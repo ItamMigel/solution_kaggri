@@ -1,0 +1,11 @@
+#!/bin/bash
+# usage: ask_claude [--bg] "prompt"  — one headless Claude Code run in /workspace/wt/claude, logged under runs/
+bg=0; [ "$1" = --bg ] && { bg=1; shift; }
+ts=$(date -u +%Y%m%dT%H%M%S); out=/workspace/shared/runs/claude_$ts.final.md
+pre="You were called headlessly by Codex via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board."
+cmd=(claude -p --permission-mode bypassPermissions --add-dir /workspace/shared "$pre
+
+$*")
+cd /workspace/wt/claude
+if [ $bg = 1 ]; then PATH=/workspace/shared/bin:$PATH nohup "${cmd[@]}" > "$out" 2>&1 & echo "claude running in bg: final=$out"
+else PATH=/workspace/shared/bin:$PATH "${cmd[@]}" > "$out" 2>&1; cat "$out"; fi

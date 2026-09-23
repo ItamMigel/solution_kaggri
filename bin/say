@@ -1,0 +1,6 @@
+#!/bin/bash
+# usage: say <claude|codex> "message"   — append a note to the other agent's inbox
+to="$1"; shift; from="${AGENT_NAME:-$( [ "$to" = codex ] && echo claude || echo codex )}"
+[ -f /workspace/shared/inbox/$to.md ] || { echo "unknown recipient $to"; exit 1; }
+printf -- '- [ ] %s from %s: %s\n' "$(date -u +%FT%H:%MZ)" "$from" "$*" >> /workspace/shared/inbox/$to.md
+echo "sent to $to"

@@ -1,0 +1,10 @@
+#!/bin/bash
+# usage: ask_codex [--bg] "prompt"  — one headless Codex run in /workspace/wt/codex, logged under runs/
+bg=0; [ "$1" = --bg ] && { bg=1; shift; }
+ts=$(date -u +%Y%m%dT%H%M%S); log=/workspace/shared/runs/codex_$ts.log; out=/workspace/shared/runs/codex_$ts.final.md
+pre="You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board."
+cmd=(codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check -C /workspace/wt/codex -o "$out" "$pre
+
+$*")
+if [ $bg = 1 ]; then PATH=/workspace/shared/bin:$PATH nohup "${cmd[@]}" > "$log" 2>&1 & echo "codex running in bg: log=$log final=$out"
+else PATH=/workspace/shared/bin:$PATH "${cmd[@]}" > "$log" 2>&1; cat "$out"; fi
