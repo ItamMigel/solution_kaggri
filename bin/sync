@@ -1,0 +1,6 @@
+#!/bin/bash
+# usage: sync "msg" — commit + push the board (branch board) and the merged repo (branch lab) to AdilHAA/kaggriculture
+m="${1:-sync $(date -u +%FT%H:%MZ)}"
+cd /workspace/shared && git add -A && git -c user.email=noreply@anthropic.com -c user.name=agent commit -qm "$m" ; git push -q mine board:board
+cd /workspace/solution_kaggri && git push -q mine lab:lab
+echo "pushed board + lab"
