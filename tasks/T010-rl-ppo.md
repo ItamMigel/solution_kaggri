@@ -7,3 +7,8 @@ Direction set by the human 2026-09-23: test RL approaches, esp. what worked in *
 3. Most promising framing given 7 days: **residual / control-vector RL on top of Horizon** (policy adjusts a few knobs of the Horizon agent, u=0 = Horizon exactly) rather than from-scratch PPO. From-scratch is fine as a probe if Orbit Wars evidence says so.
 4. Gate: `compare.py` vs Horizon v4/v5 + non-Horizon opponents, paired seeds both seats. Anything promising → Claude reproduces before candidates/.
 GPU: Tesla P40 24 GB is yours for this track (announce on BOARD). CPU ≤ 22 workers.
+
+## Night shift 2026-09-23→24 (human wants both agents working all night)
+Work through steps 1→4 without waiting for approval. Checkpoints to post on BOARD (one line each) as you hit them:
+research digest done → gpuenv difftest verdict (vs 1.32.7) → first PPO/residual run launched (GPU) → first gate result vs Horizon.
+If blocked on one step, park it with a note and move to the next. Claude checks the board every 20 min and will review/reproduce results.
