@@ -1,4 +1,4 @@
-"""Local-only, paired comparison against three frozen Horizon agents.
+"""Local-only, paired comparison against frozen Horizon agents.
 
 Every game runs in a new Python process using Kaggle's official Environment.run.
 No Kaggle credentials, uploads, account access, or submission commands are used.
@@ -17,7 +17,10 @@ from datetime import datetime, timezone
 ROOT = pathlib.Path(__file__).resolve().parent
 BASELINES = {'v3': ROOT/'agents/horizon_v3.py',
              'v4_8turn': ROOT/'agents/horizon_v4_8turn.py',
-             'v4_12turn': ROOT/'agents/horizon_v4.py'}
+             'v4_12turn': ROOT/'agents/horizon_v4.py',
+             'v5_market': ROOT/'agents/horizon_v5_market.py',
+             'v5_guarded': ROOT/'agents/horizon_v5_guarded.py'}
+DEFAULT_BASELINES = ['v3', 'v4_8turn', 'v4_12turn']
 
 
 def sha(path):
@@ -92,7 +95,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--agent', action='append', default=[], metavar='NAME=FILE.py',
                    help='Repeat to compare two or more friend candidates on the same opponents/seeds')
-    p.add_argument('--baselines', nargs='+', choices=sorted(BASELINES), default=list(BASELINES))
+    p.add_argument('--baselines', nargs='+', choices=sorted(BASELINES), default=list(DEFAULT_BASELINES))
     p.add_argument('--opponent', action='append', default=[], metavar='NAME=FILE.py',
                    help='Optional additional reacting opponents')
     seeds = p.add_mutually_exclusive_group()

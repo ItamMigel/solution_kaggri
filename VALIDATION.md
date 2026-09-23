@@ -22,3 +22,13 @@ by these checks. See [machine-readable checks](results/kit_validation.json) and
 
 No Kaggle login, API credentials, uploads, submissions, or selection changes
 were used. The ZIP excludes test fixtures, local runs, credentials, and replays.
+
+## V5 addition — 24 September 2026
+
+The original checks above apply to the preserved v3/v4 kit. The two new v5
+archives contain `main.py`, `LICENSE.txt`, and `NOTICE.txt`, with `main.py` exactly
+matching each standalone source. Both passed Kaggle validation (56504560 and
+56504572). Eight official archive-loader checks and four extracted-kit games
+passed locally, in addition to the recorded strength evaluations. See
+[the v5 report](docs/v5_validation_report.md) and
+[archive checks](results/round4/official_validation.json).

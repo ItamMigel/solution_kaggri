@@ -1,10 +1,52 @@
 # Kaggriculture — comparison kit for our teammate
 
-Compare your agent against all three frozen Horizon versions before choosing the
-team's next two candidates. **This kit only runs local matches. It cannot upload
+Compare your agent against the submitted Horizon versions before choosing the
+team's next candidates. **This kit only runs local matches. It cannot upload
 or select submissions, and no Kaggle account or credentials are needed.**
 
-## What to compare
+## Submitted v5 solutions — 24 September 2026
+
+Both exact archives passed Kaggle validation (**COMPLETE**):
+
+| Candidate | Standalone source | Archive | Kaggle submission |
+|---|---|---|---|
+| **Market — preferred locally** | [horizon_v5_market.py](agents/horizon_v5_market.py) | [horizon_v5_market.tar.gz](submissions/horizon_v5_market.tar.gz) | **56504560** |
+| Guarded — alternative | [horizon_v5_guarded.py](agents/horizon_v5_guarded.py) | [horizon_v5_guarded.tar.gz](submissions/horizon_v5_guarded.tar.gz) | **56504572** |
+
+The uploads were explicitly authorized. Further submissions require a new
+request; this comparison code still cannot upload anything. Their initial 600
+ratings are starting values, not evidence of leaderboard strength. Hashes and
+receipts are under [results/round4](results/round4/v5_submission_summary.json).
+
+Both preserve v4's production and twelve-turn sale anticipation. They protect
+opening cash for hires and reapply sale ordering after the final action is built.
+Guarded requires at least 85% visible productive-layout similarity for that extra
+pass; it was not stronger than Market on our panel.
+
+On 64 fresh worlds against six reacting public controllers, both seats, Market
+won **767/768**, Guarded **764/768**, and saved v4 **726/768**. On a separate
+64-world direct panel, each new candidate won **126/128** against saved v4.
+The full selection and confirmation effort completed 6,784 games on 232 distinct
+worlds with zero callback failures. The opponents share substantial ancestry;
+this does not establish superiority to verified top-player agents.
+
+Read the [v5 validation report](docs/v5_validation_report.md),
+[research notes](docs/v5_research_notes.md), and
+[selection ledger](docs/v5_selection_ledger.md). Original v3/v4 files and the
+historical comparison ZIP are preserved.
+
+After the setup below, compare your agent against the latest three choices:
+
+```sh
+.venv/bin/python compare.py --agent friend=../my_agent/main.py --baselines v4_12turn v5_market v5_guarded --seeds-file seeds/v5_smoke.json --workers 2 --out runs/v5_smoke
+.venv/bin/python compare.py --agent friend=../my_agent/main.py --baselines v4_12turn v5_market v5_guarded --seeds-file seeds/v5_development.json --workers 4 --out runs/v5_development
+```
+
+These new pools were not used to tune the agents. Freeze a candidate before
+using `seeds/v5_confirmation.json`. The existing default comparison remains
+v3, eight-turn v4 and twelve-turn v4; select the v5 aliases explicitly.
+
+## Historical v3/v4 comparison
 
 | Code | Role | Historical public-panel result |
 |---|---|---:|

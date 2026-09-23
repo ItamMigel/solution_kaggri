@@ -58,3 +58,14 @@ and Jonathan Day's MIT-licensed
 [lonespear/kaggriculture](https://github.com/lonespear/kaggriculture). Their
 original notices and source provenance are retained locally. Their controllers
 are not included in the submitted `main.py`.
+
+## Horizon v5 additions, 24 September 2026
+
+The Market and Guarded variants preserve the existing public Apache-2.0
+controller ancestry and notices. They change the opening trade and reapply the
+inherited sale-block optimizer after final action construction. The latter idea
+was informed by Tetsutani's public Demand-Preserving Turn Sale Timing notebook:
+https://www.kaggle.com/code/tetsutani/demand-preserving-turn-sale-timing
+
+Guarded adds a visible productive-layout similarity condition to that extra pass.
+The exact uploaded archives retain their own LICENSE.txt and NOTICE.txt.

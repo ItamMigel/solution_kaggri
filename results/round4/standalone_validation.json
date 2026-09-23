@@ -1,0 +1,89 @@
+{
+  "invocation": "python -I -S scripts/standalone_probe.py SOURCE data/standalone_observation.json",
+  "note": "Opening callback and recursive literal-exec import scan; full-game behavior covered separately by official archive checks.",
+  "all_passed": true,
+  "candidates": [
+    {
+      "candidate": "horizon_v5_market",
+      "entrypoint": "round4_queue_agent",
+      "imports": [
+        "__future__",
+        "base64",
+        "copy",
+        "itertools",
+        "json",
+        "math",
+        "random",
+        "time",
+        "zlib"
+      ],
+      "source_bytes": 1105947,
+      "load_ms": 125.53820900211576,
+      "call_ms": 0.919999998586718,
+      "action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            8
+          ],
+          [
+            "SELL",
+            "WHEAT",
+            3
+          ],
+          [
+            "BUY_SEED",
+            "WHEAT",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "candidate": "horizon_v5_guarded",
+      "entrypoint": "round4_queue_agent",
+      "imports": [
+        "__future__",
+        "base64",
+        "copy",
+        "itertools",
+        "json",
+        "math",
+        "random",
+        "time",
+        "zlib"
+      ],
+      "source_bytes": 1106056,
+      "load_ms": 121.30837500080816,
+      "call_ms": 1.8610409970278852,
+      "action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            8
+          ],
+          [
+            "SELL",
+            "WHEAT",
+            3
+          ],
+          [
+            "BUY_SEED",
+            "WHEAT",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}

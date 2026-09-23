@@ -1,0 +1,592 @@
+{
+  "candidates": {
+    "gated8": {
+      "games": 64,
+      "worlds": 16,
+      "errors": 0,
+      "wins": 64,
+      "draws": 0,
+      "losses": 0,
+      "score_rate": 1.0,
+      "world_block_score_95": [
+        1.0,
+        1.0
+      ],
+      "mean_margin": 99416.265625,
+      "median_margin": 95377.0,
+      "p10_margin": 71426.5,
+      "worst_margin": 63972.0,
+      "worst_decile_mean_margin": 68076.0,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "max_candidate_callback_ms": 197.49245799903292,
+      "non_done": 0,
+      "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+      "by_opponent": {
+        "research/opponents/lonespear/main_bigherd_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 119521.21875,
+          "median_margin": 119602.5,
+          "p10_margin": 89668.2,
+          "worst_margin": 83567.0,
+          "worst_decile_mean_margin": 86214.75,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 197.49245799903292,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "research/opponents/lonespear/main_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 79311.3125,
+          "median_margin": 77759.0,
+          "p10_margin": 69357.0,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 66138.25,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 125.40716699732002,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99498.1875,
+          "median_margin": 95377.0,
+          "p10_margin": 71870.9,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 69084.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 197.49245799903292,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "1": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99334.34375,
+          "median_margin": 95377.0,
+          "p10_margin": 71349.5,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 67973.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 102.72183400229551,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1517470700,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 67252.0,
+          "shops": [
+            "PET_CAFE",
+            "YARN_STORE",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "ICE_CREAM_SHOP",
+            "ICE_CREAM_SHOP",
+            "PET_CAFE"
+          ]
+        },
+        {
+          "seed": 541041862,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 69357.0,
+          "shops": [
+            "PET_CAFE",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET"
+          ]
+        }
+      ]
+    },
+    "incumbent": {
+      "games": 64,
+      "worlds": 16,
+      "errors": 0,
+      "wins": 64,
+      "draws": 0,
+      "losses": 0,
+      "score_rate": 1.0,
+      "world_block_score_95": [
+        1.0,
+        1.0
+      ],
+      "mean_margin": 99416.265625,
+      "median_margin": 95377.0,
+      "p10_margin": 71426.5,
+      "worst_margin": 63972.0,
+      "worst_decile_mean_margin": 68076.0,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "max_candidate_callback_ms": 119.8560839984566,
+      "non_done": 0,
+      "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+      "by_opponent": {
+        "research/opponents/lonespear/main_bigherd_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 119521.21875,
+          "median_margin": 119602.5,
+          "p10_margin": 89668.2,
+          "worst_margin": 83567.0,
+          "worst_decile_mean_margin": 86214.75,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 119.8560839984566,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "research/opponents/lonespear/main_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 79311.3125,
+          "median_margin": 77759.0,
+          "p10_margin": 69357.0,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 66138.25,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 104.98183399977279,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99498.1875,
+          "median_margin": 95377.0,
+          "p10_margin": 71870.9,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 69084.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 119.71308300053352,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "1": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99334.34375,
+          "median_margin": 95377.0,
+          "p10_margin": 71349.5,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 67973.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 119.8560839984566,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1517470700,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 67252.0,
+          "shops": [
+            "PET_CAFE",
+            "YARN_STORE",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "ICE_CREAM_SHOP",
+            "ICE_CREAM_SHOP",
+            "PET_CAFE"
+          ]
+        },
+        {
+          "seed": 541041862,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 69357.0,
+          "shops": [
+            "PET_CAFE",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET"
+          ]
+        }
+      ]
+    },
+    "queue8": {
+      "games": 64,
+      "worlds": 16,
+      "errors": 0,
+      "wins": 64,
+      "draws": 0,
+      "losses": 0,
+      "score_rate": 1.0,
+      "world_block_score_95": [
+        1.0,
+        1.0
+      ],
+      "mean_margin": 99420.8125,
+      "median_margin": 95388.5,
+      "p10_margin": 71427.7,
+      "worst_margin": 63972.0,
+      "worst_decile_mean_margin": 68076.0,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "max_candidate_callback_ms": 126.86254099753569,
+      "non_done": 0,
+      "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+      "by_opponent": {
+        "research/opponents/lonespear/main_bigherd_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 119526.125,
+          "median_margin": 119601.5,
+          "p10_margin": 89669.40000000001,
+          "worst_margin": 83656.0,
+          "worst_decile_mean_margin": 86214.25,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 119.37704199954169,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "research/opponents/lonespear/main_harness.py": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 79315.5,
+          "median_margin": 77759.0,
+          "p10_margin": 69357.0,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 66138.25,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 126.86254099753569,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99499.875,
+          "median_margin": 95388.5,
+          "p10_margin": 71874.1,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 69085.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 119.37704199954169,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        },
+        "1": {
+          "games": 32,
+          "worlds": 16,
+          "errors": 0,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "mean_margin": 99341.75,
+          "median_margin": 95388.5,
+          "p10_margin": 71349.9,
+          "worst_margin": 63972.0,
+          "worst_decile_mean_margin": 67973.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "max_candidate_callback_ms": 126.86254099753569,
+          "non_done": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1803587639,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 63972.0,
+          "shops": [
+            "PIZZA_SHOP",
+            "BAKERY",
+            "YARN_STORE",
+            "PET_CAFE",
+            "YARN_STORE",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 1517470700,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 1,
+          "margin": 67252.0,
+          "shops": [
+            "PET_CAFE",
+            "YARN_STORE",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "ICE_CREAM_SHOP",
+            "ICE_CREAM_SHOP",
+            "PET_CAFE"
+          ]
+        },
+        {
+          "seed": 541041862,
+          "opponent": "research/opponents/lonespear/main_harness.py",
+          "seat": 0,
+          "margin": 69357.0,
+          "shops": [
+            "PET_CAFE",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET"
+          ]
+        }
+      ]
+    }
+  },
+  "paired_against": "incumbent",
+  "paired": {
+    "gated8": {
+      "matched_games": 64,
+      "unmatched_games": 0,
+      "worlds": 16,
+      "paired_score_gain": 0.0,
+      "paired_score_gain_95": [
+        0.0,
+        0.0
+      ],
+      "paired_margin_gain": 0.0,
+      "paired_margin_gain_95": [
+        0.0,
+        0.0
+      ]
+    },
+    "queue8": {
+      "matched_games": 64,
+      "unmatched_games": 0,
+      "worlds": 16,
+      "paired_score_gain": 0.0,
+      "paired_score_gain_95": [
+        0.0,
+        0.0
+      ],
+      "paired_margin_gain": 4.546875,
+      "paired_margin_gain_95": [
+        1.90625,
+        7.250390624999994
+      ]
+    }
+  }
+}
