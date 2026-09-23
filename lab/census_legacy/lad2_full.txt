@@ -1,0 +1,198 @@
+TOTAL fingerprinted episodes: 303  (OLD 190, NEW 113, unknown 0)
+NEW window: 2026-08-03 12:07:28.894000  ..  2026-08-04 16:48:40.960000
+NEW by submission: {'exp030': 36, 'exp031': 40, 'exp032': 22, 'exp033': 15}
+OLD window: 2026-08-02 00:11:03.581000  ..  2026-08-03 11:51:28.556000
+
+=== OLD corpus (2026-08-02..03): 190 episodes, 147 distinct opponent teams ===
+  class                               n   share  teams       W-L  win%  mean margin  opp money
+  NB-partial (bpW<900)               53   27.9%     42  26-27     49%           99     95,442
+  NB-v1 (frontier, straw44)          30   15.8%     26   0-30      0%      -50,426    140,710
+  OTHER MIXED                        25   13.2%     23  17-8      68%       13,388     77,671
+  NB-v2 (carrot, bpW~1300)           24   12.6%     17  10-14     42%      -12,496    123,683
+  MELON-RUSH + small herd            14    7.4%     12  11-3      79%       30,885     65,597
+  BIG-HERD ANIMAL (>=20)             14    7.4%     13   9-5      64%        9,566     67,794
+  MID-HERD ANIMAL-LED                13    6.8%     11  10-3      77%       26,434     59,727
+  CROP-ONLY                          11    5.8%      9  11-0     100%       72,052     48,429
+  NB-v2ish                            6    3.2%      6   2-4      33%      -25,400    112,251
+
+=== NEW corpus (2026-08-03..04): 113 episodes, 97 distinct opponent teams ===
+  class                               n   share  teams       W-L  win%  mean margin  opp money
+  NB-v1 (frontier, straw44)          36   31.9%     34   1-35      3%      -18,591    137,025
+  NB-partial (bpW<900)               27   23.9%     24  20-7      74%       16,337    104,761
+  NB-v2 (carrot, bpW~1300)           26   23.0%     18  14-12     54%         -199    121,385
+  OTHER MIXED                        11    9.7%      8   8-3      73%       25,275    101,345
+  MID-HERD ANIMAL-LED                 3    2.7%      3   3-0     100%       97,594     50,773
+  BIG-HERD ANIMAL (>=20)              3    2.7%      3   2-1      67%       44,614     85,322
+  CROP-ONLY                           3    2.7%      3   3-0     100%       81,581     55,993
+  NB-v2ish                            3    2.7%      3   1-2      33%       -1,756    130,196
+  MELON-RUSH + small herd             1    0.9%      1   1-0     100%       76,137     66,057
+
+
+########## SHARE SHIFT ##########
+  class                             OLD n   OLD %  NEW n   NEW %  delta pp
+  NB-v1 (frontier, straw44)            30   15.8%     36   31.9%    +16.1
+  NB-partial (bpW<900)                 53   27.9%     27   23.9%     -4.0
+  NB-v2 (carrot, bpW~1300)             24   12.6%     26   23.0%    +10.4
+  OTHER MIXED                          25   13.2%     11    9.7%     -3.4
+  NB-v2ish                              6    3.2%      3    2.7%     -0.5
+  MID-HERD ANIMAL-LED                  13    6.8%      3    2.7%     -4.2
+  CROP-ONLY                            11    5.8%      3    2.7%     -3.1
+  BIG-HERD ANIMAL (>=20)               14    7.4%      3    2.7%     -4.7
+  MELON-RUSH + small herd              14    7.4%      1    0.9%     -6.5
+
+
+########## PER-ARCHETYPE STRENGTH: OLD vs NEW (money AND production) ##########
+
+--- NB-v1 (frontier, straw44) ---
+ OLD
+  n= 30 teams= 26  money=$ 140,710  herd 7.6c/6.3s hands 9.7 quad 3.07
+    seeds STRAW= 46.6 MELON= 21.1 WHEAT= 28.5 CARRO=  0.0  bpWHEAT=1036
+    sold  STRAW= 288.2 MELON= 117.9 MILK= 217.2 WOOL= 168.0 FERTI= 217.8 WHEAT= 815.2 CARRO=   0.0
+ NEW
+  n= 36 teams= 34  money=$ 137,025  herd 7.7c/5.5s hands 10.6 quad 3.00
+    seeds STRAW= 44.7 MELON= 20.4 WHEAT= 51.4 CARRO=  0.0  bpWHEAT=996
+    sold  STRAW= 278.9 MELON= 114.7 MILK= 221.1 WOOL= 163.7 FERTI= 210.4 WHEAT= 848.3 CARRO=   0.0
+    money  97.4% of old   STRAW=   97%  MELON=   97%  MILK=  102%  WOOL=   97%  FERTI=   97%  WHEAT=  104%
+
+--- NB-partial (bpW<900) ---
+ OLD
+  n= 53 teams= 42  money=$  95,442  herd 5.8c/6.6s hands 7.6 quad 3.11
+    seeds STRAW= 41.3 MELON= 25.5 WHEAT= 30.1 CARRO= 16.1  bpWHEAT=454
+    sold  STRAW= 147.3 MELON= 107.8 MILK= 145.8 WOOL= 134.6 FERTI= 223.6 WHEAT= 257.2 CARRO=  23.9
+ NEW
+  n= 27 teams= 24  money=$ 104,761  herd 7.1c/6.7s hands 7.4 quad 3.04
+    seeds STRAW= 40.0 MELON= 24.0 WHEAT= 42.4 CARRO= 11.1  bpWHEAT=440
+    sold  STRAW= 182.2 MELON= 117.4 MILK= 174.9 WOOL= 147.6 FERTI= 212.2 WHEAT= 230.5 CARRO=  13.0
+    money 109.8% of old   STRAW=  124%  MELON=  109%  MILK=  120%  WOOL=  110%  FERTI=   95%  WHEAT=   90%  CARRO=   54%
+
+--- NB-v2 (carrot, bpW~1300) ---
+ OLD
+  n= 24 teams= 17  money=$ 123,683  herd 5.0c/9.8s hands 8.4 quad 3.00
+    seeds STRAW= 34.1 MELON= 19.8 WHEAT= 34.6 CARRO=  9.8  bpWHEAT=1285
+    sold  STRAW= 191.7 MELON= 115.3 MILK= 132.3 WOOL= 199.2 FERTI= 263.1 WHEAT=1061.2 CARRO=  19.5
+ NEW
+  n= 26 teams= 18  money=$ 121,385  herd 5.5c/9.3s hands 8.3 quad 3.00
+    seeds STRAW= 34.8 MELON= 19.8 WHEAT= 32.6 CARRO= 10.3  bpWHEAT=1381
+    sold  STRAW= 211.5 MELON= 116.5 MILK= 138.2 WOOL= 192.4 FERTI= 248.8 WHEAT=1152.3 CARRO=  20.6
+    money  98.1% of old   STRAW=  110%  MELON=  101%  MILK=  104%  WOOL=   97%  FERTI=   95%  WHEAT=  109%
+
+--- OTHER MIXED ---
+ OLD
+  n= 25 teams= 23  money=$  77,671  herd 7.0c/4.8s hands 7.8 quad 2.88
+    seeds STRAW= 28.1 MELON= 26.8 WHEAT= 44.7 CARRO= 13.0  bpWHEAT=2977
+    sold  STRAW=  87.7 MELON= 118.9 MILK= 156.2 WOOL=  86.3 FERTI= 171.2 WHEAT=2833.8 CARRO=  15.8
+ NEW
+  n= 11 teams=  8  money=$ 101,345  herd 3.2c/1.9s hands 6.2 quad 2.27
+    seeds STRAW= 21.7 MELON= 23.7 WHEAT= 52.6 CARRO= 14.1  bpWHEAT=701
+    sold  STRAW=  61.1 MELON=  57.0 MILK=  63.5 WOOL=  44.4 FERTI=  67.0 WHEAT= 635.0 CARRO=   4.5
+    money 130.5% of old   STRAW=   70%  MELON=   48%  MILK=   41%  WOOL=   51%  FERTI=   39%  WHEAT=   22%
+
+--- NB-v2ish ---
+ OLD
+  n=  6 teams=  6  money=$ 112,251  herd 6.5c/5.7s hands 8.3 quad 3.17
+    seeds STRAW= 49.0 MELON= 23.7 WHEAT= 55.2 CARRO=  4.3  bpWHEAT=1586
+    sold  STRAW= 190.2 MELON= 129.3 MILK= 171.8 WOOL= 141.8 FERTI= 189.8 WHEAT=1454.0 CARRO=   2.5
+ NEW
+  n=  3 teams=  3  money=$ 130,196  herd 6.3c/8.3s hands 6.7 quad 2.67
+    seeds STRAW= 40.7 MELON= 18.7 WHEAT= 42.7 CARRO=  8.0  bpWHEAT=988
+    sold  STRAW= 206.0 MELON= 106.0 MILK= 182.0 WOOL= 190.7 FERTI= 206.3 WHEAT= 818.7 CARRO=   8.7
+    money 116.0% of old   STRAW=  108%  MELON=   82%  MILK=  106%  WOOL=  134%  FERTI=  109%  WHEAT=   56%
+
+--- MID-HERD ANIMAL-LED ---
+ OLD
+  n= 13 teams= 11  money=$  59,727  herd 7.8c/5.4s hands 9.3 quad 2.31
+    seeds STRAW=  9.7 MELON= 26.2 WHEAT= 46.3 CARRO=  3.1  bpWHEAT=270
+    sold  STRAW=  12.4 MELON=  79.3 MILK= 192.9 WOOL= 102.8 FERTI= 264.2 WHEAT=  60.1 CARRO=   3.3
+ NEW
+  n=  3 teams=  3  money=$  50,773  herd 8.0c/6.0s hands 9.0 quad 2.33
+    seeds STRAW= 15.0 MELON= 24.7 WHEAT= 21.0 CARRO=  0.0  bpWHEAT=352
+    sold  STRAW=   9.0 MELON=  66.0 MILK= 160.7 WOOL= 122.7 FERTI= 168.7 WHEAT=  71.7 CARRO=   0.0
+    money  85.0% of old   MELON=   83%  MILK=   83%  WOOL=  119%  FERTI=   64%  WHEAT=  119%
+
+--- CROP-ONLY ---
+ OLD
+  n= 11 teams=  9  money=$  48,429  herd 0.0c/0.0s hands 2.6 quad 2.55
+    seeds STRAW= 16.1 MELON= 34.5 WHEAT= 66.2 CARRO= 25.1  bpWHEAT=56
+    sold  STRAW=  43.9 MELON= 143.2 MILK=  29.7 WOOL=  13.4 FERTI=  38.7 WHEAT= 176.4 CARRO=  50.2
+ NEW
+  n=  3 teams=  3  money=$  55,993  herd 0.0c/0.0s hands 2.0 quad 1.67
+    seeds STRAW=  8.3 MELON= 27.7 WHEAT= 67.3 CARRO= 12.7  bpWHEAT=39
+    sold  STRAW=   3.0 MELON=  42.7 MILK=   4.0 WOOL=   7.3 FERTI=  13.7 WHEAT=  69.3 CARRO=   4.7
+    money 115.6% of old   STRAW=    7%  MELON=   30%  MILK=   13%  FERTI=   35%  WHEAT=   39%  CARRO=    9%
+
+--- BIG-HERD ANIMAL (>=20) ---
+ OLD
+  n= 14 teams= 13  money=$  67,794  herd 12.2c/10.4s hands 7.1 quad 3.00
+    seeds STRAW= 19.9 MELON= 25.9 WHEAT= 49.7 CARRO= 16.5  bpWHEAT=791
+    sold  STRAW=  57.2 MELON= 103.2 MILK= 222.9 WOOL= 170.5 FERTI= 242.4 WHEAT= 413.8 CARRO=  16.7
+ NEW
+  n=  3 teams=  3  money=$  85,322  herd 12.7c/8.0s hands 5.0 quad 2.33
+    seeds STRAW= 11.3 MELON= 17.7 WHEAT= 63.7 CARRO=  4.7  bpWHEAT=409
+    sold  STRAW=  61.7 MELON= 105.0 MILK= 252.7 WOOL= 148.3 FERTI= 310.0 WHEAT= 116.0 CARRO=   0.0
+    money 125.9% of old   STRAW=  108%  MELON=  102%  MILK=  113%  WOOL=   87%  FERTI=  128%  WHEAT=   28%
+
+--- MELON-RUSH + small herd ---
+ OLD
+  n= 14 teams= 12  money=$  65,597  herd 5.8c/2.5s hands 8.1 quad 2.86
+    seeds STRAW= 18.2 MELON= 43.0 WHEAT=111.4 CARRO= 16.9  bpWHEAT=194
+    sold  STRAW=  48.8 MELON= 170.9 MILK= 109.9 WOOL=  38.1 FERTI= 107.5 WHEAT= 218.8 CARRO=  15.0
+ NEW
+  n=  1 teams=  1  money=$  66,057  herd 1.0c/0.0s hands 5.0 quad 2.00
+    seeds STRAW=  2.0 MELON= 29.0 WHEAT= 26.0 CARRO=  4.0  bpWHEAT=75
+    sold  STRAW=   0.0 MELON=  17.0 MILK=   4.0 WOOL=   0.0 FERTI=  45.0 WHEAT=   6.0 CARRO=   5.0
+    money 100.7% of old   STRAW=    0%  MELON=   10%  MILK=    4%  WOOL=    0%  FERTI=   42%  WHEAT=    3%
+
+
+########## NEW-CORPUS OPPONENTS NOT IN THE NOTEBOOK FAMILY (hunt for new archetypes) ##########
+  21 of 113 episodes (18.6%)
+  $ 147,520 BIG-HERD ANIMAL (>=20)     Seb (allegedly)        lb=  1179 h=13c/8s hands=12 q=3 bpW=348 seeds={'STRAWBERRY': 34, 'WHEAT': 130, 'MELON': 21, 'CARROT': 14} sold={'FERTILIZER': 338, 'MILK': 312, 'WHEAT': 276, 'STRAWBERRY': 185, 'MELON': 126}
+  $ 139,975 OTHER MIXED                TakamaruEX             lb=  1102 h=1c/0s hands=10 q=1 bpW=3142 seeds={'MELON': 20, 'STRAWBERRY': 28, 'WHEAT': 32, 'TOMATO': 5, 'CARROT': 44} sold={'WHEAT': 3069, 'FERTILIZER': 49, 'MILK': 39, 'WOOL': 16, 'CARROT': 7}
+  $ 125,587 OTHER MIXED                weedfarmer             lb=   996 h=11c/1s hands=12 q=3 bpW=155 seeds={'MELON': 33, 'STRAWBERRY': 44, 'CARROT': 13, 'WHEAT': 37} sold={'STRAWBERRY': 240, 'MILK': 208, 'MELON': 168, 'FERTILIZER': 97, 'WHEAT': 35}
+  $ 124,927 OTHER MIXED                TakamaruEX             lb=  1102 h=1c/0s hands=10 q=2 bpW=2975 seeds={'MELON': 26, 'STRAWBERRY': 39, 'TOMATO': 5, 'WHEAT': 27, 'CARROT': 39} sold={'WHEAT': 2913, 'FERTILIZER': 44, 'MILK': 39, 'MELON': 32, 'WOOL': 13}
+  $ 121,044 OTHER MIXED                op_star_platinum       lb=  1013 h=1c/0s hands=12 q=2 bpW=34 seeds={'MELON': 6, 'WHEAT': 2, 'STRAWBERRY': 2} sold={'FERTILIZER': 14, 'WHEAT': 8, 'MILK': 7}
+  $ 118,968 OTHER MIXED                op_star_platinum       lb=  1013 h=2c/0s hands=12 q=2 bpW=122 seeds={'MELON': 29, 'WHEAT': 92, 'STRAWBERRY': 1} sold={'WHEAT': 85, 'MILK': 50, 'FERTILIZER': 44, 'MELON': 24, 'WOOL': 8}
+  $  98,614 OTHER MIXED                aldoktvns              lb=  1000 h=0c/1s hands=0 q=1 bpW=351 seeds={'MELON': 27, 'WHEAT': 76, 'CARROT': 26} sold={'WHEAT': 314, 'WOOL': 38, 'FERTILIZER': 22, 'MELON': 5, 'CARROT': 4}
+  $  98,372 OTHER MIXED                SanggeunParrk          lb=  2302 h=1c/5s hands=2 q=3 bpW=163 seeds={'WHEAT': 65, 'MELON': 43, 'STRAWBERRY': 34, 'TOMATO': 15, 'CARROT': 25} sold={'MELON': 173, 'WOOL': 168, 'STRAWBERRY': 112, 'FERTILIZER': 104, 'WHEAT': 83}
+  $  94,851 OTHER MIXED                aldoktvns              lb=  1000 h=1c/0s hands=0 q=2 bpW=331 seeds={'MELON': 20, 'STRAWBERRY': 14, 'WHEAT': 16, 'CARROT': 4} sold={'WHEAT': 235, 'MILK': 31, 'FERTILIZER': 29, 'WOOL': 25, 'MELON': 17}
+  $  84,679 BIG-HERD ANIMAL (>=20)     just_calculate         lb=   833 h=14c/9s hands=3 q=2 bpW=328 seeds={'MELON': 32, 'WHEAT': 61} sold={'MILK': 289, 'FERTILIZER': 217, 'MELON': 189, 'WOOL': 171, 'WHEAT': 50}
+  $  75,055 OTHER MIXED                Devaansh Pathak        lb=   817 h=8c/6s hands=6 q=3 bpW=197 seeds={'WHEAT': 20, 'MELON': 18, 'CARROT': 4, 'STRAWBERRY': 34} sold={'STRAWBERRY': 215, 'FERTILIZER': 129, 'MELON': 107, 'MILK': 90, 'WOOL': 83}
+  $  73,372 OTHER MIXED                QYQ1693                lb=  1757 h=6c/6s hands=4 q=4 bpW=79 seeds={'MELON': 27, 'WHEAT': 156, 'STRAWBERRY': 31} sold={'MILK': 167, 'FERTILIZER': 156, 'WHEAT': 142, 'MELON': 101, 'WOOL': 100}
+  $  66,857 CROP-ONLY                  Praveen                lb=   933 h=0c/0s hands=6 q=1 bpW=117 seeds={'MELON': 19, 'WHEAT': 25, 'STRAWBERRY': 21, 'TOMATO': 8, 'CARROT': 2} sold={'WHEAT': 46, 'FERTILIZER': 38, 'WOOL': 22, 'MILK': 12, 'MELON': 11}
+  $  66,057 MELON-RUSH + small herd    not today              lb=   757 h=1c/0s hands=5 q=2 bpW=75 seeds={'MELON': 29, 'WHEAT': 26, 'CARROT': 4, 'STRAWBERRY': 2, 'TOMATO': 5} sold={'EGG': 61, 'FERTILIZER': 45, 'MELON': 17, 'WHEAT': 6, 'CARROT': 5}
+  $  60,261 MID-HERD ANIMAL-LED        Koichi HIRAOKA         lb=   727 h=9c/4s hands=8 q=3 bpW=395 seeds={'MELON': 57, 'WHEAT': 63, 'STRAWBERRY': 21} sold={'FERTILIZER': 216, 'MILK': 164, 'WHEAT': 161, 'MELON': 150, 'WOOL': 26}
+  $  54,311 MID-HERD ANIMAL-LED        Ali Ali G              lb=   612 h=10c/5s hands=9 q=3 bpW=314 seeds={'MELON': 12, 'STRAWBERRY': 14} sold={'MILK': 203, 'WOOL': 105, 'MELON': 48, 'WHEAT': 22, 'STRAWBERRY': 17}
+  $  52,620 CROP-ONLY                  Etsushi Yamamoto       lb=   589 h=0c/0s hands=0 q=2 bpW=0 seeds={'MELON': 38, 'WHEAT': 107} sold={'MELON': 70, 'WHEAT': 48, 'FERTILIZER': 3}
+  $  48,502 CROP-ONLY                  Chaitanya Jamble       lb=   591 h=0c/0s hands=0 q=2 bpW=0 seeds={'MELON': 26, 'CARROT': 36, 'WHEAT': 70, 'TOMATO': 4, 'STRAWBERRY': 4} sold={'WHEAT': 114, 'MELON': 47, 'CARROT': 14, 'TOMATO': 12, 'STRAWBERRY': 7}
+  $  44,034 OTHER MIXED                mandgeee               lb=   508 h=3c/2s hands=0 q=2 bpW=165 seeds={'WHEAT': 56, 'MELON': 12, 'STRAWBERRY': 12} sold={'WHEAT': 51, 'FERTILIZER': 49, 'MILK': 31, 'WOOL': 19, 'STRAWBERRY': 2}
+  $  37,746 MID-HERD ANIMAL-LED        Emre Can               lb=   664 h=5c/9s hands=10 q=1 bpW=348 seeds={'MELON': 5, 'TOMATO': 5, 'STRAWBERRY': 10} sold={'FERTILIZER': 290, 'WOOL': 237, 'MILK': 115, 'WHEAT': 32}
+  $  23,768 BIG-HERD ANIMAL (>=20)     Gigrise                lb=  2404 h=11c/7s hands=0 q=2 bpW=552 seeds={} sold={'FERTILIZER': 375, 'EGG': 363, 'MILK': 157, 'WOOL': 155, 'WHEAT': 22}
+
+
+########## TOP-MONEY OPPONENTS IN THE NEW CORPUS ##########
+  $ 172,224 margin   -27,877 NB-v1 (frontier, straw44)  Pavlo Ivanin         lb=  2202 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 847, 'STRAWBERRY': 280, 'MILK': 230, 'FERTILIZER': 213, 'WOOL': 168}
+  $ 169,709 margin   -22,988 NB-v1 (frontier, straw44)  ZZfancy              lb=  2598 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 847, 'STRAWBERRY': 280, 'MILK': 230, 'FERTILIZER': 213, 'WOOL': 168}
+  $ 158,624 margin   -18,154 NB-v1 (frontier, straw44)  kitory Yeah やきとり     lb=  1248 h=7c/7s hands=10 bpW=1056 sold={'WHEAT': 770, 'STRAWBERRY': 315, 'FERTILIZER': 209, 'MILK': 197, 'WOOL': 145}
+  $ 156,733 margin   -18,412 NB-v1 (frontier, straw44)  MilanJoshi           lb=  2595 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 847, 'STRAWBERRY': 272, 'MILK': 230, 'FERTILIZER': 213, 'WOOL': 168}
+  $ 156,148 margin   -18,501 NB-v1 (frontier, straw44)  Guzha Panashe H      lb=  2380 h=8c/5s hands=12 bpW=981 sold={'WHEAT': 884, 'STRAWBERRY': 270, 'MILK': 229, 'FERTILIZER': 213, 'WOOL': 168}
+  $ 153,791 margin   -23,807 NB-v1 (frontier, straw44)  test_money           lb=  2594 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 840, 'STRAWBERRY': 276, 'MILK': 230, 'FERTILIZER': 214, 'WOOL': 168}
+  $ 151,967 margin   -24,965 NB-v1 (frontier, straw44)  typeIIIfairy         lb=  1246 h=8c/6s hands=9 bpW=1045 sold={'WHEAT': 842, 'STRAWBERRY': 285, 'FERTILIZER': 230, 'MILK': 230, 'WOOL': 168}
+  $ 150,994 margin   -27,659 NB-v1 (frontier, straw44)  James Mancillas      lb=  2740 h=8c/5s hands=12 bpW=981 sold={'WHEAT': 883, 'STRAWBERRY': 278, 'MILK': 229, 'FERTILIZER': 212, 'WOOL': 168}
+  $ 150,775 margin   -15,317 NB-v1 (frontier, straw44)  trantrikien239       lb=  2609 h=8c/6s hands=8 bpW=1044 sold={'WHEAT': 841, 'STRAWBERRY': 291, 'MILK': 230, 'FERTILIZER': 229, 'WOOL': 168}
+  $ 150,579 margin   -20,882 NB-v1 (frontier, straw44)  cjen07               lb=  2012 h=8c/5s hands=12 bpW=981 sold={'WHEAT': 876, 'STRAWBERRY': 271, 'MILK': 229, 'FERTILIZER': 215, 'WOOL': 168}
+  $ 148,623 margin    -2,693 NB-v2 (carrot, bpW~1300)   Aleksander Sachuk    lb=  1121 h=9c/6s hands=8 bpW=1316 sold={'WHEAT': 1070, 'FERTILIZER': 266, 'STRAWBERRY': 243, 'MILK': 218, 'WOOL': 131}
+  $ 148,028 margin   -20,506 NB-v2ish                   taijunhao            lb=  1249 h=5c/8s hands=10 bpW=940 sold={'WHEAT': 864, 'STRAWBERRY': 229, 'FERTILIZER': 211, 'WOOL': 211, 'MILK': 165}
+  $ 147,520 margin   -11,142 BIG-HERD ANIMAL (>=20)     Seb (allegedly)      lb=  1179 h=13c/8s hands=12 bpW=348 sold={'FERTILIZER': 338, 'MILK': 312, 'WHEAT': 276, 'STRAWBERRY': 185, 'MELON': 126}
+  $ 147,079 margin   -31,368 NB-v1 (frontier, straw44)  webcainiao           lb=  2061 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 845, 'STRAWBERRY': 280, 'MILK': 230, 'FERTILIZER': 213, 'WOOL': 168}
+  $ 147,022 margin   -37,648 NB-v1 (frontier, straw44)  senkin13             lb=  2551 h=8c/5s hands=12 bpW=954 sold={'WHEAT': 854, 'STRAWBERRY': 280, 'MILK': 230, 'FERTILIZER': 214, 'WOOL': 168}
+  $ 144,225 margin   -23,026 NB-v1 (frontier, straw44)  Subin An             lb=  2914 h=8c/5s hands=12 bpW=981 sold={'WHEAT': 883, 'STRAWBERRY': 278, 'MILK': 229, 'FERTILIZER': 212, 'WOOL': 168}
+  $ 142,813 margin   -10,261 NB-v1 (frontier, straw44)  Md. Mehedi Hasan     lb=  1251 h=7c/7s hands=10 bpW=1057 sold={'WHEAT': 767, 'STRAWBERRY': 315, 'FERTILIZER': 209, 'MILK': 197, 'WOOL': 145}
+  $ 142,522 margin   -17,640 NB-v1 (frontier, straw44)  ZotAZaw3             lb=     0 h=8c/6s hands=8 bpW=1043 sold={'WHEAT': 840, 'STRAWBERRY': 291, 'MILK': 230, 'FERTILIZER': 225, 'WOOL': 168}
+  $ 141,841 margin   -14,810 NB-v1 (frontier, straw44)  curiosity            lb=  1864 h=8c/5s hands=12 bpW=944 sold={'WHEAT': 844, 'STRAWBERRY': 271, 'MILK': 230, 'FERTILIZER': 216, 'WOOL': 168}
+  $ 140,365 margin      -775 NB-v2 (carrot, bpW~1300)   MakiMakiAi           lb=  1084 h=3c/12s hands=10 bpW=1309 sold={'WHEAT': 1074, 'WOOL': 271, 'FERTILIZER': 213, 'STRAWBERRY': 196, 'MELON': 120}
+
+
+########## OUR RECORD BY SUBMISSION (new corpus) ##########
+  exp030:  36 eps 16-20 (44%) mean margin      6,803 our money $ 117,911 opp $ 111,107
+  exp031:  40 eps 16-24 (40%) mean margin       -308 our money $ 120,296 opp $ 120,604
+  exp032:  22 eps 13-9 (59%) mean margin     16,216 our money $ 130,299 opp $ 114,083
+  exp033:  15 eps 8-7 (53%) mean margin     13,168 our money $ 128,589 opp $ 115,421
