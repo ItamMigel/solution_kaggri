@@ -42,9 +42,9 @@ def mine(path, verbose=True):
     orig_land = K._do_buy_land
     orig_unit = K._apply_unit_action
 
-    def commit(op, item, price, farm, private, market):
+    def commit(op, item, price, farm, private, market, *extra):
         pid = farms_ref.get(id(farm), 0)
-        ok = orig_commit(op, item, price, farm, private, market)
+        ok = orig_commit(op, item, price, farm, private, market, *extra)
         if ok:
             day = cur["step"] // 24
             if op == "SELL":
