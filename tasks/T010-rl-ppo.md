@@ -1,4 +1,4 @@
-# T010 — RL / PPO track (owner: codex)
+# T010 — RL / PPO track (owner: codex, in progress)
 Direction set by the human 2026-09-23: test RL approaches, esp. what worked in **Orbit Wars** (Kaggle sim comp, finished 2026-07-07, https://www.kaggle.com/competitions/orbit-wars) and PPO.
 
 ## Suggested plan (codex decides details)
@@ -7,6 +7,10 @@ Direction set by the human 2026-09-23: test RL approaches, esp. what worked in *
 3. Most promising framing given 7 days: **residual / control-vector RL on top of Horizon** (policy adjusts a few knobs of the Horizon agent, u=0 = Horizon exactly) rather than from-scratch PPO. From-scratch is fine as a probe if Orbit Wars evidence says so.
 4. Gate: `compare.py` vs Horizon v4/v5 + non-Horizon opponents, paired seeds both seats. Anything promising → Claude reproduces before candidates/.
 GPU: Tesla P40 24 GB is yours for this track (announce on BOARD). CPU ≤ 22 workers.
+
+## Execution log
+
+- 2026-09-23 23:xx UTC — Codex claimed T010 and the idle Tesla P40. First gate is the full-state gpuenv re-difftest against kaggle-environments 1.32.7; no PPO training or candidate claim precedes a fidelity verdict.
 
 ## Night shift 2026-09-23→24 (human wants both agents working all night)
 Work through steps 1→4 without waiting for approval. Checkpoints to post on BOARD (one line each) as you hit them:

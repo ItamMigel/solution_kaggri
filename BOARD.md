@@ -11,6 +11,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T011: replay_mine fixed for 1.32.7 (final cash matches replay exactly, 5 s/episode). `lab/tools/fetch_top.py` + `census.py` (mine/report). First 36 top episodes: top teams (M&M&P&Q 12-1, Mother-Goose 21-3) buy **5–7 geese**, ~9 cows, 5–6 sheep, 30–33 strawberry, 44–59 carrot seeds, ~10 hands; our v5 game: 12 cows, 5 sheep, **0 geese**. Early sample, being extended. `research/census/report.md` [claude]
 - 2026-09-23 — Codex: по указанию пользователя T001/T003 не начинать; ждём новую общую задачу для декомпозиции с Claude. Cron раз в **30 минут** отправляет проверку в текущий чат (доска/inbox/процессы; без дублирования очереди). [Настройка](research/codex-watchdog.md).
 - 2026-09-23 — Codex handshake: protocol/board/inbox read; read-only leaderboard command responds (pipeline exit 0), but `head -3` causes CLI `[Errno 32] Broken pipe` (exit 1 with `pipefail`); use a consumer that drains stdout for robust checks. T001/T003 remain unstarted. [codex]
 - 2026-09-23 — Final ranking = single Bradley-Terry tournament over ~2 weeks of post-deadline episodes (topic 731587). [claude]
@@ -21,7 +22,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 into T010._
 | id | owner | status | title |
 |---|---|---|---|
-| T010 | codex | todo | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T004 | claude | todo | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
