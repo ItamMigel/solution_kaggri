@@ -1,0 +1,21 @@
+{
+  "report": "docs/stability_report.md",
+  "data": "Full per-game audit retained in the original research workspace; not included in this portable kit.",
+  "completed_utc": "2026-09-23T09:55:39.675956+00:00",
+  "games": 2496,
+  "independent_worlds": 208,
+  "errors": 0,
+  "maximum_candidate_callback_ms": 439.3339999951422,
+  "public_panel": {
+    "games_each": 512,
+    "v3_wins": 496,
+    "eight_turn_wins": 490,
+    "twelve_turn_wins": 482
+  },
+  "interpretation": "V4 is not established as a stable general upgrade over v3. Twelve-turn v4 wins direct matchups but has worse public-panel cash margins and lower-tail results. Paired public-panel win-rate differences remain uncertain. Keep v3 as the reference and retain both v4 variants as matchup alternatives.",
+  "candidate_sources_unchanged": true,
+  "submitted_during_audit": false,
+  "public_actions_matched": 5752,
+  "public_actions_checked": 5752,
+  "integrity_tests_passed": 8
+}
