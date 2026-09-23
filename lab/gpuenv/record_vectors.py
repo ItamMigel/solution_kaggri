@@ -509,8 +509,11 @@ class Instrument:
 
         orig_commit = K._commit_unit
 
-        def commit_unit(op, item, price, farm, private, market):
-            ok = orig_commit(op, item, price, farm, private, market)
+        def commit_unit(op, item, price, farm, private, market, *extra):
+            # kaggle-environments 1.32.7 passes shed_capacity as a seventh
+            # positional argument.  Forward a future tail unchanged so the
+            # instrumentation cannot alter simulator semantics.
+            ok = orig_commit(op, item, price, farm, private, market, *extra)
             if not ok:
                 s["commit_fail"] += 1
             elif op == "SELL":
@@ -918,8 +921,14 @@ def sharp_plantblock(obs):
     return {"farmer": farmer, "hands": hands[:MAX_HANDS], "market": market[:MAX_ORDERS]}
 
 
-AG_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-                      "artifacts", "agents")
+# The lab worktree intentionally does not carry the large frozen agent corpus.
+# A caller can point the recorder at that immutable corpus without copying it
+# into the worktree; the default preserves the standalone source-tree layout.
+AG_DIR = os.environ.get(
+    "KAGGRICULTURE_AGENT_DIR",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                 "artifacts", "agents"),
+)
 
 BUILTIN_AGENTS = {
     "starter": "starter",
@@ -1317,8 +1326,10 @@ def main(argv=None):
         "max_hands_cap": MAX_HANDS,
         "max_orders_cap": MAX_ORDERS,
         "wall_s": round(time.time() - t0, 1),
-        "episodes": [{k: r[k] for k in ("ep", "seed", "agents", "file", "ok")} | (
-            {"stats": r["stats"]} if r["ok"] else {"error": r["error"]}) for r in records],
+        "episodes": [{k: r[k] for k in ("ep", "seed", "agents", "ok")}
+                     | ({"file": r["file"], "stats": r["stats"]}
+                        if r["ok"] else {"error": r["error"]})
+                     for r in records],
         "aggregate": aggregate(records),
     }
     with open(os.path.join(args.out, "manifest.json"), "w") as f:

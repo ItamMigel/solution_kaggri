@@ -50,16 +50,14 @@ def town_consume(st, step, day=None):
         if step % TOWN_SHOP_SELL_INTERVAL == 0:
             st.market_inv -= shop_pull
         if step % TOWN_CENTER_SELL_INTERVAL == 0:
-            st.market_inv -= town_center_mult(step // TURNS_PER_DAY) * tab.town_center_mask
+            st.market_inv -= tab.town_center_mask
         return
     if day is None:
         day = step // TURNS_PER_DAY
     shop_tick = (step % TOWN_SHOP_SELL_INTERVAL == 0).to(torch.int64)
     center_tick = (step % TOWN_CENTER_SELL_INTERVAL == 0).to(torch.int64)
-    # TOWN_CENTER_DEMAND_SCHEDULE = [(20, 4), (10, 2), (0, 1)]
-    mult = 1 + (day >= 10).to(torch.int64) + 2 * (day >= 20).to(torch.int64)
     st.market_inv -= (shop_tick * shop_pull
-                      + center_tick * mult * tab.town_center_mask)
+                      + center_tick * tab.town_center_mask)
 
 
 def decay_plants(st, step):
@@ -179,28 +177,26 @@ def _drop_inventories(st):
 
 
 def _unlock_shop(st, words, base_word, enabled=True):
-    """Source 855-859: ``rng.choice(sorted(remaining))``.
+    """Source 855-859: ``rng.choice(sorted(SHOPS))`` with replacement.
 
     ``enabled``: bool or 0-dim device tensor -- whether this is an unlock day.
     Gating on device keeps the end-of-day phase static-shaped for graph capture.
     """
     tab = get_tables(str(st.shops.device))
-    n_rem = N_SHOPS - st.shops.to(torch.int64).sum(-1)             # [B]
-    do = (n_rem > 0) & torch.as_tensor(enabled, device=st.shops.device)
-    k = tab.bitlen[n_rem.clamp(0, N_SHOPS)]
+    # 1.32.7 permits repeated unlocks.  The town holds at most 8 *instances*,
+    # so the count tensor must not be reduced to the old boolean set.
+    do = (st.shops.sum(-1) < 8) & torch.as_tensor(enabled, device=st.shops.device)
+    k = torch.full_like(st.shops.sum(-1), 4)  # _randbelow(8) -> getrandbits(4)
     idx = base_word.unsqueeze(-1) + torch.arange(_CHOICE_TRIES, device=words.device)
     idx = idx.clamp(0, words.shape[1] - 1)
     cand = words.gather(-1, idx) >> (32 - k).unsqueeze(-1)
-    valid = cand < n_rem.unsqueeze(-1)
+    valid = cand < N_SHOPS
     pos = torch.where(valid, torch.arange(_CHOICE_TRIES, device=words.device).expand_as(valid),
                       torch.full_like(cand, _CHOICE_TRIES)).min(dim=-1).values
     r = cand.gather(-1, pos.clamp(max=_CHOICE_TRIES - 1).unsqueeze(-1)).squeeze(-1)
 
-    not_unlocked = ~st.shops
-    nu = not_unlocked.to(torch.int64)
-    rank = nu.cumsum(-1) - nu
-    pick = not_unlocked & (rank == r.unsqueeze(-1)) & do.unsqueeze(-1)
-    st.shops |= pick
+    pick = torch.nn.functional.one_hot(r, num_classes=N_SHOPS).to(st.shops.dtype)
+    st.shops.add_(pick * do.unsqueeze(-1).to(st.shops.dtype))
 
 
 def end_of_day(st, day, max_hands: int, words=None, unlock=None):

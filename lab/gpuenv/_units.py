@@ -116,7 +116,10 @@ def apply_one_unit(st, unit_actions, blocked, day, step, u: int):
     ny = fy + tab.move_dy[mi]
     inb = (nx >= 0) & (nx < BOARD_SIZE) & (ny >= 0) & (ny < BOARD_SIZE)
     nflat = (ny.clamp(0, BOARD_SIZE - 1) * BOARD_SIZE + nx.clamp(0, BOARD_SIZE - 1)).unsqueeze(-1)
-    can_move = is_move & inb & (st.kind.gather(-1, nflat).squeeze(-1) != O.TILE_LOCKED)
+    # 1.32.7 permits crossing into a LOCKED tile.  This matters at the shed:
+    # hands can spawn on one of its initially locked access tiles and otherwise
+    # would be stranded.  Tile operations still retain the guard below.
+    can_move = is_move & inb
     st.ux[:, :, u] = torch.where(can_move, nx, fx).to(st.ux.dtype)
     st.uy[:, :, u] = torch.where(can_move, ny, fy).to(st.uy.dtype)
 
@@ -135,7 +138,11 @@ def apply_one_unit(st, unit_actions, blocked, day, step, u: int):
     tfa = st.tfavail.gather(-1, flat).squeeze(-1)
     tcb = st.tcare.gather(-1, flat).squeeze(-1).to(torch.int64)
 
-    act = act & ~is_move & (k != O.TILE_LOCKED)
+    # The 1.32.7 interpreter resolves PICKUP/DROP before rejecting operations
+    # on a LOCKED tile: three shed-access tiles begin locked, yet must remain
+    # usable as standing positions.  Other tile operations still no-op there.
+    shed_op = ((op == O.OP_PICKUP) | (op == O.OP_DROP) | (op == O.OP_PLACE))
+    act = act & ~is_move & ((k != O.TILE_LOCKED) | shed_op)
 
     is_plant = k == O.TILE_PLANT
     is_animal = k == O.TILE_ANIMAL

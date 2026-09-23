@@ -68,7 +68,7 @@ class State:
 
     # --- shared world ------------------------------------------------------
     market_inv: torch.Tensor    # int64 [B, 9]
-    shops: torch.Tensor         # bool  [B, 8]  (alphabetical shop order)
+    shops: torch.Tensor         # int64 [B, 8]  (alphabetical shop-instance counts)
 
     # --- rng ---------------------------------------------------------------
     rng_words: torch.Tensor     # int32 [B, 30, WORDS_PER_DAY] (may be empty)

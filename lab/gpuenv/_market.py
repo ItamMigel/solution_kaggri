@@ -33,7 +33,7 @@ from __future__ import annotations
 import torch
 
 from . import ops as O
-from ._consts import FARM_HAND_COST_MULT, MAX_MARKET_ORDERS
+from ._consts import FARM_HAND_COST_MULT, MAX_MARKET_ORDERS, SHED_CAPACITY
 from ._tables import get_tables
 
 MARKET_UNIT_CAP = 100_000
@@ -131,7 +131,14 @@ def _lane_loop(st, tab, op, item, qty, active_in=None, stats=None):
         price = _quote(st, tab, is_sell, is_bp, is_bs, is_ba, item)
         shed_here = st.shed.gather(-1, item_iu).squeeze(-1)
         ok_sell = alive & is_sell & (shed_here > 0)
-        ok_buy = alive & (is_bp | is_bs | is_ba) & (st.money >= price)
+        # kaggle-environments 1.32.7 applies shedCapacity to every market
+        # purchase that lands in the shed (BUY_PRODUCT and BUY_ANIMAL), but
+        # never to seeds.  Check it on each lockstep unit as the interpreter
+        # does, because an order can run out of room mid-quantity.
+        shed_room = st.shed.sum(-1) < SHED_CAPACITY
+        needs_shed = is_bp | is_ba
+        ok_buy = (alive & (is_bp | is_bs | is_ba) & (st.money >= price)
+                  & (~needs_shed | shed_room))
         ok = ok_sell | ok_buy
 
         st.money += torch.where(ok_sell, price, 0) - torch.where(ok_buy, price, 0)
@@ -201,7 +208,11 @@ def _lane_fast(st, tab, op, item, qty, need_bp: bool, coupled_any: bool, stats=N
     m_fixed = fast & (is_bs | is_ba)
     cost1 = torch.where(is_bs, tab.crop_seed_cost[crop_i],
                         tab.animal_cost[(item - O.ITEM_GOOSE).clamp(0, O.N_ANIMALS - 1)])
-    cnt = torch.where(m_fixed, torch.minimum(qty, st.money // cost1.clamp(min=1)), 0)
+    shed_room = (SHED_CAPACITY - st.shed.sum(-1)).clamp(min=0)
+    affordable = torch.minimum(qty, st.money // cost1.clamp(min=1))
+    cnt = torch.where(m_fixed,
+                      torch.where(is_ba, torch.minimum(affordable, shed_room), affordable),
+                      0)
     st.money -= cnt * cost1
     st.seeds.scatter_add_(-1, crop_i.unsqueeze(-1),
                           torch.where(is_bs, cnt, 0).unsqueeze(-1))
@@ -211,7 +222,8 @@ def _lane_fast(st, tab, op, item, qty, need_bp: bool, coupled_any: bool, stats=N
     # ---- BUY_PRODUCT (never same-item across players here) ------------------
     if need_bp:
         m_bp = fast & is_bp
-        kbp, cost = _bp_closed(tab, item_p, v0, st.money, qty)
+        bp_qty = torch.minimum(qty, shed_room)
+        kbp, cost = _bp_closed(tab, item_p, v0, st.money, bp_qty)
         kbp = torch.where(m_bp, kbp, 0)
         cost = torch.where(m_bp, cost, 0)
         st.money -= cost

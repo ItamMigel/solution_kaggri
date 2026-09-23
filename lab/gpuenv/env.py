@@ -268,7 +268,7 @@ class VecKaggriculture:
             inv_order=torch.full((b, 2, self.max_units, O.N_ITEMS), _ORDER_SENTINEL,
                                  dtype=torch.int64, device=dev),
             market_inv=torch.full((b, O.N_PRODUCTS), MARKET_I0, dtype=torch.int64, device=dev),
-            shops=z((b, 8), torch.bool),
+            shops=z((b, 8), torch.int64),
             rng_words=(self._make_rng(seeds) if (rng and not self.rng_lazy)
                        else torch.zeros((b, N_DAYS, 1), dtype=torch.int32, device=dev)),
             overflow=z((b, 2), torch.int32),
@@ -460,7 +460,7 @@ class VecKaggriculture:
 
         bits = torch.zeros(b, dtype=torch.int64, device=dev)
         for j, src in enumerate(self._SHOPS_ALPHA_TO_DICT):
-            bits |= st.shops[:, j].to(torch.int64) << src
+            bits |= (st.shops[:, j] > 0).to(torch.int64) << src
 
         return {
             "money": st.money.to(torch.int64),

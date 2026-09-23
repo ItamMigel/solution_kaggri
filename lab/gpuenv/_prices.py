@@ -29,10 +29,10 @@ INV_HI = 60000
 INV_N = INV_HI - INV_LO + 1
 
 _CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_cache")
-_CACHE_PATH = os.path.join(_CACHE_DIR, f"prices_v1_{INV_LO}_{INV_HI}.npz")
+_CACHE_PATH = os.path.join(_CACHE_DIR, f"prices_v2_{INV_LO}_{INV_HI}.npz")
 
 
-def _shape(func: str, x: float) -> float:
+def _shape(func: str, x: float, T: float | None = None) -> float:
     """Verbatim copy of the source's ``_shape``."""
     x = max(0.0, x)
     if func == "linear":
@@ -45,6 +45,14 @@ def _shape(func: str, x: float) -> float:
         return math.log(1.0 + x)
     if func == "log10":
         return math.log10(1.0 + x)
+    if func == "hinge":
+        # kaggle-environments 1.32.7: linear until x/T reaches one,
+        # then a steep quadratic scarcity premium.  The source calls this
+        # helper with T for both the numerator and normalising denominator.
+        if not T or T <= 0:
+            return x
+        u = x / T
+        return u + 8.0 * max(0.0, u - 1.0) ** 2
     return x
 
 
@@ -52,8 +60,8 @@ def market_price(item: int, inventory: int) -> int:
     """Verbatim copy of the source's ``market_price`` (default params)."""
     base, I0, T, below_func, below_target, above_func, above_target = MARKET_PARAMS[item]
     if inventory < I0:
-        amp = below_target * base / _shape(below_func, T)
-        price = base + amp * _shape(below_func, I0 - inventory)
+        amp = below_target * base / _shape(below_func, T, T)
+        price = base + amp * _shape(below_func, I0 - inventory, T)
     else:
         amp = above_target * base / _shape(above_func, T)
         price = base - amp * _shape(above_func, inventory - I0)
@@ -64,13 +72,13 @@ def _build_table() -> np.ndarray:
     table = np.empty((N_PRODUCTS, INV_N), dtype=np.int64)
     for item in range(N_PRODUCTS):
         base, I0, T, bf, bt, af, at = MARKET_PARAMS[item]
-        amp_below = bt * base / _shape(bf, T)
+        amp_below = bt * base / _shape(bf, T, T)
         amp_above = at * base / _shape(af, T)
         row = table[item]
         for k in range(INV_N):
             inv = INV_LO + k
             if inv < I0:
-                price = base + amp_below * _shape(bf, I0 - inv)
+                price = base + amp_below * _shape(bf, I0 - inv, T)
             else:
                 price = base - amp_above * _shape(af, inv - I0)
             p = int(round(price))

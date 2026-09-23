@@ -20,7 +20,7 @@ SHED_CAPACITY = 100
 WEED_SPAWN_CHANCE = 0.005
 TOWN_SHOP_UNLOCK_INTERVAL = 3
 TOWN_SHOP_SELL_INTERVAL = 4
-TOWN_CENTER_SELL_INTERVAL = 12
+TOWN_CENTER_SELL_INTERVAL = 24
 FARM_HAND_COST_MULT = 1
 
 N_TILES = BOARD_SIZE * BOARD_SIZE
@@ -142,11 +142,11 @@ PRICE_FLOOR = 1
 # item id -> (base, I0, T, below_func, below_target, above_func, above_target)
 MARKET_PARAMS = [
     (25,  MARKET_I0, 400, "sqrt",   0.80, "log",    0.20),   # WHEAT
-    (35,  MARKET_I0, 450, "log",    0.20, "sqrt",   0.70),   # CARROT
-    (60,  MARKET_I0, 200, "linear", 0.40, "sqrt",   0.60),   # TOMATO
+    (35,  MARKET_I0, 450, "hinge",  1.00, "sqrt",   0.70),   # CARROT
+    (60,  MARKET_I0, 200, "hinge",  0.40, "sqrt",   0.60),   # TOMATO
     (120, MARKET_I0, 100, "sqrt",   0.70, "linear", 1.60),   # STRAWBERRY
     (250, MARKET_I0, 300, "log",    0.20, "sq",     3.60),   # MELON
-    (50,  MARKET_I0, 332, "linear", 0.40, "log",    0.20),   # EGG
+    (50,  MARKET_I0, 332, "hinge",  0.40, "log",    0.20),   # EGG
     (160, MARKET_I0, 122, "sqrt",   0.60, "linear", 1.60),   # MILK
     (200, MARKET_I0, 105, "log",    0.20, "sq",     3.20),   # WOOL
     (100, MARKET_I0, 200, "linear", 0.40, "linear", 0.40),   # FERTILIZER
