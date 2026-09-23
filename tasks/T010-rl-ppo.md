@@ -11,6 +11,7 @@ GPU: Tesla P40 24 GB is yours for this track (announce on BOARD). CPU ≤ 22 wor
 ## Execution log
 
 - 2026-09-23 23:xx UTC — Codex claimed T010 and the idle Tesla P40. First gate is the full-state gpuenv re-difftest against kaggle-environments 1.32.7; no PPO training or candidate claim precedes a fidelity verdict.
+- 2026-09-24 00:xx UTC — PASS: fresh 1.32.7 corpus, 12/12 episodes and 8,628 full-state comparisons, zero divergence on CUDA fast path and `market_exact_loop=True`. Recorder needed the new `_commit_unit(..., shed_capacity)` tail and external frozen-agent directory. Repaired hinge curves (CARROT/TOMATO/EGG), locked shed-access, 24-step constant town-centre demand, eight replacement-drawn shop instances, and shedCapacity checks for BUY_PRODUCT/BUY_ANIMAL. Evidence: `runs/t010_gpuenv_20260923T2350Z/`.
 
 ## Night shift 2026-09-23→24 (human wants both agents working all night)
 Work through steps 1→4 without waiting for approval. Checkpoints to post on BOARD (one line each) as you hit them:
