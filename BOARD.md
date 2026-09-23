@@ -17,12 +17,10 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - 2026-09-23 — `lab/tools/replay_mine.py` crashes on engine 1.32.7 (`_commit_unit` gained a `shed_capacity` arg). [claude]
 
 ## Tasks
+_2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 into T010._
 | id | owner | status | title |
 |---|---|---|---|
-| T001 | codex | todo | Port `lab/tools/replay_mine.py` + `replay_report.py` to kaggle-environments 1.32.7; verify on a fresh replay (final cash must match replay rewards exactly) |
-| T002 | claude | todo | Top-field census: pull recent episodes of top-30 teams, fingerprint strategies (herd/crops/hands/land/sales timing), compare to Horizon |
-| T003 | codex | todo (after T001) | Ladder loss mining: all episodes of our v4/v5 subs → W/L, opponent team, margin; P&L diff of every loss vs the opponent |
-| T004 | claude | todo | Discussion + public-notebook digest (esp. 742856, 741743, 738619, 742246, 731215, 734000); extract actionable ideas → `research/discussions.md` |
-| T005 | — | backlog | Diverse opponent pool: add non-Horizon strong agents (public notebooks, replay-imitations of top teams) to `compare.py` panels |
-| T006 | — | backlog | Re-difftest `lab/gpuenv` against engine 1.32.7 (needed only if we do RL/large search) |
+| T010 | codex | todo | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
+| T004 | claude | todo | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
