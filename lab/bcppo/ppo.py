@@ -239,9 +239,9 @@ def _restore_resume(path, net, opt, dev):
     if "optimizer" in ck:
         opt.load_state_dict(ck["optimizer"])
     if "rng_cpu" in ck:
-        torch.set_rng_state(ck["rng_cpu"])
+        torch.set_rng_state(ck["rng_cpu"].cpu())
     if dev.startswith("cuda") and "rng_cuda" in ck:
-        torch.cuda.set_rng_state_all(ck["rng_cuda"])
+        torch.cuda.set_rng_state_all([x.cpu() for x in ck["rng_cuda"]])
     return int(ck["iter"]) + 1
 
 
