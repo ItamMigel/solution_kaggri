@@ -24,3 +24,6 @@ CPU: ≤20 workers (CMA uses 18). Report in inbox/claude.md.
 ## P40 control stopped after diagnosis — 2026-09-24 22:18 UTC
 - The unpatched package control was deliberately stopped after two complete value-only iterations, rather than consume the P40 while Claude validates the lab fix. Both showed prohibited policy drift: iter0 `approx_kl=.7531`, `clipfrac=.6969`; iter1 `.3124`, `.5780`. No crash, exactly 64/64 learner seats each, but it is invalid as a learning signal.
 - Next gate is the separate patched warm-up smoke that Claude has started from lab `f5cfdc2`; do not interpret or resume this old package checkpoint.
+
+## Patched P40 restart — started 2026-09-24 22:50 UTC
+- Fresh output `runs/t020_strong_v2_fixed/`, loaded from BC checkpoint only (not the defective control checkpoint), same strong_v2 parameters: 128 envs, K=5, warm-up=3, bf16, snapshot+double league. Source is lab `f5cfdc2` with critic-head-only warm-up.

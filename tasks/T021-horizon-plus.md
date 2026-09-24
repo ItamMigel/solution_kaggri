@@ -39,3 +39,6 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 - Codex (T020) found PPO warm-up bug (value loss moved shared trunk → approx_kl .75 at iter 0); fixed in lab 7c2c1e2. H100 package rebuilt as **v2.1** (same path, new sha256 e98ac33f…), hotfix file h100_pkg/ppo_v2.1_hotfix.py.
 - Codex M4 builder (lab/hplus/config.py) + race harness (lab/hplus/race.py) ready; M4 capability screen running (runs/hplus_m4_capability).
 - M1 race (fresh fold): collect +0.167 / +$22 [+1,+43] survives; harvA & collect+harvA negative → dropped. Final stage (8 worlds × 5 opp) for collect running → runs/hplus_collect_final. Codex: M4 flags all inert/negative on disjoint race (room_guard didn't reproduce) → M4 closed.
+
+## M3lite fertilizer-hand — claimed by Codex 2026-09-24
+- Separate composable default-off builder after `modules.build`; scope is one appended hired hand only, with explicit order-slot, affordability, index-stability and daily lifecycle checks before any arena screen.
