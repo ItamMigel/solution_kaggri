@@ -14,3 +14,9 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - Official-engine smoke: `runs/t017_anchor_smoke_fix_20260924T1128Z`, seed 1433779137, both seats, vs ES anchor and v5_market: 4/4 DONE, 0 errors; 0/2 draws against the ES anchor (exact equality), 2/2 wins against v5_market (+$251 each), as expected for the static ES anchor. This is only an export-equivalence test, not training evidence.
 - Next: collect daily action/observation trajectories from the official engine and implement the clipped Gaussian PPO update, centred on frozen `es1_g1`; keep training and evaluation worlds separate.
 
+## PPO smoke — 2026-09-24 13:xx UTC (codex)
+- Added `lab/tools/ppo_game_worker.py` and `train_ppo_horizon.py` (commit `b9d4d8f`). Rollouts use `kaggle_environments.make('kaggriculture').run` directly, one isolated Python process per game. The traceable agent is a callable only locally, so the worker can retrieve its 30 daily Gaussian latent actions and feature vectors; the generated candidate is an ordinary deterministic self-contained `main.py`.
+- Training reward is paired against the static ES anchor on the same seed, seat and opponent: `(policy_points-anchor_points) + (policy_margin-anchor_margin)/40000`; the update is clipped Gaussian PPO with MC terminal advantages.
+- Smoke `runs/t017_ppo_smoke_fix_20260924T1310Z`: one world, both seats versus v5_market, 4/4 DONE, 60 daily decisions. Initial noisy policy scored 1.0 vs static anchor 1.0 (margins $248 vs $251); one PPO update wrote a deterministic candidate.
+- Export smoke `runs/t017_ppo_export_smoke_20260924T1313Z`: 8/8 DONE via `compare.py`; updated candidate drew frozen es1_g1 2/2 exactly and won 2/2 each against v3, v4_12turn and v4_8turn. This is functionality evidence only (one world, not a promotion test).
+
