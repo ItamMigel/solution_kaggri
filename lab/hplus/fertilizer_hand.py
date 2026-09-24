@@ -213,7 +213,7 @@ def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
         raise ValueError("day window must be within 0..28")
     if not (1 <= value["fh_min_targets"] <= 10 and 1 <= value["fh_take"] <= 8
             and value["fh_cash_buffer"] >= 0 and 0 <= value["fh_reserve"] <= 100
-            and 0 <= value["fh_max_hires_today"] <= 9):
+            and 0 <= value["fh_max_hires_today"] <= 30):
         raise ValueError("invalid fertilizer-hand bounds")
     if not isinstance(value["fh_crops"], list) or not value["fh_crops"] or any(x not in {"STRAWBERRY", "TOMATO"} for x in value["fh_crops"]):
         raise ValueError("fh_crops must be a nonempty subset of STRAWBERRY/TOMATO")
