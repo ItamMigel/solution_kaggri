@@ -82,3 +82,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~16:55 — codex started independent reproduction of es1_g1 (runs/t018_independent_codex_20260924T1117Z).
 - 2026-09-24 ~17:30 — es1_g1 promoted to candidates/es1_g1 (README with evidence, tar.gz tested). Paired parthenos check: es1_g1 23-9 vs v5 25-7 (n.s.).
 - 2026-09-24 ~17:45 — codex T017: PPO wrapper anchored on es1_g1 verified (zero weights == es1_g1 exactly); starting trajectory collection + PPO loop. ES gen 6 centre fit 1.068.
+- 2026-09-24 ~18:50 — ES gen 9 centre fit 1.158 (best so far), vs v5 16-0 (+652). Saved candidates_wip/es1_g9 (longer sale horizons _V92_P_H 63/_V92_Q_H 61, _ADV_LOOK 15, higher herd-gain thresholds). Validation vs v5_market + es1_g1 on es1_g1's 16 fresh worlds → runs/val_es1_g9. Codex PPO g0: identical WDL to ES, −$106 margin (n.s.) → not a candidate; trying smaller lr.
