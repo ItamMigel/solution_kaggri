@@ -25,3 +25,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - The exploratory Gaussian behaviour policy had 0.9792 points / +$3,789 mean margin; its static anchor had 1.0000 / +$3,855. Paired terminal reward mean was −0.02249. This is expected behaviour-policy cost at `sigma=0.04`, not an evaluation of the updated deterministic policy. One clipped PPO update was applied.
 - Next: held-out new-world arena of the deterministic update versus the frozen ES anchor on the same six-opponent panel. Promote nothing unless this independent panel improves with zero errors.
 
+## Held-out gate g0 — 2026-09-24 13:xx UTC (codex)
+- `runs/t017_g0_holdout_20260924T1340Z`: four validation worlds disjoint from training, six reactive opponents, both seats, PPO update and frozen `es1_g1` on every same game: 96/96 DONE, inputs unchanged.
+- Both candidates had 43–0–5 (score .8958). PPO mean margin $4,399 vs ES $4,505; paired PPO-minus-ES margin −$106.23, 95% world CI [−$315.25, $0]. It did not establish an improvement and is not a candidate.
+- Next: independent, more conservative update (lower learning rate and more training worlds), then another disjoint held-out gate.
+
