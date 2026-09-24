@@ -35,4 +35,4 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T012 | codex | todo | Horizon production overrides toward the M&M&P&Q profile (land timing, strawberry+fertilize, herd); hard gate incl. mmpq tapes. `tasks/T012-horizon-production.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
 | T004 | codex | todo | Discussion digest (non-RL threads) → `research/discussions.md` |
-| T007 | claude | ongoing | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
