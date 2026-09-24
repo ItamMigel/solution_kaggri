@@ -49,7 +49,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
-| T019 | claude | in_progress | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
 | T017 | codex | in_progress — ES-anchored daily wrapper smoke passed; PPO rollout/trainer next | PPO over Horizon: per-day knob policy via `lab/tools/knobs.py`, CPU rollouts on real engine. `tasks/T017-ppo-horizon.md` |
 | T018 | claude | in_progress | ES over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
