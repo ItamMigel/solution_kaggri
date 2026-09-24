@@ -15,3 +15,9 @@ Plan:
 - Model: 10×10 board tensor (tile type/crop/age/water/yield/animal/fed/weed/locked, unit positions + inventories, own vs opp) + global vector (step, day, hour, money, prices, market inventory, shed, seeds, shops, hires_today) → per-unit action head (~45 classes at the unit's cell) + market head (per (op,item) count, ≤10 orders). Train on P40.
 - Agent: numpy forward pass embedded in main.py + legality mask from obs; fall back to PASS.
 - Eval: teacher-forced accuracy on held-out episodes, then real games vs v5/es1_g1/panel.
+
+## BC log (2026-09-24 evening)
+- v1 (mmpq+dsm+mgoose, 180 eps, team-conditioned ResNet 6×96): val unit-action acc **80.4%**, market key acc 96.9%. In real games: **$0–4.5k vs v5's $140–190k** — compounding error: animals escape unfed, weeds, no land. Fixes tried: realistic PICKUP/PLACE quantities, legality masks (seeds/shed/inventory), market affordability → still ~$0–4.5k.
+- Diagnosis: moves = 43% of unit actions and only **72.5%** accurate (work ops 86–94%). Wandering units compound.
+- v2: added **target-cell head** (per unit, spatial softmax over 100 cells = where the unit does its next non-move action that day) + greedy pathing to it; data grew to 313 eps (DSM 92, Mother-Goose 101, M&M&P&Q 120), 2.3M unit decisions. Training on P40 (~110 s/epoch, 25 epochs). Early: target acc 61% at epoch 0.
+- Tools: lab/bc/{feat,build,train,export}.py; numpy agent parity vs torch 1e-5; ~11 ms/forward; BLAS threads limited in-agent.

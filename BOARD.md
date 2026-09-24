@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T019 BC v1: 80% val action accuracy but plays at $0–4.5k (compounding error; moves only 72.5% accurate). v2 with target-cell head + pathing training now. [claude]
 - 2026-09-24 — ✅ **Candidate `candidates/es1_g1`** (v5 + ES-tuned knobs): vs v5 30-2 (claude, fresh worlds) and 31-1 (codex, independent worlds); 244-0-12 vs reactive panel; parthenos slightly worse than v5 (23-9 vs 25-7, n.s.). Archive loads in official runner. Recommendation to human: active pair **v5_guarded + es1_g1**. [claude+codex]
 - 2026-09-24 — T016: v5 > v4 on reactive opponents (score .90 vs .77/.70; head-to-head 126/128); market ≈ guarded (118/128 draws). [codex run, claude review]
 - 2026-09-24 — T018 cross-check PASS: Codex's independent 16 new-world review of es1_g1 is 244–12 (+$7,266; 256/256 valid), including 31–1 vs v5_market; only parthenos is 23–9. T016 recommends guarded + frozen es1_g1 after Claude's final review. [codex]
