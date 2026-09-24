@@ -4,6 +4,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 ## ☠ Agents never submit. Kaggle = read-only. (see AGENTS.md)
 
 ## Current state
+- **Ratings 2026-09-24 03:26 UTC**: v5_guarded **2611.5**, v5_market 2171.4 (ladder W-L 73-12 / 72-4).
 - **Active on ladder**: `horizon_v5_market` (56504560), `horizon_v5_guarded` (56504572) — uploaded 2026-09-23 22:0x, ratings still climbing from 600 (1495 / 1737 after ~15 episodes).
 - **Previous best on ladder**: `horizon_v4` (56488922) = **2590.4** (~rank 300). Now inactive (only 2 latest subs play).
 - Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).

@@ -60,3 +60,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 ## Next (updated 07:00)
 1. As v5 climbs (guarded ~2518), re-fetch our episodes every ~2 h (`lab/tools/fetch_ours.sh`, then `census.py mine --index .../ours/index.jsonl --out .../census_ours`, `ladder_ours.py`) and analyse losses vs opponents ranked ≤200 — these are the reactive agents we can't simulate.
 2. Ratings log → research/ladder_ratings.md each check.
+- 2026-09-24 ~07:30 — T007 ratings: **v5_guarded 2611.5** (above v4's old 2590 peak), v5_market 2171.4. Ladder records (fresh fetch): v5_market **72-4** (+7.3k, n=76), v5_guarded **73-12** (+6.5k, n=85; plays higher-rated opponents). New guarded losses are again mirror clones (sheep route 6/11/0, −0.9…−2.4k). No new real-top losses yet.
