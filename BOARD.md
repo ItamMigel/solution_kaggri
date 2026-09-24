@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T018 ES: after one update the knob centre beats **v5_market 16/16 (+536)** and the whole reactive panel on gen-1 worlds. Independent validation on fresh worlds running (`runs/val_es1_g1`). Not a candidate yet. [claude]
 - 2026-09-24 — Human: keep building/improving, don't write things off as unrealistic. New plan: optimise Horizon itself. `lab/tools/knobs.py` exposes 24 Horizon knobs (base == v5 exactly, verified). Claude: ES (T018). Codex: PPO per-day knob policy (T017). [claude]
 - 2026-09-24 — T015 ✗ closed: all 12 alternatives to route 9 for the entire Yarn-shop family fail the predeclared 32-world screen (2,496/2,496, no errors); best r0/r2 are −30.2pp on factual Yarn games. Keep route 9. [codex]
 - 2026-09-24 — T015 ✗: on four fresh factual Smoothie→Yarn worlds, legacy route 2 loses to current route 9 (24–8 vs 30–2; paired score −0.188, margin −$392; 64/64 error-free). Keep route 9; first 48-game route-8 screen had zero factual target games and is discarded. [codex]
