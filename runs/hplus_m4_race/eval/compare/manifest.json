@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-09-24T22:31:07.348904+00:00",
+  "candidates": {
+    "genome0": "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py",
+    "room_guard_on": "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py"
+  },
+  "opponents": {
+    "g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "v5_market": "/workspace/solution_kaggri/agents/horizon_v5_market.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py"
+  },
+  "seeds": [
+    1032457230,
+    1279231879,
+    2058852247,
+    633068990
+  ],
+  "expected_games": 48,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py": "70887c7da7b4da0b1ee158727c2d571d53e8b6efe63ad28d0af0d12985b61018",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/solution_kaggri/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "genome0",
+      "g9"
+    ]
+  ]
+}

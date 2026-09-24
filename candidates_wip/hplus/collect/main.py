@@ -7649,9 +7649,47 @@ agent=round4_queue_agent
 globals().update({"_ADV_LOOK": 15, "_V92_P_H": 63, "_V92_P_K": 4, "_V92_Q_H": 61, "_V92_Q_PF": 0.9588692901465681, "_V92_Q_PM": 0.5950279500507011, "_CA_MARGIN": -10.770785089555442, "_CA_BUFFER": 11, "_CA_CASH": 922, "_OR2_CAP": 31, "_OR2_SLOT_MARGIN": 25.254063691938246, "_CH_SHED": 95, "_SR_MARGIN": 8, "_HD2_RATIO": 1.5306223930384326, "_HD2_MIN_GAIN": 907.9084338249305, "_HD2_CARE": 0.7982504516755895, "_CS_RATIO": 1.2704272166602957, "_CS_MIN_GAIN": 596.584918178097, "_RACE_HORIZON_CLONE": 8, "_RACE_HORIZON_ESCALATED": 24, "_Y_MARGIN": -7, "_FD_POWER": 0.6958292762638281, "_FD_WIDTH": 8, "_HH_MARGIN": 2.523456276879993})
 
 # ======================= Horizon+ modules (lab/hplus/modules.py) =======================
-_HP = {'m1_on': True, 'm1_day0': 0, 'm1_day1': 29, 'm1_ops': ['COLLECT_FERTILIZER'], 'm1_fert_crops': ['STRAWBERRY', 'TOMATO']}
+_HP = {'m1_on': True, 'm1_day0': 0, 'm1_day1': 29, 'm1_ops': ['COLLECT_FERTILIZER'], 'm1_fert_crops': ['STRAWBERRY', 'TOMATO'], 'land_on': False, 'land_k': 24, 'land_buffer': 300}
 _HP_FIRST_YIELD = {"WHEAT": 2, "CARROT": 2, "TOMATO": 8, "STRAWBERRY": 10, "MELON": 10}
-_HP_STATS = {"m1_fills": 0}
+_HP_STATS = {"m1_fills": 0, "land_early": 0, "land_absorbed": 0}
+_HP_LAND = {}   # player -> {"owed": int, "done": set(tape steps accelerated)}
+_HP_LAND_COST = [1000, 2000, 4000]
+
+def _hp_land(obs, action):
+    """Macro L: buy a quadrant up to land_k steps before the current Horizon tape plans it (if cash stays >= buffer);
+    then drop the next Horizon BUY_LAND (from tape or any layer) so the total number of quadrants is unchanged."""
+    p = int(obs["player"]); step = int(obs["step"])
+    st = _HP_LAND.setdefault(p, {"owed": 0, "done": set(), "pending": None})
+    if step == 0:
+        st["owed"] = 0; st["done"] = set(); st["pending"] = None
+    nq_now = len(obs["farms"][p].get("unlocked_quadrants") or [])
+    if st["pending"] is not None:   # confirm last step's early purchase actually executed
+        if nq_now > st["pending"]:
+            st["owed"] += 1; _HP_STATS["land_early"] += 1
+        st["pending"] = None
+    orders = [list(o) for o in (action.get("market") or [])]
+    if st["owed"] > 0:
+        kept = []
+        for o in orders:
+            if o and o[0] == "BUY_LAND" and st["owed"] > 0:
+                st["owed"] -= 1; _HP_STATS["land_absorbed"] += 1
+            else:
+                kept.append(o)
+        orders = kept
+    try:
+        cst = _IMPL.chassis.players.get(p) or {}
+        tape = _IMPL.chassis.routes.get(cst.get("route"))
+    except Exception:
+        tape = None
+    if tape and len(orders) < 10 and not any(o and o[0] == "BUY_LAND" for o in orders):
+        for t in range(step + 1, min(len(tape), step + 1 + int(_HP["land_k"]))):
+            a = tape[t] if isinstance(tape[t], dict) else {}
+            if t not in st["done"] and any(o and o[0] == "BUY_LAND" for o in (a.get("market") or [])):
+                farm = obs["farms"][p]; nq = len(farm.get("unlocked_quadrants") or []) - 1
+                if nq < 3 and float(farm["money"]) - _HP_LAND_COST[nq] >= float(_HP["land_buffer"]):
+                    orders.append(["BUY_LAND"]); st["pending"] = nq_now; st["done"].add(t)
+                break
+    return dict(action, market=orders)
 
 def _hp_tile_op(tile, inv, day, allowed):
     """Best productive in-place op on this tile (M1), following engine semantics; None if nothing useful."""
@@ -7685,6 +7723,11 @@ del agent  # kaggle loader takes the LAST-inserted callable: re-insert `agent` a
 
 def agent(obs, config=None):
     action = _HP_BASE_AGENT(obs, config)
+    try:
+        if _HP.get("land_on"):
+            action = _hp_land(obs, action)
+    except Exception:
+        pass
     try:
         if not _HP.get("m1_on"):
             return action

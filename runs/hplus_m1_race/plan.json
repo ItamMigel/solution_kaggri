@@ -1,0 +1,50 @@
+{
+  "created_utc": "2026-09-24T22:36:03.432262+00:00",
+  "stage": "race",
+  "stage_contract": {
+    "worlds": 4,
+    "opponents": 3,
+    "description": "4 worlds \u00d7 g9 + v5 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/wt/claude/lab/hplus/m1race",
+  "seeds": [
+    1083260328,
+    2100403128,
+    486693444,
+    682508698
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates_wip/hplus/g0/main.py",
+      "sha256": "a9a6f301c6f6744cde26066ebd71d542368c9366953b4500c53afd2afdd0a533"
+    },
+    "collect": {
+      "path": "/workspace/shared/candidates_wip/hplus/collect/main.py",
+      "sha256": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072"
+    },
+    "harvA": {
+      "path": "/workspace/shared/candidates_wip/hplus/harvA/main.py",
+      "sha256": "4a301dae5183988742062cf76fc18b2ea7e29e5bd537d769c8853175f168ac41"
+    },
+    "collect_harvA": {
+      "path": "/workspace/shared/candidates_wip/hplus/collect_harvA/main.py",
+      "sha256": "f61f0b957de800236204c2524b0db9d620531e31b74976e38afbac6a8ca671ca"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "v5": {
+      "path": "/workspace/solution_kaggri/agents/horizon_v5_market.py",
+      "sha256": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4"
+    },
+    "parthenos": {
+      "path": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    }
+  },
+  "expected_games": 96,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

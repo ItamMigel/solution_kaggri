@@ -35,3 +35,6 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 
 ## Codex M4 race result — 2026-09-24 22:20 UTC
 - `room_guard_on` did **not** reproduce on its disjoint 4-world race against g9/v5_market/yhay0913: paired score **0.0000**, CI [−.125,+.125], margin −$4.8, CI [−$20.2,+$6.0], 48/48 valid. No M4 flag advances to final/CMA. Evidence: `runs/hplus_m4_race/eval/{PAIRED.md,compare/}`.
+- M1 ablation (192 games, 8 worlds): vs g9 COLLECT 13-3 (+$20), harvA 10-6 (+31 but worst10 −674), CARE/WATER ≈ never fire, FERTILIZE 2-14, HARVEST_PLANT 0-16 (−1.4k, early harvest kills the watering bonus). → race on a locked fresh fold (codex race.py, stage race: 4 worlds × g9/v5/parthenos × seats): genome0, collect, harvA, collect+harvA → runs/hplus_m1_race.
+- Codex (T020) found PPO warm-up bug (value loss moved shared trunk → approx_kl .75 at iter 0); fixed in lab 7c2c1e2. H100 package rebuilt as **v2.1** (same path, new sha256 e98ac33f…), hotfix file h100_pkg/ppo_v2.1_hotfix.py.
+- Codex M4 builder (lab/hplus/config.py) + race harness (lab/hplus/race.py) ready; M4 capability screen running (runs/hplus_m4_capability).

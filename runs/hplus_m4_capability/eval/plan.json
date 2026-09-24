@@ -1,0 +1,88 @@
+{
+  "created_utc": "2026-09-24T22:13:12.418503+00:00",
+  "stage": "capability",
+  "stage_contract": {
+    "worlds": 2,
+    "opponents": 2,
+    "description": "2 worlds \u00d7 g9 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/runs/hplus_m4_capability/fold_capability.json",
+  "seeds": [
+    137093887,
+    134760203
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "hand_align_off": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/hand_align_off/main.py",
+      "sha256": "34a6b704d92bcb803608b521a8dabbf93f8f6a3ed23a56d3e234c8eaf01376ee"
+    },
+    "weed_repair_off": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/weed_repair_off/main.py",
+      "sha256": "58315bd9a7bc1a02d0affb5153ae88020b1856c1ff46f9b378ef58281db30792"
+    },
+    "sell_lead_off": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/sell_lead_off/main.py",
+      "sha256": "03034460af20ee5650db46b02a18dcc80946d7a3d5f4b5b0aeac9101dcda8612"
+    },
+    "budget_guard_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/budget_guard_on/main.py",
+      "sha256": "dd2fb717793af6614c8f7bb4c1f9a41332db9bb0fe5040943de1a6290aceb8dc"
+    },
+    "room_guard_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py",
+      "sha256": "70887c7da7b4da0b1ee158727c2d571d53e8b6efe63ad28d0af0d12985b61018"
+    },
+    "clamp_sells_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/clamp_sells_on/main.py",
+      "sha256": "9980df337fd0b9a0f47ef317a793f4dc104f155f68012dbe9ee193aaf34f43b9"
+    },
+    "dead_stock_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/dead_stock_on/main.py",
+      "sha256": "d8fed3a60e8a6d289f2c7038234d1ab33fdd72d1f670b3960fcb1b6dea9100a3"
+    },
+    "terminal_liquidation_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/terminal_liquidation_on/main.py",
+      "sha256": "1fc11a381ae9018ab19ed7d91026982e50274b1604579550d21af32272438c7a"
+    },
+    "front_run_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/front_run_on/main.py",
+      "sha256": "971f314ff0834559fa1aedb1798761c9371d589c201bc20b15e7f4a32a440aa6"
+    },
+    "opening_5": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/opening_5/main.py",
+      "sha256": "b502e25fabb09713830d0456a004de4fbfba20fc7f58028f49ed6e045a842287"
+    },
+    "opening_12": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/opening_12/main.py",
+      "sha256": "5a016c077508b64eb6562ef095a75ff3548750b3f45dbed411f99f0de8c0e21e"
+    },
+    "router_624": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/router_624/main.py",
+      "sha256": "0a97792321199b7ac1ff5ad3bfb3ca1997e7d55d417e61defe1d1513a9000fd1"
+    },
+    "router_672": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/router_672/main.py",
+      "sha256": "086f15758fe99b14f5f84477de2115956e3eb41274a635c76d806ff4ad6b5269"
+    },
+    "fd_708": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/fd_708/main.py",
+      "sha256": "c8c47e9488574f7b81af87344a8143bc4ac8c27252c379daffca476b925c5811"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "yhay0913": {
+      "path": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa"
+    }
+  },
+  "expected_games": 120,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

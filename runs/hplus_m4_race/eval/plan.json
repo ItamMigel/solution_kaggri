@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-09-24T22:31:07.217331+00:00",
+  "stage": "race",
+  "stage_contract": {
+    "worlds": 4,
+    "opponents": 3,
+    "description": "4 worlds \u00d7 g9 + v5 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/runs/hplus_m4_race/fold_race.json",
+  "seeds": [
+    1032457230,
+    1279231879,
+    2058852247,
+    633068990
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "room_guard_on": {
+      "path": "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py",
+      "sha256": "70887c7da7b4da0b1ee158727c2d571d53e8b6efe63ad28d0af0d12985b61018"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "v5_market": {
+      "path": "/workspace/solution_kaggri/agents/horizon_v5_market.py",
+      "sha256": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4"
+    },
+    "yhay0913": {
+      "path": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa"
+    }
+  },
+  "expected_games": 48,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

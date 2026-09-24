@@ -1,0 +1,64 @@
+{
+  "created_utc": "2026-09-24T22:13:12.620609+00:00",
+  "candidates": {
+    "genome0": "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py",
+    "hand_align_off": "/workspace/shared/candidates_wip/hplus/m4_capability/hand_align_off/main.py",
+    "weed_repair_off": "/workspace/shared/candidates_wip/hplus/m4_capability/weed_repair_off/main.py",
+    "sell_lead_off": "/workspace/shared/candidates_wip/hplus/m4_capability/sell_lead_off/main.py",
+    "budget_guard_on": "/workspace/shared/candidates_wip/hplus/m4_capability/budget_guard_on/main.py",
+    "room_guard_on": "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py",
+    "clamp_sells_on": "/workspace/shared/candidates_wip/hplus/m4_capability/clamp_sells_on/main.py",
+    "dead_stock_on": "/workspace/shared/candidates_wip/hplus/m4_capability/dead_stock_on/main.py",
+    "terminal_liquidation_on": "/workspace/shared/candidates_wip/hplus/m4_capability/terminal_liquidation_on/main.py",
+    "front_run_on": "/workspace/shared/candidates_wip/hplus/m4_capability/front_run_on/main.py",
+    "opening_5": "/workspace/shared/candidates_wip/hplus/m4_capability/opening_5/main.py",
+    "opening_12": "/workspace/shared/candidates_wip/hplus/m4_capability/opening_12/main.py",
+    "router_624": "/workspace/shared/candidates_wip/hplus/m4_capability/router_624/main.py",
+    "router_672": "/workspace/shared/candidates_wip/hplus/m4_capability/router_672/main.py",
+    "fd_708": "/workspace/shared/candidates_wip/hplus/m4_capability/fd_708/main.py"
+  },
+  "opponents": {
+    "g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py"
+  },
+  "seeds": [
+    137093887,
+    134760203
+  ],
+  "expected_games": 120,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/budget_guard_on/main.py": "dd2fb717793af6614c8f7bb4c1f9a41332db9bb0fe5040943de1a6290aceb8dc",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/clamp_sells_on/main.py": "9980df337fd0b9a0f47ef317a793f4dc104f155f68012dbe9ee193aaf34f43b9",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/dead_stock_on/main.py": "d8fed3a60e8a6d289f2c7038234d1ab33fdd72d1f670b3960fcb1b6dea9100a3",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/fd_708/main.py": "c8c47e9488574f7b81af87344a8143bc4ac8c27252c379daffca476b925c5811",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/front_run_on/main.py": "971f314ff0834559fa1aedb1798761c9371d589c201bc20b15e7f4a32a440aa6",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/genome0/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/hand_align_off/main.py": "34a6b704d92bcb803608b521a8dabbf93f8f6a3ed23a56d3e234c8eaf01376ee",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/opening_12/main.py": "5a016c077508b64eb6562ef095a75ff3548750b3f45dbed411f99f0de8c0e21e",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/opening_5/main.py": "b502e25fabb09713830d0456a004de4fbfba20fc7f58028f49ed6e045a842287",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/room_guard_on/main.py": "70887c7da7b4da0b1ee158727c2d571d53e8b6efe63ad28d0af0d12985b61018",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/router_624/main.py": "0a97792321199b7ac1ff5ad3bfb3ca1997e7d55d417e61defe1d1513a9000fd1",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/router_672/main.py": "086f15758fe99b14f5f84477de2115956e3eb41274a635c76d806ff4ad6b5269",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/sell_lead_off/main.py": "03034460af20ee5650db46b02a18dcc80946d7a3d5f4b5b0aeac9101dcda8612",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/terminal_liquidation_on/main.py": "1fc11a381ae9018ab19ed7d91026982e50274b1604579550d21af32272438c7a",
+    "/workspace/shared/candidates_wip/hplus/m4_capability/weed_repair_off/main.py": "58315bd9a7bc1a02d0affb5153ae88020b1856c1ff46f9b378ef58281db30792",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "genome0",
+      "g9"
+    ]
+  ]
+}
