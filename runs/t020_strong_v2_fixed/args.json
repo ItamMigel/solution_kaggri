@@ -1,0 +1,35 @@
+{
+ "init": "/workspace/shared/h100_pkg/kaggri_bcppo_v2/data/bc_ckpt/bc_v2_final.pt",
+ "out": "/workspace/shared/runs/t020_strong_v2_fixed",
+ "envs": 128,
+ "iters": 5,
+ "lr": 3e-05,
+ "epochs": 2,
+ "mb": 8192,
+ "gamma": 1.0,
+ "lam": 0.995,
+ "clip": 0.2,
+ "ent": 0.001,
+ "kl": 0.05,
+ "stop_at": 5,
+ "kl_floor": 0.0,
+ "team": "dsm",
+ "vf": 0.5,
+ "value_warmup": 3,
+ "device": "cuda",
+ "amp": "bf16",
+ "resume": false,
+ "seed": 0,
+ "league_snapshot": [
+  "/workspace/shared/h100_pkg/kaggri_bcppo_v2/data/bc_ckpt/bc_v2_final.pt:dsm"
+ ],
+ "league_double": [
+  "/workspace/shared/h100_pkg/kaggri_bcppo_v2/data/bc_ckpt/bc_v2_final.pt:mmpq"
+ ],
+ "league_effective": {
+  "current": 0.3,
+  "snapshot0": 0.35,
+  "double0": 0.25,
+  "bc_fallback": 0.1
+ }
+}

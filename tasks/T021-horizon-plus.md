@@ -42,3 +42,4 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 
 ## M3lite fertilizer-hand — claimed by Codex 2026-09-24
 - Separate composable default-off builder after `modules.build`; scope is one appended hired hand only, with explicit order-slot, affordability, index-stability and daily lifecycle checks before any arena screen.
+- collect FINAL stage (8 worlds × 5 opp): paired +0.0875 [+0.06,+0.10], vs g9 15-1 (genome0 1-14-1), no regression elsewhere. Candidate es2_c1 = g9+collect → promotion gate (16 fresh worlds vs g9, g1, v5×2) runs/gate_es2_c1.
