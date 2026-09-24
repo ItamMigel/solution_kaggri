@@ -17,18 +17,18 @@ def fp_one(path):
             "name": r["names"][p], "final": r["rewards"][p], "sells": sells, "buys": buys,
             "animals": {k.split(":")[1]: v[0] for k, v in buys.items() if k.startswith("BUY_ANIMAL")},
             "seeds": {k.split(":")[1]: v[0] for k, v in buys.items() if k.startswith("BUY_SEED")},
-            "hire_cost": round(r["hire_cost"][p]), "hands_by_day": hands, "land": r["land"][p],
+            "hire_cost": round(r["hire_cost"][p]), "hands_by_day": hands, "hires_by_day": [r["hires"][p].get(dd, 0) for dd in range(30)], "land": r["land"][p],
             "first_sell_day": r["first_sell_day"][p], "unit_ops": r["unit_ops"][p], "order_lane": r["order_lane"][p],
             "money_by_day": [r["money"][p][min(len(r["money"][p]) - 1, d * 24 + 23)] for d in range(30)],
         })
     out["shops"] = r["tiles_hist"][-1][6]
     out["daily"] = [{"day": day, "tiles": tiles, "hands": hands, "shops": shops} for (day, tiles, _pr, _inv, hands, _q, shops) in r["tiles_hist"]]
-    out["v"] = 2
+    out["v"] = 3
     return out
 
 def _job(args):
     path, dst = args
-    if os.path.exists(dst) and json.load(open(dst)).get("v") == 2: return "skip"
+    if os.path.exists(dst) and json.load(open(dst)).get("v") == 3: return "skip"
     try:
         import io, contextlib
         with contextlib.redirect_stdout(io.StringIO()):
@@ -59,7 +59,7 @@ def cmd_report(a):
         for p in range(2):
             me, op = d["players"][p], d["players"][1 - p]
             rows[me["name"]].append((me, op, d))
-    lines = ["| team | n | W-L | mean $ | mean opp $ | animals (c/s/g/ch) | straw seeds | melon | carrot | tomato | max hands | land days | top sells |", "|" + "---|" * 13]
+    lines = ["| team | n | W-L | mean $ | mean opp $ | animals (c/s/g/ch) | straw seeds | melon | carrot | tomato | max hires/day | land days | top sells |", "|" + "---|" * 13]
     for name, lst in sorted(rows.items(), key=lambda kv: -st.mean(x[0]["final"] for x in kv[1])):
         if len(lst) < a.min_n: continue
         w = sum(me["final"] > op["final"] for me, op, _ in lst); l = sum(me["final"] < op["final"] for me, op, _ in lst)
@@ -73,7 +73,7 @@ def cmd_report(a):
         lands = "/".join(f"{st.mean(x[0]['land'][i][0] for x in lst if len(x[0]['land']) > i):.0f}" for i in range(3) if any(len(x[0]['land']) > i for x in lst))
         lines.append(f"| {name[:24]} | {len(lst)} | {w}-{l} | {m(lambda me: me['final'])/1000:.0f}k | {st.mean(op['final'] for _, op, _ in lst)/1000:.0f}k | "
                      f"{an('COW'):.1f}/{an('SHEEP'):.1f}/{an('GOOSE'):.1f}/{an('CHICKEN'):.1f} | {sd('STRAWBERRY'):.0f} | {sd('MELON'):.0f} | {sd('CARROT'):.0f} | {sd('TOMATO'):.0f} | "
-                     f"{m(lambda me: max(me['hands_by_day'])):.1f} | {lands} | {top} |")
+                     f"{m(lambda me: max(me.get('hires_by_day') or [0])):.1f} | {lands} | {top} |")
     txt = "\n".join(lines); open(a.out + "/report.md", "w").write(txt + "\n"); print(txt)
 
 if __name__ == "__main__":
