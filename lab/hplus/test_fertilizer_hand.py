@@ -30,7 +30,7 @@ class FertilizerHandBuildTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             normalise({"fh_reserve": -1})
         with self.assertRaises(ValueError):
-            normalise({"fh_max_hires_today": 10})
+            normalise({"fh_max_hires_today": 31})
 
 
 if __name__ == "__main__":
