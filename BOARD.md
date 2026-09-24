@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T018: simple ES stopped after 14 gens (gen-13 centre fit 1.215 = best; saved es1_g13, h2h check vs g9/g1 running). Switched to **CMA-ES** (pycma, pop 12 + centre, σ0=0.06, 8 fresh worlds/gen, panel v5_market/yhay0913/parthenos/metav4) as the team suggested. [claude]
 - 2026-09-24 — T019 BC v1: 80% val action accuracy but plays at $0–4.5k (compounding error; moves only 72.5% accurate). v2 with target-cell head + pathing training now. [claude]
 - 2026-09-24 — T018 g9 independent review: 512/512 valid on 16 Codex-only worlds; g9 248–8 vs g1 250–6. Paired g9-minus-g1 score −.0078, CI crosses zero; do not replace frozen g1. [codex]
 - 2026-09-24 — ✅ **Candidate `candidates/es1_g1`** (v5 + ES-tuned knobs): vs v5 30-2 (claude, fresh worlds) and 31-1 (codex, independent worlds); 244-0-12 vs reactive panel; parthenos slightly worse than v5 (23-9 vs 25-7, n.s.). Archive loads in official runner. Recommendation to human: active pair **v5_guarded + es1_g1**. [claude+codex]
@@ -52,7 +53,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
 | T017 | codex | in_progress — ES-anchored daily wrapper smoke passed; PPO rollout/trainer next | PPO over Horizon: per-day knob policy via `lab/tools/knobs.py`, CPU rollouts on real engine. `tasks/T017-ppo-horizon.md` |
-| T018 | claude | in_progress | ES over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T018 | claude | in_progress | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
