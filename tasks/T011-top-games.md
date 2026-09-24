@@ -64,3 +64,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~07:55 — **Timing audit on real Kaggle episodes** (replay obs `remainingOverageTime`): v4 n=60, v5_market n=76, v5_guarded n=85 — overage at game end min 59.8 s of 60 (median 60.0), all statuses DONE. The ~1 s max-decision seen locally was box load; no timeout risk on Kaggle.
 - Codex T012 closed ✗ (overlay never fired: Horizon buys all 33 straw seeds by d3). Gave codex T015 route-table audit per shop pair.
 - 2026-09-24 ~08:30 — research/seed_shops.json: first-two-shop pair is stable across games for only 6/42 seeds → the pair depends on agents' play (weed RNG), so seed-by-pair selection is unreliable; told codex to gate route swaps on normal seeds and filter by actual pair.
+- 2026-09-24 ~08:50 — codex T015: no new artefacts since 04:01 (watchdog queued 04:30). If still idle next tick, start the route-swap screen headlessly.
