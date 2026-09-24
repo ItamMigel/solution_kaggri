@@ -4,7 +4,7 @@ import argparse, glob, json, os, sys, time
 import numpy as np, torch, torch.nn as nn, torch.nn.functional as F
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import feat
-TEAMS = ["mmpq", "dsm", "mgoose"]
+TEAMS = ["mmpq", "dsm", "mgoose"]  # default; overridden by --data
 
 def load(teams, root=os.environ.get("BC_DATA", "/workspace/shared/bc_data"), val_frac=0.1, seed=0):
     rng = np.random.default_rng(seed); parts = {"train": [], "val": []}
@@ -18,7 +18,7 @@ def load(teams, root=os.environ.get("BC_DATA", "/workspace/shared/bc_data"), val
         Bs, Gs, Qs, UT, UX, UY, UV, UA, W = [], [], [], [], [], [], [], [], []; TX, TY = [], []; off = 0
         for ti, f in lst:
             d = np.load(f); T = len(d["G"])
-            team = np.zeros((T, len(TEAMS)), np.float32); team[:, TEAMS.index(teams[ti])] = 1
+            team = np.zeros((T, len(teams)), np.float32); team[:, ti] = 1
             Bs.append(d["B"]); Gs.append(np.concatenate([d["G"], team], 1)); Qs.append(d["Q"])
             UT.append(d["ut"] + off); UX.append(d["ux"]); UY.append(d["uy"]); UV.append(d["uv"]); UA.append(d["ua"]); TX.append(d["tx"]); TY.append(d["ty"])
             W.append(np.full(T, 1.0 if bool(d["won"]) else 0.3, np.float32)); off += T
@@ -62,22 +62,23 @@ def batch(D, idx, dev):
     return B, G, Q, W, t(bi), t(D["ux"][ui]), t(D["uy"][ui]), t(D["uv"][ui]), t(D["ua"][ui]), t(D["tc"][ui])
 
 def evaluate(net, D, dev, bs=512):
-    net.eval(); uc = un = 0; mc = mn = 0; mall = 0; tcc = 0
+    net.eval(); uc = un = 0; mc = mn = 0; mall = 0; tcc = 0; nzc = nzn = 0
     with torch.no_grad():
         for s in range(0, len(D["G"]), bs):
             idx = np.arange(s, min(len(D["G"]), s + bs))
             B, G, Q, W, bi, ux, uy, uv, ua, tc = batch(D, idx, dev)
             ul, ml, tl = net(B, G, bi, ux, uy, uv)
             uc += (ul.argmax(1) == ua).sum().item(); un += len(ua); tcc += (tl.argmax(1) == tc).sum().item()
-            mp = ml.argmax(2); mc += (mp == Q).sum().item(); mn += Q.numel(); mall += (mp == Q).all(1).sum().item()
-    net.train(); return dict(unit_acc=uc / un, target_acc=tcc / un, mkt_key_acc=mc / mn, mkt_exact=mall / len(D["G"]))
+            mp = ml.argmax(2); nz = Q > 0; nzc += ((mp == Q) & nz).sum().item(); nzn += nz.sum().item(); mc += (mp == Q).sum().item(); mn += Q.numel(); mall += (mp == Q).all(1).sum().item()
+    net.train(); return dict(mkt_nz_acc=nzc / max(1, nzn), unit_acc=uc / un, target_acc=tcc / un, mkt_key_acc=mc / mn, mkt_exact=mall / len(D["G"]))
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--data", default="mmpq,dsm,mgoose"); ap.add_argument("--out", required=True)
+    ap.add_argument("--ch", type=int, default=96); ap.add_argument("--blocks", type=int, default=6)
     ap.add_argument("--root", default=os.environ.get("BC_DATA", "/workspace/shared/bc_data")); ap.add_argument("--epochs", type=int, default=20); ap.add_argument("--bs", type=int, default=256); ap.add_argument("--lr", type=float, default=1e-3)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = "cuda"
     D = load(a.data.split(","), root=a.root); gdim = D["train"]["G"].shape[1]
-    net = Net(gdim).to(dev); opt = torch.optim.AdamW(net.parameters(), a.lr, weight_decay=1e-4)
+    teams = a.data.split(","); net = Net(gdim, a.ch, a.blocks).to(dev); opt = torch.optim.AdamW(net.parameters(), a.lr, weight_decay=1e-4)
     n = len(D["train"]["G"]); steps = a.epochs * (n // a.bs); sched = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=steps)
     log = open(f"{a.out}/log.jsonl", "w"); it = 0; best = -1
     for ep in range(a.epochs):
@@ -92,4 +93,4 @@ if __name__ == "__main__":
         ev = evaluate(net, D["val"], dev); rec = dict(epoch=ep, lu=lu.item(), lm=lm.item(), secs=round(time.time() - t0), **ev)
         print(json.dumps(rec), flush=True); log.write(json.dumps(rec) + "\n"); log.flush()
         if ev["unit_acc"] + ev["target_acc"] > best:
-            best = ev["unit_acc"] + ev["target_acc"]; torch.save({"state": net.state_dict(), "gdim": gdim, "teams": TEAMS}, f"{a.out}/best.pt")
+            best = ev["unit_acc"] + ev["target_acc"]; torch.save({"state": net.state_dict(), "gdim": gdim, "teams": teams, "ch": a.ch, "blocks": a.blocks}, f"{a.out}/best.pt")
