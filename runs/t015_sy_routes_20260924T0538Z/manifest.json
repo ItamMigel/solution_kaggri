@@ -1,0 +1,58 @@
+{
+  "created_utc": "2026-09-24T05:35:10.106617+00:00",
+  "candidates": {
+    "r0": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r0.py",
+    "r1": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r1.py",
+    "r2": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r2.py",
+    "r3": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r3.py",
+    "r4": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r4.py",
+    "r5": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r5.py",
+    "r6": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r6.py",
+    "r7": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r7.py",
+    "r8": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r8.py",
+    "r9": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r9.py",
+    "r10": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r10.py",
+    "r11": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r11.py",
+    "r12": "/workspace/wt/codex/agents/horizon_v5_t015_sy_r12.py"
+  },
+  "opponents": {
+    "v4_8turn": "/workspace/wt/codex/agents/horizon_v4_8turn.py",
+    "yhay": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    1445933037
+  ],
+  "expected_games": 104,
+  "input_sha256": {
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/wt/codex/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r0.py": "1c887fbb01a288d06d6e5d42654617d9fc7d1345fa7288709cd646daf7225245",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r1.py": "a906e1c4470253b851668323247f4cdf803e5adca74ab35e23c01265cca14a21",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r10.py": "b6174225e114be21ce79271e4ed90b4e23883416c1bdfafffb6cb56a8ad95406",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r11.py": "69e81b1ddac29dfd3c7b11378240a2a0e5b56d6f00d0e8e7664eddddad4101c3",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r12.py": "8fe872945122f275bde30f1dabf982a94e195bb6de36be5c3f10839939813c3d",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r2.py": "2f8d718a074eae6cc4cc148b7caa670d86c30573e3e5998d6542058bf39154c6",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r3.py": "49c815724d4ed13533a2c7a1482b148b24b4add71070f64f6d39a4da7f19f844",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r4.py": "f0c6dde108109f03b7df33684ec9dd2dee621e64408dbccd1f48b588c216aa9f",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r5.py": "b3383a85be68d583ccae7e893949b70937992c7d7d03b02915b6dd36153b87b6",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r6.py": "063c162e91fb2fee2a187fe263501f25e53da7e6063a4bb602009105ada83b4f",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r7.py": "433d6a2127d617ff98d921cd053a1878a32b0179df4a3e5b2455bdaf32a9ce67",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r8.py": "7fbc81bf919f484ead50d082d1148a7de83494659e66f442ba89096c1a524741",
+    "/workspace/wt/codex/agents/horizon_v5_t015_sy_r9.py": "f554d8c45690a34a1650f35df2ad8bd66f34d90c827a73b2e0d427048d01b01c",
+    "/workspace/wt/codex/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "T015 exploratory route-family screen: S-Y table set to each legacy route 0..12. Interpret only factual S-Y games; one preselected development world ranks alternatives only, never promotes.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

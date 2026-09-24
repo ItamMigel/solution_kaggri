@@ -1,0 +1,41 @@
+recording 12 episodes with 12 workers -> /workspace/shared/runs/t010_gpuenv_20260923T2350Z/vectors
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+
+recorded 12/12 episodes in 7.6s
+sharp-edge coverage (episodes where the engine event fired at least once):
+  lane_contested             12 episodes   (total 1030)
+  weeds_spawned              12 episodes   (total 75)
+  buy_product                10 episodes   (total 1949)
+  buy_animal                  9 episodes   (total 143)
+  plant_dry_death             8 episodes   (total 185)
+  day29_lost_yield            7 episodes   (total 155)
+  animal_escape               6 episodes   (total 12)
+  care_paid                   6 episodes   (total 1457)
+  sell_at_floor               6 episodes   (total 456)
+  plant_block_events          6 episodes   (total 847)
+  land_ok                     6 episodes   (total 15)
+  hire_fail                   6 episodes   (total 646)
+  care_burned                 5 episodes   (total 39)
+  day29_lost_items            5 episodes   (total 59)
+  commit_fail                 5 episodes   (total 863)
+  cap_truncated               4 episodes   (total 70)
+  first_prod_truncated        4 episodes   (total 70)
+  eod_destroyed               2 episodes   (total 15)
+  drop_destroyed              0 episodes   (total 0)
+  shed_over_cap_steps         0 episodes   (total 0)
+  max hands ever alive: 14 (cap 16)
+unit-op usage: {'PASS': 9620, 'NORTH': 9437, 'SOUTH': 6777, 'EAST': 7538, 'WEST': 9543, 'PLANT': 1427, 'WATER': 4803, 'HARVEST': 1792, 'FERTILIZE': 414, 'DIG': 437, 'BUILD_COOP': 192, 'BUILD_PASTURE': 318, 'PLACE': 637, 'FEED': 2495, 'CARE': 1748, 'COLLECT_FERTILIZER': 1581, 'PICKUP': 1804, 'DROP': 3091}
+market-op usage: {'HIRE': 2747, 'BUY_LAND': 256, 'SELL': 3339, 'BUY_PRODUCT': 963, 'BUY_SEED': 557, 'BUY_ANIMAL': 65}
+market lane histogram: [4246, 1817, 735, 389, 188, 134, 122, 120, 88, 88]
+record_exit=0

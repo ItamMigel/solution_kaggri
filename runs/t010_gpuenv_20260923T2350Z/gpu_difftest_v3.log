@@ -1,0 +1,47 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 0 clean, 12 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 1735 steps x full canonical state
+wall time        : 6.2s
+
+RESULT: FAIL — 12 of 12 episodes diverged.
+
+--- FIRST DIVERGENCE (earliest step) ---
+  episode        : ep_00006.npz
+  env index      : 6
+  step           : 7   (day 0, hour 7)
+  field          : shed[player 0][FERTILIZER]
+  expected (real): 15
+  actual   (impl): 5
+  mechanic       : logistics(shed)
+
+--- MONEY vs STATE ---
+  money differs only                       : 0
+  money AND state differ                   : 0
+  *** state differs but MONEY MATCHES ***  : 12
+  ^ this is NOT a lesser failure. A wrong intermediate state that happens to end on
+    the same number will diverge as soon as the policy changes. Fix it.
+
+--- PER-MECHANIC BREAKDOWN (episodes whose first divergence was here) ---
+     11  town/RNG(shop unlock)
+      1  logistics(shed)
+
+--- FIRST DIVERGENCE PER EPISODE (up to 15) ---
+    ep_00006.npz step    7  shed[player 0][FERTILIZER]  exp=15 got=5
+    ep_00000.npz step  144  shops  exp=80 got=68
+    ep_00001.npz step  144  shops  exp=96 got=34
+    ep_00002.npz step  144  shops  exp=48 got=34
+    ep_00004.npz step  144  shops  exp=48 got=144
+    ep_00005.npz step  144  shops  exp=10 got=18
+    ep_00007.npz step  144  shops  exp=136 got=10
+    ep_00009.npz step  144  shops  exp=36 got=20
+    ep_00010.npz step  144  shops  exp=40 got=48
+    ep_00011.npz step  144  shops  exp=144 got=132
+    ep_00003.npz step  216  shops  exp=69 got=7
+    ep_00008.npz step  216  shops  exp=69 got=7
+gpu_difftest_v3_exit=1

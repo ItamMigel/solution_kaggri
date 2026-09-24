@@ -1,0 +1,61 @@
+{
+  "created_utc": "2026-09-24T15:33:50.220981+00:00",
+  "candidates": {
+    "c": "/workspace/shared/runs/es1/gen_012/c/main.py",
+    "p0": "/workspace/shared/runs/es1/gen_012/p0/main.py",
+    "p1": "/workspace/shared/runs/es1/gen_012/p1/main.py",
+    "p2": "/workspace/shared/runs/es1/gen_012/p2/main.py",
+    "p3": "/workspace/shared/runs/es1/gen_012/p3/main.py",
+    "n0": "/workspace/shared/runs/es1/gen_012/n0/main.py",
+    "n1": "/workspace/shared/runs/es1/gen_012/n1/main.py",
+    "n2": "/workspace/shared/runs/es1/gen_012/n2/main.py",
+    "n3": "/workspace/shared/runs/es1/gen_012/n3/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "yhay0909": "/workspace/shared/opponents/pool/yhay_router0909/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "t2945": "/workspace/shared/opponents/pool/tschinkel2945/main.py"
+  },
+  "seeds": [
+    399063369,
+    553478476,
+    1264027382,
+    931310477,
+    1112910604,
+    1967156612,
+    2058712054,
+    278891664
+  ],
+  "expected_games": 864,
+  "input_sha256": {
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel2945/main.py": "4f3ca95dd12d9a94b03339999d8803c155f450a8d3956636f050643301fcc5dd",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0909/main.py": "d6d74997dc5b483db63d8e39cafa1afeec0f366824e75107e109123f111e866b",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/es1/gen_012/c/main.py": "21db68a9d6dd525ed8c353d70de1d6fb8d72c45b1b232b9a8dbdc07d88db28c6",
+    "/workspace/shared/runs/es1/gen_012/n0/main.py": "b21bb3ede724561248f7f641550e453c1ea3258f84b2e4636a50cbc0f1c60380",
+    "/workspace/shared/runs/es1/gen_012/n1/main.py": "fdeb9042a03a3156d7c13908e33cb0c28224ceb5ccbdf3663e2e5c92deee9a02",
+    "/workspace/shared/runs/es1/gen_012/n2/main.py": "4c7dac5fe312cf853aa1461a9385bf7aa37e66a51bc261e5232d274fd299784e",
+    "/workspace/shared/runs/es1/gen_012/n3/main.py": "214865ea843a0fdf1beef2a9f8e0fa8857b4f2c81919c0f7bccbb93d36902484",
+    "/workspace/shared/runs/es1/gen_012/p0/main.py": "159965053ced129c03e5578898276f35a25cba7f60f19750c2eb0acf17f2e63a",
+    "/workspace/shared/runs/es1/gen_012/p1/main.py": "86c653acb3f5c3aad574ed2622cab1ad6fb2a17b8a1dec3a0c380ed94e62c358",
+    "/workspace/shared/runs/es1/gen_012/p2/main.py": "fe27cfe34258d7f04492fff494464e93b8257edceedc67f127cb3cf920003abb",
+    "/workspace/shared/runs/es1/gen_012/p3/main.py": "0267ec650de211f8a2b9e37035a75e438127552342e75af9f223050d70488e2d",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

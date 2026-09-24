@@ -1,0 +1,178 @@
+Topic #742856: What actually predicted the ladder, and 15 things that didn't
+  Author: Avineesh Arora
+  Posted: 2026-09-23 19:14:11.179000
+  Votes: 2  Comments: 0
+
+My first local evaluator correlated with the real Kaggriculture ladder at r = +0.014. I checked it on 51 boards where I had real results to compare against. That is not a weak instrument. It measures nothing. Every verdict I drew from it for a week was noise.
+
+This post collects everything I have measured since, including a few things I learned in the last two days that I haven't seen written down anywhere. The full method, with runnable code, is in my notebook (linked at the bottom). This is the short version with the numbers.
+
+
+
+The opponent is part of the environment
+
+
+Prices move with how much has been sold, so an opponent that trades moves your prices. starter, random, pass and frozen replays barely trade. Against them you are farming an uncontested market, which is a different game.
+
+The same agent on the same boards:
+
+vs starter locally: mean bank $121k
+
+on the real ladder: mean bank $81k
+
+A live opponent was costing about $40k a game, and none of my local numbers knew it.
+
+The fix was a league of strong public agents that actually trade, played on real ladder boards. The board seeds come from your own episodes (competitions.EpisodeService/GetEpisode returns the seed). Checked against my real results, that league reached corr(bank) +0.458 and corr(margin) +0.533, up from +0.014.
+
+
+
+The local engine reproduces the ladder to the coin
+
+
+This is the one I wish I'd known in week one. kaggle-environments 1.32.7 is deterministic for a fixed seed and a fixed pair of agents, and it matches the ladder exactly. My submission's validation game (self-play, seed 0) banked 71,345 / 72,013 on Kaggle and 71,345 / 72,013 locally.
+
+So any of your own ladder games can be replayed exactly. You can check your harness against real outcomes, and you can test "what if my new agent had played that exact game?" instead of guessing.
+
+
+
+Win rate, not margin
+
+
+The final standing is a single Bradley-Terry fit on win/loss (Kaggle staff, final evaluation post). One competitor lost a game 103,148 to 103,147 and took a full rating penalty for it.
+
+This changed which agent I shipped. Two candidates, 384 paired games each:
+
+Agent A: margin +$27,682, win rate 91.7%
+
+Agent B: margin +$25,715, win rate 97.7%
+
+Head-to-head on identical boards, B beat A by +6.0 pp [95% CI +2.9, +9.4] while banking $1,967 less. B wins more often, by less.
+
+It matters even more near the top. In 100 of my games against opponents rated 2250+:
+
+the median gap between the two players was $177, on banks around $98k;
+
+40% of games were decided by under $100, and 78% by under $1,000;
+
+seat made no measurable difference (44% vs 43% wins).
+
+At that level, a change worth a few dozen dollars a game flips a real share of results. A change worth thousands in games you already win is worth nothing.
+
+
+
+Pair everything, and look per opponent
+
+
+The harness rules I added only after being burned without them:
+
+Identical (seed, opponent, seat) triples for every candidate, and both seats. Pairing cancels board luck.
+
+A bootstrap CI on the paired difference, plus a floor below which you call it a no-op. Identical paired deltas give the bootstrap no spread, and an exact no-op once reported "BETTER" to me on a $1 delta.
+
+A per-opponent breakdown, not just a pooled number. Strong public agents here are not transitive. Among the current strong public agents I measured, three form a clean cycle: A beats B in 100% of games, B beats C 85%, and C beats A 100%. The pooled win rate hides all of that, and it changes which pair of agents you should keep.
+
+
+
+Your agent has to survive the climb, not just the band you're aiming for
+
+
+This one cost me a submission this week.
+
+I built a league to look like the 2250+ band, then replayed candidates on the exact boards of my own 2250+ games. One candidate scored 82–84% on both. On the ladder it stalled near 1,800 after 85 games, winning only 56.5% against opponents below 2000. It never reached the band where it was strong.
+
+A different candidate, submitted a minute earlier, won 93% below 2000 and was past 2,080 and still rising seven hours later.
+
+Every new submission starts near 600 and has to beat the field on the way up. If your league models only where you want to finish, it cannot see an agent that loses on the way there. Check your league against a live submission's record in every band it passes through, not only the top one.
+
+
+
+Crash-screen before you believe a number
+
+
+Most agents wrap each turn in try/except and return PASS on failure. An agent that throws on every turn therefore plays a legal, silent game and banks about the $3,000 starting money. That looks like a result. It isn't.
+
+It caught me three times. Now any bank near the starting money is a crash until proven otherwise, and I time the first move of a freshly loaded file, when a 1 MB agent is still building itself. Going past the 60-second overage bank forfeits the game.
+
+
+
+How to read your score
+
+
+New submissions overshoot. Mine have peaked at 1233 and settled near 950, and peaked at 1815 then fallen to 1539. Never quote the peak.
+
+A rating needs 40–70 games to settle. Don't judge or replace a submission before that.
+
+Bucket your games by the opponent's rating. The band where you win about 50% is your real level. The headline number lags it.
+
+
+
+How the final ranking actually works (verified this week)
+
+
+Only your latest 2 submissions are tracked, and they are your final pair (Overview → Evaluation). Your leaderboard score is the better of the two.
+
+Each new submission retires the older of the two active ones. Order matters: submit the agent you want to keep last. I made exactly this mistake. Replacing a weak submission retired my strong one, because the strong one was older by one minute.
+
+The Bradley-Terry fit uses "all episodes ever played between submissions that are still active" (Addison Howard, Kaggle staff, 22 Sep, in the "Tournament Question" thread). Games you play now count, but games against opponents who later swap out do not. So a good agent gains from being submitted early.
+
+
+
+What failed
+
+
+I measured 15 changes against opponents that trade, on real ladder boards, paired, in both seats. Two worked:
+
+Repairing a blocked action (queue it, clear the blocker, replay it): +$4,373 margin, CI [+3,345, +5,339].
+
+Removing a deep copy on the first callback: first move 292–423 ms → 1 ms. That protects against timeouts rather than raising the score.
+
+The rest were nothing or worse:
+
+Selling earlier: −$80k.
+
+Splitting large sales across turns: −$60k to −$80k.
+
+Holding stock while the price is depressed: −$2,330.
+
+Handing the endgame to a tuned online controller: −$7,087, and it lost on every board.
+
+Guards ported from stronger agents that never fired: exactly $0.
+
+The sale schedule sits in a narrow feasible band. Sell later and the shed fills, so the next delivery fails. Sell earlier and you're selling goods that haven't arrived. The full table with CIs is in the notebook.
+
+
+
+Do's and don'ts
+
+
+Do
+
+Check your harness against your own real episodes before trusting one verdict from it.
+
+Pair everything: same seeds, same opponents, both seats.
+
+Report win rate, per opponent, with a CI.
+
+Replay your own ladder games exactly. The engine lets you.
+
+Write down your prediction before you submit.
+
+Don't
+
+Measure against starter, random, pass or a frozen replay and call it an improvement.
+
+Trust a title, a badge or a headline score. One well-regarded public agent measured worse than mine; another was in a different class.
+
+Replace a submission that's still climbing, or submit your keeper first.
+
+Believe a bank near $3,000.
+
+What I'm not claiming
+
+These numbers come from one competitor's games and agents. The correlations are clearly better than +0.014, but that doesn't make my harness a validated simulator, and I wouldn't defend their third decimal. The ordering of the two setups is the claim. Section 5 shows a well-validated league can still miss what matters. If your measurements disagree with mine, I'd genuinely like to see them.
+
+Notebook, with the harness, the ladder-check code and the full failure table: Your Local Evaluator Is Probably Measuring a Different Game
+
+Credits: the Kaggle team's final-evaluation posts (María Cruz, 31 Jul; Addison Howard, 22 Sep). destbreso's community agents dataset, which made a realistic league possible. Georgy Mamarin's episode dataset. busyaprime's public work on end-of-game waste. The agents I submit are forks of public Apache-2.0 notebooks, with their notices intact. The farming logic in them is not mine.
+
+No comments

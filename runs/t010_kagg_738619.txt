@@ -1,0 +1,61 @@
+Topic #738619: Learnings from PPO to 80k terminal cash
+  Author: Mark Schatza
+  Posted: 2026-09-01 02:53:34.656000
+  Votes: 22  Comments: 13
+
+Hey all, was not expecting RL to be such a difficult challenge compared to Orbit Wars! And I'm not the only one struggling so wanted to share how I at least got to 80k terminal cash submission (but far from the top) so maybe someone else can crack my ceiling.
+
+Throughput
+It's RL. We need to be fast. JAX end to end is what I'm using. Getting about 10k SPS throughput (although this keeps slowly getting chipped away at as I add features). Very CPU limited so rust/C++ may be a better option tbh. Telling codex to recreate with parity works great here. I enabled the full action space to the policy. Only masking illegal moves and limiting to 16 hands hired at a time. 
+
+Warm-up
+I tried two different warm-ups. First I tried rewarding each product individually from production to selling and adding them one by one. This worked for a bit, but after 5 products I had overfit the policy so much it struggled to do all 5. The next thing I did was use the open heuristic code and build some traces and train my policy only to match the heuristic replays. I didn't training for long, I believe I got to ~7% exact action parity with the replays. But that was enough to get the policy somewhat aware of how the game worked. On to real training now.
+
+Training
+Classic PPO. Nothing too crazy here. Not much hyperparameter tweaking just LR, gamma and rollout length. 50% self play/25% active opponent/ 25% bank opponents. Train for 1000 updates with 128 rollout length. Eval against active opponent. If &gt;60% win rate add to bank (FIFO w/ 5 latest banked opponents). If &gt;70% promote to active. With some testing I determined temperature of 0.8 best for training and 0.5 best for formal eval and submission. Much later once the policy was somewhat competent I added the heuristic as 10% of the play taking from self play. 
+
+Reward Shaping
+I started with a 75/25 reward structure. With 75% being having more sales from produced product than the opponent (note sales from produced product, not any sales…) and 25% being more terminal cash than the opponent. As I've seen many times in the discussions, this will naively produce a melon farm. To combat this I added a exploration reward. +0.2 the first time it sold any of the nine sellable products, once per game. Was massive to give it incentive to try to produce other products. Eventually inverted the 75/25 to have terminal cash be the stronger of the two once it had learned to produce 80k+ a game. Finally last piece was to add a absolute scaling from 50k up to 120k final cash reward because it got stuck trying to game the market against itself rather than improve. 
+
+Feature
+Added some history information to track how much we've produced this game already. Calculated value horizons of current farm in different buckets of the future. And gave the policy some future exact information on the town demand rather than expecting it to learn what each building does. Better exact worker information, who was holding what, some previous state information. 
+
+Conclusion
+The above got my to 80k terminal cash purely RL with full action space allowed. And then I absolutely hit a wall that I have not been able to climb out of. The logits were very saturated as they needed to be with such important per state turns, but struggled to get exploration without collapse. Critic showed really high EV, but struggled to turn that into early game rollouts. 
+
+Next steps
+I progressively over the last few weeks made updates that have made policy worse and worse. Currently trying a more hybrid approach. An entirely new policy that only tells intents of each square and whether to upkeep this turn or skip w/ a executor underneath to perform the actions. Plus market purchases/sales. This policy is surprisingly struggling to even reach the highs of the old one even trying to follow the above playbook. May hop back to that best policy and see if I can resurrect it with fresh eyes. 
+
+Hope this helps! Best of luck RL'ing everyone. 
+
+P.S. All of the above is hand written, but I've written the entire codebase and guided all training exclusively through the codex app on my phone. I have a tailscale connected with a live dashboard that I can check from anywhere to see how my training/evals are going. Highly recommend!
+
+Comments:
+├─ hwe owe (2026-09-03 09:55:42.890000) [+3]
+│  I am current at 8 TH place and not using rl.i am trying a strategy that ml a model to sell things on correct timing
+├─ Roxy (2026-09-01 09:31:25.280000) [+3]
+│  To be honest, I'm not convinced RL is the right approach for this competition. Maybe I just haven't figured out how to make it work properly yet.
+  ├─ Praveen (2026-09-02 15:00:09.373000) [+0]
+  │  It indeed isn't… Peak dp btw bro :)
+  ├─ [deleted] (2026-09-03 00:41:16.513000) [+0]
+  │  [deleted]
+├─ Friaseus  (2026-09-01 18:35:03.087000) [+2]
+│  Hey Mark, great write-up! Really impressive engineering setup, especially running the whole pipeline via Codex and Tailscale from your phone. 10k SPS in JAX is no joke.
+│  
+│  I totally agree with your c...
+├─ Alex Paul (2026-09-19 22:18:00.570000) [+0]
+│  about the hybrid idea you ended on: if the executor handles the micro perfectly, what does the RL part actually output in your picture? choosing between whole plans, or more like setting parameters...
+  ├─ Mark Schatza (2026-09-20 14:38:50.133000) [+0]
+  │  I had decent luck with a 5 turn look ahead where the policy chose the “intent” for each plot of land. Eg, wheat and then a Boolean for boost and harvest. The 5 turns game my executor time to figure...
+├─ Gerardo Del Toro (2026-09-02 03:00:10.460000) [+0]
+│  Thank you very much for sharing your approach. I also participated in Orbit Wars and tried to apply RL again here. It seems the credit assignment problem and length of the game are quite an issue h...
+  ├─ Mark Schatza (2026-09-02 03:41:27.657000) [+0]
+  │  I tried all kinds of things with varying success. Most success I had was with splitting 0.75 reward for winning on cash and 0.25 reward with beating on produced sales revenue. And then added some s...
+    ├─ Zotar (2026-09-02 08:54:49.713000) [+0]
+    │  does a step mean a turn of the game or a backward pass or something else?
+    ├─ Mark Schatza (2026-09-02 14:47:06.210000) [+0]
+    │  One turn of a game.
+├─ [deleted] (2026-09-01 07:19:16.880000) [+-6]
+│  [deleted]
+  ├─ Swachhith B (2026-09-01 07:25:48.787000) [+0]
+  │  Using RL?

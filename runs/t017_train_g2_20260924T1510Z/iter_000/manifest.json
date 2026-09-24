@@ -1,0 +1,25 @@
+{
+  "iteration": 0,
+  "seeds": [
+    842175903,
+    1908374261,
+    526104798,
+    1365982740,
+    719406285,
+    1640285973,
+    305841976,
+    1159374628
+  ],
+  "opponents": {
+    "v5_market": "/workspace/wt/codex/agents/horizon_v5_market.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "yhay0909": "/workspace/shared/opponents/pool/yhay_router0909/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "t2945": "/workspace/shared/opponents/pool/tschinkel2945/main.py"
+  },
+  "workers": 20,
+  "noise_std": 0.04,
+  "expected_games": 192,
+  "reward": "paired points + paired margin/40000"
+}

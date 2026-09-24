@@ -1,0 +1,22 @@
+Topic #742737: How long does RL training usually take for agents?
+  Author: dzjiann
+  Posted: 2026-09-23 06:05:32.541000
+  Votes: 2  Comments: 4
+
+I’ve been training a reinforcement learning agent for the game,but it improves slowly, and I’m curious about people’s real-world experience with training time. Hours, days, millions of games, hundreds of millions of game? I’m a bit worried that I won’t have enough time left to train a model that’s actually strong enough.
+
+I’d also be very interested to hear how many games it took you to reach a certain win rate against a strong public opponent. Even rough numbers would be really helpful for setting expectations.
+
+Comments:
+├─ Steve421471 (2026-09-23 23:07:53.310000) [+0]
+│  I think I did about half a billion steps total across multiple attempts over 3-4 weeks. I can't speak for the people who have been successful with it, but my best attempt was about 4 days on a 3060...
+  ├─ Gerardo Del Toro (2026-09-23 23:35:59.780000) [+0]
+  │  So your current approach is not RL based?
+├─ Brahim (2026-09-23 10:02:19.987000) [+0]
+│  Short answer: depends on a lot of factors, in my case  ~tens of millions steps, detailed answer below.
+│  
+│  
+│  
+│  Action space : a big one. A stricter action space can remove useless actions or simplify ag...
+  ├─ dzjiann (2026-09-23 16:08:33.230000) [+0]
+  │  Thank you for your share!

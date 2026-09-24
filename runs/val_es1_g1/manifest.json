@@ -1,0 +1,47 @@
+{
+  "created_utc": "2026-09-24T09:47:08.212449+00:00",
+  "candidates": {
+    "es1_g1": "/workspace/shared/candidates_wip/es1_g1/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "v5_guarded": "/workspace/wt/claude/agents/horizon_v5_guarded.py",
+    "v4_8turn": "/workspace/wt/claude/agents/horizon_v4_8turn.py"
+  },
+  "seeds": [
+    492491202,
+    957442965,
+    956910492,
+    2130064128,
+    791558715,
+    1235895753,
+    579466451,
+    1785350793,
+    721862988,
+    1154668781,
+    1615587082,
+    85850733,
+    1981472593,
+    957114424,
+    1959049020,
+    1434477856
+  ],
+  "expected_games": 96,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/es1_g1/main.py": "2a73b821add3b47aa930d70ba68187374b94a82d55ca9ca7bc9a8398ccc45937",
+    "/workspace/wt/claude/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
+    "/workspace/wt/claude/agents/horizon_v5_guarded.py": "20f24a06d5eae203b0909dbf31b13ab5c71acb67b0597daea047af55e29d6440",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 4,
+  "decision_note": "T018 validation: ES gen1 centre vs v5_market/v5_guarded/v4_8turn head-to-head on 16 fresh non-confirmation worlds",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

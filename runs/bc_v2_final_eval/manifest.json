@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-09-24T15:02:49.300344+00:00",
+  "candidates": {
+    "bc_dsm": "/workspace/shared/candidates_wip/bc_v2_dsm/main.py",
+    "bc_mgoose": "/workspace/shared/candidates_wip/bc_v2_mgoose/main.py",
+    "bc_mmpq": "/workspace/shared/candidates_wip/bc_v2_mmpq/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "boatlee": "/workspace/shared/opponents/pool/boatlee_v16/main.py",
+    "fukami": "/workspace/shared/opponents/pool/fukami_v48/main.py"
+  },
+  "seeds": [
+    607628401,
+    1264996817,
+    1489233339,
+    1510390127,
+    1772049822,
+    803980020,
+    1017825392,
+    2131145226
+  ],
+  "expected_games": 144,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/bc_v2_dsm/main.py": "8ead8686187d6a054fdf901404af66871c6fa95e613c213b9b90c4778797d561",
+    "/workspace/shared/candidates_wip/bc_v2_mgoose/main.py": "1ac5704237281401d5c103f0b554caeaa00c0179746ad5daa1847729ddf5cb61",
+    "/workspace/shared/candidates_wip/bc_v2_mmpq/main.py": "6368cf8c9b4ab00505071b3ad2e27f53613fc72febf7118e0f964991293104c6",
+    "/workspace/shared/opponents/pool/boatlee_v16/main.py": "f029fa0cb66a9eb509afbe44e3f59b800332d0419db91607183410e4089c4d19",
+    "/workspace/shared/opponents/pool/fukami_v48/main.py": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

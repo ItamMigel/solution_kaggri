@@ -1,0 +1,26 @@
+recording 12 episodes with 12 workers -> /workspace/shared/runs/t010_gpuenv_20260923T2340Z/vectors
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+  FAILED ep 2 (['cand_b1', 'exp021']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/cand_b1.py
+  FAILED ep 6 (['rndlegal_hire', 'rndlegal']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+  FAILED ep 3 (['starter', 'rndlegal']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+  FAILED ep 5 (['exp017', 'rndlegal_hire']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/best_exp017.py
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+  FAILED ep 4 (['rndlegal_dense', 'cand_a2']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/cand_a2.py
+  FAILED ep 0 (['exp017', 'starter']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/best_exp017.py
+  FAILED ep 7 (['sharp_weeds', 'sharp_shed']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+  FAILED ep 8 (['sharp_animals', 'cand_b1']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/cand_b1.py
+  FAILED ep 10 (['sharp_day29', 'sharp_plantblock']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+  FAILED ep 1 (['x_hyb', 'exp017']): FileNotFoundError: Could not find : /tmp/t010-gpuenv-namespace/artifacts/agents/pool/x_hyb.py
+  FAILED ep 11 (['sharp_animals', 'sharp_lane']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+  FAILED ep 9 (['sharp_weeds', 'sharp_animals']): TypeError: Instrument.__enter__.<locals>.commit_unit() takes 6 positional arguments but 7 were given
+record_exit=1

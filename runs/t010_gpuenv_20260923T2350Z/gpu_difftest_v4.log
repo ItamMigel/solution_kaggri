@@ -1,0 +1,46 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 0 clean, 12 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 2892 steps x full canonical state
+wall time        : 6.7s
+
+RESULT: FAIL — 12 of 12 episodes diverged.
+
+--- FIRST DIVERGENCE (earliest step) ---
+  episode        : ep_00000.npz
+  env index      : 0
+  step           : 241   (day 10, hour 1)
+  field          : mkt_inv[WHEAT]
+  expected (real): 9957
+  actual   (impl): 9956
+  mechanic       : market+town
+
+--- MONEY vs STATE ---
+  money differs only                       : 0
+  money AND state differ                   : 0
+  *** state differs but MONEY MATCHES ***  : 12
+  ^ this is NOT a lesser failure. A wrong intermediate state that happens to end on
+    the same number will diverge as soon as the policy changes. Fix it.
+
+--- PER-MECHANIC BREAKDOWN (episodes whose first divergence was here) ---
+     12  market+town
+
+--- FIRST DIVERGENCE PER EPISODE (up to 15) ---
+    ep_00000.npz step  241  mkt_inv[WHEAT]  exp=9957 got=9956
+    ep_00001.npz step  241  mkt_inv[WHEAT]  exp=9992 got=9991
+    ep_00002.npz step  241  mkt_inv[WHEAT]  exp=9992 got=9991
+    ep_00003.npz step  241  mkt_inv[WHEAT]  exp=9922 got=9921
+    ep_00004.npz step  241  mkt_inv[WHEAT]  exp=9972 got=9971
+    ep_00005.npz step  241  mkt_inv[WHEAT]  exp=9946 got=9945
+    ep_00006.npz step  241  mkt_inv[WHEAT]  exp=9982 got=9981
+    ep_00007.npz step  241  mkt_inv[WHEAT]  exp=9924 got=9923
+    ep_00008.npz step  241  mkt_inv[WHEAT]  exp=9927 got=9926
+    ep_00009.npz step  241  mkt_inv[WHEAT]  exp=9934 got=9933
+    ep_00010.npz step  241  mkt_inv[WHEAT]  exp=9989 got=9988
+    ep_00011.npz step  241  mkt_inv[WHEAT]  exp=9902 got=9901
+gpu_difftest_v4_exit=1

@@ -1,0 +1,54 @@
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+=== episode 4b62733e-b7c8-11f1-a08e-3602701f6110 seed=198533160 ===
+
+--- P0 p0  FINAL $118,142 ---
+  REVENUE $143,597
+    STRAWBERRY    247 u  $    48,094   avg $  194.7  first sell d15
+    MILK          245 u  $    31,869   avg $  130.1  first sell d8
+    WHEAT         400 u  $    15,814   avg $   39.5  first sell d0
+    FERTILIZER    341 u  $    15,752   avg $   46.2  first sell d1
+    MELON          72 u  $    14,267   avg $  198.2  first sell d10
+    WOOL          124 u  $     9,350   avg $   75.4  first sell d6
+    EGG            90 u  $     4,705   avg $   52.3  first sell d15
+    CARROT         97 u  $     3,746   avg $   38.6  first sell d28
+  COSTS $28,455  (hires $4,253, land $3,000)
+    buy BUY_PRODUCT:WHEAT   122 u  $     4,403
+    buy BUY_SEED:STRAWBERRY    33 u  $     3,300
+    buy BUY_ANIMAL:COW     8 u  $     3,200
+    buy BUY_PRODUCT:FERTILIZER    96 u  $     3,189
+    buy BUY_ANIMAL:SHEEP     6 u  $     3,000
+    buy BUY_SEED:WHEAT   163 u  $     1,630
+    buy BUY_SEED:MELON    12 u  $       960
+    buy BUY_ANIMAL:GOOSE     3 u  $       900
+    buy BUY_SEED:CARROT    31 u  $       620
+  land: [(6, 'NE', 1000.0), (11, 'SW', 2000.0)]
+  hires by day: {0: 5, 1: 3, 2: 4, 3: 5, 4: 4, 5: 4, 6: 7, 7: 7, 8: 8, 9: 8, 10: 11, 11: 10, 12: 9, 13: 9, 14: 9, 15: 10, 16: 11, 17: 11, 18: 11, 19: 11, 20: 11, 21: 11, 22: 11, 23: 12, 24: 11, 25: 11, 26: 11, 27: 11, 28: 11, 29: 9} total 266
+  market ops: {'BUY_PRODUCT': 73, 'SELL': 338, 'BUY_SEED': 187, 'HIRE': 266, 'BUY_ANIMAL': 12, 'BUY_LAND': 2}
+  order lanes: {'BUY_ANIMAL@0': 1, 'BUY_ANIMAL@1': 4, 'BUY_ANIMAL@2': 1, 'BUY_ANIMAL@3': 2, 'BUY_ANIMAL@4': 1, 'BUY_ANIMAL@5': 1, 'BUY_ANIMAL@6': 1, 'BUY_ANIMAL@7': 1, 'BUY_LAND@3': 1, 'BUY_LAND@6': 1, 'BUY_PRODUCT@0': 31, 'BUY_PRODUCT@1': 26, 'BUY_PRODUCT@2': 13, 'BUY_PRODUCT@3': 2, 'BUY_PRODUCT@4': 1, 'BUY_SEED@0': 130, 'BUY_SEED@1': 45, 'BUY_SEED@2': 10, 'BUY_SEED@3': 1, 'BUY_SEED@8': 1, 'HIRE@0': 7, 'HIRE@1': 29, 'HIRE@2': 37, 'HIRE@3': 39, 'HIRE@4': 36, 'HIRE@5': 31, 'HIRE@6': 26, 'HIRE@7': 23, 'HIRE@8': 21, 'HIRE@9': 17, 'SELL@0': 254, 'SELL@1': 53, 'SELL@2': 18, 'SELL@3': 8, 'SELL@4': 4, 'SELL@5': 1}
+  unit ops: {'WATER': 1098, 'NORTH': 919, 'WEST': 868, 'EAST': 578, 'SOUTH': 497, 'HARVEST': 480, 'PASS': 430, 'CARE': 400, 'COLLECT_FERTILIZER': 378, 'FEED': 340, 'PLANT': 239, 'PICKUP': 209, 'FERTILIZE': 124, 'PLACE': 94, 'DROP': 51, 'DIG': 38, 'BUILD_PASTURE': 14, 'BUILD_COOP': 5}
+
+--- P1 p1  FINAL $118,142 ---
+  REVENUE $143,597
+    STRAWBERRY    247 u  $    48,094   avg $  194.7  first sell d15
+    MILK          245 u  $    31,869   avg $  130.1  first sell d8
+    WHEAT         400 u  $    15,814   avg $   39.5  first sell d0
+    FERTILIZER    341 u  $    15,752   avg $   46.2  first sell d1
+    MELON          72 u  $    14,267   avg $  198.2  first sell d10
+    WOOL          124 u  $     9,350   avg $   75.4  first sell d6
+    EGG            90 u  $     4,705   avg $   52.3  first sell d15
+    CARROT         97 u  $     3,746   avg $   38.6  first sell d28
+  COSTS $28,455  (hires $4,253, land $3,000)
+    buy BUY_PRODUCT:WHEAT   122 u  $     4,403
+    buy BUY_SEED:STRAWBERRY    33 u  $     3,300
+    buy BUY_ANIMAL:COW     8 u  $     3,200
+    buy BUY_PRODUCT:FERTILIZER    96 u  $     3,189
+    buy BUY_ANIMAL:SHEEP     6 u  $     3,000
+    buy BUY_SEED:WHEAT   163 u  $     1,630
+    buy BUY_SEED:MELON    12 u  $       960
+    buy BUY_ANIMAL:GOOSE     3 u  $       900
+    buy BUY_SEED:CARROT    31 u  $       620
+  land: [(6, 'NE', 1000.0), (11, 'SW', 2000.0)]
+  hires by day: {0: 5, 1: 3, 2: 4, 3: 5, 4: 4, 5: 4, 6: 7, 7: 7, 8: 8, 9: 8, 10: 11, 11: 10, 12: 9, 13: 9, 14: 9, 15: 10, 16: 11, 17: 11, 18: 11, 19: 11, 20: 11, 21: 11, 22: 11, 23: 12, 24: 11, 25: 11, 26: 11, 27: 11, 28: 11, 29: 9} total 266
+  market ops: {'BUY_PRODUCT': 73, 'SELL': 338, 'BUY_SEED': 187, 'HIRE': 266, 'BUY_ANIMAL': 12, 'BUY_LAND': 2}
+  order lanes: {'BUY_ANIMAL@0': 1, 'BUY_ANIMAL@1': 4, 'BUY_ANIMAL@2': 1, 'BUY_ANIMAL@3': 2, 'BUY_ANIMAL@4': 1, 'BUY_ANIMAL@5': 1, 'BUY_ANIMAL@6': 1, 'BUY_ANIMAL@7': 1, 'BUY_LAND@3': 1, 'BUY_LAND@6': 1, 'BUY_PRODUCT@0': 31, 'BUY_PRODUCT@1': 26, 'BUY_PRODUCT@2': 13, 'BUY_PRODUCT@3': 2, 'BUY_PRODUCT@4': 1, 'BUY_SEED@0': 130, 'BUY_SEED@1': 45, 'BUY_SEED@2': 10, 'BUY_SEED@3': 1, 'BUY_SEED@8': 1, 'HIRE@0': 7, 'HIRE@1': 29, 'HIRE@2': 37, 'HIRE@3': 39, 'HIRE@4': 36, 'HIRE@5': 31, 'HIRE@6': 26, 'HIRE@7': 23, 'HIRE@8': 21, 'HIRE@9': 17, 'SELL@0': 254, 'SELL@1': 53, 'SELL@2': 18, 'SELL@3': 8, 'SELL@4': 4, 'SELL@5': 1}
+  unit ops: {'WATER': 1098, 'NORTH': 919, 'WEST': 868, 'EAST': 578, 'SOUTH': 497, 'HARVEST': 480, 'PASS': 430, 'CARE': 400, 'COLLECT_FERTILIZER': 378, 'FEED': 340, 'PLANT': 239, 'PICKUP': 209, 'FERTILIZE': 124, 'PLACE': 94, 'DROP': 51, 'DIG': 38, 'BUILD_PASTURE': 14, 'BUILD_COOP': 5}

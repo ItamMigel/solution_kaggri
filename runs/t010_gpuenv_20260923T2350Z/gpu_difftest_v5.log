@@ -1,0 +1,48 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 0 clean, 12 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 7687 steps x full canonical state
+wall time        : 13.8s
+
+RESULT: FAIL — 12 of 12 episodes diverged.
+
+--- FIRST DIVERGENCE (earliest step) ---
+  episode        : ep_00004.npz
+  env index      : 4
+  step           : 554   (day 23, hour 2)
+  field          : money[player 1]
+  expected (real): 36551
+  actual   (impl): 35928
+  mechanic       : economy/market
+
+--- MONEY vs STATE ---
+  money differs only                       : 0
+  money AND state differ                   : 1
+  *** state differs but MONEY MATCHES ***  : 11
+  ^ this is NOT a lesser failure. A wrong intermediate state that happens to end on
+    the same number will diverge as soon as the policy changes. Fix it.
+
+--- PER-MECHANIC BREAKDOWN (episodes whose first divergence was here) ---
+      6  town/RNG(shop unlock)
+      5  market+town
+      1  economy/market
+
+--- FIRST DIVERGENCE PER EPISODE (up to 15) ---
+    ep_00004.npz step  554  money[player 1]  exp=36551 got=35928
+    ep_00002.npz step  648  shops  exp=241 got=243
+    ep_00003.npz step  648  shops  exp=213 got=245
+    ep_00005.npz step  648  shops  exp=90 got=122
+    ep_00006.npz step  648  shops  exp=126 got=127
+    ep_00008.npz step  648  shops  exp=221 got=223
+    ep_00009.npz step  648  shops  exp=46 got=174
+    ep_00000.npz step  649  mkt_inv[WOOL]  exp=9826 got=9824
+    ep_00001.npz step  649  mkt_inv[CARROT]  exp=9664 got=9662
+    ep_00007.npz step  649  mkt_inv[WHEAT]  exp=9786 got=9785
+    ep_00010.npz step  649  mkt_inv[CARROT]  exp=9700 got=9698
+    ep_00011.npz step  649  mkt_inv[WHEAT]  exp=9263 got=9262
+gpu_difftest_v5_exit=1

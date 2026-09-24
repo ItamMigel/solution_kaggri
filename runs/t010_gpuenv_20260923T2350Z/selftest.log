@@ -1,0 +1,24 @@
+op ids from src.gpuenv.ops
+self-test: replaying 12 recorded episodes through the REAL simulator wrapped in the contract API (12 workers)
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+
+==============================================================================
+FIDELITY GATE — SELF-TEST (ground truth vs recorded vectors)
+==============================================================================
+episodes checked : 12
+state comparisons: 8628 steps x full canonical state
+wall time        : 4.8s
+
+RESULT: PASS — zero divergences at every step of every episode.
+selftest_exit=0

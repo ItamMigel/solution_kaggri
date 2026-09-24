@@ -1,0 +1,47 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 0 clean, 12 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 12 steps x full canonical state
+wall time        : 3.1s
+
+RESULT: FAIL — 12 of 12 episodes diverged.
+
+--- FIRST DIVERGENCE (earliest step) ---
+  episode        : ep_00000.npz
+  env index      : 0
+  step           : 1   (day 0, hour 1)
+  field          : mkt_price[CARROT]
+  expected (real): 35
+  actual   (impl): 36
+  mechanic       : market pricing
+
+--- MONEY vs STATE ---
+  money differs only                       : 0
+  money AND state differ                   : 0
+  *** state differs but MONEY MATCHES ***  : 12
+  ^ this is NOT a lesser failure. A wrong intermediate state that happens to end on
+    the same number will diverge as soon as the policy changes. Fix it.
+
+--- PER-MECHANIC BREAKDOWN (episodes whose first divergence was here) ---
+      9  market pricing
+      3  movement(farmer)
+
+--- FIRST DIVERGENCE PER EPISODE (up to 15) ---
+    ep_00007.npz step    1  farmer[player 0][x]  exp=5 got=4
+    ep_00009.npz step    1  farmer[player 0][x]  exp=5 got=4
+    ep_00010.npz step    1  farmer[player 0][x]  exp=5 got=4
+    ep_00000.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00001.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00002.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00003.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00004.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00005.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00006.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00008.npz step    1  mkt_price[CARROT]  exp=35 got=36
+    ep_00011.npz step    1  mkt_price[CARROT]  exp=35 got=36
+gpu_difftest_exit=1

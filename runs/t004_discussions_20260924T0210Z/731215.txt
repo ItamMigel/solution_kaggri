@@ -1,0 +1,24 @@
+Topic #731215: Daily Top Episodes Dataset
+  Author: Bovard Doerschuk-Tiberi
+  Posted: 2026-07-31 00:39:04.850000
+  Votes: 44  Comments: 6
+
+Each day we order episodes by the average rating of the agents playing (at the time). Then we download up to 20 GB of replays and make a new daily dataset! This should be helpful for everyone trying IL/BC, bootstrapping RL, or just gathering statistics.
+
+https://www.kaggle.com/datasets/kaggle/kaggriculture-episodes-index
+
+Comments:
+├─ Ragheb haddara (2026-08-10 21:43:56.710000) [+-20]
+│  The ARC-AGI-2 tasks are significantly harder than AGI-1 because they require compositional reasoning — combining multiple transformations in sequence. Common patterns include: 1) Tiling/repeating t...
+├─ Noberto Frota (2026-09-18 18:47:25.123000) [+0]
+│  Really useful dataset for imitation learning and behavior cloning.
+│  
+│  Since episodes are prioritized by the average rating of the agents playing, I wonder how much this selection affects strategy div...
+├─ Georgy Mamarin (2026-09-12 09:55:35.543000) [+0]
+│  The 20 GiB budget binds on 43 of the 44 days, each one landing within 0.6 MB of the limit. So the episode count tracks replay weight rather than how many strong games a day had: a replay averaged 2...
+├─ CemBas (2026-08-08 15:39:21.860000) [+0]
+│  Super useful :) instead of handpicking replays. Thank you!!!
+├─ Weijun Guo (2026-08-08 12:34:46.553000) [+0]
+│  Hello, might be a stupid question.  The 20GB data is quite interesting for me to train my agents. The current csv file at the link seems to be a csv file that has the top ranking agent index number...
+  ├─ QuasarHeart (2026-08-09 09:42:41.350000) [+2]
+  │  Check the csv file and u will find urls for downloading

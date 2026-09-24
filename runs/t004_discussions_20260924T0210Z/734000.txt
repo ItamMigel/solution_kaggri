@@ -1,0 +1,64 @@
+Topic #734000: How path dependent is the current leaderboard rating?
+  Author: Rayk Kretzschmar
+  Posted: 2026-08-09 13:18:32.031000
+  Votes: 31  Comments: 18
+
+I submitted two byte-identical agents approximately two hours apart. The first submission is currently around 1700, while the second, submitted 2h later, has climbed &gt;3000. Because the submitted code is identical, this difference appears to come from matchmaking, seeds, player positions, and the order of early results, not agent quality. In particular, early losses seem to make subsequent climbing extremely slow.
+
+A gap of roughly 1400 points between identical agents suggests that the current rating may be highly path-dependent, especially during the initial games. It may even incentivize repeatedly submitting the same agent in hopes of receiving a better early trajectory.
+
+Has anyone else tested duplicate submissions or observed similar rating divergence? Does the rating system eventually converge given enough games?
+
+Comments:
+├─ Rayk Kretzschmar (2026-08-10 14:35:04.443000) [+6]
+│  I want to add that this is especially frustrating when an early loss happens because of a random weed spawn that only affects the own side. If early results strongly influence the subsequent rating...
+├─ Victor Mercklé (2026-08-09 15:41:32.523000) [+5]
+│  In particular, early losses seem to make subsequent climbing extremely slow.
+│  
+│  
+│  I think this is the biggest factor. It was less an issue when any new agents you'd submit would beat everyone except t...
+  ├─ evnchn (2026-08-17 17:19:13.100000) [+0]
+  │  Also a big part of the pool currently is stale agents (for the old engine)
+  │  
+  │  
+  │  Indeed, those are dropping out as we speak. 
+  │  
+  │  I wonder if all-reset-to-600 is more productive when a patch lands like ht...
+├─ Steve421471 (2026-08-15 03:17:38.050000) [+2]
+│  I think we're starting to develop a stratification problem. Last week I would submit an agent and it would win 30 matches in a row and break into the top 50 in 4 hours. Now I have agents that could...
+├─ destbreso (2026-08-18 17:38:46.977000) [+-8]
+│  I've been digging into this question, and I think the answer could be more nuanced than simply saying that the leaderboard is path-dependent.
+│  
+│  My research suggests that the competition does not beh...
+├─ Talvenn (2026-09-23 20:59:03.917000) [+0]
+│  I know this was discussed a while ago, but I can confirm it's still very much the case. Yesterday I submitted the same agent twice, a few minutes apart. 16 hours after submission, one copy was at 2...
+├─ evnchn (2026-08-19 03:38:04.800000) [+0]
+│  Another issue which the path-dependent leaderboard rating causes, is all the false "this notebook gets a 3k score" in the Code section, which is wildly over-claimed. 
+│  
+│  And that's with me already pu...
+├─ evnchn (2026-08-16 19:20:53.227000) [+0]
+│  Very. IMO the initial few matches should not have such high weight. 
+│  
+│  I have a gap of 300 for identical agents, don't have as big as 1400, but the ideal, assuming a well-tuned ELO matching algorith...
+  ├─ evnchn (2026-08-16 19:34:38.797000) [+0]
+  │  Under the current leaderboard system, there can exist (though I wish not to point fingers), a group of people who repeatedly submit before rating truly settles, gambling on the initial rush for a h...
+    ├─ Belati Jagad Bintang Syuhada (2026-08-16 19:46:26.187000) [+0]
+    │  To be honest, I see no point (except for temporary satisfaction) of submitting repeatedly to get a lucky start and reach the top faster. In the end, once the competition's submission deadline has p...
+    ├─ [deleted] (2026-08-16 20:56:49.220000) [+0]
+    │  [deleted]
+    ├─ Rayk Kretzschmar (2026-08-16 20:57:18.303000) [+1]
+    │  Do they start over? I read that they will "continue to run". Even if they start over completely, I think it's interesting to know if an approach is worth to keep improving or if it should be reject...
+    ├─ Belati Jagad Bintang Syuhada (2026-08-17 01:57:33.620000) [+0]
+    │  At least from my past experience with simulations competition (FIDE Chess Challenge), they will reset all the players ELO to 600 after the submission deadline and rerun the whole scoring system wit...
+    ├─ Mahog (2026-08-17 02:13:33.710000) [+0]
+    │  They didn't do the reset with Orbit Wars if I remember correctly
+    ├─ Belati Jagad Bintang Syuhada (2026-08-17 02:34:36.130000) [+0]
+    │  My bad then. If that's the case, it will most likely not reset from 600.
+    ├─ evnchn (2026-08-17 03:42:45.663000) [+0]
+    │  Indeed there's absolutely no point other than temporary satisfaction to repeat-submit and leverage the chance of initial win streak for a higher rating. 
+    │  
+    │  That rating simply doesn't belong to the a...
+    ├─ Temitayo Gbolahan (2026-08-21 07:10:27.650000) [+0]
+    │  Pokemon TCG submission deadline was few days ago, did you check if it was reset???
+├─ [deleted] (2026-08-14 22:20:24.453000) [+0]
+│  [deleted]

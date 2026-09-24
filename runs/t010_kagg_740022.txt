@@ -1,0 +1,75 @@
+Topic #740022: My experimentation with RL
+  Author: Roy Wei
+  Posted: 2026-09-07 20:37:00.236000
+  Votes: 34  Comments: 26
+
+I have seen a couple posts on how RL won't work. Considering that it may scare people off from learning about RL, I want to share my result so far. 
+
+I'm running end-to-end RL, training a model on rtx3090 against one of the public static replay and the terminal money gap between them is closing (model ~90K v.s. static ~122K). It has consumed 350M env steps so far, less than 10% of the whole curriculum and no where near convergence. I won't disclose much about my exact training setup; yet I can confirm it takes some tuning and design. As a starter, you may reference write-ups in orbit war. There contains some good advice on how to make RL work. 
+
+Lastly, based on data I gathered so far, I couldn't vouch that RL works either (no self-play or test-time benchmark yet), but I hope that it may instill faith in others, so that we can see more bold ideas as the competition finalizes.
+
+Comments:
+├─ Mengfei Li (2026-09-08 11:34:48.793000) [+8]
+│  Personally, I’d rather invest time in RL than in reverse-engineering strategies from replays.
+  ├─ Gengsr (2026-09-08 14:28:28.697000) [+-8]
+  │  你是用强化学习到现在的排名吗
+    ├─ オグリキャップ (2026-09-15 06:01:37.920000) [+-3]
+    │  你是用强化学习到现在的排名吗
+    ├─ Swachhith B (2026-09-15 08:08:37.837000) [+-4]
+    │  你是用强化学习到现在的排名吗
+    ├─ Gengsr (2026-09-16 04:57:19.287000) [+-1]
+    │  不是😭，正在考虑转向强化学习，我受够了一点点去修改策略
+├─ JB Bryant (2026-09-08 04:28:25.307000) [+5]
+│  I think RL can work here too, although it seems trickier than PTCG. And I think I may have found the signal.
+│  
+│  Let's make RL great again!🤣
+├─ c-number (2026-09-09 14:00:16.693000) [+0]
+│  Have you tested your win rate against this notebook?
+│  https://www.kaggle.com/code/yhay81/shop-router-0909
+  ├─ Roy Wei (2026-09-10 00:00:45.453000) [+0]
+  │  Not yet. Thanks for bringing it up
+├─ KKY (2026-09-09 10:58:22.927000) [+0]
+│  Amazing work, thanks for sharing this and I've regained my confidence in RL… 
+│  
+│  Let's cook
+├─ Zhenyu Zhang (2026-09-08 07:23:59.343000) [+0]
+│  When was your public static replay from？Was it a recent one,or from a long time ago.  There is a huge difference  between the two.
+  ├─ Roy Wei (2026-09-08 14:35:16.997000) [+1]
+  │  70K against the static agent published yesterday. The training is not fitted against them so it's resonable.
+    ├─ Zhenyu Zhang (2026-09-09 10:27:10.867000) [+0]
+    │  Excellent work ! Hope you can reach the top of the leaderboard
+├─ Jesse Bullard (2026-09-08 05:20:06.127000) [+0]
+│  I'm curious if you just trained on a terminal reward or if you had a dense reward. Would you be willing to share some of your insights into reward engineering?
+  ├─ Gengsr (2026-09-08 09:22:17.560000) [+-2]
+  │  我也想知道，作为一个强化学习新手，尝试了接近一周最后还是放弃了🤓
+  ├─ Roy Wei (2026-09-08 14:17:13.220000) [+0]
+  │  Try it out! There is no correct answer because everyone engineers the whole thing differently. It's a combination of many factors that the recipe shows sign of life so far. Sometimes, you may be on...
+├─ Darshan Makwana (2026-09-08 03:41:40.297000) [+0]
+│  Awesome, you mentioned you are training it against a static agent as opponent, did you evaluate your agent on other static agent whose strategies are different from one over which you trained. How ...
+  ├─ Roy Wei (2026-09-08 04:02:37.133000) [+0]
+  │  Not yet. Next step will be training against a league that includes other static tapes.
+    ├─ Darshan Makwana (2026-09-08 04:07:02.457000) [+0]
+    │  best of luck!
+    ├─ destbreso (2026-09-08 17:48:25.363000) [+0]
+    │  Instead of learning against static tapes, which introduces a significant representation bias for RL, you could synthesize agents from replays or replay fragments. This gives you the ability to repr...
+├─ Timme (2026-09-08 00:58:44.503000) [+0]
+│  good work. can you clarify what each graph represents?
+│  
+│  also, did you do behavioural cloning or from scratch (if you can share)?
+  ├─ Roy Wei (2026-09-08 01:22:08.560000) [+0]
+  │  They show the amount money the model and static replay respectively gain at the end of the episode (post edited upon your question).   I didn't use behavioral cloning.
+    ├─ Timme (2026-09-08 01:41:26.757000) [+0]
+    │  oh. good work, i must say again. 
+    │  
+    │  i just broke 30k without behavioural cloning. hoping to break into 90k+ soon.
+    │  
+    │  goodluck
+├─ [deleted] (2026-09-08 14:23:11.637000) [+0]
+│  [deleted]
+  ├─ Roy Wei (2026-09-08 14:36:09.920000) [+1]
+  │  What is representation collapse? Sorry, I have never heard of that term.
+    ├─ [deleted] (2026-09-08 14:44:49.353000) [+-1]
+    │  [deleted]
+├─ Octavi Grau (2026-09-08 17:20:52.717000) [+0]
+│  Thanks for sharing @renyiwei !

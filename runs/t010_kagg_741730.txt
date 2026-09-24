@@ -1,0 +1,37 @@
+Topic #741730: RL Progress update : self play
+  Author: KKY
+  Posted: 2026-09-17 01:44:18.377000
+  Votes: 6  Comments: 8
+
+I resume thed ckpt from previous experiments (a stastic week opponent) and started training it with self-play.
+
+
+
+exp4 =&gt; SGD optimizer =&gt; crashed
+
+exp2 =&gt; exp3 =&gt; Adam optimizer (resume the optimizer state)  works
+
+exp5 (plan) : dynamic opponents pool
+
+
+but exp3 isn't able to beat strong opensource oppenents.
+
+Comments:
+├─ Mahog (2026-09-17 01:51:43.040000) [+1]
+│  Nice work! The most I can achieve with self-play is around 35k money before it plateaus, but that is by training from scratch. I'm testing training with a static opponent but it keeps regressing to...
+  ├─ KKY (2026-09-17 01:57:22.150000) [+0]
+  │  let's cook
+  ├─ Gerardo Del Toro (2026-09-17 13:55:34.807000) [+0]
+  │  Our issue are fertilizers and animals right? haha
+    ├─ Mahog (2026-09-17 14:18:37.180000) [+0]
+    │  Haha yep, that's the problem with my model as well :D
+    ├─ Mahog (2026-09-20 01:39:14.037000) [+2]
+    │  My model has finally learned to use animals, but it doesn't seem to like crops anymore :V
+    ├─ Gerardo Del Toro (2026-09-20 03:24:07.993000) [+0]
+    │  HAHA, Had the same issue.
+    │  
+    │  My model gets to learn first crops, then crops + fertilizers, then first melon with fertilizers, end of game strawberries. And some other param config gets it to learn on...
+    ├─ Gerardo Del Toro (2026-09-21 04:32:41.043000) [+0]
+    │  @mahoganybuttstrings Should we merge forces and make a team to try doing a 10 days RL try-hard run?
+    ├─ Mahog (2026-09-21 05:21:48.340000) [+0]
+    │  @gerardeltoro Sure! I've sent you a message

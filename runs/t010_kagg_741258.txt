@@ -1,0 +1,61 @@
+Topic #741258: RL finally starts learning something!
+  Author: KKY
+  Posted: 2026-09-14 08:00:51.128000
+  Votes: 27  Comments: 17
+
+I started learning RL on this competition and finally the RL training pipeline works!
+
+I like the curve 😭
+
+Hope i still get time to finetune a competitive policy (dgx spark is too slow …)
+
+
+
+UPDATE 
+
+It was trained with a static opponent and was still a dumb policy. Try to make it smarter.
+
+Comments:
+├─ BillDoser (2026-09-14 13:17:54.927000) [+3]
+│  That looks great!
+│  
+│  I'm curious how you approached the problem?
+│  I've restarted a few times. Initially I tried to build a PPO model that evaluated every turn. It was difficult to get early actions to...
+  ├─ aisormo P.H (2026-09-16 19:10:14.603000) [+0]
+  │  I had a very similar idea to yours! I even prepared quite a few game state-cut for my own model to learn planning and estimate task success rates from. But in the end, the results were a bit disapp...
+  ├─ [deleted] (2026-09-17 00:07:20.487000) [+0]
+  │  [deleted]
+├─ JJ (2026-09-14 23:13:43.837000) [+1]
+│  Congratulations! Can you share what the scale on the y-axis is? =)
+  ├─ [deleted] (2026-09-14 23:43:53.933000) [+0]
+  │  [deleted]
+  ├─ KKY (2026-09-15 01:03:16.540000) [+2]
+  │  final money money, around 80,000 on 300M env steps
+├─ nofreewill42 (2026-09-14 21:44:56.483000) [+1]
+│  rooting for you, for a solo gold that you get soon ! ;)
+├─ KKY (2026-09-15 01:06:28.803000) [+2]
+│  UPDATE
+│  
+│  policy seems to be saturated at 80,000 final money level through 300M env steps.
+│  
+│  New expes started.
+  ├─ Ankith Savio (2026-09-16 09:45:22.600000) [+0]
+  │  Does it plateau after beating the opponent?
+├─ zhangwenshegn (2026-09-14 13:20:50.490000) [+1]
+│  wa o，good job
+├─ Ankith Savio (2026-09-14 12:16:20.377000) [+1]
+│  Thats a impressive curve, how long did it take to get good?
+  ├─ KKY (2026-09-14 14:19:10.973000) [+2]
+  │  two weeks, 100+ exps
+├─ NT (2026-09-14 08:51:33.550000) [+1]
+│  oh,good job！
+├─ Gerardo Del Toro (2026-09-17 13:54:51.527000) [+0]
+│  You mentioned "dumb policy", but it's at least making use of animals and fertilizers haha, mine's not and stuck at 35k. May I know if you tried to incentive that behaviour in some manner?
+├─ Daniel Choi (2026-09-17 00:38:15.190000) [+0]
+│  Looks good!
+├─ TheoDaimon (2026-09-16 13:48:47.370000) [+0]
+│  Is it PPO?
+│  How much time it took to understand what the hell is happening?)
+│  Imma trying some insane rl monsters(hierarchial combo of dl/rl/another) but it takes to much time to learn:(
+├─ hwe owe (2026-09-14 09:25:17.460000) [+1]
+│  congratulations!!!

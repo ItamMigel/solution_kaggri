@@ -1,0 +1,73 @@
+Topic #741743: Finally reached the silver medal zone with Reinforcement Learning
+  Author: Snorlax
+  Posted: 2026-09-17 04:44:42.099000
+  Votes: 42  Comments: 26
+
+After a lot of experiments, failed runs, weird policies, and watching my agent make decisions that no human would ever make…
+
+It finally reached the silver medal zone 🎉
+
+Built mainly with reinforcement learning, which made the whole journey much more painful — and much more fun.
+
+Still plenty of room to improve. Let’s see if the agent can climb a little higher before the end.
+
+Back to training. :)
+
+Comments:
+├─ madmax0404 (2026-09-21 06:34:42.867000) [+1]
+│  hello, may i ask what kind of compute you have?
+├─ nofreewill42 (2026-09-17 18:32:46.973000) [+2]
+│  i wish this competition was like 6 months long
+├─ Syed Asad Ali (2026-09-18 07:57:45.927000) [+1]
+│  @pku1400010735 Congratulations on reaching Silver via the RL route. This is no small feat!
+│  Could you please clarify a few details regarding your approach? What are the macro actions, how frequently...
+  ├─ Snorlax (2026-09-19 05:49:48.610000) [+0]
+  │  Thanks! For the BC data, you can use the official collection of top-match replays, or build a local pipeline to collect replays from top teams yourself.
+├─ KKY (2026-09-17 13:18:26.223000) [+1]
+│  Great job, thanks for sharing your progress!
+├─ Vishal Kishore (2026-09-17 12:00:12.113000) [+1]
+│  I have a doubt are you using RL for macro (policies) or micro (turn based) level decisions ?
+  ├─ Snorlax (2026-09-17 12:19:44.633000) [+5]
+  │  Macro level
+├─ Ankith Savio (2026-09-17 09:05:41.420000) [+1]
+│  How many steps did it take to achieve this?
+  ├─ Snorlax (2026-09-17 12:19:16.073000) [+2]
+  │  Roughly 300k games in total. I’ll keep the exact step count private for now :)
+├─ TheoDaimon (2026-09-21 21:23:16.797000) [+0]
+│  hi!
+│  Can u share notebook after competition's end?
+├─ OmerZalman (2026-09-20 13:06:34.927000) [+0]
+│  Congrats on the gold medal
+├─ 9Hash (2026-09-20 10:43:41.690000) [+0]
+│  I did improved with rl, but eventually down the line, some aspects are collapsing completely. Are you training on bank improvement objective or solely improving the win ratio?
+  ├─ Snorlax (2026-09-20 10:52:22.300000) [+1]
+  │  I found the bank difference to be a informative reward early in training, then later added the final win/loss outcome as well. I also use a few auxiliary rewards to make learning and convergence mo...
+├─ WOOSUNG YOON (2026-09-20 09:16:40.347000) [+0]
+│  You’re achieving great results with a really good method.  
+│  
+│  I’ll be watching and cheering you on 😄.
+  ├─ Snorlax (2026-09-20 10:35:04.577000) [+1]
+  │  Thanks! I’ll keep going!
+├─ Alex Paul (2026-09-19 22:13:35.863000) [+0]
+│  congrats on the silver btw. trying the BC warmup then PPO route myself at the macro level. curious about the data side since you mentioned the official top match replays: did you clone only the win...
+  ├─ Snorlax (2026-09-20 10:48:28.523000) [+1]
+  │  Thanks! I don’t think the exact BC warm-up setup is the key part — roughly speaking, higher-scoring players are more valuable demonstrations.
+  │  For checkpoint selection, I built a small local leaderb...
+├─ OmerZalman (2026-09-18 23:10:11.813000) [+0]
+│  did you use native RL or a more specific version?
+  ├─ Snorlax (2026-09-19 05:48:35.523000) [+0]
+  │  I used PPO
+├─ Adarsh (2026-09-17 10:25:03.743000) [+0]
+│  Congrats, especially with RL, not easy to do
+├─ Navneet (2026-09-17 08:38:15.107000) [+0]
+│  Bravo for reaching the silver medal zone @pku1400010735
+├─ J.Moriuchi (2026-09-17 08:05:29.560000) [+0]
+│  Congratulations on reaching the silver medal zone! 🎉 That’s an amazing achievement, especially with an RL-based agent. I can imagine how many failed experiments and bizarre policies you had to go t...
+├─ Krzysztof Gonia (2026-09-17 07:47:46.870000) [+0]
+│  Congrats! I focused on heuristic solution because I found RL to slow - running experiments takes too much time locally.
+├─ Khánh Vũ (2026-09-17 07:13:46.993000) [+0]
+│  Was it trained from scratch?
+  ├─ Snorlax (2026-09-17 07:22:13.883000) [+3]
+  │  I used behavior cloning for warm-up, then switched to RL training.
+    ├─ Khánh Vũ (2026-09-17 08:11:30.727000) [+1]
+    │  make sense, thnx

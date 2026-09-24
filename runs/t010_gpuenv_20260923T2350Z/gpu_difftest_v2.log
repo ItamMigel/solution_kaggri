@@ -1,0 +1,48 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 0 clean, 12 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 139 steps x full canonical state
+wall time        : 3.0s
+
+RESULT: FAIL — 12 of 12 episodes diverged.
+
+--- FIRST DIVERGENCE (earliest step) ---
+  episode        : ep_00007.npz
+  env index      : 7
+  step           : 3   (day 0, hour 3)
+  field          : shed[player 1][WHEAT]
+  expected (real): 15
+  actual   (impl): 40
+  mechanic       : logistics(shed)
+
+--- MONEY vs STATE ---
+  money differs only                       : 0
+  money AND state differ                   : 1
+  *** state differs but MONEY MATCHES ***  : 11
+  ^ this is NOT a lesser failure. A wrong intermediate state that happens to end on
+    the same number will diverge as soon as the policy changes. Fix it.
+
+--- PER-MECHANIC BREAKDOWN (episodes whose first divergence was here) ---
+     10  market+town
+      1  logistics(shed)
+      1  economy/market
+
+--- FIRST DIVERGENCE PER EPISODE (up to 15) ---
+    ep_00007.npz step    3  shed[player 1][WHEAT]  exp=15 got=40
+    ep_00006.npz step    6  money[player 0]  exp=1889 got=2800
+    ep_00000.npz step   13  mkt_inv[WHEAT]  exp=9999 got=9998
+    ep_00001.npz step   13  mkt_inv[WHEAT]  exp=9985 got=9984
+    ep_00002.npz step   13  mkt_inv[WHEAT]  exp=9983 got=9982
+    ep_00003.npz step   13  mkt_inv[WHEAT]  exp=9999 got=9998
+    ep_00004.npz step   13  mkt_inv[WHEAT]  exp=9984 got=9983
+    ep_00005.npz step   13  mkt_inv[WHEAT]  exp=9998 got=9997
+    ep_00008.npz step   13  mkt_inv[WHEAT]  exp=9975 got=9974
+    ep_00009.npz step   13  mkt_inv[WHEAT]  exp=9991 got=9990
+    ep_00010.npz step   13  mkt_inv[WHEAT]  exp=9999 got=9998
+    ep_00011.npz step   13  mkt_inv[WHEAT]  exp=9991 got=9990
+gpu_difftest_v2_exit=1

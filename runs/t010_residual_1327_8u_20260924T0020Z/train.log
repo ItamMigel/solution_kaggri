@@ -1,0 +1,5 @@
+obs=190 act=28 params=44729 envs=256 reps=8 groups=32
+league=['t_nb2', 't_nb1', 't_nb_hi', 't_nb_lo'] weights=[3, 2, 2, 1]  per-env counts=[96, 64, 64, 32]
+sigma: live=0.07 mid=0.03 dead=0.01
+[   1] p0 margin=    -3340 win=0.305 nb2= -11894 nb1=  -7866 nb_hi=  -9077 nb_lo= +42850 | pg=-0.0257 v=0.0239 kl=+0.0239 sig=0.0458 lr=3.00e-03 | 256 eps 2k st/s 1.6min
+[   2] p1 margin=    -4334 win=0.301 nb2= -12135 nb1=  -7927 nb_hi= -10155 nb_lo= +37896 | pg=-0.0279 v=0.0072 kl=+0.0202 sig=0.0405 lr=2.88e-03 | 512 eps 1k st/s 6.6min

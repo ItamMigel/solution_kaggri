@@ -1,0 +1,31 @@
+{
+  "created_utc": "2026-09-24T02:01:25.371970+00:00",
+  "candidates": {
+    "overlay": "/workspace/wt/codex/agents/horizon_v5_mmpq_overlay.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/codex/agents/horizon_v5_market.py",
+    "mmpq": "/workspace/shared/opponents/tapes/tape_mmpq_26860/main.py"
+  },
+  "seeds": [
+    198533160,
+    1459388359
+  ],
+  "expected_games": 8,
+  "input_sha256": {
+    "/workspace/shared/opponents/tapes/tape_mmpq_26860/main.py": "f23def88f4333ba9787a0337f07dd8a85a29bcd81aff36ed44ab522a6846d900",
+    "/workspace/wt/codex/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/codex/agents/horizon_v5_mmpq_overlay.py": "074c3450c011c1cc40234d94476b3b2f8c77c3cb7e6586322a911a6c72aa0397",
+    "/workspace/wt/codex/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 2,
+  "decision_note": "T012 smoke against hard tape; no promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

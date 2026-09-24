@@ -1,0 +1,13 @@
+op ids from src.gpuenv.ops
+checking src.gpuenv.env:VecKaggriculture on 12 episodes, batch=12, device=cuda
+  batch 0: 12 episodes, 12 clean, 0 diverged
+
+==============================================================================
+FIDELITY GATE — src.gpuenv.env:VecKaggriculture
+==============================================================================
+episodes checked : 12
+state comparisons: 8628 steps x full canonical state
+wall time        : 28.9s
+
+RESULT: PASS — zero divergences at every step of every episode.
+gpu_difftest_v6_exit=0

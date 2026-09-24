@@ -1,0 +1,59 @@
+{
+  "created_utc": "2026-09-24T01:00:35.371541+00:00",
+  "candidates": {
+    "h572": "/workspace/shared/candidates_wip/h572/main.py",
+    "h572e": "/workspace/shared/candidates_wip/h572e/main.py",
+    "h604": "/workspace/shared/candidates_wip/h604/main.py",
+    "tape572": "/workspace/shared/opponents/mmpq_bank/ep112572059/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "v4_8turn": "/workspace/wt/claude/agents/horizon_v4_8turn.py",
+    "mmpq26860": "/workspace/shared/opponents/tapes/tape_mmpq_26860/main.py",
+    "mgoose98862": "/workspace/shared/opponents/tapes/tape_unknownmothe_98862/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    1772049822,
+    803980020,
+    1017825392,
+    2131145226,
+    1416751662,
+    862705062,
+    1888453934,
+    1267884777,
+    335609898,
+    1666950667,
+    836526668,
+    352434753,
+    342070285,
+    1445933037,
+    1730601716,
+    1621208374
+  ],
+  "expected_games": 768,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/h572/main.py": "4d5607784381ea8ebb4198377d49aee74821341cb09f3468b31e26299cf5b4f7",
+    "/workspace/shared/candidates_wip/h572e/main.py": "9c28b213e679b522af33f01cd2500e7371d5cf146bc1cd7092ba0e20f66f7682",
+    "/workspace/shared/candidates_wip/h604/main.py": "a257ae68a8f744316039e480d551860028f3db86d7d9f64264f6cca6aecd38d1",
+    "/workspace/shared/opponents/mmpq_bank/ep112572059/main.py": "f949cb2d7e702d642e4b16c742da606cdd66136b79245cb9345ec0f3ce3d1034",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/tapes/tape_mmpq_26860/main.py": "f23def88f4333ba9787a0337f07dd8a85a29bcd81aff36ed44ab522a6846d900",
+    "/workspace/shared/opponents/tapes/tape_unknownmothe_98862/main.py": "abc6596e25bf84790973c6630099c569480169cfca9b2888cdd17e0446e829f1",
+    "/workspace/wt/claude/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 22,
+  "decision_note": "T013 screen: horizon chassis + mmpq tape vs v5_market; tapes selected on dev seeds 0-3, evaluated on 4-19",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
