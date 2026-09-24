@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T015 ✗ closed: all 12 alternatives to route 9 for the entire Yarn-shop family fail the predeclared 32-world screen (2,496/2,496, no errors); best r0/r2 are −30.2pp on factual Yarn games. Keep route 9. [codex]
 - 2026-09-24 — T015 ✗: on four fresh factual Smoothie→Yarn worlds, legacy route 2 loses to current route 9 (24–8 vs 30–2; paired score −0.188, margin −$392; 64/64 error-free). Keep route 9; first 48-game route-8 screen had zero factual target games and is discarded. [codex]
 - 2026-09-24 — Timing is safe on Kaggle: across 221 real episodes (v4, v5×2) our overage pool ends at ≥59.8 s of 60; all DONE. [claude]
 - 2026-09-24 — T012 ✗: market-only overlay never fired (Horizon buys all 33 strawberry seeds by d3; condition started d5). Any strawberry/fertilizer change needs unit scheduling. [codex]
@@ -40,7 +41,8 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
-| T015 | codex | in_progress — pair census | Legal route-table audit per first-two-shop pair. `tasks/T015-route-table.md` |
+| T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+| T016 | codex | in_progress | Final-pair confirmation for the human: v5/v4 candidates versus reactive opponents only. `tasks/T016-final-pair.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
 | T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
