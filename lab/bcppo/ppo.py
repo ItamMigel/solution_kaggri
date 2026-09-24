@@ -157,7 +157,7 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
             out0 = policy.act(net, st, 0, so, team, greedy=greedy)
             # Calling each opponent on the full batch keeps ShopOrder state
             # aligned and avoids host-side batch slicing in the hot loop.
-            opponent_out = {name: policy.act(league[name][0], st, 1, so, team, greedy=False)
+            opponent_out = {name: policy.act(league[name][0], st, 1, so, league[name][2], greedy=False)
                             for name in names}
             out1 = _merge_actions(opponent_out, labels, names)
             st, _, _, _ = ve.step(st, policy.combine(out0[0], out1))
@@ -203,26 +203,32 @@ def _explained_variance(pred, target):
     return 1.0 - torch.var(target - pred) / var_y
 
 
+def _team_vec(ck, team, dev):
+    teams = ck.get("teams", ["mmpq", "dsm", "mgoose"]); v = torch.zeros((1, len(teams)), device=dev)
+    v[0, teams.index(team) if team in teams else 0] = 1
+    return v
+
+
 def _league_from_args(a, ck, net, bc, dev):
-    """Return name -> (frozen/current net, probability), with safe smoke defaults."""
-    snapshots = []
-    doubles = []
-    for path in a.league_snapshot:
-        snapshots.append(_new_net(torch.load(path, map_location=dev), dev).eval())
-    for path in a.league_double:
-        doubles.append(_new_net(torch.load(path, map_location=dev), dev).eval())
+    """Return name -> (net, probability, team_vec). --league-snapshot/--league-double accept CKPT or CKPT:TEAM
+    (TEAM = the team the opponent imitates; defaults to the learner's team)."""
+    def load(spec):
+        path, _, team = spec.partition(":")
+        oc = torch.load(path, map_location=dev)
+        return _new_net(oc, dev).eval(), _team_vec(oc, team or a.team, dev)
+    snapshots = [load(s_) for s_ in a.league_snapshot]
+    doubles = [load(s_) for s_ in a.league_double]
+    own = _team_vec(ck, a.team, dev)
     if not snapshots and not doubles:
-        return {"current": (net, 1.0)}
-    # F10's requested mix.  BC supplies the optional final 10% until a tape
-    # adapter exists, instead of pretending an incompatible action tape is a net.
-    entries = [("current", net, .30)]
-    if snapshots:
-        entries.append(("snapshot", snapshots[0], .35))
-    if doubles:
-        entries.append(("double", doubles[0], .25))
-    entries.append(("bc_fallback", bc, .10))
+        return {"current": (net, 1.0, own)}
+    entries = [("current", net, .30, own)]
+    for i, (m, tv) in enumerate(snapshots):
+        entries.append((f"snapshot{i}", m, .35 / len(snapshots), tv))
+    for i, (m, tv) in enumerate(doubles):
+        entries.append((f"double{i}", m, .25 / len(doubles), tv))
+    entries.append(("bc_fallback", bc, .10, own))
     total = sum(x[2] for x in entries)
-    return {name: (model, weight / total) for name, model, weight in entries}
+    return {name: (model, weight / total, tv) for name, model, weight, tv in entries}
 
 
 def _restore_resume(path, net, opt, dev):
@@ -261,7 +267,7 @@ def main():
     ap.add_argument("--lam", type=float, default=.995)
     ap.add_argument("--clip", type=float, default=.2)
     ap.add_argument("--ent", type=float, default=.001)
-    ap.add_argument("--kl", type=float, default=.05)
+    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
     ap.add_argument("--team", default="dsm")
     ap.add_argument("--vf", type=float, default=.5)
     ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
@@ -348,7 +354,7 @@ def main():
                 mm = lambda x: policy.market_mask(x, rec["hire_max"].long(), rec["land_max"].long())
                 kl_bc = (kl(btl, tl, unit_mask) +
                          kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(mm(bml), mm(ml)))
-                kl_coef = a.kl * max(0.0, 1 - it / max(1, a.iters))
+                kl_coef = max(a.kl_floor, a.kl * max(0.0, 1 - it / max(1, a.iters)))
                 loss = a.vf * value_loss if value_only else policy_loss + a.vf * value_loss - a.ent * ent_total.mean() + kl_coef * kl_bc
                 opt.zero_grad(set_to_none=True)
                 loss.backward()
