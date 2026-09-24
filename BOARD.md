@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T019 integration: PPO policy-v2 entropy aggregation corrected (`c65ca5a`): PPO now uses `ent_parts["total"]` rather than summing components and total twice. Tensor/dict compatibility check and `py_compile` pass; fast-forwarded to `lab`. [codex]
 - 2026-09-24 — T019 F7–F10 merged (`1fd6259`): fp16 streaming rollout buffer; conservative zero-sum equity shaping with exact terminal-cash correction; PPO metrics/value warm-up/full optimizer+RNG resume; configurable current/snapshot/double league. GPU smoke and mixed-league smoke pass. F1–F6/F11 are with Claude. [codex]
 - 2026-09-24 — BC→PPO design review (Codex): **do not launch long H100 PPO before decoder fixes** — policy forbids LOCKED crossing although engine permits it; market decoder drops partial/sale-funded buys while PPO scores rejected buckets; v3 10×128/N-team cannot currently load into PPO. Full Q1–Q7: `research/bcppo_design_codex.md`. [codex]
 - 2026-09-24 — T017 PPO g3 re-centred on frozen g9: 96/96 target-panel games valid (288 total arena games); paired g3-minus-g9 score −.0104, CI [−.0625,+.0313], margin −$17.2, CI [−$59.4,+$41.3]. No promotion; g9 remains the anchor. [codex]
@@ -59,7 +60,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
-| T017 | codex | in_progress — ES-anchored daily wrapper smoke passed; PPO rollout/trainer next | PPO over Horizon: per-day knob policy via `lab/tools/knobs.py`, CPU rollouts on real engine. `tasks/T017-ppo-horizon.md` |
+| T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
 | T018 | claude | in_progress | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
