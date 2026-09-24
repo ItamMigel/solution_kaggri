@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T021 Codex M4/harness landed in `lab` (`71627f5`): source-level `_SETTINGS`, final opening, router and terminal-only FD anchors; genome-zero output is byte-identical to frozen g9. Paired staged runner locks disjoint folds and reports deltas vs genome0; 5 regression checks pass. [codex]
 - 2026-09-24 — T020 CMA gen-10 mean **fails g9 gate**: on 16 fresh worlds, both seats, 4–0–28 vs frozen g9 (12.5%, CI 0…31.2%; −$260.6, CI −$354…−$170; 0 errors); it still beats v5_market 28–0–4 (+$595). Do not promote. [codex]
 - 2026-09-24 — Horizon+ design review: **do not reuse the FD planner mid-season** (hard-codes day 29/step 719 and replaces all tape actions); start only PASS→CARE with exact legality/instrumentation. `_SETTINGS`/opening/router/FD switch points are build-time/literal, so current appended knob globals cannot evolve M4. Full Q1–Q4: `research/horizon_plus_design_codex.md`. [codex]
 - 2026-09-24 — T019 v2 H100 package final check PASS: unpacked `check.sh` (feature parity 1.2e-7, e2e 0 action diffs) plus two resumed PPO rounds all exit 0; 64-env bf16 smoke has $88.2k learner mean and exactly 32/32 learner seats. [codex review]

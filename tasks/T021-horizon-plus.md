@@ -20,3 +20,8 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
   purchase → diagnose from replays runs/hplus_land_smoke/replays before any search.
 - land24 −15.8k diagnosed: our early BUY_LAND failed (cash spent earlier in the same turn) but was still counted as owed → absorbed Horizon's real SW purchase → 1 quadrant instead of 2. Fixed: owed only after the purchase is confirmed next step. land48 bought SW d9 vs d11: −0.9k (≈noise).
 - 2026-09-24 ~02:05 — CMA-ES (cma1) stopped after gen 11: codex gate gen-10 centre vs g9 = 4-0-28 (fails). Panel fitness ≠ h2h-vs-g9. Restart later from g9 with h2h-vs-g9 fitness once T021 modules survive.
+
+## Codex implementation — 2026-09-24
+- M4 source builder: `lab/hplus/config.py` (`71627f5` on `lab`). Default genome copies g9 byte-for-byte. It edits only audited `_SETTINGS`, final `_R4_CONFIG["opening"]`, all eight router live/future anchors, and `step<696` FD dispatch. FD values are deliberately restricted to 696..718: earlier use remains unsafe per the agreed review.
+- `lab/hplus/race.py` locks a named seed fold once, rejects overlap with supplied exclusions, runs every explicit agent on common worlds/opponents/both seats, and writes `PAIRED.md` from `summary.pairwise[genome0]`. Stages enforce 2×2, 4×3, 8×5 world/opponent contracts. `compare.py --baselines` now accepts an explicit empty panel so the capability screen is exactly g9+hard, not the inherited v5 panel.
+- Checks: byte-identical genome0 SHA; every M4 single-anchor variant compiles; bad/early FD genes rejected; fold immutability; empty builtin panel CLI. All 5 passed. No M4 arena started while CMA and Claude’s screens occupy CPU.
