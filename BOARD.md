@@ -68,7 +68,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
 | T020 | codex | in_progress — P40 strong_v2 diagnostic; CMA gen-10 gate failed g9 | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
-| T018 | claude | in_progress | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
