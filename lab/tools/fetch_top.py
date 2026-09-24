@@ -7,6 +7,11 @@ K = "/workspace/shared/bin/kaggle"
 def run(*a):
     return subprocess.run([K, *a], capture_output=True, text=True, timeout=600).stdout
 
+def jl(txt):
+    txt = (txt or "").lstrip()
+    if not txt.startswith("["): return []
+    return json.JSONDecoder().raw_decode(txt)[0]
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--per-sub", type=int, default=12); ap.add_argument("--out", default="/workspace/shared/replays/top")
@@ -18,14 +23,16 @@ def main():
         name = zf.namelist()[0]; rows = list(csv.DictReader(io.TextIOWrapper(zf.open(name), "utf-8-sig")))
     idx = open(a.out + "/index.jsonl", "a")
     for r in rows[: a.top]:
-        subs = json.loads(run("competitions", "team-submissions", r["TeamId"], "--format", "json") or "[]")
+        subs = jl(run("competitions", "team-submissions", r["TeamId"], "--format", "json"))
         for s in subs:
-            eps = json.loads(run("competitions", "episodes", str(s["id"]), "--format", "json") or "[]")
+            eps = jl(run("competitions", "episodes", str(s["id"]), "--format", "json"))
             eps = [e for e in eps if "COMPLETED" in e["state"]][: a.per_sub]
             for e in eps:
-                f = f"{a.out}/episode-{e['id']}-replay.json"
+                f = f"{a.out}/episode-{e['id']}-replay.json.gz"
                 if not os.path.exists(f):
                     run("competitions", "replay", str(e["id"]), "-p", a.out, "-q")
+                    raw = f[:-3]
+                    if os.path.exists(raw): subprocess.run(["gzip", "-f", raw])
                 idx.write(json.dumps({"team": r["TeamName"], "team_id": r["TeamId"], "rank": r["Rank"], "score": r["Score"],
                                       "sub_id": s["id"], "sub_score": s.get("publicScore"), "episode_id": e["id"],
                                       "end": e["endTime"], "file": f}) + "\n"); idx.flush()
