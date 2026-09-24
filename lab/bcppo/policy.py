@@ -38,6 +38,9 @@ def _mkt_table():
 MOP, MIT, MORDER = _mkt_table()
 
 
+AMP = None  # set to torch.bfloat16 on H100/A100 for the conv trunk; heads stay fp32
+
+
 class PolicyNet(bctrain.Net):
     def __init__(self, gdim, ch=96, blocks=6):
         super().__init__(gdim, ch, blocks)
@@ -45,7 +48,13 @@ class PolicyNet(bctrain.Net):
 
     def full(self, B, G, uv, ux, uy, umask):
         """B[N,C,10,10] G[N,g] uv[N,U,d] ux/uy[N,U] -> unit op logits [N,U,NOP], target logits [N,U,100], market [N,NK,NB], value [N]"""
-        h = self.trunk(B, G); N_, C = h.shape[:2]; U = ux.shape[1]
+        if AMP is not None and B.is_cuda:
+            with torch.autocast("cuda", dtype=AMP):
+                h = self.trunk(B, G)
+            h = h.float()
+        else:
+            h = self.trunk(B, G)
+        N_, C = h.shape[:2]; U = ux.shape[1]
         hu = h.flatten(2).gather(2, (uy * 10 + ux)[:, None, :].expand(N_, C, U)).transpose(1, 2)  # [N,U,C]
         uin = torch.cat([hu, uv, G[:, None, :].expand(N_, U, G.shape[1])], -1)
         ul = self.unit(uin)

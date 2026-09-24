@@ -44,18 +44,25 @@ def main():
     ap.add_argument("--mb", type=int, default=8192); ap.add_argument("--gamma", type=float, default=0.999); ap.add_argument("--lam", type=float, default=0.95)
     ap.add_argument("--clip", type=float, default=0.2); ap.add_argument("--ent", type=float, default=0.001); ap.add_argument("--kl", type=float, default=0.05)
     ap.add_argument("--margin-coef", type=float, default=0.5); ap.add_argument("--team", default="dsm"); ap.add_argument("--vf", type=float, default=0.5)
-    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--device", default="cuda"); ap.add_argument("--amp", default="none", choices=["none", "bf16"])
+    ap.add_argument("--resume", action="store_true", help="continue from <out>/last.pt if present"); ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = a.device
+    torch.manual_seed(a.seed)
+    if a.amp == "bf16": policy.AMP = torch.bfloat16
     ck = torch.load(a.init, map_location=dev)
     net = policy.PolicyNet(ck["gdim"]).to(dev); net.load_state_dict(ck["state"], strict=False)
+    start = 0
+    if a.resume and os.path.exists(f"{a.out}/last.pt"):
+        lk = torch.load(f"{a.out}/last.pt", map_location=dev); net.load_state_dict(lk["state"]); start = lk["iter"] + 1; print("resumed at iter", start, flush=True)
+    json.dump(vars(a), open(f"{a.out}/args.json", "w"), indent=1)
     bc = policy.PolicyNet(ck["gdim"]).to(dev); bc.load_state_dict(ck["state"], strict=False); bc.eval()
     for q in bc.parameters(): q.requires_grad_(False)
     teams = ck.get("teams", ["mmpq", "dsm", "mgoose"]); team = torch.zeros((1, len(teams)), device=dev); team[0, teams.index(a.team)] = 1
     opt = torch.optim.Adam(net.parameters(), lr=a.lr); ve = VecKaggriculture(a.envs, device=dev)
     log = open(f"{a.out}/log.jsonl", "a")
-    for it in range(a.iters):
+    for it in range(start, a.iters):
         t0 = time.time(); net.eval()
-        buf, final = rollout(net, ve, a.envs, dev, team, seed_base=1_000_003 * (it + 1))
+        buf, final = rollout(net, ve, a.envs, dev, team, seed_base=1_000_003 * (it + 1) + 7_919 * a.seed)
         t_roll = time.time() - t0
         margin = final[:, 0] - final[:, 1]
         data = {k: [] for k in REC_KEYS + ("logp", "adv", "ret", "v")}

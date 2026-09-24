@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import feat
 TEAMS = ["mmpq", "dsm", "mgoose"]
 
-def load(teams, root="/workspace/shared/bc_data", val_frac=0.1, seed=0):
+def load(teams, root=os.environ.get("BC_DATA", "/workspace/shared/bc_data"), val_frac=0.1, seed=0):
     rng = np.random.default_rng(seed); parts = {"train": [], "val": []}
     for ti, t in enumerate(teams):
         fs = sorted(glob.glob(f"{root}/{t}/*.npz")); rng.shuffle(fs)
@@ -74,9 +74,9 @@ def evaluate(net, D, dev, bs=512):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--data", default="mmpq,dsm,mgoose"); ap.add_argument("--out", required=True)
-    ap.add_argument("--epochs", type=int, default=20); ap.add_argument("--bs", type=int, default=256); ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--root", default=os.environ.get("BC_DATA", "/workspace/shared/bc_data")); ap.add_argument("--epochs", type=int, default=20); ap.add_argument("--bs", type=int, default=256); ap.add_argument("--lr", type=float, default=1e-3)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = "cuda"
-    D = load(a.data.split(",")); gdim = D["train"]["G"].shape[1]
+    D = load(a.data.split(","), root=a.root); gdim = D["train"]["G"].shape[1]
     net = Net(gdim).to(dev); opt = torch.optim.AdamW(net.parameters(), a.lr, weight_decay=1e-4)
     n = len(D["train"]["G"]); steps = a.epochs * (n // a.bs); sched = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=steps)
     log = open(f"{a.out}/log.jsonl", "w"); it = 0; best = -1

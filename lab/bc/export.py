@@ -77,7 +77,7 @@ def _legal_mask(obs, p, x, y, inv, shed_left, seeds):
     for c in CROPS:
         if t is not None or seeds.get(c, 0) <= 0: m[UNIT_IDX["PLANT:" + c]] = False
     if t is not None: m[UNIT_IDX["BUILD_COOP"]] = m[UNIT_IDX["BUILD_PASTURE"]] = False
-    if t is None or (isinstance(t, dict) and t.get("kind") not in ("WEED", "PLANT")): m[UNIT_IDX["DIG"]] = False
+    if not (isinstance(t, dict) and t.get("kind") in ("WEED", "PLANT")): m[UNIT_IDX["DIG"]] = False
     adj = (x, y) in SHED_ADJ
     if not adj or not inv: m[UNIT_IDX["DROP"]] = False
     for it in ITEMS:
@@ -98,21 +98,40 @@ def _decode_unit(cls, inv, shed_left):
     n = 1 if (it in ANIMALS or it == "FERTILIZER") else int((inv or {}).get(it, 1))
     return ["PLACE", it, max(1, n)]
 
-def _afford(obs, p, orders):
-    farm = obs["farms"][p]; money = float(farm["money"]); prices = obs["market"].get("prices") or {}
-    hires = int(farm.get("hires_today", 0) or 0); nland = len(farm.get("unlocked_quadrants") or []) - 1; out = []
-    for o in orders:
-        op = o[0]
-        if op == "SELL": out.append(o); continue
-        if op == "HIRE": c = _fib(hires)
-        elif op == "BUY_LAND": c = _LAND_COST[nland] if 0 <= nland < 3 else 1e12
-        elif op == "BUY_SEED": c = _SEED_COST.get(o[1], 1e9) * o[2]
-        elif op == "BUY_ANIMAL": c = _ANIMAL_COST.get(o[1], 1e9) * o[2]
-        else: c = float(prices.get(o[1], 100)) * 1.2 * o[2]
-        if c <= money:
-            money -= c; out.append(o)
-            if op == "HIRE": hires += 1
-            if op == "BUY_LAND": nland += 1
+_RNG = np.random.default_rng(_SEED)
+
+def _pick(logits, mask=None):
+    z = logits if mask is None else np.where(mask, logits, -1e9)
+    if not _SAMPLE:
+        return int(z.argmax())
+    g = -np.log(-np.log(_RNG.random(z.shape) + 1e-20) + 1e-20)
+    return int((z / _TEMP + g).argmax())
+
+_MKT_ORDER_IDX = [MKT_IDX[k] for k in MKT_ORDER]
+_REP = {"HIRE", "BUY_LAND"}
+
+def _market(obs, p, q):
+    """Mirror of policy.build_actions market: fixed key order, HIRE/LAND/ANIMAL one per order (<=10 reps),
+    prefix-affordability on cumulative cost of all wanted slots, first 10 accepted."""
+    farm = obs["farms"][p]; money = int(farm["money"]); prices = obs["market"].get("prices") or {}
+    hires = int(farm.get("hires_today", 0) or 0); land = len(farm.get("unlocked_quadrants") or []) - 1
+    cum = 0; out = []
+    for k in _MKT_ORDER_IDX:
+        key = MKT_KEYS[k]; n = int(q[k]); op, _, it = key.partition(":")
+        if n <= 0: continue
+        rep = op in _REP or op == "BUY_ANIMAL"
+        slots = range(min(n, 10)) if rep else [0]
+        for r in slots:
+            qty = 1 if rep else n
+            if op == "SELL": c = 0
+            elif op == "HIRE": c = _fib(min(hires + r, 20))
+            elif op == "BUY_LAND": c = _LAND_COST[land + r] if land + r < 3 else 10 ** 12
+            elif op == "BUY_SEED": c = _SEED_COST[it] * qty
+            elif op == "BUY_ANIMAL": c = _ANIMAL_COST[it] * qty
+            else: c = (int(prices.get(it, 0)) * 12 // 10) * qty
+            cum += c
+            if cum <= money and len(out) < 10:
+                out.append([op] if op in _REP else [op, it, qty])
     return out
 
 def agent(obs, config=None):
@@ -122,42 +141,36 @@ def agent(obs, config=None):
         ul = unit_list(obs, p); priv = obs.get("private") or {}
         outs, m, tls = _forward(Bd, g, ul)
         tiles = obs["farms"][p]["tiles"]
-        locked = np.array([[tiles[yy][xx] == "LOCKED" for xx in range(10)] for yy in range(10)]).reshape(-1)
-        invs = priv.get("inventories") or []; shed_left = dict(priv.get("shed") or {}); seeds = dict(priv.get("seeds") or {})
+        unlocked = np.array([[tiles[yy][xx] != "LOCKED" for xx in range(10)] for yy in range(10)]).reshape(-1)
+        invs = priv.get("inventories") or []; shed = dict(priv.get("shed") or {}); seeds = dict(priv.get("seeds") or {})
         acts = []
         for i, ((x, y, v), lg) in enumerate(zip(ul, outs)):
             inv = invs[i] if i < len(invs) else {}
-            legal = _legal_mask(obs, p, x, y, inv, shed_left, seeds)
+            legal = _legal_mask(obs, p, x, y, inv, shed, seeds)
+            tcell = _pick(tls[i], unlocked); tx, ty = tcell % 10, tcell // 10
             a = None
-            if tls:
-                tl = np.where(locked, -1e9, tls[i]); tcell = int(tl.argmax()); tx, ty = tcell % 10, tcell // 10
-                if (tx, ty) != (x, y):
-                    cand = []
-                    if tx > x: cand.append("EAST")
-                    if tx < x: cand.append("WEST")
-                    if ty > y: cand.append("SOUTH")
-                    if ty < y: cand.append("NORTH")
-                    cand = [c for c in cand if legal[UNIT_IDX[c]]]
-                    if cand: a = [max(cand, key=lambda c: lg[UNIT_IDX[c]])]
-                else:
-                    for mv in _MOVES: legal[UNIT_IDX[mv]] = False
+            if (tx, ty) != (x, y):
+                cand = [c for c, ok in (("EAST", tx > x), ("WEST", tx < x), ("SOUTH", ty > y), ("NORTH", ty < y)) if ok and legal[UNIT_IDX[c]]]
+                if cand: a = [max(cand, key=lambda c: lg[UNIT_IDX[c]])]
+            else:
+                for mv in _MOVES: legal[UNIT_IDX[mv]] = False
             if a is None:
-                lg2 = np.where(legal, lg, -1e9); a = _decode_unit(int(lg2.argmax()), inv, shed_left)
-            if a[0] == "PLANT": seeds[a[1]] = seeds.get(a[1], 0) - 1
+                a = _decode_unit(_pick(lg, legal), inv, dict(shed))
             acts.append(a)
-        orders = _afford(obs, p, decode_market(m.argmax(1)))
-        return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": orders}
+        q = [_pick(m[k]) for k in range(len(MKT_KEYS))]
+        return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": _market(obs, p, q)}
     except Exception:
         return {"farmer": ["PASS"], "hands": [], "market": []}
 '''
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--ckpt"); ap.add_argument("--team"); ap.add_argument("--out")
+    ap.add_argument("--sample", action="store_true", help="sample actions (PPO/BC stochastic policy) instead of argmax"); ap.add_argument("--temp", type=float, default=1.0); ap.add_argument("--seed", type=int, default=12345)
     a = ap.parse_args(); ck = torch.load(a.ckpt, map_location="cpu")
     sd = {k: v.numpy().astype(np.float32) for k, v in ck["state"].items()}
     nblocks = len({k.split(".")[1] for k in sd if k.startswith("body.")})
     buf = io.BytesIO(); np.savez(buf, **sd); blob = base64.b85encode(zlib.compress(buf.getvalue(), 9)).decode()
     featsrc = open(os.path.join(HERE, "feat.py")).read()
-    src = featsrc + f"\n_TEAMS = {ck['teams']!r}\n_TEAM = {a.team!r}\n_NBLOCKS = {nblocks}\n_WBLOB = {blob!r}\n" + RUNTIME
+    src = featsrc + f"\n_TEAMS = {ck['teams']!r}\n_TEAM = {a.team!r}\n_NBLOCKS = {nblocks}\n_SAMPLE = {a.sample}\n_TEMP = {a.temp}\n_SEED = {a.seed}\n_WBLOB = {blob!r}\n" + RUNTIME
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True); open(a.out, "w").write(src)
     print("wrote", a.out, len(src) // 1024, "KB")
