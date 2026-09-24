@@ -22,3 +22,9 @@ Plan:
 - v2: added **target-cell head** (per unit, spatial softmax over 100 cells = where the unit does its next non-move action that day) + greedy pathing to it; data grew to 313 eps (DSM 92, Mother-Goose 101, M&M&P&Q 120), 2.3M unit decisions. Training on P40 (~110 s/epoch, 25 epochs). Early: target acc 61% at epoch 0.
 - Tools: lab/bc/{feat,build,train,export}.py; numpy agent parity vs torch 1e-5; ~11 ms/forward; BLAS threads limited in-agent.
 - **BC v2 final** (25 epochs, 313 eps): val unit acc **82.8%**, target-cell acc **83.8%**, market key acc 97.1%. Real play `runs/bc_v2_final_eval` (8 worlds, both seats, 144 games): **0/144** vs v5_market, boatlee_v16, fukami_v48; margins −135k…−184k. BC alone does not produce a working farm (long production chains break under ~17% per-step error). Next viable path: BC as init + PPO fine-tuning in the exact gpuenv (needs GPU feature extraction; candidate job for the human's 4×H100 box).
+## BC → PPO on gpuenv (2026-09-24 night) — lab/bcppo/
+- `gpufeat.py`: batched State→features mirror of feat.py; **parity over a full v5-vs-v4 game, both players: max diff 1.2e-7** (parity_test.py). ShopOrder tracks first-two-shop order (State keeps counts only).
+- `policy.py`: batched legal masks, target-cell sampling + greedy pathing, op sampling, vectorised prefix-affordability market builder, exact log-prob recompute (first-minibatch |ratio−1| = 1.4e-5).
+- Smoke on gpuenv: BC **greedy ≈ $2k (matches official-engine eval), BC sampled ≈ $30k mean, up to $80k** → sampling is a far better starting point than argmax.
+- Speed P40: B=1024: net 64 ms, features 16 ms, env step 36 ms per player-step → ~4k game-steps/s. (H100 bf16 should be ≥10×.)
+- `ppo.py`: self-play PPO, reward = Δmoney/1e4 dense + 0.5·margin/1e4 terminal, GAE(0.999, 0.95), KL-to-BC anchor annealed. Run r1: 256 envs × 40 iters on P40 → /workspace/shared/bcppo_runs/r1, log runs/bcppo_r1.log.
