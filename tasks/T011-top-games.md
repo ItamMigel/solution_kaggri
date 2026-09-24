@@ -78,3 +78,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~14:35 — val_es1_g1 partial (56/96, fresh worlds): es1_g1 vs v5_market 18-2 (+406), vs v5_guarded 16-2 (+279), vs v4_8turn 18-0 (+1134). Holding out of sample so far.
 - 2026-09-24 ~14:55 — **val_es1_g1 done** (96 games, 0 errors, ledger): es1_g1 vs v5_market 30-2 (+515, CI [81,100]%), vs v5_guarded 30-2 (+515), vs v4_8turn 32-0 (+1311); worst loss −37. Asked codex for independent reproduction on its own seeds + broader panel.
 - 2026-09-24 ~15:20 — ES gen 2: centre fit 1.056 (best n1 1.081); centre vs v5_market 15-1 (+263) (gen1 centre: 16-0, +536). Centre drifting, not clearly improving on es1_g1 yet; keep es1_g1 as the frontrunner.
+- 2026-09-24 ~16:05 — ES gen 3: centre best again (fit 1.102).
