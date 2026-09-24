@@ -2,6 +2,7 @@
 usage: python parity_test.py [--seed S] [--agents A,B] [--steps N]"""
 import argparse, copy, json, os, sys
 import numpy as np, torch
+torch.backends.cudnn.allow_tf32 = False; torch.backends.cuda.matmul.allow_tf32 = False  # exact fp32 for parity tests (H100 defaults to TF32 convs)
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "bc")); sys.path.insert(0, os.path.join(HERE, ".."))
 import feat, gpufeat
 from gpuenv.env import VecKaggriculture

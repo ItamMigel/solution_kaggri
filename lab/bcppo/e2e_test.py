@@ -1,6 +1,7 @@
 """End-to-end: exported numpy agent (official engine) vs GPU policy (gpuenv), greedy, same seed, both seats.
 Reports first step where money/actions diverge. usage: python e2e_test.py --ckpt X --team dsm [--seed S]"""
 import argparse, json, os, subprocess, sys, torch
+torch.backends.cudnn.allow_tf32 = False; torch.backends.cuda.matmul.allow_tf32 = False  # exact fp32 for parity tests (H100 defaults to TF32 convs)
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import policy, gpufeat
 from gpuenv.env import VecKaggriculture
