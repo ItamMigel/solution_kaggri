@@ -29,13 +29,16 @@ def _validate(weights):
     return [[float(x) for x in row] for row in weights]
 
 
-def make_daily_agent_file(weights, out, *, base_path=None, scale=1.0):
+def make_daily_agent_file(weights, out, *, base_path=None, scale=1.0, anchor=None):
     """Write a loadable agent that updates all knobs once per simulated day."""
     weights = _validate(weights)
     if base_path is None:
         base_path = Path(__file__).resolve().parents[2] / "agents" / "horizon_v5_market.py"
     source = Path(base_path).read_text().rstrip() + "\n"
-    payload = dict(names=NAMES, base=base_params(), space=SPACE, weights=weights,
+    anchor_params = base_params()
+    if anchor is not None:
+        anchor_params.update({name: float(anchor[name]) for name in NAMES if name in anchor})
+    payload = dict(names=NAMES, base=anchor_params, space=SPACE, weights=weights,
                    scale=float(scale), features=FEATURES)
     source += "\n# --- T017 daily PPO knob policy; self-contained ---\n"
     source += "_T017=" + json.dumps(payload, separators=(",", ":")) + "\n"
