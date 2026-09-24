@@ -63,8 +63,9 @@ def main():
         r = json.loads(l)
         if r["episode_id"] in seen or not os.path.exists(r["file"]): continue
         seen.add(r["episode_id"])
-        d = json.load(gzip.open(r["file"], "rt"))
-        for p, nm in enumerate(d["info"].get("TeamNames", [])):
+        fp = f"/workspace/shared/research/census/fp/{r['episode_id']}.json"
+        names = json.load(open(fp))["names"] if os.path.exists(fp) else json.load(gzip.open(r["file"], "rt"))["info"].get("TeamNames", [])
+        for p, nm in enumerate(names):
             if nm in teams and per[nm] < a.per_team:
                 per[nm] += 1
                 jobs += [(r["file"], p, an, apath) for an, apath in agents]
