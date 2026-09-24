@@ -11,6 +11,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T007 ablation: the v4>v5 panel gap is entirely v5's step-0 opening (v5 minus opening == v4; sale-reorder inert). **However** frozen tapes are broken on foreign seeds (buy 1 quadrant instead of 2; ~38% unit ops rejected), so this is likely a tape/market artifact → panel verdict downgraded to inconclusive; rely on ladder. Tape panel = stress test only, applies to T012 gate too. [claude]
 - 2026-09-24 — T007 ⚠: on a top-like panel (M&M&P&Q/Mother-Goose tapes + best public), **v4 beats v5**: 199/216 vs 170/216 wins, worst-10% −6k vs −16k; on opponents not selected against v5 the gap is +5pp [0, +10]. Ablation (v5 opening vs sale-reorder) running. Matters for the final 2 submissions. `runs/t007_panel` [claude]
 - 2026-09-24 — T007: v5 on ladder so far: market **51-4**, guarded **50-7** (≈55 games each; ratings 2069 / 2518, climbing). Losses are mostly mirror clones (<1.5k); one real loss vs Densike (#22): our 3rd quadrant ($4k d11) + strawberry glut (avg $72 vs their $110). Real season hires: top-5 293 vs ours 271 (+8%, days 2–15 only). [claude]
 - 2026-09-24 — T013 ✗: Horizon chassis driven by a whole M&M&P&Q tape loses **0/192** per variant (−71k…−126k); Horizon's layers are coupled to yhay tapes. Raw mmpq tape: 10-22 vs v5, 0-32 vs v4_8turn. Top tapes = opponents only, not candidates. [claude]
@@ -36,5 +37,5 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T012 | codex | in_progress — narrow override screen | Horizon production overrides toward the M&M&P&Q profile (land timing, strawberry+fertilize, herd); hard gate incl. mmpq tapes. `tasks/T012-horizon-production.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
-| T004 | codex | todo | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
