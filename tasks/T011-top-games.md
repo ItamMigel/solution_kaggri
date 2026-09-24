@@ -35,3 +35,7 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - Downloading all M&M&P&Q episodes (60/sub) → `replays/mmpq` for a tape bank.
 ## Next
 - T013 idea: **Horizon chassis + M&M&P&Q tapes** (their plan + Horizon's repair/sale/final-day layers). First: pure mmpq tapes vs v4_8turn + public pool to size them; then find mmpq tapes sharing an opening to build a shop-pair router.
+- 2026-09-24 ~03:10 — `runs/tapes_dev` complete (832 games, 0 errors; ledger): v5 vs tape_mmpq_26860 **42-22** (+11.4k, worst-10% −10.6k), vs tape_mmpq_33893 46-18; Mother-Goose tapes 53-11 / 57-7; others ≥59-5. Early 8/12 was noise of the first worlds, but mmpq tapes remain the strongest local opponents.
+- M&M&P&Q newest sub 56497780 is **60-0** in its last 60 ladder games; older sub 56464621 30-30. Their agent is reactive from step 0 (60 episodes → 23 distinct 24-step openings) → no shared-opening router possible.
+- Built `opponents/mmpq_bank/ep*/` (60 winning tapes of 56497780) and screening all vs v5 on 4 worlds × 2 seats → `runs/mmpq_bank_screen`.
+- T013 tool ready: `lab/tools/mk_horizon_tape.py` = Horizon v5 chassis with an external tape pinned as route 9001 (optionally keep Horizon endgame route 2 from step 648).
