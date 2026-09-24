@@ -81,3 +81,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~16:05 — ES gen 3: centre best again (fit 1.102).
 - 2026-09-24 ~16:55 — codex started independent reproduction of es1_g1 (runs/t018_independent_codex_20260924T1117Z).
 - 2026-09-24 ~17:30 — es1_g1 promoted to candidates/es1_g1 (README with evidence, tar.gz tested). Paired parthenos check: es1_g1 23-9 vs v5 25-7 (n.s.).
+- 2026-09-24 ~17:45 — codex T017: PPO wrapper anchored on es1_g1 verified (zero weights == es1_g1 exactly); starting trajectory collection + PPO loop. ES gen 6 centre fit 1.068.
