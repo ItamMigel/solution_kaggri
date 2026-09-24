@@ -28,5 +28,6 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 |---|---|---|---|
 | T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
+| T012 | claude | in_progress | Horizon production-volume probe: +hands / +geese / herd overrides in horizon_v5_market, CPU gate vs v5/v4_8turn + public pool (`opponents/pool`) |
 | T004 | claude | todo | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
