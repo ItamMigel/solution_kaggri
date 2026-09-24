@@ -1,0 +1,54 @@
+{
+  "created_utc": "2026-09-24T23:46:56.227506+00:00",
+  "stage": "race",
+  "stage_contract": {
+    "worlds": 4,
+    "opponents": 3,
+    "description": "4 worlds \u00d7 g9 + v5 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/wt/claude/lab/hplus/landrace",
+  "seeds": [
+    1618013624,
+    616038787,
+    296519106,
+    1591501595
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates_wip/hplus2/c_g0/main.py",
+      "sha256": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072"
+    },
+    "land24": {
+      "path": "/workspace/shared/candidates_wip/hplus2/c_land24/main.py",
+      "sha256": "b64f875ddd49038033b942eb01027c1bd7bcce8c5c842a767e5f38f0ec0a3587"
+    },
+    "land48": {
+      "path": "/workspace/shared/candidates_wip/hplus2/c_land48/main.py",
+      "sha256": "f13d115e486fc8cdebb78390d5ee629258e54495dc7ba6972db34db99ffee2ac"
+    },
+    "land72": {
+      "path": "/workspace/shared/candidates_wip/hplus2/c_land72/main.py",
+      "sha256": "3b9f2e5ae2e338dd1ca20fcebbb3739e769893b322992f18f36e4a0d993a035f"
+    },
+    "land96": {
+      "path": "/workspace/shared/candidates_wip/hplus2/c_land96/main.py",
+      "sha256": "dc40e231ef358f9cd4f4c1184f873a353344760db54fbedb053b844a2921bd69"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "v5": {
+      "path": "/workspace/solution_kaggri/agents/horizon_v5_market.py",
+      "sha256": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4"
+    },
+    "parthenos": {
+      "path": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    }
+  },
+  "expected_games": 120,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

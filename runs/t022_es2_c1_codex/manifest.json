@@ -1,0 +1,57 @@
+{
+  "created_utc": "2026-09-24T23:31:11.815841+00:00",
+  "candidates": {
+    "es2_c1": "/workspace/shared/candidates_wip/es2_c1/main.py"
+  },
+  "opponents": {
+    "v5_guarded": "/workspace/wt/codex/agents/horizon_v5_guarded.py",
+    "es1_g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "yhay0909": "/workspace/shared/opponents/pool/yhay_router0909/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "ozer_v45": "/workspace/shared/opponents/pool/ozer_v45/main.py",
+    "fukami_v48": "/workspace/shared/opponents/pool/fukami_v48/main.py"
+  },
+  "seeds": [
+    32306113,
+    153297190,
+    258607753,
+    621952316,
+    761956697,
+    1018018885,
+    1046038075,
+    1137554359,
+    1160330887,
+    1169530161,
+    1614818346,
+    1670546381,
+    1699621283,
+    1829620743,
+    1912424350,
+    2009399362
+  ],
+  "expected_games": 256,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/es2_c1/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/opponents/pool/fukami_v48/main.py": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+    "/workspace/shared/opponents/pool/ozer_v45/main.py": "2536d41ed5a00c75204b6350f1c76c54259c774cb065ba2a3a0072eedf210d94",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0909/main.py": "d6d74997dc5b483db63d8e39cafa1afeec0f366824e75107e109123f111e866b",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/wt/codex/agents/horizon_v5_guarded.py": "20f24a06d5eae203b0909dbf31b13ab5c71acb67b0597daea047af55e29d6440",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "T022 independent es2_c1 review: g9 score CI must exceed 50%; no panel regression; t2945 unavailable locally",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
