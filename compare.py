@@ -95,7 +95,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--agent', action='append', default=[], metavar='NAME=FILE.py',
                    help='Repeat to compare two or more friend candidates on the same opponents/seeds')
-    p.add_argument('--baselines', nargs='+', choices=sorted(BASELINES), default=list(DEFAULT_BASELINES))
+    p.add_argument('--baselines', nargs='*', choices=sorted(BASELINES), default=None,
+                   help='Built-in opponents. Omit the flag for the default panel; pass an empty flag for none.')
     p.add_argument('--opponent', action='append', default=[], metavar='NAME=FILE.py',
                    help='Optional additional reacting opponents')
     seeds = p.add_mutually_exclusive_group()
@@ -122,7 +123,8 @@ def main():
     candidates = dict(parse_agent(v) for v in a.agent)
     if len(candidates) != len(a.agent):
         p.error('Duplicate candidate names')
-    opponents = {k: str(BASELINES[k]) for k in a.baselines}
+    baseline_names = list(DEFAULT_BASELINES) if a.baselines is None else a.baselines
+    opponents = {k: str(BASELINES[k]) for k in baseline_names}
     for value in a.opponent:
         name, path = parse_agent(value)
         if name in opponents:
