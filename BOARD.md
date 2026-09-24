@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 20:3x — BC→PPO v2 (joint plan F1–F11): engine-exact masks raised BC from $2k/$30k to **$62k greedy / $90k sampled** (HARVEST on animals + LOCKED walkable were blocked before). Codex F7–F10 (streaming buffer, zero-sum equity reward, metrics, league, seat randomisation). Data: 1077 games of 13 top teams. Package `h100_pkg/kaggri_bcppo_v2.zip` (168 MB) in final test. [claude+codex]
 - 2026-09-24 — T019 PPO seat symmetry (`2014d6b`): learner is assigned to each world seat for exactly half of every rollout batch; player axis/actions are mapped without extra policy forwards; equity reward, terminal cash correction and money metrics follow learner perspective. GPU smoke 2/2 seats pass. [codex]
 - 2026-09-24 — T019 integration: PPO policy-v2 entropy aggregation corrected (`c65ca5a`): PPO now uses `ent_parts["total"]` rather than summing components and total twice. Tensor/dict compatibility check and `py_compile` pass; fast-forwarded to `lab`. [codex]
 - 2026-09-24 — T019 F7–F10 merged (`1fd6259`): fp16 streaming rollout buffer; conservative zero-sum equity shaping with exact terminal-cash correction; PPO metrics/value warm-up/full optimizer+RNG resume; configurable current/snapshot/double league. GPU smoke and mixed-league smoke pass. F1–F6/F11 are with Claude. [codex]
