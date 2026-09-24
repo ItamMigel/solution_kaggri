@@ -1,9 +1,9 @@
 """PPO fine-tuning over the exact batched gpuenv.
 
 The rollout buffer is preallocated on the device: it avoids Python lists and a
-large stack/concat peak.  Player zero is the trainable policy; player one is a
-frozen/current league opponent.  Rewards are zero-sum changes in conservative
-equity, with a terminal correction to the exact cash margin.
+large stack/concat peak.  The learner is randomly assigned to both world
+seats; its opponent is a frozen/current league policy.  Rewards are zero-sum
+changes in conservative equity, with a terminal correction to exact cash.
 """
 import argparse
 import json
@@ -11,6 +11,7 @@ import os
 import sys
 import time
 from collections import Counter
+from dataclasses import fields, replace
 
 import torch
 import torch.nn.functional as F
@@ -22,6 +23,7 @@ import gpufeat
 from gpuenv import ops as O
 from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
+from gpuenv._state import Actions
 
 REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "hire_max", "land_max", "minc")
 STEPS = 719
@@ -136,15 +138,56 @@ def _league_labels(batch, dev, seed, names, probs):
     return torch.multinomial(p.expand(batch, -1), 1, generator=generator).squeeze(1)
 
 
+def _balanced_seats(batch, dev, seed):
+    """Return a deterministic, exactly half player-one learner assignment."""
+    generator = torch.Generator(device=dev)
+    generator.manual_seed(seed)
+    seat_one = torch.zeros(batch, dtype=torch.bool, device=dev)
+    seat_one[torch.randperm(batch, device=dev, generator=generator)[:batch // 2]] = True
+    return seat_one
+
+
+def _swap_player_tensor(value, seat_one):
+    """For selected batch rows, exchange the player axis of a State/action tensor."""
+    if value.ndim < 2 or value.shape[0] != seat_one.numel() or value.shape[1] != 2:
+        return value
+    swapped = value[:, [1, 0]]
+    return torch.where(seat_one.view(-1, *([1] * (value.ndim - 1))), swapped, value)
+
+
+def _learner_view(state, seat_one):
+    """Present each learner as player zero without changing the real environment state."""
+    return replace(state, **{
+        field.name: _swap_player_tensor(getattr(state, field.name), seat_one)
+        for field in fields(state)
+    })
+
+
+def _world_actions(actions, seat_one):
+    """Map player-zero/player-one actions from learner coordinates back to world seats."""
+    return Actions(*(_swap_player_tensor(value, seat_one) for value in
+                     (actions.farmer, actions.hands, actions.market)))
+
+
+def _learner_margin(values, seat_one):
+    """Own-minus-opponent values for a [batch, two-player] tensor."""
+    return torch.where(seat_one, values[:, 1] - values[:, 0], values[:, 0] - values[:, 1])
+
+
+def _learner_value(values, seat_one):
+    return torch.where(seat_one, values[:, 1], values[:, 0])
+
+
 def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
-    """Run player zero against a fixed per-environment league draw."""
+    """Run the learner from a balanced mix of world seats against a fixed league draw."""
     st = ve.reset(torch.arange(batch, device=dev) + seed_base)
     so = gpufeat.ShopOrder(batch, dev)
     names = list(league)
     probs = [league[n][1] for n in names]
     labels = _league_labels(batch, dev, seed_base ^ 0x9E3779B9, names, probs)
+    seat_one = _balanced_seats(batch, dev, seed_base ^ 0xC6A4A793)
     buf = StreamingBuffer(STEPS, batch)
-    eq_prev = conservative_equity(st)
+    eq_prev = _learner_margin(conservative_equity(st), seat_one)
     metric = {
         "unit_hist": torch.zeros(O.N_UNIT_OPS, dtype=torch.int64, device=dev),
         "market_hist": torch.zeros(O.N_MARKET_OPS, dtype=torch.int64, device=dev),
@@ -152,20 +195,23 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
         "unit_noop": torch.zeros((), dtype=torch.int64, device=dev),
         "market_noop": torch.zeros((), dtype=torch.int64, device=dev),
         "league_counts": torch.bincount(labels, minlength=len(names)),
+        "learner_seat_one": seat_one.sum(),
     }
     with torch.no_grad():
         for _ in range(STEPS):
             so.update(st)
-            out0 = policy.act(net, st, 0, so, team, greedy=greedy)
+            learner_state = _learner_view(st, seat_one)
+            out0 = policy.act(net, learner_state, 0, so, team, greedy=greedy)
             # Calling each opponent on the full batch keeps ShopOrder state
             # aligned and avoids host-side batch slicing in the hot loop.
-            opponent_out = {name: policy.act(league[name][0], st, 1, so, league[name][2], greedy=False)
+            opponent_out = {name: policy.act(league[name][0], learner_state, 1, so, league[name][2], greedy=False)
                             for name in names}
             out1 = _merge_actions(opponent_out, labels, names)
-            st, _, _, _ = ve.step(st, policy.combine(out0[0], out1))
+            st, _, _, _ = ve.step(st, _world_actions(policy.combine(out0[0], out1), seat_one))
             eq = conservative_equity(st)
-            reward = ((eq[:, 0] - eq[:, 1]) - (eq_prev[:, 0] - eq_prev[:, 1])) / 1e4
-            eq_prev = eq
+            equity_margin = _learner_margin(eq, seat_one)
+            reward = (equity_margin - eq_prev) / 1e4
+            eq_prev = equity_margin
             _, logp, value, _, rec = out0
             buf.put(rec, logp, value, reward)
             farmer, hands, market = out0[0]
@@ -179,11 +225,12 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
             metric["market_noop"] += (market_ops == O.MKT_NONE).sum()
     # Sum of equity deltas is end equity difference.  Correct terminally to
     # the true cash result required by the competition.
-    cash_margin = st.money[:, 0].float() - st.money[:, 1].float()
-    equity_margin = eq_prev[:, 0] - eq_prev[:, 1]
-    buf.terminal_add((cash_margin - equity_margin) / 1e4)
+    cash_margin = _learner_margin(st.money.float(), seat_one)
+    buf.terminal_add((cash_margin - eq_prev) / 1e4)
     metric = {k: (v.detach().cpu() if torch.is_tensor(v) else v) for k, v in metric.items()}
-    return buf, st.money.float(), metric, {name: int((labels == i).sum()) for i, name in enumerate(names)}
+    league_counts = {name: int((labels == i).sum()) for i, name in enumerate(names)}
+    league_counts.update(learner_seat0=int((~seat_one).sum()), learner_seat1=int(seat_one.sum()))
+    return buf, _learner_value(st.money.float(), seat_one), metric, league_counts
 
 
 def gae(reward, value, gamma, lam):
