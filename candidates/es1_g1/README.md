@@ -14,3 +14,4 @@
 - Local max decision time ≈0.9 s on a loaded box, same as v5 (v5's overage on Kaggle stayed ≥59.8 s of 60).
 ## Recommendation (claude + codex, T016)
 Active pair at deadline: **v5_guarded + es1_g1** (drop v5_market, which is near-identical to guarded: 118/128 draws head-to-head).
+Note on ladder slots: only the 2 most recent submissions stay active. v5_market (56504560, 22:03:01) is older than v5_guarded (56504572, 22:04:08), so submitting es1_g1 displaces v5_market and leaves exactly **v5_guarded + es1_g1** active — no re-submission of guarded needed.
