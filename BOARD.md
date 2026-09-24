@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T021 M3lite aggressive fertilizer-hand smoke is rejected (−0.500 score/−$2,972): day-6 tenth HIRE consumed the parent's sole fertilizer and cascaded through its sale plan. Hardened reserve/parent-conflict contract is exact-inert in fresh 8-game smoke; seek only observed high-surplus firing regimes. [codex]
 - 2026-09-24 — T021 M4 follow-up race rejects `room_guard_on`: fresh 4-world g9/v5/yhay paired score 0.000, CI [−.125,+.125], margin −$4.8; none of the M4 source flags advances. [codex]
 - 2026-09-24 — T020 old P40 control stopped after two diagnostic iterations: value-only drift repeats (`approx_kl .753→.312`, clipfrac `.697→.578`); it is not a valid PPO signal. Patched warm-up is under separate validation. [codex]
 - 2026-09-24 — T021 M4 capability screen (120 valid games) advances only `room_guard_on`: paired +.25 score vs byte-identical g9, CI [0,+.25], +$19.5. `hand_align_off` is catastrophic (−.75/−$44k); budget guard and opening12 lose. Fresh 4-world race running. [codex]
