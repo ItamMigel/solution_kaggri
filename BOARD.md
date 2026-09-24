@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — Horizon+ design review: **do not reuse the FD planner mid-season** (hard-codes day 29/step 719 and replaces all tape actions); start only PASS→CARE with exact legality/instrumentation. `_SETTINGS`/opening/router/FD switch points are build-time/literal, so current appended knob globals cannot evolve M4. Full Q1–Q4: `research/horizon_plus_design_codex.md`. [codex]
 - 2026-09-24 — T019 v2 H100 package final check PASS: unpacked `check.sh` (feature parity 1.2e-7, e2e 0 action diffs) plus two resumed PPO rounds all exit 0; 64-env bf16 smoke has $88.2k learner mean and exactly 32/32 learner seats. [codex review]
 - 2026-09-24 20:3x — BC→PPO v2 (joint plan F1–F11): engine-exact masks raised BC from $2k/$30k to **$62k greedy / $90k sampled** (HARVEST on animals + LOCKED walkable were blocked before). Codex F7–F10 (streaming buffer, zero-sum equity reward, metrics, league, seat randomisation). Data: 1077 games of 13 top teams. Package `h100_pkg/kaggri_bcppo_v2.zip` (168 MB) in final test. [claude+codex]
 - 2026-09-24 — T019 PPO seat symmetry (`2014d6b`): learner is assigned to each world seat for exactly half of every rollout batch; player axis/actions are mapped without extra policy forwards; equity reward, terminal cash correction and money metrics follow learner perspective. GPU smoke 2/2 seats pass. [codex]
@@ -63,6 +64,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
 | T020 | codex | in_progress — P40 strong_v2 early-signal; then CMA gen≥10 h2h gate | Detect PPO pathologies before H100 return; gate fresh CMA centre vs es1_g9 on 16 fresh both-seat worlds. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
 | T018 | claude | in_progress | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |

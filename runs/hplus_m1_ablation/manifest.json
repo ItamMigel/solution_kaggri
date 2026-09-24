@@ -1,0 +1,47 @@
+{
+  "created_utc": "2026-09-24T21:58:45.134366+00:00",
+  "candidates": {
+    "care": "/workspace/shared/candidates_wip/hplus/care/main.py",
+    "collect": "/workspace/shared/candidates_wip/hplus/collect/main.py",
+    "water": "/workspace/shared/candidates_wip/hplus/water/main.py",
+    "harvA": "/workspace/shared/candidates_wip/hplus/harvA/main.py",
+    "harvP": "/workspace/shared/candidates_wip/hplus/harvP/main.py",
+    "fert": "/workspace/shared/candidates_wip/hplus/fert/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "g9": "/workspace/shared/candidates/es1_g9/pkg/main.py"
+  },
+  "seeds": [
+    607628401,
+    1264996817,
+    1489233339,
+    1510390127,
+    1772049822,
+    803980020,
+    1017825392,
+    2131145226
+  ],
+  "expected_games": 192,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/care/main.py": "76e6dbcfbb4719afd65647288d5cce5ea928852468c1034a8a61a66cb1576a54",
+    "/workspace/shared/candidates_wip/hplus/collect/main.py": "f993b68b11891067ad48c2e71f4cdaed7e01f1901695316575cdf7596dba15e8",
+    "/workspace/shared/candidates_wip/hplus/fert/main.py": "03cf0a709385476082b516fa64937e2a0b290884c337b535082ac1e2b6ea1cd5",
+    "/workspace/shared/candidates_wip/hplus/harvA/main.py": "32bf388c552cddd6b3bbc30b839d79dcca38919a858c799cbcff217f8e9c9321",
+    "/workspace/shared/candidates_wip/hplus/harvP/main.py": "ac0a4e59041ab85d41b59497ec3feea9286e9de0c96247724ca4e5187f868dff",
+    "/workspace/shared/candidates_wip/hplus/water/main.py": "8a06df89400c7100871269464509ec189a808ded260e292c00815d8feabac9e2",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
