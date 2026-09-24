@@ -72,3 +72,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~11:05 — T015 closed ✗ by codex (r9 best); codex running T016 stage 1 (64 confirmation worlds, 20 workers).
 - 2026-09-24 ~11:25 — T016 stage 1 running: 1008/6144 games (runs/t016_final_pair_64_*/arena), decision rule frozen in manifest.
 - 2026-09-24 ~12:05 — T018 ES gen 0 running slowly (96/864) — box saturated: T016 (codex, 20w) + ES (20w), load 54. Expected ~60–90 min/gen until T016 ends. Not restarting.
+- 2026-09-24 ~12:30 — T018 ES gen 0 partial (456/864): centre == v5 (10/10 draws, as expected); mutants n0, n2, p1, p3 beat v5_market head-to-head 8/10 each (+170…+361 mean), others lose — the knobs carry real signal in the mirror matchup. ~45–50 min/gen at current load.
