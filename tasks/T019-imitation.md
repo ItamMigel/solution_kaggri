@@ -7,3 +7,11 @@ Plan:
 3. Reconstruct: implement the top team's deviations on top of its ancestor (or on Horizon) → an **imitation agent** of that team → (a) strong reactive opponent for our gate, (b) candidate if it beats es1_g1.
 4. BC: (obs, action) pairs at the deviation points → learn the deviation rule (small model / decision tree on obs features) where rules aren't obvious.
 - 2026-09-24 ~18:30 — T019 teacher-force run (re)started with fast job listing: 918 jobs (9 teams × 6 eps × 17 agents), 12 workers → research/teacher_force_top.jsonl. Codex T017 PPO runner functional (b9d4d8f), starting training rollouts. ES gen 7 centre 1.046.
+
+## Result of step 1 (2026-09-24 ~19:00, research/teacher_force_top.jsonl, 918 jobs)
+**None of our 17 candidate ancestors (Horizon v3/v4/v4_8/v5, yhay 0909/0913, 11 public notebooks) is the ancestor of any top-9 team**: whole-action agreement ≈0, divergence at step 0, farmer-op agreement ≈13% (≈ PASS rate). Tool verified correct (v5 on our own episode: 99.86%). Example DSM (24-0): step 0 BUY_ANIMAL COW + BUY wheat 5; step 1 farmer PICKUP COW, HIRE×4, BUY 1 cow + 3 sheep; step 2 BUILD_PASTURE — an animals-first custom opening, unlike Horizon's wheat trading. ⇒ The top of the LB is custom code; "copy the ancestor + diff" is not available.
+## Step 2 (new): behavioural cloning of top teams (Lux-style)
+- Data: DSM (16732748) + Mother-Goose (16730612) all active-sub episodes (fetch_team.sh 100/sub, running) + M&M&P&Q (replays/mmpq, 120). Use only the top team's seat; weight wins.
+- Model: 10×10 board tensor (tile type/crop/age/water/yield/animal/fed/weed/locked, unit positions + inventories, own vs opp) + global vector (step, day, hour, money, prices, market inventory, shed, seeds, shops, hires_today) → per-unit action head (~45 classes at the unit's cell) + market head (per (op,item) count, ≤10 orders). Train on P40.
+- Agent: numpy forward pass embedded in main.py + legality mask from obs; fall back to PASS.
+- Eval: teacher-forced accuracy on held-out episodes, then real games vs v5/es1_g1/panel.
