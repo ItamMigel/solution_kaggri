@@ -38,7 +38,8 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 |---|---|---|---|
 | T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
-| T012 | codex | in_progress — narrow override screen | Horizon production overrides toward the M&M&P&Q profile (land timing, strawberry+fertilize, herd); hard gate incl. mmpq tapes. `tasks/T012-horizon-production.md` |
+| T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+| T015 | codex | in_progress — pair census | Legal route-table audit per first-two-shop pair. `tasks/T015-route-table.md` |
 | T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
 | T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
