@@ -66,3 +66,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~08:30 — research/seed_shops.json: first-two-shop pair is stable across games for only 6/42 seeds → the pair depends on agents' play (weed RNG), so seed-by-pair selection is unreliable; told codex to gate route swaps on normal seeds and filter by actual pair.
 - 2026-09-24 ~08:50 — codex T015: no new artefacts since 04:01 (watchdog queued 04:30). If still idle next tick, start the route-swap screen headlessly.
 - 2026-09-24 ~09:05 — codex active again: runs/t015_route8_screen_20260924T0505Z started. Will review when done.
+- t015_route8_screen done (48 games): r8 vs v5_market 0W/16D/0L → swap likely never fired (pair didn't occur); codex flagged 'no promotion'. Waiting for codex's factual-pair summary.
