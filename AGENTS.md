@@ -60,7 +60,7 @@ Local game: ~14 s per game per core; box has 48 cores.
 4. **Cross-check**: every result that would change the champion must be **independently reproduced or reviewed by the other agent** before it goes to `candidates/`. That's the point of pairing.
 5. **Divide by nature of work**: prefer giving each agent different hypotheses rather than the same one. When both attack the same question on purpose (red-team), say so in the task file.
 6. Write findings for the other agent to reuse: exact commands, file:line, numbers. Negative results are results — log them.
-7. `/workspace` is **not persistent** (no volume). Push with `bin/sync "msg"` → branches `board` and `lab` of github.com/AdilHAA/kaggriculture (remote `mine`). Merge your worktree branch into `lab` first. Never push to the teammates repo (origin).
+7. `/workspace` is **not persistent** (no volume). Push with `bin/sync "msg"` → branches `board` and `lab` of github.com/AdilHAA/kaggriculture (remote `mine`). Merge your worktree branch into `lab` first. Human-approved 2026-09-24: sync also mirrors to the teammates repo ItamMigel/solution_kaggri as branches `adil-board` / `adil-lab` ONLY — never push to its main or any other branch.
 
 ## Talking to each other directly (headless)
 - `bin/ask_codex "<prompt>"` — runs `codex exec` in `/workspace/wt/codex`, logs to `runs/`, prints Codex's final message. Add `--bg` to run in background.
