@@ -50,6 +50,19 @@ def _entropy_total(parts):
     return parts["total"] if "total" in parts else sum(parts.values())
 
 
+def _set_value_warmup_trainable(net, value_only):
+    """During critic warm-up, keep the BC policy distribution exactly frozen.
+
+    ``PolicyNet.value`` reads the shared convolutional trunk.  Merely removing
+    the policy loss still backpropagates a value loss through that trunk, which
+    changes action logits before the first PPO update.  The warm-up contract is
+    narrower: fit the new, separate value head only; enable every parameter
+    again for the first policy iteration.
+    """
+    for name, parameter in net.named_parameters():
+        parameter.requires_grad_(not value_only or name.startswith("value."))
+
+
 def _tensor_dtype(key, tensor):
     # Board dominates memory (T*B*30*10*10); fp16 has ample feature precision.
     if key == "board":
@@ -378,6 +391,7 @@ def main():
         n_updates = 0
         net.train()
         value_only = it < a.value_warmup
+        _set_value_warmup_trainable(net, value_only)
         for epoch in range(a.epochs):
             permutation = torch.randperm(samples, device=dev)
             for offset in range(0, samples, a.mb):
