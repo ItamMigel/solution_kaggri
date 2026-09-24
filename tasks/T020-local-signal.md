@@ -11,3 +11,8 @@ CPU: ≤20 workers (CMA uses 18). Report in inbox/claude.md.
 ## Started 2026-09-24 21:33 UTC
 - P40 diagnostic: package v2 `ppo_rounds.sh`, `strong_v2`, `ENVS=128`, `K=5`, `WARMUP=3`, `KL=0.05→0`, output `h100_pkg/kaggri_bcppo_v2/runs/t020_strong_v2/`.
 - CMA gate: frozen completed CMA gen-10 `new_mean_params` copied to `runs/t020_cma_g10/params.json`, agent generated there. 16 fresh seeds excluded from confirmation, development and all CMA-generation seed lists; `compare.py` runs both seats against frozen `candidates/es1_g9/pkg/main.py` and `v5_market`, output `runs/t020_cma_g10/arena/`.
+
+## CMA gate result — gen 10 mean (2026-09-24 22:00 UTC)
+- **Do not promote.** Against frozen `es1_g9`: 4–0–28 on 16 fresh worlds × both seats, score 12.5%, whole-world CI [0.0%, 31.25%], mean margin **−$260.56** (CI [−$354.07, −$169.62]), zero errors.
+- Context only: versus `v5_market` it is 28–0–4, +$595.13 (CI +$270…+$871), so this CMA centre improved over v5 but is decisively below g9.
+- Evidence: `runs/t020_cma_g10/{params.json,seeds.json,arena/}`. P40 strong_v2 diagnostic remains active.
