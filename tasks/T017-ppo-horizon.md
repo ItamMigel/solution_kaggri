@@ -20,3 +20,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - Smoke `runs/t017_ppo_smoke_fix_20260924T1310Z`: one world, both seats versus v5_market, 4/4 DONE, 60 daily decisions. Initial noisy policy scored 1.0 vs static anchor 1.0 (margins $248 vs $251); one PPO update wrote a deterministic candidate.
 - Export smoke `runs/t017_ppo_export_smoke_20260924T1313Z`: 8/8 DONE via `compare.py`; updated candidate drew frozen es1_g1 2/2 exactly and won 2/2 each against v3, v4_12turn and v4_8turn. This is functionality evidence only (one world, not a promotion test).
 
+## First full rollout — 2026-09-24 13:xx UTC (codex)
+- `runs/t017_train_g0_20260924T1320Z`: four new training worlds × six reactive opponents × both seats, with a static ES-anchor twin for each policy game: 96/96 DONE, 0 errors, 48 paired episodes and 1,440 daily decisions.
+- The exploratory Gaussian behaviour policy had 0.9792 points / +$3,789 mean margin; its static anchor had 1.0000 / +$3,855. Paired terminal reward mean was −0.02249. This is expected behaviour-policy cost at `sigma=0.04`, not an evaluation of the updated deterministic policy. One clipped PPO update was applied.
+- Next: held-out new-world arena of the deterministic update versus the frozen ES anchor on the same six-opponent panel. Promote nothing unless this independent panel improves with zero errors.
+
