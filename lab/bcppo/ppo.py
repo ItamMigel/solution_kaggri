@@ -43,7 +43,9 @@ def _entropy_parts(value):
 
 
 def _entropy_total(parts):
-    return sum(parts.values())
+    # policy.logprob v2 exposes both the individual heads and their already
+    # aggregated total.  Using every mapping value would count entropy twice.
+    return parts["total"] if "total" in parts else sum(parts.values())
 
 
 def _tensor_dtype(key, tensor):
