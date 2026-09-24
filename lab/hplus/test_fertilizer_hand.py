@@ -27,6 +27,10 @@ class FertilizerHandBuildTest(unittest.TestCase):
             normalise({"fh_take": 0})
         with self.assertRaises(ValueError):
             normalise({"fh_crops": ["WHEAT"]})
+        with self.assertRaises(ValueError):
+            normalise({"fh_reserve": -1})
+        with self.assertRaises(ValueError):
+            normalise({"fh_max_hires_today": 10})
 
 
 if __name__ == "__main__":

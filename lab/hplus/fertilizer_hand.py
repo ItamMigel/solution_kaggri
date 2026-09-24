@@ -19,6 +19,10 @@ DEFAULT: dict[str, Any] = {
     "fh_min_targets": 1,
     "fh_take": 2,
     "fh_cash_buffer": 1500,
+    # Never consume the parent controller's last fertiliser stock.  The
+    # capability is deliberately dormant until it sees a real surplus.
+    "fh_reserve": 6,
+    "fh_max_hires_today": 5,
     "fh_crops": ["STRAWBERRY", "TOMATO"],
 }
 
@@ -37,17 +41,43 @@ def _fh_fib(n):
         a, b = b, a + b
     return a
 
-def _fh_targets(obs, seat, day):
+def _fh_targets(obs, seat, day, blocked=()):
     """Eligible unfertilized crops, stable row-major order for reproducibility."""
     farm = obs["farms"][seat]
     out = []
     allowed = set(_FH["fh_crops"])
+    blocked = set(blocked)
     for y, row in enumerate(farm.get("tiles") or []):
         for x, tile in enumerate(row):
             if isinstance(tile, dict) and tile.get("kind") == "PLANT" and tile.get("crop") in allowed \
-                    and int(tile.get("fertilized_until_day", -1)) < day:
+                    and int(tile.get("fertilized_until_day", -1)) < day \
+                    and (x, y) not in blocked:
                 out.append((x, y))
     return out
+
+def _fh_parent_fertilizer_work(action, farm):
+    """Current parent work that owns fertiliser or a crop tile this turn.
+
+    This is intentionally current-turn only: the parent remains the owner of
+    its tape and the appended hand is allowed to act solely in an observed
+    surplus, never in the same operation slot or on the same fertilise tile.
+    """
+    units = [action.get("farmer") or ["PASS"], *(action.get("hands") or [])]
+    positions = [farm.get("farmer"), *(farm.get("hands") or [])]
+    blocked = set()
+    resource = False
+    for pos, command in zip(positions, units):
+        if not command:
+            continue
+        op = command[0]
+        if op == "FERTILIZE" and pos is not None:
+            blocked.add(tuple(pos))
+        if op in ("PICKUP", "PLACE") and len(command) > 1 and command[1] == "FERTILIZER":
+            resource = True
+    for order in action.get("market") or []:
+        if len(order) > 1 and order[1] == "FERTILIZER":
+            resource = True
+    return blocked, resource
 
 def _fh_move(pos, goal):
     """One legal board-bounded Manhattan move; LOCKED cells are walkable."""
@@ -95,10 +125,13 @@ def agent(obs, config=None):
         if st.get("disabled"):
             return action
 
-        targets = _fh_targets(obs, seat, day)
+        blocked, parent_fertilizer_work = _fh_parent_fertilizer_work(action, farm)
+        targets = _fh_targets(obs, seat, day, blocked)
         if len(targets) < int(_FH["fh_min_targets"]):
             return action
         index = st.get("index")
+        reserve = int(_FH["fh_reserve"])
+        take = int(_FH["fh_take"])
         if index is None:
             orders = [list(o) for o in (action.get("market") or [])]
             cost = _fh_fib(int(farm.get("hires_today", 0)))
@@ -107,8 +140,10 @@ def agent(obs, config=None):
             # buy and with cash that covers the exact Fibonacci cost + reserve.
             if (len(orders) >= 10 or any(o and o[0] == "HIRE" for o in orders)
                     or _fh_non_sale_purchase(orders)
+                    or parent_fertilizer_work
+                    or int(farm.get("hires_today", 0)) >= int(_FH["fh_max_hires_today"])
                     or float(farm.get("money", 0)) < cost + float(_FH["fh_cash_buffer"])
-                    or int((private.get("shed") or {}).get("FERTILIZER", 0)) < int(_FH["fh_take"])):
+                    or int((private.get("shed") or {}).get("FERTILIZER", 0)) < take + reserve):
                 _FH_STATS["skips"] += 1
                 return action
             _FH_STATS["hire_attempts"] += 1
@@ -134,11 +169,13 @@ def agent(obs, config=None):
                 command = _fh_move(pos, target); _FH_STATS["moves"] += command != ["PASS"]
         else:
             shed = private.get("shed") or {}
-            if int(shed.get("FERTILIZER", 0)) <= 0:
+            # Keep a fixed observed reserve for the parent.  This prevents an
+            # appended hand from cannibalising planned sales/pickups later today.
+            if parent_fertilizer_work or int(shed.get("FERTILIZER", 0)) < take + reserve:
                 return action
             access = min(_FH_ACCESS, key=lambda q: (abs(q[0] - pos[0]) + abs(q[1] - pos[1]), q[1], q[0]))
             if tuple(pos) == access:
-                command = ["PICKUP", "FERTILIZER", min(int(_FH["fh_take"]), int(shed.get("FERTILIZER", 0)))]
+                command = ["PICKUP", "FERTILIZER", take]
                 _FH_STATS["pickup"] += 1
             else:
                 command = _fh_move(pos, access); _FH_STATS["moves"] += command != ["PASS"]
@@ -170,11 +207,13 @@ def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
     value.update(genes)
     if type(value["fh_on"]) is not bool:
         raise ValueError("fh_on must be bool")
-    if not all(type(value[key]) is int for key in ("fh_day0", "fh_day1", "fh_min_targets", "fh_take", "fh_cash_buffer")):
+    if not all(type(value[key]) is int for key in ("fh_day0", "fh_day1", "fh_min_targets", "fh_take", "fh_cash_buffer", "fh_reserve", "fh_max_hires_today")):
         raise ValueError("fertilizer-hand numeric genes must be integers")
     if not (0 <= value["fh_day0"] <= value["fh_day1"] <= 28):
         raise ValueError("day window must be within 0..28")
-    if not (1 <= value["fh_min_targets"] <= 10 and 1 <= value["fh_take"] <= 8 and value["fh_cash_buffer"] >= 0):
+    if not (1 <= value["fh_min_targets"] <= 10 and 1 <= value["fh_take"] <= 8
+            and value["fh_cash_buffer"] >= 0 and 0 <= value["fh_reserve"] <= 100
+            and 0 <= value["fh_max_hires_today"] <= 9):
         raise ValueError("invalid fertilizer-hand bounds")
     if not isinstance(value["fh_crops"], list) or not value["fh_crops"] or any(x not in {"STRAWBERRY", "TOMATO"} for x in value["fh_crops"]):
         raise ValueError("fh_crops must be a nonempty subset of STRAWBERRY/TOMATO")
