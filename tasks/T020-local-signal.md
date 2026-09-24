@@ -16,3 +16,7 @@ CPU: ≤20 workers (CMA uses 18). Report in inbox/claude.md.
 - **Do not promote.** Against frozen `es1_g9`: 4–0–28 on 16 fresh worlds × both seats, score 12.5%, whole-world CI [0.0%, 31.25%], mean margin **−$260.56** (CI [−$354.07, −$169.62]), zero errors.
 - Context only: versus `v5_market` it is 28–0–4, +$595.13 (CI +$270…+$871), so this CMA centre improved over v5 but is decisively below g9.
 - Evidence: `runs/t020_cma_g10/{params.json,seeds.json,arena/}`. P40 strong_v2 diagnostic remains active.
+
+## PPO diagnostic finding — iter 0 (2026-09-24 22:11 UTC)
+- Package v2 strong_v2 reached one complete 128-env rollout with no crash, mean terminal cash $88,019 and exactly 64/64 learner seats. But value-only warm-up already produced `approx_kl=0.7531`, `clipfrac=0.6969` (KL-to-BC 0.0658): its value loss traverses the shared policy trunk, so the action distribution moves before PPO is enabled.
+- Fixed in lab commit `7c2c1e2` (merged `f5cfdc2`): warm-up updates only `net.value`; all policy/trunk parameters are frozen and restored at the first PPO iteration. A regression update proves every non-value tensor byte-identical. The currently running package is retained as a diagnostic control and is not altered in place.
