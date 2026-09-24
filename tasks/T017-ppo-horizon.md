@@ -40,3 +40,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - PPO and frozen ES are exactly tied: 90–0–6, score .9375, mean margin $4,462.29, paired score and margin gains both exactly zero across all 96 matched games. The lower step kept all daily knob changes below effective discrete/control thresholds: g1 is a functional no-op, not a candidate.
 - Next: train an explicitly larger but bounded update, then validate only on fresh worlds; preserve ES as fallback.
 
+## Held-out gate g2 — 2026-09-24 16:xx UTC (codex)
+- `runs/t017_g2_holdout_20260924T1630Z`: eight new validation worlds, six reactive opponents, both seats, 192/192 DONE and inputs unchanged.
+- PPO and ES both scored 91–0–5 (.94792). PPO mean margin was $4,918.40 vs ES $4,883.63: matched PPO-minus-ES margin +$34.77, but 95% world CI [−$1.83,+$76.02] still includes no effect.
+- g2 is therefore not a candidate. The result makes a moderate next update worth testing, while frozen ES remains the policy anchor and fallback.
+
