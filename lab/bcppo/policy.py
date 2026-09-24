@@ -64,145 +64,156 @@ class PolicyNet(bctrain.Net):
         return ul, tl, ml, self.value(pooled).squeeze(-1)
 
 
-def legal_masks(st, p, ux, uy, umask):
-    """op mask [B,U,NOP] (moves included) and target mask [B,100] (unlocked cells)."""
+STRUCT_OF_ANIMAL = torch.tensor([O.TILE_COOP, O.TILE_PASTURE, O.TILE_PASTURE])  # goose, cow, sheep
+
+
+def tile_masks(st, p, ux, uy, umask):
+    """Static (pre-allocation) per-unit legality following kaggriculture.py _apply_unit_action exactly.
+    Returns base [B,U,NOP] (excluding PLANT/PICKUP, which depend on running seeds/shed) and helper tensors."""
     dev = ux.device; B, U = ux.shape
     kind = st.kind[:, p].long(); cell = uy * 10 + ux
-    tk = kind.gather(1, cell)
-    inv = st.inv[:, p].long(); shed = st.shed[:, p].long(); seeds = st.seeds[:, p].long()
-    m = torch.ones((B, U, NOP), dtype=torch.bool, device=dev)
+    g = lambda t: t.gather(1, cell)
+    tk = g(kind); sp = g(st.species[:, p].long()); flag = g(st.tflag[:, p]); yld = g(st.tyield[:, p].long())
+    cared = g(st.tcared[:, p]); favail = g(st.tfavail[:, p]); age = int(st.step) // 24 - g(st.tday[:, p].long())
+    inv = st.inv[:, p].long()
+    m = torch.zeros((B, U, NOP), dtype=torch.bool, device=dev)
     for mid, (dx, dy) in DXY.items():
-        nx = ux + dx; ny = uy + dy; inb = (nx >= 0) & (nx < 10) & (ny >= 0) & (ny < 10)
-        nk = kind.gather(1, (ny.clamp(0, 9) * 10 + nx.clamp(0, 9)))
-        m[..., mid] = inb & (nk != O.TILE_LOCKED)
+        nx = ux + dx; ny = uy + dy
+        m[..., mid] = (nx >= 0) & (nx < 10) & (ny >= 0) & (ny < 10)          # LOCKED tiles are walkable
+    locked = tk == O.TILE_LOCKED
     plant = tk == O.TILE_PLANT; animal = tk == O.TILE_ANIMAL; empty = tk == O.TILE_EMPTY
-    for k in ("WATER", "HARVEST"): m[..., IDX[k]] = plant
+    first_yield = gpufeat.FIRST_YIELD.to(dev)[sp.clamp(0, 4)]
+    m[..., IDX["WATER"]] = plant & ~flag
+    m[..., IDX["HARVEST"]] = ((plant & (age >= first_yield)) | animal) & (yld > 0)
     m[..., IDX["FERTILIZE"]] = plant & (inv[..., O.ITEM_FERTILIZER] > 0)
-    for k in ("CARE", "COLLECT_FERTILIZER"): m[..., IDX[k]] = animal
-    m[..., IDX["FEED"]] = animal & (inv[..., O.ITEM_WHEAT] > 0)
-    for c, name in enumerate(feat.CROPS): m[..., IDX["PLANT:" + name]] = empty & (seeds[:, None, c] > 0)
+    m[..., IDX["FEED"]] = animal & ~flag & (inv[..., O.ITEM_WHEAT] > 0)
+    m[..., IDX["CARE"]] = animal & ~cared
+    m[..., IDX["COLLECT_FERTILIZER"]] = animal & favail
     m[..., IDX["BUILD_COOP"]] = empty; m[..., IDX["BUILD_PASTURE"]] = empty
-    m[..., IDX["DIG"]] = (tk == O.TILE_WEED) | plant
+    m[..., IDX["DIG"]] = ~empty & ~locked & ~animal
     adj = gpufeat.SHED_ADJ_MASK.to(dev)[cell]
     m[..., IDX["DROP"]] = adj & (inv.sum(-1) > 0)
     for it, name in enumerate(feat.ITEMS):
-        m[..., IDX["PICKUP:" + name]] = adj & (shed[:, None, it] > 0)
-        m[..., IDX["PLACE:" + name]] = inv[..., it] > 0
-    m &= umask[..., None]
+        has = inv[..., it] > 0
+        if it >= 9:
+            on_struct = (tk == int(STRUCT_OF_ANIMAL[it - 9]))
+            m[..., IDX["PLACE:" + name]] = has & (on_struct | adj)
+        else:
+            m[..., IDX["PLACE:" + name]] = has & adj
     m[..., IDX["PASS"]] = True
-    tmask = kind != O.TILE_LOCKED
-    return m, tmask
+    m &= umask[..., None]; m[..., IDX["PASS"]] = True
+    return m, dict(empty=empty & ~locked, adj=adj)
+
+
+PLANT_IDS = [IDX["PLANT:" + c] for c in feat.CROPS]
+PICK_IDS = [IDX["PICKUP:" + i] for i in feat.ITEMS]
+MOVE_T = torch.tensor(MOVE_IDS)
 
 
 def act(net, st, p, so, team_vec, greedy=False):
     board, G, uv, ux, uy, umask = gpufeat.features(st, p, so)
     G = torch.cat([G, team_vec.expand(G.shape[0], -1)], 1)
-    opm, tm = legal_masks(st, p, ux, uy, umask)
     ul, tl, ml, v = net.full(board, G, uv, ux, uy, umask)
-    rec = dict(board=board, G=G, uv=uv, ux=ux.to(torch.int8), uy=uy.to(torch.int8), umask=umask, opm=opm, tm=tm)
-    t_choice, o_choice, at_t, need_op, mkt_b = sample(ul, tl, ml, opm, tm, ux, uy, greedy)
-    rec.update(t=t_choice.to(torch.int8), o=o_choice.to(torch.int8), need_op=need_op, mb=mkt_b.to(torch.int8))
+    B, U = ux.shape; dev = ux.device
+    base, aux = tile_masks(st, p, ux, uy, umask)
+    # targets: any cell (LOCKED shed-access tiles are legitimate destinations)
+    t = tl.argmax(-1) if greedy else torch.distributions.Categorical(logits=tl).sample()
+    cur = uy.long() * 10 + ux.long(); tx = t % 10; ty = t // 10
+    want = torch.zeros((B, U, NOP), dtype=torch.bool, device=dev)
+    want[..., IDX["EAST"]] = tx > ux; want[..., IDX["WEST"]] = tx < ux; want[..., IDX["SOUTH"]] = ty > uy; want[..., IDX["NORTH"]] = ty < uy
+    seeds_left = st.seeds[:, p].long().clone(); shed_left = st.shed[:, p].long().clone()
+    used = torch.zeros((B, U, NOP), dtype=torch.bool, device=dev); o = torch.zeros((B, U), dtype=torch.long, device=dev)
+    qty = torch.zeros((B, U), dtype=torch.long, device=dev)
+    U_eff = int(umask.any(0).sum())  # slots beyond the largest hand count in the batch are PASS
+    for u in range(U_eff):
+        mu = base[:, u].clone()
+        for c, pid in enumerate(PLANT_IDS): mu[:, pid] = aux["empty"][:, u] & (seeds_left[:, c] > 0) & umask[:, u]
+        for it, pid in enumerate(PICK_IDS): mu[:, pid] = aux["adj"][:, u] & (shed_left[:, it] > 0) & umask[:, u]
+        mv = want[:, u] & mu
+        off = (t[:, u] != cur[:, u]) & mv.any(-1)
+        nonmove = mu.clone(); nonmove[:, MOVE_T.to(dev)] = False
+        mask = torch.where(off[:, None], mv, nonmove)
+        lg = ul[:, u].masked_fill(~mask, -1e9)
+        ou = lg.argmax(-1) if greedy else torch.distributions.Categorical(logits=lg).sample()
+        used[:, u] = mask; o[:, u] = ou
+        for c, pid in enumerate(PLANT_IDS): seeds_left[:, c] -= (ou == pid).long()
+        it_ = ARG1.to(dev)[ou].clamp(0, 11); is_pick = OPT.to(dev)[ou] == O.OP_PICKUP
+        n = torch.where(it_ >= 9, torch.ones_like(it_), torch.where(it_ == O.ITEM_FERTILIZER, 4, 3))
+        n = torch.minimum(n, shed_left.gather(1, it_[:, None]).squeeze(1)).clamp(min=1)
+        qty[:, u] = torch.where(is_pick, n, 0)
+        shed_left.scatter_add_(1, it_[:, None], -(n * is_pick.long())[:, None])
+    # market: hire / land caps as bucket masks
+    hire_max = (O.MAX_HANDS - st.n_hands[:, p].long()).clamp(min=0, max=feat.MKT_MAX)
+    land_max = (3 - st.land[:, p].long()).clamp(min=0)
+    mlm = market_mask(ml, hire_max, land_max)
+    mb = mlm.argmax(-1) if greedy else torch.distributions.Categorical(logits=mlm).sample()
+    orders, inc = build_market(mb)
+    rec = dict(board=board, G=G, uv=uv, ux=ux.to(torch.int8), uy=uy.to(torch.int8), umask=umask, opm=used,
+               t=t.to(torch.int8), o=o.to(torch.int8), mb=mb.to(torch.int8), hire_max=hire_max.to(torch.int8), land_max=land_max.to(torch.int8), minc=inc)
     logp, ent = logprob(ul, tl, ml, rec)
-    actions = build_actions(st, p, o_choice, umask, mkt_b)
-    return actions, logp, v, ent, rec
+    farmer, hands = unit_triples(o, qty, st, p, umask)
+    return (farmer, hands, orders), logp, v, ent, rec
 
 
 def _masked(logits, mask):
     return logits.masked_fill(~mask, -1e9)
 
 
-def sample(ul, tl, ml, opm, tm, ux, uy, greedy):
-    B, U = ux.shape
-    tlm = _masked(tl, tm[:, None, :])
-    t = tlm.argmax(-1) if greedy else torch.distributions.Categorical(logits=tlm).sample()
-    cur = uy.long() * 10 + ux.long(); at_t = t == cur
-    tx = t % 10; ty = t // 10
-    # greedy move toward target among legal moves, scored by op logits
-    want = torch.zeros_like(opm)
-    want[..., IDX["EAST"]] = tx > ux; want[..., IDX["WEST"]] = tx < ux; want[..., IDX["SOUTH"]] = ty > uy; want[..., IDX["NORTH"]] = ty < uy
-    mv_ok = want & opm
-    has_move = mv_ok.any(-1) & ~at_t
-    mv = _masked(ul, mv_ok).argmax(-1)
-    nonmove = opm.clone(); nonmove[..., MOVE_IDS] = False
-    need_op = ~has_move
-    op_mask = torch.where(at_t[..., None], nonmove, opm)  # at target: work ops; stuck: anything legal
-    olm = _masked(ul, op_mask)
-    o = olm.argmax(-1) if greedy else torch.distributions.Categorical(logits=olm).sample()
-    o = torch.where(has_move, mv, o)
-    mb = ml.argmax(-1) if greedy else torch.distributions.Categorical(logits=ml).sample()
-    return t, o, at_t, need_op, mb
+def market_mask(ml, hire_max, land_max):
+    b = torch.arange(NB, device=ml.device)
+    ml = ml.clone()
+    ml[:, feat.MKT_IDX["HIRE"]] = ml[:, feat.MKT_IDX["HIRE"]].masked_fill(b[None, :] > hire_max[:, None], -1e9)
+    ml[:, feat.MKT_IDX["BUY_LAND"]] = ml[:, feat.MKT_IDX["BUY_LAND"]].masked_fill(b[None, :] > land_max[:, None], -1e9)
+    return ml
 
 
 def logprob(ul, tl, ml, rec):
-    """Recompute log-prob and entropy of recorded choices under current logits."""
-    ux = rec["ux"].long(); uy = rec["uy"].long(); umask = rec["umask"]; opm = rec["opm"]; tm = rec["tm"]
-    t = rec["t"].long() % 100; o = rec["o"].long(); need_op = rec["need_op"]
-    tlp = F.log_softmax(_masked(tl, tm[:, None, :]), -1)
-    lp_t = tlp.gather(-1, t[..., None]).squeeze(-1)
-    cur = uy * 10 + ux; at_t = t == cur
-    nonmove = opm.clone(); nonmove[..., MOVE_IDS] = False
-    op_mask = torch.where(at_t[..., None], nonmove, opm)
-    olp = F.log_softmax(_masked(ul, op_mask), -1)
-    lp_o = olp.gather(-1, o[..., None]).squeeze(-1)
-    unit_lp = (lp_t + torch.where(need_op, lp_o, torch.zeros_like(lp_o))) * umask
-    mlp = F.log_softmax(ml, -1); lp_m = mlp.gather(-1, rec["mb"].long()[..., None]).squeeze(-1).sum(-1)
-    ent_t = -(tlp.exp() * tlp.clamp(min=-30)).sum(-1); ent_m = -(mlp.exp() * mlp.clamp(min=-30)).sum((-1, -2))
-    ent = (ent_t * umask).sum(-1) + ent_m
-    return unit_lp.sum(-1) + lp_m, ent
+    """Recompute log-prob / entropies of recorded choices. Unit: log p(target) + log p(op | recorded mask).
+    Market: sum over keys that were decision-relevant (bucket 0 or actually emitted; truncated keys excluded)."""
+    umask = rec["umask"]; t = rec["t"].long() % 100; o = rec["o"].long() % NOP
+    tlp = F.log_softmax(tl, -1); lp_t = tlp.gather(-1, t[..., None]).squeeze(-1)
+    olp = F.log_softmax(ul.masked_fill(~rec["opm"], -1e9), -1); lp_o = olp.gather(-1, o[..., None]).squeeze(-1)
+    unit_lp = ((lp_t + lp_o) * umask).sum(-1)
+    mlp = F.log_softmax(market_mask(ml, rec["hire_max"].long(), rec["land_max"].long()), -1)
+    lp_m = (mlp.gather(-1, rec["mb"].long()[..., None]).squeeze(-1) * rec["minc"]).sum(-1)
+    ent_t = (-(tlp.exp() * tlp).sum(-1) * umask).sum(-1)
+    ent_o = (-(olp.exp() * olp.clamp(min=-30)).sum(-1) * umask).sum(-1)
+    ent_m = -(mlp.exp() * mlp.clamp(min=-30)).sum(-1).sum(-1)
+    return unit_lp + lp_m, dict(target=ent_t, op=ent_o, market=ent_m, total=ent_t + ent_o + ent_m)
 
 
-def build_actions(st, p, o, umask, mb):
-    """-> gpuenv Actions for player p only: farmer [B,3], hands [B,MAX_HANDS,3], market [B,MAX_ORDERS,3]."""
-    dev = o.device; B, U = o.shape
-    opt = OPT.to(dev)[o]; a1 = ARG1.to(dev)[o]
-    shed = st.shed[:, p].long(); inv = st.inv[:, p].long()
-    item = a1.clamp(0, 11)
-    is_pick = opt == O.OP_PICKUP; is_place = opt == O.OP_PLACE
-    animal = item >= 9
-    pick_n = torch.where(animal, torch.ones_like(item), torch.where(item == O.ITEM_FERTILIZER, 4, 3))
-    pick_n = torch.minimum(pick_n, shed.gather(1, item)).clamp(min=1)
+def unit_triples(o, qty, st, p, umask):
+    dev = o.device
+    opt = OPT.to(dev)[o]; a1 = ARG1.to(dev)[o]; item = a1.clamp(0, 11)
+    inv = st.inv[:, p].long()
+    is_place = opt == O.OP_PLACE; animal = item >= 9
     place_n = torch.where(animal | (item == O.ITEM_FERTILIZER), torch.ones_like(item), inv.gather(2, item[..., None]).squeeze(-1)).clamp(min=1)
-    a2 = torch.where(is_pick, pick_n, torch.where(is_place, place_n, torch.zeros_like(item)))
+    a2 = torch.where(opt == O.OP_PICKUP, qty, torch.where(is_place, place_n, torch.zeros_like(item)))
     opt = torch.where(umask, opt, torch.zeros_like(opt))
     trip = torch.stack([opt, a1, a2], -1)
-    farmer = trip[:, 0]; hands = trip[:, 1:]
-    # market
-    q = mb.long()  # [B,NK] quantity per key
-    orders = torch.zeros((B, O.MAX_ORDERS, 3), dtype=torch.long, device=dev); n = torch.zeros(B, dtype=torch.long, device=dev)
-    money = st.money[:, p].long().clone(); hires = st.hires_today[:, p].long().clone(); land = st.land[:, p].long().clone()
-    prices = st.market_price()[:, :].long()
-    mop = MOP.to(dev); mit = MIT.to(dev)
-    # expand every key into up to R single slots (HIRE/LAND/ANIMAL: one unit per order; others: one order with qty).
-    # Prefix-affordability rule (vectorised, no host syncs): slots in fixed order, accept slot j iff wanted and the
-    # cumulative cost of all wanted slots up to j fits the money; keep at most MAX_ORDERS accepted.
-    R = O.MAX_ORDERS
-    mop = MOP.to(dev); mit = MIT.to(dev); order = MORDER.to(dev)
+    return trip[:, 0], trip[:, 1:]
+
+
+def build_market(mb):
+    """Fixed key order; HIRE/LAND/ANIMAL one unit per order; others one order with qty; first MAX_ORDERS kept.
+    No client-side affordability: the engine fills partially / funds buys from earlier sells exactly.
+    Returns orders [B,10,3] and inc [B,NK] = key is decision-relevant (bucket 0, or >=1 order emitted)."""
+    dev = mb.device; B = mb.shape[0]; q = mb.long()
+    R = O.MAX_ORDERS; mop = MOP.to(dev); mit = MIT.to(dev); order = MORDER.to(dev)
     kop = mop[order]; kit = mit[order]; K = len(order)
     rep_key = (kop == O.MKT_HIRE) | (kop == O.MKT_BUY_LAND) | (kop == O.MKT_BUY_ANIMAL)
     qo = q[:, order]; r = torch.arange(R, device=dev)
-    want = torch.where(rep_key[None, :, None], qo[..., None] > r, (qo[..., None] > 0) & (r == 0))            # [B,K,R]
+    want = torch.where(rep_key[None, :, None], qo[..., None] > r, (qo[..., None] > 0) & (r == 0))
     qty = torch.where(rep_key[None, :, None], torch.ones_like(qo)[..., None].expand(-1, -1, R), qo[..., None].expand(-1, -1, R))
-    hires0 = st.hires_today[:, p].long(); land0 = st.land[:, p].long(); money = st.money[:, p].long()
-    prices = st.market_price().long()                                                                          # [B,9]
-    itc = kit.clamp(0, 11)
-    unit_cost = torch.zeros((B, K), dtype=torch.long, device=dev)
-    unit_cost = torch.where((kop == O.MKT_BUY_SEED)[None], SEED_COST.to(dev)[itc.clamp(max=4)][None].expand(B, -1), unit_cost)
-    unit_cost = torch.where((kop == O.MKT_BUY_ANIMAL)[None], ANIMAL_COST.to(dev)[(itc - 9).clamp(0, 2)][None].expand(B, -1), unit_cost)
-    unit_cost = torch.where((kop == O.MKT_BUY_PRODUCT)[None], prices[:, itc.clamp(max=8)] * 12 // 10, unit_cost)
-    cost = unit_cost[..., None] * qty                                                                          # [B,K,R]
-    cost = torch.where((kop == O.MKT_HIRE)[None, :, None], FIB.to(dev)[(hires0[:, None, None] + r).clamp(max=20)].expand(-1, K, -1), cost)
-    cost = torch.where((kop == O.MKT_BUY_LAND)[None, :, None], LAND_COST.to(dev)[(land0[:, None, None] + r).clamp(max=3)].expand(-1, K, -1), cost)
-    want = want.reshape(B, -1); cost = cost.reshape(B, -1); qty = qty.reshape(B, -1)
-    cum = torch.cumsum(cost * want, 1)
-    ok = want & (cum <= money[:, None])
-    rank = torch.cumsum(ok.long(), 1) - 1
-    ok = ok & (rank < O.MAX_ORDERS)
-    val = torch.stack([kop[:, None].expand(-1, R).reshape(1, -1).expand(B, -1), kit[:, None].expand(-1, R).reshape(1, -1).expand(B, -1), qty], -1)
+    wf = want.reshape(B, -1); rank = torch.cumsum(wf.long(), 1) - 1; ok = wf & (rank < O.MAX_ORDERS)
+    val = torch.stack([kop[:, None].expand(-1, R).reshape(1, -1).expand(B, -1), kit[:, None].expand(-1, R).reshape(1, -1).expand(B, -1), qty.reshape(B, -1)], -1)
     dst = torch.where(ok, rank, torch.full_like(rank, O.MAX_ORDERS))
     buf = torch.zeros((B, O.MAX_ORDERS + 1, 3), dtype=torch.long, device=dev)
     buf.scatter_(1, dst[..., None].expand(-1, -1, 3), val * ok[..., None])
-    orders = buf[:, :O.MAX_ORDERS]
-    return farmer, hands, orders
+    emitted_o = ok.view(B, K, R).any(-1)                      # per key in emission order
+    inc_o = (qo == 0) | emitted_o
+    inc = torch.zeros((B, NK), dtype=torch.bool, device=dev); inc[:, order] = inc_o
+    return buf[:, :O.MAX_ORDERS], inc
 
 
 def combine(a0, a1):

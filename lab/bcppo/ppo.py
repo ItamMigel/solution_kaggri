@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import policy, gpufeat
 from gpuenv.env import VecKaggriculture
 
-REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "tm", "t", "o", "need_op", "mb")
+REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "hire_max", "land_max", "minc")
 
 
 def rollout(net, ve, B, dev, team, seed_base, greedy=False):
@@ -93,13 +93,13 @@ def main():
                     lp_, lq_ = F.log_softmax(pl, -1), F.log_softmax(ql, -1)
                     k_ = (lp_.exp() * (lp_ - lq_)).sum(-1)
                     return (k_ * m).sum() / m.sum().clamp(min=1) if m is not None else k_.mean()
-                tmask = rec["tm"][:, None, :]
-                klv = kl(policy._masked(btl, tmask), policy._masked(tl, tmask), um) + kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), um) + kl(bml, ml)
+                mm = lambda x: policy.market_mask(x, rec["hire_max"].long(), rec["land_max"].long())
+                klv = kl(btl, tl, um) + kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), um) + kl(mm(bml), mm(ml))
                 kl_coef = a.kl * max(0.0, 1 - it / max(1, a.iters))
-                loss = pg + a.vf * vl - a.ent * ent.mean() + kl_coef * klv
+                loss = pg + a.vf * vl - a.ent * ent["total"].mean() + kl_coef * klv
                 opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0); opt.step()
                 if ep == 0 and s == 0: first_ratio = (ratio - 1).abs().mean().item()
-                stats.append([pg.item(), vl.item(), ent.mean().item(), klv.item(), (ratio - 1).abs().mean().item()])
+                stats.append([pg.item(), vl.item(), ent["total"].mean().item(), klv.item(), (ratio - 1).abs().mean().item()])
         st_ = torch.tensor(stats).mean(0).tolist()
         rec = dict(iter=it, money_mean=final.mean().item(), money_p90=final.flatten().quantile(0.9).item(), money_max=final.max().item(),
                    pg=st_[0], vloss=st_[1], ent=st_[2], kl_bc=st_[3], ratio_dev=st_[4], ratio_first=first_ratio, secs_roll=round(t_roll), secs=round(time.time() - t0), samples=N)

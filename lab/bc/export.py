@@ -61,42 +61,52 @@ def _fib(n):
     for _ in range(n): a, b = b, a + b
     return a
 
-def _legal_mask(obs, p, x, y, inv, shed_left, seeds):
-    farm = obs["farms"][p]; t = farm["tiles"][y][x]; m = np.ones(len(UNIT_OPS), bool)
+_STRUCT = {"GOOSE": "COOP", "COW": "PASTURE", "SHEEP": "PASTURE"}
+_MAX_HANDS = 16
+
+def _tile_mask(obs, p, x, y, inv, day):
+    """Mirror of policy.tile_masks (kaggriculture.py _apply_unit_action semantics); PLANT/PICKUP set later."""
+    t = obs["farms"][p]["tiles"][y][x]; m = np.zeros(len(UNIT_OPS), bool); inv = inv or {}
     for mv, (dx, dy) in _MOVES.items():
-        nx, ny = x + dx, y + dy
-        if not (0 <= nx < 10 and 0 <= ny < 10) or farm["tiles"][ny][nx] == "LOCKED": m[UNIT_IDX[mv]] = False
-    is_plant = isinstance(t, dict) and t.get("kind") == "PLANT"
-    if not is_plant:
-        for op in ("WATER", "HARVEST", "FERTILIZE"): m[UNIT_IDX[op]] = False
-    if not (inv or {}).get("FERTILIZER"): m[UNIT_IDX["FERTILIZE"]] = False
-    has_animal = isinstance(t, dict) and t.get("animal") in ANIMALS
-    if not has_animal:
-        for op in ("FEED", "CARE", "COLLECT_FERTILIZER"): m[UNIT_IDX[op]] = False
-    if not (inv or {}).get("WHEAT"): m[UNIT_IDX["FEED"]] = False
-    for c in CROPS:
-        if t is not None or seeds.get(c, 0) <= 0: m[UNIT_IDX["PLANT:" + c]] = False
-    if t is not None: m[UNIT_IDX["BUILD_COOP"]] = m[UNIT_IDX["BUILD_PASTURE"]] = False
-    if not (isinstance(t, dict) and t.get("kind") in ("WEED", "PLANT")): m[UNIT_IDX["DIG"]] = False
+        m[UNIT_IDX[mv]] = 0 <= x + dx < 10 and 0 <= y + dy < 10
+    locked = t == "LOCKED"; empty = t is None
+    d = t if isinstance(t, dict) else {}
+    plant = d.get("kind") == "PLANT"; animal = "animal" in d
+    if plant:
+        age = day - int(d.get("planted_day", day)); fy = FIRST_YIELD.get(d.get("crop"), 99)
+        m[UNIT_IDX["WATER"]] = not d.get("watered_today")
+        m[UNIT_IDX["HARVEST"]] = age >= fy and int(d.get("yield_units", 0)) > 0
+        m[UNIT_IDX["FERTILIZE"]] = inv.get("FERTILIZER", 0) > 0
+    if animal:
+        m[UNIT_IDX["HARVEST"]] = int(d.get("yield_units", 0)) > 0
+        m[UNIT_IDX["FEED"]] = (not d.get("fed_today")) and inv.get("WHEAT", 0) > 0
+        m[UNIT_IDX["CARE"]] = not d.get("cared_today")
+        m[UNIT_IDX["COLLECT_FERTILIZER"]] = bool(d.get("fertilizer_available"))
+    m[UNIT_IDX["BUILD_COOP"]] = m[UNIT_IDX["BUILD_PASTURE"]] = empty
+    m[UNIT_IDX["DIG"]] = (not empty) and (not locked) and (not animal)
     adj = (x, y) in SHED_ADJ
-    if not adj or not inv: m[UNIT_IDX["DROP"]] = False
+    m[UNIT_IDX["DROP"]] = adj and sum(inv.values()) > 0
     for it in ITEMS:
-        if not adj or shed_left.get(it, 0) <= 0: m[UNIT_IDX["PICKUP:" + it]] = False
-        if not (inv or {}).get(it): m[UNIT_IDX["PLACE:" + it]] = False
-    return m
+        has = inv.get(it, 0) > 0
+        if it in _STRUCT:
+            m[UNIT_IDX["PLACE:" + it]] = has and ((d.get("kind") == _STRUCT[it] and not animal) or adj)
+        else:
+            m[UNIT_IDX["PLACE:" + it]] = has and adj
+    m[UNIT_IDX["PASS"]] = True
+    return m, (empty and not locked), adj
 
-_PICK_N = {"WHEAT": 3, "FERTILIZER": 4}
+_PICK_N = {"FERTILIZER": 4}
 
-def _decode_unit(cls, inv, shed_left):
-    k = UNIT_OPS[int(cls)]
+def _unit_triple(k, inv, shed_left):
     if ":" not in k: return [k]
     op, it = k.split(":")
     if op == "PLANT": return ["PLANT", it]
     if op == "PICKUP":
-        n = 1 if it in ANIMALS else min(_PICK_N.get(it, 3), shed_left.get(it, 1)); shed_left[it] = shed_left.get(it, 0) - n
-        return ["PICKUP", it, max(1, n)]
-    n = 1 if (it in ANIMALS or it == "FERTILIZER") else int((inv or {}).get(it, 1))
-    return ["PLACE", it, max(1, n)]
+        n = 1 if it in ANIMALS else _PICK_N.get(it, 3)
+        n = max(1, min(n, int(shed_left.get(it, 0)))); shed_left[it] = shed_left.get(it, 0) - n
+        return ["PICKUP", it, n]
+    n = 1 if (it in ANIMALS or it == "FERTILIZER") else max(1, int((inv or {}).get(it, 1)))
+    return ["PLACE", it, n]
 
 _RNG = np.random.default_rng(_SEED)
 
@@ -108,57 +118,58 @@ def _pick(logits, mask=None):
     return int((z / _TEMP + g).argmax())
 
 _MKT_ORDER_IDX = [MKT_IDX[k] for k in MKT_ORDER]
-_REP = {"HIRE", "BUY_LAND"}
 
-def _market(obs, p, q):
-    """Mirror of policy.build_actions market: fixed key order, HIRE/LAND/ANIMAL one per order (<=10 reps),
-    prefix-affordability on cumulative cost of all wanted slots, first 10 accepted."""
-    farm = obs["farms"][p]; money = int(farm["money"]); prices = obs["market"].get("prices") or {}
-    hires = int(farm.get("hires_today", 0) or 0); land = len(farm.get("unlocked_quadrants") or []) - 1
-    cum = 0; out = []
+def _market(q):
+    """Mirror of policy.build_market: fixed key order, HIRE/LAND/ANIMAL one per order (<=10), first 10 orders; no affordability filter."""
+    out = []
     for k in _MKT_ORDER_IDX:
         key = MKT_KEYS[k]; n = int(q[k]); op, _, it = key.partition(":")
         if n <= 0: continue
-        rep = op in _REP or op == "BUY_ANIMAL"
-        slots = range(min(n, 10)) if rep else [0]
-        for r in slots:
-            qty = 1 if rep else n
-            if op == "SELL": c = 0
-            elif op == "HIRE": c = _fib(min(hires + r, 20))
-            elif op == "BUY_LAND": c = _LAND_COST[land + r] if land + r < 3 else 10 ** 12
-            elif op == "BUY_SEED": c = _SEED_COST[it] * qty
-            elif op == "BUY_ANIMAL": c = _ANIMAL_COST[it] * qty
-            else: c = (int(prices.get(it, 0)) * 12 // 10) * qty
-            cum += c
-            if cum <= money and len(out) < 10:
-                out.append([op] if op in _REP else [op, it, qty])
-    return out
+        if op in ("HIRE", "BUY_LAND"):
+            out += [[op]] * min(n, 10)
+        elif op == "BUY_ANIMAL":
+            out += [[op, it, 1]] * min(n, 10)
+        else:
+            out.append([op, it, n])
+    return out[:10]
 
 def agent(obs, config=None):
     try:
-        p = int(obs.get("player", 0))
+        p = int(obs.get("player", 0)); day = int(obs.get("day", int(obs.get("step", 0)) // 24))
         Bd = board_tensor(obs, p); g = np.concatenate([glob_vec(obs, p), _TEAM_VEC])
         ul = unit_list(obs, p); priv = obs.get("private") or {}
         outs, m, tls = _forward(Bd, g, ul)
-        tiles = obs["farms"][p]["tiles"]
-        unlocked = np.array([[tiles[yy][xx] != "LOCKED" for xx in range(10)] for yy in range(10)]).reshape(-1)
-        invs = priv.get("inventories") or []; shed = dict(priv.get("shed") or {}); seeds = dict(priv.get("seeds") or {})
+        invs = priv.get("inventories") or []
+        seeds_left = {c: int((priv.get("seeds") or {}).get(c, 0)) for c in CROPS}
+        shed_left = {it: int((priv.get("shed") or {}).get(it, 0)) for it in ITEMS}
+        tgts = [_pick(tls[i]) for i in range(len(ul))]
         acts = []
         for i, ((x, y, v), lg) in enumerate(zip(ul, outs)):
             inv = invs[i] if i < len(invs) else {}
-            legal = _legal_mask(obs, p, x, y, inv, shed, seeds)
-            tcell = _pick(tls[i], unlocked); tx, ty = tcell % 10, tcell // 10
-            a = None
-            if (tx, ty) != (x, y):
-                cand = [c for c, ok in (("EAST", tx > x), ("WEST", tx < x), ("SOUTH", ty > y), ("NORTH", ty < y)) if ok and legal[UNIT_IDX[c]]]
-                if cand: a = [max(cand, key=lambda c: lg[UNIT_IDX[c]])]
+            mu, empty_ok, adj = _tile_mask(obs, p, x, y, inv, day)
+            for c in CROPS: mu[UNIT_IDX["PLANT:" + c]] = empty_ok and seeds_left[c] > 0
+            for it in ITEMS: mu[UNIT_IDX["PICKUP:" + it]] = adj and shed_left[it] > 0
+            tx, ty = tgts[i] % 10, tgts[i] // 10
+            want = np.zeros(len(UNIT_OPS), bool)
+            want[UNIT_IDX["EAST"]] = tx > x; want[UNIT_IDX["WEST"]] = tx < x; want[UNIT_IDX["SOUTH"]] = ty > y; want[UNIT_IDX["NORTH"]] = ty < y
+            mv = want & mu
+            if (tx, ty) != (x, y) and mv.any():
+                mask = mv
             else:
-                for mv in _MOVES: legal[UNIT_IDX[mv]] = False
-            if a is None:
-                a = _decode_unit(_pick(lg, legal), inv, dict(shed))
-            acts.append(a)
+                mask = mu.copy()
+                for k in _MOVES: mask[UNIT_IDX[k]] = False
+            k = UNIT_OPS[_pick(lg, mask)]
+            if k.startswith("PLANT:"): seeds_left[k[6:]] -= 1
+            acts.append(_unit_triple(k, inv, shed_left))
+        farm = obs["farms"][p]
+        hire_max = max(0, min(MKT_MAX, _MAX_HANDS - len(farm.get("hands") or [])))
+        land_max = max(0, 3 - (len(farm.get("unlocked_quadrants") or []) - 1))
+        b = np.arange(MKT_MAX + 1)
+        m = m.copy()
+        m[MKT_IDX["HIRE"]] = np.where(b > hire_max, -1e9, m[MKT_IDX["HIRE"]])
+        m[MKT_IDX["BUY_LAND"]] = np.where(b > land_max, -1e9, m[MKT_IDX["BUY_LAND"]])
         q = [_pick(m[k]) for k in range(len(MKT_KEYS))]
-        return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": _market(obs, p, q)}
+        return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": _market(q)}
     except Exception:
         return {"farmer": ["PASS"], "hands": [], "market": []}
 '''
