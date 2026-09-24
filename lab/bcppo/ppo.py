@@ -1,111 +1,399 @@
-"""PPO fine-tuning of the BC policy in the exact batched gpuenv (self-play, both seats use the current policy).
-usage: python ppo.py --init /workspace/shared/bc_runs/v2/final.pt --out /workspace/shared/bcppo_runs/r1 --envs 256 --iters 50
-Reward per player: dense d(money)/1e4 each step + terminal margin/1e4 * --margin-coef.  GAE(gamma, lam).
-Loss: clipped PPO + value + entropy bonus + KL(BC || pi) anchor (annealed)."""
-import argparse, copy, json, os, sys, time
-import torch, torch.nn.functional as F
-HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-import policy, gpufeat
+"""PPO fine-tuning over the exact batched gpuenv.
+
+The rollout buffer is preallocated on the device: it avoids Python lists and a
+large stack/concat peak.  Player zero is the trainable policy; player one is a
+frozen/current league opponent.  Rewards are zero-sum changes in conservative
+equity, with a terminal correction to the exact cash margin.
+"""
+import argparse
+import json
+import os
+import sys
+import time
+from collections import Counter
+
+import torch
+import torch.nn.functional as F
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import policy
+import gpufeat
+from gpuenv import ops as O
+from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
 
 REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "tm", "t", "o", "need_op", "mb")
+STEPS = 719
 
 
-def rollout(net, ve, B, dev, team, seed_base, greedy=False):
-    st = ve.reset(torch.arange(B, device=dev) + seed_base); so = gpufeat.ShopOrder(B, dev)
-    T = 719; buf = {p: {k: [] for k in REC_KEYS + ("logp", "v", "r")} for p in (0, 1)}
-    prev = st.money.float().clone()
+def _new_net(ck, dev):
+    """Build a policy from both old and F6 architecture-carrying checkpoints."""
+    kw = {k: ck[k] for k in ("ch", "blocks") if k in ck}
+    net = policy.PolicyNet(ck["gdim"], **kw).to(dev)
+    net.load_state_dict(ck["state"], strict=False)
+    return net
+
+
+def _entropy_parts(value):
+    """F1--F6 change entropy from a tensor to a dict; accept either revision."""
+    if isinstance(value, dict):
+        return value
+    return {"total": value}
+
+
+def _entropy_total(parts):
+    return sum(parts.values())
+
+
+def _tensor_dtype(key, tensor):
+    # Board dominates memory (T*B*30*10*10); fp16 has ample feature precision.
+    if key == "board":
+        return torch.float16
+    return tensor.dtype
+
+
+class StreamingBuffer:
+    """Fixed [time, env, ...] device storage for a single trainable player."""
+    def __init__(self, steps, batch):
+        self.steps, self.batch, self.pos = steps, batch, 0
+        self.data = {}
+
+    def put(self, rec, logp, value, reward):
+        if self.pos >= self.steps:
+            raise RuntimeError("rollout buffer overflow")
+        row = dict(rec)
+        row.update(logp=logp, v=value, r=reward)
+        if not self.data:
+            for key, val in row.items():
+                self.data[key] = torch.empty((self.steps, *val.shape), device=val.device,
+                                             dtype=_tensor_dtype(key, val))
+        for key, val in row.items():
+            self.data[key][self.pos].copy_(val)
+        self.pos += 1
+
+    def terminal_add(self, correction):
+        if self.pos != self.steps:
+            raise RuntimeError("terminal correction before a complete rollout")
+        self.data["r"][-1].add_(correction)
+
+    def flat(self):
+        if self.pos != self.steps:
+            raise RuntimeError(f"incomplete rollout: {self.pos}/{self.steps}")
+        return {k: v.reshape(self.steps * self.batch, *v.shape[2:]) for k, v in self.data.items()}
+
+
+def conservative_equity(st):
+    """Cash plus deliberately discounted immediately/liquidly usable assets.
+
+    It is a training shaping signal, never a claim about official terminal
+    money.  The last reward below corrects it exactly to the cash margin.
+    """
+    dev = st.money.device
+    prices = st.market_price().float()                         # [B, 9]
+    product = (st.shed[:, :, :O.N_PRODUCTS].float() +
+               st.inv[:, :, :, :O.N_PRODUCTS].float().sum(2))
+    # Selling an inventory moves the market curve and costs a market order;
+    # value it below the displayed marginal price.
+    assets = (product * prices[:, None, :] * 0.55).sum(-1)
+    seed_cost = torch.tensor(C.CROP_SEED_COST, device=dev, dtype=torch.float32)
+    animal_cost = torch.tensor(C.ANIMAL_COST, device=dev, dtype=torch.float32)
+    assets = assets + (st.seeds.float() * seed_cost[None, None, :] * 0.45).sum(-1)
+    animals_in_inv = st.inv[:, :, :, 9:12].float().sum(2)
+    assets = assets + (animals_in_inv * animal_cost[None, None, :] * 0.45).sum(-1)
+    # Mature crops have already produced an observable yield.  Their value is
+    # discounted further because collection/pathing can still fail.
+    day = int(st.step) // C.TURNS_PER_DAY
+    crop_first = torch.tensor(C.CROP_FIRST_YIELD_DAY, device=dev)
+    plant = st.kind == O.TILE_PLANT
+    mature = plant & ((day - st.tday.long()) >= crop_first[st.species.long().clamp(0, 4)])
+    crop_price = prices[:, None, None, :5].expand(-1, 2, st.kind.shape[-1], -1)
+    crop_unit_price = crop_price.gather(-1, st.species.long().clamp(0, 4).unsqueeze(-1)).squeeze(-1)
+    assets = assets + (mature.float() * st.tyield.float().clamp(min=0) * crop_unit_price * 0.20).sum(-1)
+    return st.money.float() + assets
+
+
+def _merge_actions(outputs, labels, names):
+    """Select player-one action batch rows from named league policies."""
+    chosen = None
+    for idx, name in enumerate(names):
+        action = outputs[name][0]
+        mask = labels == idx
+        if chosen is None:
+            chosen = tuple(x.clone() for x in action)
+        else:
+            chosen = tuple(torch.where(mask.view(-1, *([1] * (x.ndim - 1))), x, old)
+                           for old, x in zip(chosen, action))
+    return chosen
+
+
+def _league_labels(batch, dev, seed, names, probs):
+    generator = torch.Generator(device=dev)
+    generator.manual_seed(seed)
+    p = torch.tensor(probs, dtype=torch.float32, device=dev)
+    return torch.multinomial(p.expand(batch, -1), 1, generator=generator).squeeze(1)
+
+
+def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
+    """Run player zero against a fixed per-environment league draw."""
+    st = ve.reset(torch.arange(batch, device=dev) + seed_base)
+    so = gpufeat.ShopOrder(batch, dev)
+    names = list(league)
+    probs = [league[n][1] for n in names]
+    labels = _league_labels(batch, dev, seed_base ^ 0x9E3779B9, names, probs)
+    buf = StreamingBuffer(STEPS, batch)
+    eq_prev = conservative_equity(st)
+    metric = {
+        "unit_hist": torch.zeros(O.N_UNIT_OPS, dtype=torch.int64, device=dev),
+        "market_hist": torch.zeros(O.N_MARKET_OPS, dtype=torch.int64, device=dev),
+        "active_units": torch.zeros((), dtype=torch.int64, device=dev),
+        "unit_noop": torch.zeros((), dtype=torch.int64, device=dev),
+        "market_noop": torch.zeros((), dtype=torch.int64, device=dev),
+        "league_counts": torch.bincount(labels, minlength=len(names)),
+    }
     with torch.no_grad():
-        for t in range(T):
+        for _ in range(STEPS):
             so.update(st)
-            outs = [policy.act(net, st, p, so, team, greedy=greedy) for p in (0, 1)]
-            st, _, done, info = ve.step(st, policy.combine(outs[0][0], outs[1][0]))
-            money = st.money.float(); dm = (money - prev) / 1e4; prev = money.clone()
-            for p in (0, 1):
-                a, lp, v, ent, rec = outs[p]
-                for k in REC_KEYS: buf[p][k].append(rec[k])
-                buf[p]["logp"].append(lp); buf[p]["v"].append(v); buf[p]["r"].append(dm[:, p])
-    final = st.money.float()
-    return buf, final
+            out0 = policy.act(net, st, 0, so, team, greedy=greedy)
+            # Calling each opponent on the full batch keeps ShopOrder state
+            # aligned and avoids host-side batch slicing in the hot loop.
+            opponent_out = {name: policy.act(league[name][0], st, 1, so, team, greedy=False)
+                            for name in names}
+            out1 = _merge_actions(opponent_out, labels, names)
+            st, _, _, _ = ve.step(st, policy.combine(out0[0], out1))
+            eq = conservative_equity(st)
+            reward = ((eq[:, 0] - eq[:, 1]) - (eq_prev[:, 0] - eq_prev[:, 1])) / 1e4
+            eq_prev = eq
+            _, logp, value, _, rec = out0
+            buf.put(rec, logp, value, reward)
+            farmer, hands, market = out0[0]
+            unit_ops = torch.cat((farmer[:, None, 0], hands[..., 0]), 1).long()
+            active = rec["umask"]
+            metric["unit_hist"] += torch.bincount(unit_ops[active], minlength=O.N_UNIT_OPS)
+            metric["active_units"] += active.sum()
+            metric["unit_noop"] += (unit_ops[active] == O.OP_PASS).sum()
+            market_ops = market[..., 0].long()
+            metric["market_hist"] += torch.bincount(market_ops.flatten(), minlength=O.N_MARKET_OPS)
+            metric["market_noop"] += (market_ops == O.MKT_NONE).sum()
+    # Sum of equity deltas is end equity difference.  Correct terminally to
+    # the true cash result required by the competition.
+    cash_margin = st.money[:, 0].float() - st.money[:, 1].float()
+    equity_margin = eq_prev[:, 0] - eq_prev[:, 1]
+    buf.terminal_add((cash_margin - equity_margin) / 1e4)
+    metric = {k: (v.detach().cpu() if torch.is_tensor(v) else v) for k, v in metric.items()}
+    return buf, st.money.float(), metric, {name: int((labels == i).sum()) for i, name in enumerate(names)}
 
 
-def gae(r, v, gamma, lam):
-    T = r.shape[0]; adv = torch.zeros_like(r); last = torch.zeros_like(r[0])
-    for t in reversed(range(T)):
-        nv = v[t + 1] if t + 1 < T else torch.zeros_like(v[t])
-        delta = r[t] + gamma * nv - v[t]; last = delta + gamma * lam * last; adv[t] = last
-    return adv, adv + v
+def gae(reward, value, gamma, lam):
+    steps = reward.shape[0]
+    adv = torch.zeros_like(reward)
+    last = torch.zeros_like(reward[0])
+    for t in reversed(range(steps)):
+        next_value = value[t + 1] if t + 1 < steps else torch.zeros_like(value[t])
+        delta = reward[t] + gamma * next_value - value[t]
+        last = delta + gamma * lam * last
+        adv[t] = last
+    return adv, adv + value
+
+
+def _explained_variance(pred, target):
+    var_y = torch.var(target)
+    if var_y <= 1e-12:
+        return torch.tensor(0.0, device=target.device)
+    return 1.0 - torch.var(target - pred) / var_y
+
+
+def _league_from_args(a, ck, net, bc, dev):
+    """Return name -> (frozen/current net, probability), with safe smoke defaults."""
+    snapshots = []
+    doubles = []
+    for path in a.league_snapshot:
+        snapshots.append(_new_net(torch.load(path, map_location=dev), dev).eval())
+    for path in a.league_double:
+        doubles.append(_new_net(torch.load(path, map_location=dev), dev).eval())
+    if not snapshots and not doubles:
+        return {"current": (net, 1.0)}
+    # F10's requested mix.  BC supplies the optional final 10% until a tape
+    # adapter exists, instead of pretending an incompatible action tape is a net.
+    entries = [("current", net, .30)]
+    if snapshots:
+        entries.append(("snapshot", snapshots[0], .35))
+    if doubles:
+        entries.append(("double", doubles[0], .25))
+    entries.append(("bc_fallback", bc, .10))
+    total = sum(x[2] for x in entries)
+    return {name: (model, weight / total) for name, model, weight in entries}
+
+
+def _restore_resume(path, net, opt, dev):
+    ck = torch.load(path, map_location=dev)
+    net.load_state_dict(ck["state"])
+    if "optimizer" in ck:
+        opt.load_state_dict(ck["optimizer"])
+    if "rng_cpu" in ck:
+        torch.set_rng_state(ck["rng_cpu"])
+    if dev.startswith("cuda") and "rng_cuda" in ck:
+        torch.cuda.set_rng_state_all(ck["rng_cuda"])
+    return int(ck["iter"]) + 1
+
+
+def _save(path, net, opt, source_ck, teams, iteration):
+    payload = {
+        "state": net.state_dict(), "gdim": source_ck["gdim"], "teams": teams, "iter": iteration,
+        "optimizer": opt.state_dict(), "rng_cpu": torch.get_rng_state(),
+        "ch": source_ck.get("ch", 96), "blocks": source_ck.get("blocks", 6),
+    }
+    if torch.cuda.is_available():
+        payload["rng_cuda"] = torch.cuda.get_rng_state_all()
+    torch.save(payload, path)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--init", required=True); ap.add_argument("--out", required=True); ap.add_argument("--envs", type=int, default=256)
-    ap.add_argument("--iters", type=int, default=50); ap.add_argument("--lr", type=float, default=3e-5); ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--mb", type=int, default=8192); ap.add_argument("--gamma", type=float, default=0.999); ap.add_argument("--lam", type=float, default=0.95)
-    ap.add_argument("--clip", type=float, default=0.2); ap.add_argument("--ent", type=float, default=0.001); ap.add_argument("--kl", type=float, default=0.05)
-    ap.add_argument("--margin-coef", type=float, default=0.5); ap.add_argument("--team", default="dsm"); ap.add_argument("--vf", type=float, default=0.5)
-    ap.add_argument("--device", default="cuda"); ap.add_argument("--amp", default="none", choices=["none", "bf16"])
-    ap.add_argument("--resume", action="store_true", help="continue from <out>/last.pt if present"); ap.add_argument("--seed", type=int, default=0)
-    a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = a.device
+    ap.add_argument("--init", required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--envs", type=int, default=256)
+    ap.add_argument("--iters", type=int, default=50)
+    ap.add_argument("--lr", type=float, default=3e-5)
+    ap.add_argument("--epochs", type=int, default=2)
+    ap.add_argument("--mb", type=int, default=8192)
+    ap.add_argument("--gamma", type=float, default=1.0)
+    ap.add_argument("--lam", type=float, default=.995)
+    ap.add_argument("--clip", type=float, default=.2)
+    ap.add_argument("--ent", type=float, default=.001)
+    ap.add_argument("--kl", type=float, default=.05)
+    ap.add_argument("--team", default="dsm")
+    ap.add_argument("--vf", type=float, default=.5)
+    ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
+    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--amp", default="none", choices=["none", "bf16"])
+    ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--league-snapshot", action="append", default=[], metavar="CKPT")
+    ap.add_argument("--league-double", action="append", default=[], metavar="CKPT")
+    a = ap.parse_args()
+    os.makedirs(a.out, exist_ok=True)
+    if not 0 < a.gamma <= 1 or not 0 <= a.lam <= 1:
+        ap.error("gamma must be in (0,1] and lambda in [0,1]")
+    dev = a.device
     torch.manual_seed(a.seed)
-    if a.amp == "bf16": policy.AMP = torch.bfloat16
-    ck = torch.load(a.init, map_location=dev)
-    net = policy.PolicyNet(ck["gdim"]).to(dev); net.load_state_dict(ck["state"], strict=False)
+    if a.amp == "bf16":
+        policy.AMP = torch.bfloat16
+    source_ck = torch.load(a.init, map_location=dev)
+    net = _new_net(source_ck, dev)
+    bc = _new_net(source_ck, dev).eval()
+    for parameter in bc.parameters():
+        parameter.requires_grad_(False)
+    teams = source_ck.get("teams", ["mmpq", "dsm", "mgoose"])
+    if a.team not in teams:
+        ap.error(f"team {a.team!r} absent from checkpoint teams={teams}")
+    team = torch.zeros((1, len(teams)), device=dev)
+    team[0, teams.index(a.team)] = 1
+    opt = torch.optim.Adam(net.parameters(), lr=a.lr)
     start = 0
-    if a.resume and os.path.exists(f"{a.out}/last.pt"):
-        lk = torch.load(f"{a.out}/last.pt", map_location=dev); net.load_state_dict(lk["state"]); start = lk["iter"] + 1; print("resumed at iter", start, flush=True)
-    json.dump(vars(a), open(f"{a.out}/args.json", "w"), indent=1)
-    bc = policy.PolicyNet(ck["gdim"]).to(dev); bc.load_state_dict(ck["state"], strict=False); bc.eval()
-    for q in bc.parameters(): q.requires_grad_(False)
-    teams = ck.get("teams", ["mmpq", "dsm", "mgoose"]); team = torch.zeros((1, len(teams)), device=dev); team[0, teams.index(a.team)] = 1
-    opt = torch.optim.Adam(net.parameters(), lr=a.lr); ve = VecKaggriculture(a.envs, device=dev)
+    last = f"{a.out}/last.pt"
+    if a.resume and os.path.exists(last):
+        start = _restore_resume(last, net, opt, dev)
+        print("resumed at iter", start, flush=True)
+    league = _league_from_args(a, source_ck, net, bc, dev)
+    ve = VecKaggriculture(a.envs, device=dev)
+    with open(f"{a.out}/args.json", "w") as fh:
+        json.dump({**vars(a), "league_effective": {k: v[1] for k, v in league.items()}}, fh, indent=1)
     log = open(f"{a.out}/log.jsonl", "a")
     for it in range(start, a.iters):
-        t0 = time.time(); net.eval()
-        buf, final = rollout(net, ve, a.envs, dev, team, seed_base=1_000_003 * (it + 1) + 7_919 * a.seed)
-        t_roll = time.time() - t0
-        margin = final[:, 0] - final[:, 1]
-        data = {k: [] for k in REC_KEYS + ("logp", "adv", "ret", "v")}
-        for p in (0, 1):
-            r = torch.stack(buf[p]["r"]); v = torch.stack(buf[p]["v"])
-            r[-1] += a.margin_coef * (margin if p == 0 else -margin) / 1e4
-            adv, ret = gae(r, v, a.gamma, a.lam)
-            for k in REC_KEYS: data[k].append(torch.stack(buf[p][k]).flatten(0, 1))
-            data["logp"].append(torch.stack(buf[p]["logp"]).flatten(0, 1)); data["adv"].append(adv.flatten()); data["ret"].append(ret.flatten()); data["v"].append(v.flatten())
+        t0 = time.time()
+        net.eval()
+        buf, final, action_metric, league_counts = rollout(
+            net, ve, a.envs, dev, team, seed_base=1_000_003 * (it + 1) + 7_919 * a.seed,
+            league=league,
+        )
+        roll_seconds = time.time() - t0
+        flat = buf.flat()
+        reward = buf.data["r"]
+        values = buf.data["v"]
+        adv, ret = gae(reward, values, a.gamma, a.lam)
+        data = {k: flat[k] for k in REC_KEYS + ("logp",)}
+        data["adv"] = adv.reshape(-1)
+        data["ret"] = ret.reshape(-1)
+        data["v"] = values.reshape(-1)
+        data["adv"] = (data["adv"] - data["adv"].mean()) / (data["adv"].std() + 1e-8)
         del buf
-        data = {k: torch.cat(v) for k, v in data.items()}
-        adv = data["adv"]; data["adv"] = (adv - adv.mean()) / (adv.std() + 1e-8)
-        N = data["adv"].shape[0]; net.train(); stats = []
-        for ep in range(a.epochs):
-            perm = torch.randperm(N, device=dev)
-            for s in range(0, N, a.mb):
-                idx = perm[s:s + a.mb]; rec = {k: data[k][idx] for k in REC_KEYS}
-                board = rec["board"].float(); ux = rec["ux"].long(); uy = rec["uy"].long()
-                ul, tl, ml, v = net.full(board, rec["G"], rec["uv"], ux, uy, rec["umask"])
-                lp, ent = policy.logprob(ul, tl, ml, rec)
-                ratio = torch.exp(lp - data["logp"][idx]); A = data["adv"][idx]
-                pg = -torch.min(ratio * A, ratio.clamp(1 - a.clip, 1 + a.clip) * A).mean()
-                vl = F.smooth_l1_loss(v, data["ret"][idx])
+        samples = data["adv"].numel()
+        stats = Counter()
+        n_updates = 0
+        net.train()
+        value_only = it < a.value_warmup
+        for epoch in range(a.epochs):
+            permutation = torch.randperm(samples, device=dev)
+            for offset in range(0, samples, a.mb):
+                idx = permutation[offset:offset + a.mb]
+                rec = {k: data[k][idx] for k in REC_KEYS}
+                board = rec["board"].float()
+                ul, tl, ml, value = net.full(board, rec["G"], rec["uv"], rec["ux"].long(), rec["uy"].long(), rec["umask"])
+                logp, raw_entropy = policy.logprob(ul, tl, ml, rec)
+                entropy = _entropy_parts(raw_entropy)
+                ent_total = _entropy_total(entropy)
+                log_ratio = logp - data["logp"][idx]
+                ratio = torch.exp(log_ratio)
+                advantage = data["adv"][idx]
+                policy_loss = -torch.min(ratio * advantage, ratio.clamp(1 - a.clip, 1 + a.clip) * advantage).mean()
+                value_loss = F.smooth_l1_loss(value, data["ret"][idx])
                 with torch.no_grad():
-                    bul, btl, bml, _ = bc.full(board, rec["G"], rec["uv"], ux, uy, rec["umask"])
-                um = rec["umask"].float()
-                def kl(pl, ql, m=None):
-                    lp_, lq_ = F.log_softmax(pl, -1), F.log_softmax(ql, -1)
-                    k_ = (lp_.exp() * (lp_ - lq_)).sum(-1)
-                    return (k_ * m).sum() / m.sum().clamp(min=1) if m is not None else k_.mean()
-                tmask = rec["tm"][:, None, :]
-                klv = kl(policy._masked(btl, tmask), policy._masked(tl, tmask), um) + kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), um) + kl(bml, ml)
+                    bul, btl, bml, _ = bc.full(board, rec["G"], rec["uv"], rec["ux"].long(), rec["uy"].long(), rec["umask"])
+                unit_mask = rec["umask"].float()
+                def kl(p_logits, q_logits, mask=None):
+                    lp, lq = F.log_softmax(p_logits, -1), F.log_softmax(q_logits, -1)
+                    val = (lp.exp() * (lp - lq)).sum(-1)
+                    return (val * mask).sum() / mask.sum().clamp(min=1) if mask is not None else val.mean()
+                target_mask = rec["tm"][:, None, :]
+                kl_bc = (kl(policy._masked(btl, target_mask), policy._masked(tl, target_mask), unit_mask) +
+                         kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(bml, ml))
                 kl_coef = a.kl * max(0.0, 1 - it / max(1, a.iters))
-                loss = pg + a.vf * vl - a.ent * ent.mean() + kl_coef * klv
-                opt.zero_grad(); loss.backward(); torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0); opt.step()
-                if ep == 0 and s == 0: first_ratio = (ratio - 1).abs().mean().item()
-                stats.append([pg.item(), vl.item(), ent.mean().item(), klv.item(), (ratio - 1).abs().mean().item()])
-        st_ = torch.tensor(stats).mean(0).tolist()
-        rec = dict(iter=it, money_mean=final.mean().item(), money_p90=final.flatten().quantile(0.9).item(), money_max=final.max().item(),
-                   pg=st_[0], vloss=st_[1], ent=st_[2], kl_bc=st_[3], ratio_dev=st_[4], ratio_first=first_ratio, secs_roll=round(t_roll), secs=round(time.time() - t0), samples=N)
-        print(json.dumps(rec), flush=True); log.write(json.dumps(rec) + "\n"); log.flush()
-        torch.save({"state": net.state_dict(), "gdim": ck["gdim"], "teams": teams, "iter": it}, f"{a.out}/last.pt")
-        if it % 5 == 4: torch.save({"state": net.state_dict(), "gdim": ck["gdim"], "teams": teams, "iter": it}, f"{a.out}/it{it:03d}.pt")
+                loss = a.vf * value_loss if value_only else policy_loss + a.vf * value_loss - a.ent * ent_total.mean() + kl_coef * kl_bc
+                opt.zero_grad(set_to_none=True)
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0)
+                opt.step()
+                with torch.no_grad():
+                    stats["pg"] += float(policy_loss)
+                    stats["vloss"] += float(value_loss)
+                    stats["kl_bc"] += float(kl_bc)
+                    stats["approx_kl"] += float((data["logp"][idx] - logp).mean())
+                    stats["clipfrac"] += float(((ratio - 1).abs() > a.clip).float().mean())
+                    for key, val in entropy.items():
+                        stats[f"entropy_{key}"] += float(val.mean())
+                n_updates += 1
+        unit_hist = action_metric["unit_hist"].tolist()
+        market_hist = action_metric["market_hist"].tolist()
+        active_units = max(1, int(action_metric["active_units"]))
+        market_slots = max(1, a.envs * STEPS * O.MAX_ORDERS)
+        record = {
+            "iter": it,
+            "money_mean": final.mean().item(),
+            "money_p90": final.flatten().quantile(.9).item(),
+            "money_max": final.max().item(),
+            "equity_reward_mean": reward.mean().item(),
+            "explained_variance": _explained_variance(data["v"], data["ret"]).item(),
+            "value_only": value_only,
+            "secs_roll": round(roll_seconds),
+            "secs": round(time.time() - t0),
+            "samples": samples,
+            "league_envs": league_counts,
+            "unit_op_distribution": [x / active_units for x in unit_hist],
+            "market_op_distribution": [x / market_slots for x in market_hist],
+            "unit_noop_fraction": int(action_metric["unit_noop"]) / active_units,
+            "market_noop_fraction": int(action_metric["market_noop"]) / market_slots,
+            # The gpuenv currently exposes no per-action rejection bit.  F11
+            # will add it; until then this is explicitly an honest placeholder.
+            "rejected_actions": None,
+        }
+        record.update({key: value / max(1, n_updates) for key, value in stats.items()})
+        print(json.dumps(record), flush=True)
+        log.write(json.dumps(record) + "\n")
+        log.flush()
+        _save(last, net, opt, source_ck, teams, it)
+        if it % 5 == 4:
+            _save(f"{a.out}/it{it:03d}.pt", net, opt, source_ck, teams, it)
 
 
 if __name__ == "__main__":
