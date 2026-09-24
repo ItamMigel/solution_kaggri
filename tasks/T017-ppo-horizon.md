@@ -35,3 +35,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - The noisy behaviour policy and anchor both scored .98958; mean margins $4,476.51 and $4,485.00 respectively (paired reward −0.000212). This is much less destructive than g0 but remains training evidence only.
 - Fresh validation now uses eight separate worlds and the same six-opponent panel.
 
+## Held-out gate g1 — 2026-09-24 14:xx UTC (codex)
+- `runs/t017_g1_holdout_20260924T1435Z`: eight worlds disjoint from both g1 training and earlier panels; six reactive opponents, both seats, 192/192 DONE and inputs unchanged.
+- PPO and frozen ES are exactly tied: 90–0–6, score .9375, mean margin $4,462.29, paired score and margin gains both exactly zero across all 96 matched games. The lower step kept all daily knob changes below effective discrete/control thresholds: g1 is a functional no-op, not a candidate.
+- Next: train an explicitly larger but bounded update, then validate only on fresh worlds; preserve ES as fallback.
+
