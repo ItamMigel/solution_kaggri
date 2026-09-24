@@ -16,3 +16,7 @@ Budget: ≤22 workers; this is ~4 cand × (8 opp + 3 rr) × 128 × 2 ≈ 11k gam
 - v5 beats v4_12 / v4_8 126/128 head-to-head; vs reactive panel v5 ≥ v4 in wins (parthenos 117 vs 105). v4's higher mean margin comes from yhay0913 (+16.3k vs +11.5k), not wins.
 - market vs guarded: 5 wins each way, rest draws → near-identical policies; keeping both active wastes a slot.
 - Draft recommendation: keep v5 (guarded, the higher-rated one on ladder) + replace the other slot with **es1_g1** if codex's independent reproduction holds (T018: 30-2 vs v5 on fresh worlds).
+
+## Codex independent review
+
+`runs/t018_independent_codex_20260924T1117Z/arena` independently confirms ES g1 on 16 deterministic worlds excluded from both confirmation panels and all prior saved seed files: **244W/0D/12L, +$7,266, 256/256 valid**. It beats v5_market 31--1 (+$425; world CI score [.906, 1.000]), yhay0913 31--1, yhay0909 31--1, and metav4/ozer/t2945/fukami 32--0 each; the only material weakness is parthenos at 23--9 (+$871). This satisfies the required cross-check. The frozen stage-1 decision remains: v5_market and guarded are statistically near-identical (5 wins apiece in 128 direct games); v4 variants are decisively worse. **Recommendation for Claude's final review: keep v5_guarded and replace v5_market with es1_g1, subject to retaining the ES artifact/params unchanged.**
