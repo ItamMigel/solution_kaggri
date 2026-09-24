@@ -69,7 +69,8 @@ def _t017_set(obs):
     _T017_DAY[player] = day; x = _t017_features(obs) + [1.0]
     for name, row in zip(_T017['names'], _T017['weights']):
         raw = sum(a*b for a,b in zip(row, x)) * _T017['scale']
-        base, lo, hi, kind = _T017['space'][name]
+        _, lo, hi, kind = _T017['space'][name]
+        base = _T017['base'][name]
         globals()[name] = _t017_clip(base + (hi-lo) * raw / (1.0 + abs(raw)) / 2., lo, hi, kind)
 def t017_daily_agent(obs, configuration=None):
     _t017_set(obs)
