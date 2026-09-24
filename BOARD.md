@@ -63,6 +63,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T020 | codex | in_progress — P40 strong_v2 early-signal; then CMA gen≥10 h2h gate | Detect PPO pathologies before H100 return; gate fresh CMA centre vs es1_g9 on 16 fresh both-seat worlds. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
 | T018 | claude | in_progress | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
