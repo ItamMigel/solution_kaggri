@@ -14,9 +14,14 @@ def _hp_land(obs, action):
     """Macro L: buy a quadrant up to land_k steps before the current Horizon tape plans it (if cash stays >= buffer);
     then drop the next Horizon BUY_LAND (from tape or any layer) so the total number of quadrants is unchanged."""
     p = int(obs["player"]); step = int(obs["step"])
-    st = _HP_LAND.setdefault(p, {"owed": 0, "done": set()})
+    st = _HP_LAND.setdefault(p, {"owed": 0, "done": set(), "pending": None})
     if step == 0:
-        st["owed"] = 0; st["done"] = set()
+        st["owed"] = 0; st["done"] = set(); st["pending"] = None
+    nq_now = len(obs["farms"][p].get("unlocked_quadrants") or [])
+    if st["pending"] is not None:   # confirm last step's early purchase actually executed
+        if nq_now > st["pending"]:
+            st["owed"] += 1; _HP_STATS["land_early"] += 1
+        st["pending"] = None
     orders = [list(o) for o in (action.get("market") or [])]
     if st["owed"] > 0:
         kept = []
@@ -37,7 +42,7 @@ def _hp_land(obs, action):
             if t not in st["done"] and any(o and o[0] == "BUY_LAND" for o in (a.get("market") or [])):
                 farm = obs["farms"][p]; nq = len(farm.get("unlocked_quadrants") or []) - 1
                 if nq < 3 and float(farm["money"]) - _HP_LAND_COST[nq] >= float(_HP["land_buffer"]):
-                    orders.append(["BUY_LAND"]); st["owed"] += 1; st["done"].add(t); _HP_STATS["land_early"] += 1
+                    orders.append(["BUY_LAND"]); st["pending"] = nq_now; st["done"].add(t)
                 break
     return dict(action, market=orders)
 
