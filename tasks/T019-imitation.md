@@ -28,3 +28,4 @@ Plan:
 - Smoke on gpuenv: BC **greedy ≈ $2k (matches official-engine eval), BC sampled ≈ $30k mean, up to $80k** → sampling is a far better starting point than argmax.
 - Speed P40: B=1024: net 64 ms, features 16 ms, env step 36 ms per player-step → ~4k game-steps/s. (H100 bf16 should be ≥10×.)
 - `ppo.py`: self-play PPO, reward = Δmoney/1e4 dense + 0.5·margin/1e4 terminal, GAE(0.999, 0.95), KL-to-BC anchor annealed. Run r1: 256 envs × 40 iters on P40 → /workspace/shared/bcppo_runs/r1, log runs/bcppo_r1.log.
+- 2026-09-24 ~01:00 — **BC→PPO package v2 READY**: h100_pkg/kaggri_bcppo_v2.zip (168 MB, sha256 alongside). From the unzipped zip: parity 1e-7, e2e 0 diffs ($55–58k greedy), bf16 league smoke $88k, 2 PPO rounds with resume OK. Codex reviewed scripts: PASS.
