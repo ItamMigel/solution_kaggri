@@ -30,3 +30,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - Both candidates had 43–0–5 (score .8958). PPO mean margin $4,399 vs ES $4,505; paired PPO-minus-ES margin −$106.23, 95% world CI [−$315.25, $0]. It did not establish an improvement and is not a candidate.
 - Next: independent, more conservative update (lower learning rate and more training worlds), then another disjoint held-out gate.
 
+## Conservative rollout g1 — 2026-09-24 14:xx UTC (codex)
+- `runs/t017_train_g1_20260924T1410Z`: eight disjoint training worlds × six opponents × both seats, 192/192 DONE, 2,880 decision records, no errors; one PPO epoch at learning rate 5e-5.
+- The noisy behaviour policy and anchor both scored .98958; mean margins $4,476.51 and $4,485.00 respectively (paired reward −0.000212). This is much less destructive than g0 but remains training evidence only.
+- Fresh validation now uses eight separate worlds and the same six-opponent panel.
+
