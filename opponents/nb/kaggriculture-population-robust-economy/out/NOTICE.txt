@@ -1,0 +1,3 @@
+Kaggriculture V61 robust policy selection
+
+The submission policy descends from the Apache-2.0 Kaggriculture public-agent lineage. V61 changes the selection method: two successive-halving searches compare discrete policy families using validity, worst-opponent-family points, balanced family points, and clipped score margin, with separate held-out seeds. The first V44-derived branch was rejected because every candidate lost to the herd-safe family. The second branch retained the herd-safe reference because no tested categorical mutation improved held-out robustness. See the notebook and search report for experimental details.

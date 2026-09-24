@@ -24,3 +24,5 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
   | v5_guarded | 27 | 25-2 | +18.4k | +5.0k (same caveat) |
   Every big loss: opponent runs 11–13 hands vs our 8–10. Caveat: v4 was rated higher than v4_8turn → tougher opponents; not a clean A/B.
 - BC/RL dataset for codex: `research/bc_daily/{top,ours}.jsonl` (21.5k + 14.2k rows), README there.
+- 2026-09-24 ~01:40 — public-notebook opponent pool: `/workspace/shared/opponents/pool/<name>/main.py` (11 working: tschinkel2945, tschinkel_metav4_v13, ozer_v45/v43, fukami_v48, boatlee_v16, parthenos_robust, pilkwang_struct, tetsu_demand, prvsiyan_soil, yaxon_reactive_v5). Smoke: v5_market 44/44 + 4/4 vs v4_8turn; closest parthenos_robust (+0.8k), metav4_v13 (+1.1k). **Public pool is not discriminative** → the ladder threat (more hands/herd) isn't represented.
+## Next (claimed): T012 Horizon production-volume probe — override hands target (+2/+3) and herd (+geese, +cows) in horizon_v5_market; gate vs v5_market/v4_8turn + pool on v5_development seeds.

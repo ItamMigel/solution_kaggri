@@ -1,0 +1,182 @@
+{
+  "artifact_type": "candidate_notebook_execution_receipt",
+  "arm": "B",
+  "archive_sha256": "8021ff857bde58df32ea7b11bee3b66b9dceae378a2bdfa8f227c3ed5819404e",
+  "runtime_files": {
+    "NOTICE.txt": "bdf3ce2bb14da2c07cba307966b984ea570f5e47a357ac2195ae599982504223",
+    "README.md": "b2710352de4b7bc3e677c06f49079d805dd7f5501f5d89bba78ed1fd4c16daa0",
+    "upstream.py": "7eb5ab6c48581c82906ab6fa6b2cc5c9607513249ef59b2c45fcd6176e8653dd",
+    "main.py": "21e4b79bbc7bca97ad1af6337322303987d73d95b963b08ebe80a67900bd5360",
+    "market_primitives.py": "dcfade4643811388ee0264046de23a1f69e44e72cb421e9fcac0930e6a48e67c",
+    "sheep_admission.py": "16b34ffd055dcfdab0ff728c0ac5524c1a83aacfae2f291eba56573ee4e4e4a4",
+    "candidate_config.json": "9e6ed4e18fa28cf51a63475b084baba7cdf3aee69757a457266bb903a162a04c"
+  },
+  "smoke": {
+    "artifact_type": "candidate_initial_observation_smoke",
+    "engine": {
+      "package_version": "1.32.7",
+      "loader_sha256": "89a04abd3e8cebac273fdc810a3c933301143821bf354aeb4d460322921c487c",
+      "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "schema_sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    },
+    "official_loader_selected": "agent",
+    "exact_agent_binding": true,
+    "action_checks": {
+      "canonical_strict_pass": true,
+      "engine_noop_slot_profile_pass": true,
+      "preserved_noop_slots": 0
+    },
+    "observation_calls": 1,
+    "full_games": 0,
+    "seed_allocations": 0,
+    "action": {
+      "farmer": [
+        "PASS"
+      ],
+      "hands": [],
+      "market": [
+        [
+          "BUY_PRODUCT",
+          "WHEAT",
+          13
+        ],
+        [
+          "BUY_PRODUCT",
+          "WHEAT",
+          30
+        ],
+        [
+          "SELL",
+          "WHEAT",
+          30
+        ]
+      ]
+    },
+    "action_sha256": "8282c63abc1a250982bdf50f76e146bd20a61c53ced385633eca70f9c08fd11b",
+    "fixture_sha256": "6314d1264234e8cecae27625f47b2d67401bf32cd7e46659b4ea162f98890e7c",
+    "entrypoint_sha256": "21e4b79bbc7bca97ad1af6337322303987d73d95b963b08ebe80a67900bd5360",
+    "telemetry": {
+      "candidate": "B",
+      "parent_eligible": 0,
+      "admission_allow": 0,
+      "admission_decline": 0,
+      "admission_fallback": 0,
+      "admission_errors": 0,
+      "normalized_empty_slots": 0,
+      "last_admission": null,
+      "upstream_error_counters": {
+        "_UPGRADE_STATS.errors": 0,
+        "_ROOM_STATS.errors": 0,
+        "_V219_REPORT.errors": 0,
+        "_V231_REPORT.errors": 0,
+        "_R36_SALE_REPORT.sale_errors": 0,
+        "_R36_SALE_REPORT.errors": 0,
+        "_R44_REPORT.probe_errors": 0,
+        "_R37_REPORT.sale_errors": 0,
+        "_R37_REPORT.errors": 0,
+        "_R37_REPORT.nocturne_errors": 0,
+        "_R37_REPORT.probe_errors": 0,
+        "_R37_STATS.nocturne_errors": 0,
+        "_RELEASE_REPORT.sale_errors": 0,
+        "_RELEASE_REPORT.errors": 0,
+        "_RELEASE_REPORT.nocturne_errors": 0,
+        "_RELEASE_REPORT.probe_errors": 0,
+        "_RELEASE_REPORT.release_errors": 0,
+        "_R46_REPORT.sale_errors": 0,
+        "_R46_REPORT.errors": 0,
+        "_R46_REPORT.nocturne_errors": 0,
+        "_R46_REPORT.probe_errors": 0,
+        "_R46_REPORT.release_errors": 0,
+        "chassis.layer_fallbacks": 0,
+        "chassis.entry_fallbacks": 0,
+        "chassis.terminal_rescue_errors": 0,
+        "chassis.v28_entry_errors": 0,
+        "chassis.production_errors": 0,
+        "chassis.v31_entry_errors": 0
+      },
+      "upstream_chassis_diagnostics": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0,
+        "terminal_rescue_errors": 0,
+        "v28_entry_errors": 0,
+        "production_errors": 0,
+        "v31_entry_errors": 0
+      },
+      "upstream_telemetry": {
+        "sale_reserved_units": 0,
+        "sale_reservations": 0,
+        "sale_errors": 0,
+        "commitments": 0,
+        "hire_requests": 0,
+        "confirmed_workers": 0,
+        "hire_shortfalls": 0,
+        "plant_requests": 0,
+        "confirmed_plants": 0,
+        "water_requests": 0,
+        "fertilize_requests": 0,
+        "harvest_requests": 0,
+        "confirmed_harvest_units": 0,
+        "drop_requests": 0,
+        "tomato_sale_requests": 0,
+        "budget_declines": 0,
+        "lost_plants": 0,
+        "extra_fertilizer_days": 0,
+        "reordered_market_turns": 0,
+        "errors": 0,
+        "cattle_confirmed": 0,
+        "cattle_reserved": 0,
+        "cattle_requested": 0,
+        "cattle_failed_purchase_units": 0,
+        "cattle_picked": 0,
+        "cattle_placed": 0,
+        "cattle_failed_placements": 0,
+        "cattle_extra_milk_harvested": 0,
+        "cattle_extra_milk_sale_requests": 0,
+        "cattle_milk_credit": 0,
+        "cattle_carried_pending": 0,
+        "quote_reordered_turns": 0,
+        "three_turn_calls": 0,
+        "nocturne_errors": 0,
+        "probe_matches": 0,
+        "probe_four_turn_calls": 0,
+        "probe_errors": 0,
+        "release_errors": 0,
+        "sheep_commit_requests": 0,
+        "sheep_committed": 0,
+        "sheep_hire_requests": 0,
+        "sheep_workers_confirmed": 0,
+        "sheep_hire_shortfalls": 0,
+        "sheep_budget_declines": 0,
+        "sheep_capacity_declines": 0,
+        "sheep_purchase_shortfalls": 0,
+        "sheep_feed_buy_requests": 0,
+        "sheep_wool_harvested": 0,
+        "sheep_fert_collected": 0,
+        "sheep_extra_wool_sales": 0,
+        "sheep_extra_fert_sales": 0,
+        "sheep_rescue_feed_requests": 0
+      },
+      "admission_supported_configuration": true
+    },
+    "nonzero_upstream_errors": {},
+    "ordinary_fallback_counters_informational": {
+      "chassis.layer_fallbacks": 0,
+      "chassis.entry_fallbacks": 0
+    },
+    "provenance": {
+      "episode_id": 107687092,
+      "kind": "recorded_initial_observation",
+      "module_version": "1.32.7",
+      "replay_sha256": "108ba390e54fb3b589814fd19844eb8b8fac515c23145d5692ffbc5b6654455a",
+      "scope": "Single off-policy action call; no state transition or game.",
+      "seat": 0,
+      "turn": 0
+    },
+    "scope": "Initial off-policy observation only. No score, branch reachability, or performance claim."
+  },
+  "status": "PASS_INITIAL_OBSERVATION_ONLY",
+  "full_games": 0,
+  "promotion_status": "UNVERIFIED_RESEARCH_CANDIDATE",
+  "pushed": false,
+  "submitted": false
+}
