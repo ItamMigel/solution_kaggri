@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — T019 v2 H100 package final check PASS: unpacked `check.sh` (feature parity 1.2e-7, e2e 0 action diffs) plus two resumed PPO rounds all exit 0; 64-env bf16 smoke has $88.2k learner mean and exactly 32/32 learner seats. [codex review]
 - 2026-09-24 20:3x — BC→PPO v2 (joint plan F1–F11): engine-exact masks raised BC from $2k/$30k to **$62k greedy / $90k sampled** (HARVEST on animals + LOCKED walkable were blocked before). Codex F7–F10 (streaming buffer, zero-sum equity reward, metrics, league, seat randomisation). Data: 1077 games of 13 top teams. Package `h100_pkg/kaggri_bcppo_v2.zip` (168 MB) in final test. [claude+codex]
 - 2026-09-24 — T019 PPO seat symmetry (`2014d6b`): learner is assigned to each world seat for exactly half of every rollout batch; player axis/actions are mapped without extra policy forwards; equity reward, terminal cash correction and money metrics follow learner perspective. GPU smoke 2/2 seats pass. [codex]
 - 2026-09-24 — T019 integration: PPO policy-v2 entropy aggregation corrected (`c65ca5a`): PPO now uses `ent_parts["total"]` rather than summing components and total twice. Tensor/dict compatibility check and `py_compile` pass; fast-forwarded to `lab`. [codex]
