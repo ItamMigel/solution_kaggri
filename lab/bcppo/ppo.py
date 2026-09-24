@@ -269,7 +269,7 @@ def main():
     ap.add_argument("--lam", type=float, default=.995)
     ap.add_argument("--clip", type=float, default=.2)
     ap.add_argument("--ent", type=float, default=.001)
-    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
+    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
     ap.add_argument("--team", default="dsm")
     ap.add_argument("--vf", type=float, default=.5)
     ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
@@ -308,7 +308,7 @@ def main():
     with open(f"{a.out}/args.json", "w") as fh:
         json.dump({**vars(a), "league_effective": {k: v[1] for k, v in league.items()}}, fh, indent=1)
     log = open(f"{a.out}/log.jsonl", "a")
-    for it in range(start, a.iters):
+    for it in range(start, min(a.iters, a.stop_at) if a.stop_at else a.iters):
         t0 = time.time()
         net.eval()
         buf, final, action_metric, league_counts = rollout(
