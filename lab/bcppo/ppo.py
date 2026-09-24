@@ -23,7 +23,7 @@ from gpuenv import ops as O
 from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
 
-REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "tm", "t", "o", "need_op", "mb")
+REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "hire_max", "land_max", "minc")
 STEPS = 719
 
 
@@ -345,9 +345,9 @@ def main():
                     lp, lq = F.log_softmax(p_logits, -1), F.log_softmax(q_logits, -1)
                     val = (lp.exp() * (lp - lq)).sum(-1)
                     return (val * mask).sum() / mask.sum().clamp(min=1) if mask is not None else val.mean()
-                target_mask = rec["tm"][:, None, :]
-                kl_bc = (kl(policy._masked(btl, target_mask), policy._masked(tl, target_mask), unit_mask) +
-                         kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(bml, ml))
+                mm = lambda x: policy.market_mask(x, rec["hire_max"].long(), rec["land_max"].long())
+                kl_bc = (kl(btl, tl, unit_mask) +
+                         kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(mm(bml), mm(ml)))
                 kl_coef = a.kl * max(0.0, 1 - it / max(1, a.iters))
                 loss = a.vf * value_loss if value_only else policy_loss + a.vf * value_loss - a.ent * ent_total.mean() + kl_coef * kl_bc
                 opt.zero_grad(set_to_none=True)
