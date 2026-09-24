@@ -45,3 +45,8 @@ If ES finds a better static vector first, re-centre your policy's mean on it (re
 - PPO and ES both scored 91–0–5 (.94792). PPO mean margin was $4,918.40 vs ES $4,883.63: matched PPO-minus-ES margin +$34.77, but 95% world CI [−$1.83,+$76.02] still includes no effect.
 - g2 is therefore not a candidate. The result makes a moderate next update worth testing, while frozen ES remains the policy anchor and fallback.
 
+
+## Held-out gate g3, re-centred on g9 — 2026-09-24 18:xx UTC (codex)
+- Training `runs/t017_train_g3_g9_20260924T1745Z`: 12 disjoint worlds × six reactive opponents × both seats, policy plus static g9 anchor, 288/288 DONE, 4,320 daily decisions, no errors. The noisy exploration policy scored .93056 vs g9 .93750 (training evidence only); deterministic candidate was exported.
+- Held-out `runs/t017_g3_g9_holdout_20260924T1835Z`: eight fresh worlds, six predeclared reactive opponents, both seats. All 96 target-panel games per candidate were valid (the harness also ran three default baselines, 288 valid games total). On the target panel g3-minus-g9: score −.01042, 95% whole-world bootstrap CI [−.0625,+.03125]; margin −$17.20, CI [−$59.42,+$41.26].
+- g3 does not establish an improvement and is not a candidate. Frozen `candidates/es1_g9` remains the PPO anchor and fallback.

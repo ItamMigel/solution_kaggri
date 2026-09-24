@@ -1,0 +1,53 @@
+{
+  "created_utc": "2026-09-24T18:30:30.910767+00:00",
+  "candidates": {
+    "ppo_g3": "/workspace/shared/runs/t017_train_g3_g9_20260924T1745Z/candidate/main.py",
+    "es1_g9": "/workspace/shared/candidates/es1_g9/pkg/main.py"
+  },
+  "opponents": {
+    "v3": "/workspace/wt/codex/agents/horizon_v3.py",
+    "v4_8turn": "/workspace/wt/codex/agents/horizon_v4_8turn.py",
+    "v4_12turn": "/workspace/wt/codex/agents/horizon_v4.py",
+    "v5_market": "/workspace/wt/codex/agents/horizon_v5_market.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "yhay0909": "/workspace/shared/opponents/pool/yhay_router0909/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "t2945": "/workspace/shared/opponents/pool/tschinkel2945/main.py"
+  },
+  "seeds": [
+    1430956078,
+    615873249,
+    1920475386,
+    375810624,
+    1685072319,
+    930742516,
+    204316987,
+    1186504732
+  ],
+  "expected_games": 288,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel2945/main.py": "4f3ca95dd12d9a94b03339999d8803c155f450a8d3956636f050643301fcc5dd",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0909/main.py": "d6d74997dc5b483db63d8e39cafa1afeec0f366824e75107e109123f111e866b",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/t017_train_g3_g9_20260924T1745Z/candidate/main.py": "a7347baaff8c4361d5ff1b81ddb4801e3e869101fc52238ada06e64ef7720a46",
+    "/workspace/wt/codex/agents/horizon_v3.py": "1cff2bd49f0800171199a87718e92da32db8e5f811d56fc5ee01e27d674cd6f9",
+    "/workspace/wt/codex/agents/horizon_v4.py": "8934ed21b6806556a73f6aeae9ed1a611498ae2abfec13b79b281a0e24ad9483",
+    "/workspace/wt/codex/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
+    "/workspace/wt/codex/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/codex/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "T017 g3 deterministic daily PPO policy, re-centred on frozen es1_g9; held-out 8 worlds, both seats, six reactive opponents. Promote only if paired whole-world CI excludes no-effect and zero errors.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

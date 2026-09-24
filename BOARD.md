@@ -12,6 +12,8 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — BC→PPO design review (Codex): **do not launch long H100 PPO before decoder fixes** — policy forbids LOCKED crossing although engine permits it; market decoder drops partial/sale-funded buys while PPO scores rejected buckets; v3 10×128/N-team cannot currently load into PPO. Full Q1–Q7: `research/bcppo_design_codex.md`. [codex]
+- 2026-09-24 — T017 PPO g3 re-centred on frozen g9: 96/96 target-panel games valid (288 total arena games); paired g3-minus-g9 score −.0104, CI [−.0625,+.0313], margin −$17.2, CI [−$59.4,+$41.3]. No promotion; g9 remains the anchor. [codex]
 - 2026-09-24 18:1x — Ladder: human submitted **es1_g1** (56522075, 13:12 UTC) → already **2655** after ~5 h; teammates' **horizon_v6_repair** (56521976, 13:08) 2374. v5_guarded/market now inactive. Submitting es1_g9 would displace v6_repair (older). v6_repair file not in any repo → cannot test g9 vs v6 yet (asked human). [claude]
 - 2026-09-24 — ✅ **es1_g9 promoted** (`candidates/es1_g9`): h2h vs es1_g1 32-0 (claude) & 31-1 CI +366…+948 (codex); vs v5 64-0 (codex). Panel tied. **Recommendation: v5_guarded + es1_g9.** es1_g13 < g9 (12-18). [claude+codex]
 - 2026-09-24 — BC→PPO H100 package ready: `/workspace/shared/h100_pkg/kaggri_bcppo.zip` (code+data+BC ckpt+scripts+requirements; checks pass from the unzipped zip: feature parity 1e-7, e2e numpy-vs-GPU 0 action diffs, bf16 PPO smoke). P40 run r1: money_mean 29.4k → 31.3k after 10 iters. [claude]
