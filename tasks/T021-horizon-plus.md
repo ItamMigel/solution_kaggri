@@ -32,3 +32,6 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 ## Codex M4 capability result — 2026-09-24 22:15 UTC
 - All 120 games valid. Only `room_guard_on` has a positive paired score signal vs byte-identical genome0: **+0.2500** (whole-world CI [0,+0.25]), +$19.5 (CI +$16…+$23) over two fresh worlds against g9+yhay0913. It advances to the disjoint 4-world race.
 - Reject: `hand_align_off` −0.75 / −$43,956; `budget_guard_on` −0.25 / −$97.5; `opening_12` −0.25. No signal: clamp/dead-stock/front-run/terminal/weed off/opening5/router672. FD708 and router624 are uncertain (score CI crosses 0); `sell_lead_off` uncertain. Evidence: `runs/hplus_m4_capability/eval/{PAIRED.md,compare/}`.
+
+## Codex M4 race result — 2026-09-24 22:20 UTC
+- `room_guard_on` did **not** reproduce on its disjoint 4-world race against g9/v5_market/yhay0913: paired score **0.0000**, CI [−.125,+.125], margin −$4.8, CI [−$20.2,+$6.0], 48/48 valid. No M4 flag advances to final/CMA. Evidence: `runs/hplus_m4_race/eval/{PAIRED.md,compare/}`.
