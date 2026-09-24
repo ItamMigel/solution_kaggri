@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-09-24T23:14:49.779173+00:00",
+  "candidates": {
+    "genome0": "/workspace/shared/candidates_wip/hplus/fh_capability/genome0/main.py",
+    "d13_19_r2_q1_c12": "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q1_c12/main.py",
+    "d13_19_r2_q2_c12": "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q2_c12/main.py",
+    "d16_20_r6_q1_c13": "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r6_q1_c13/main.py",
+    "d16_20_r2_q1_c13": "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r2_q1_c13/main.py",
+    "d20_24_r6_q1_c13": "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r6_q1_c13/main.py",
+    "d20_24_r2_q1_c13": "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r2_q1_c13/main.py"
+  },
+  "opponents": {
+    "g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py"
+  },
+  "seeds": [
+    184871359,
+    1105115420
+  ],
+  "expected_games": 56,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q1_c12/main.py": "e5b9f172b19764e5ae9606fe5ecafeb19638d3ed2d711cf8435e0da584d8dc47",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q2_c12/main.py": "99c14729f9053ae756992d424b371be0c0aea1e1d95c1f4ad812612a18d219a1",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r2_q1_c13/main.py": "c6d545c9bd3c20f7539f6a7cee532f5c19852e9bf2f96084a55695542f4825ae",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r6_q1_c13/main.py": "ccf61ede49ff140cb0a7e7772e1d1704d0aa9e2fae1808dd9f85f3dc2ed8d035",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r2_q1_c13/main.py": "b8948cfc0fefcaf8c8345d88575de547096c1f95ab94c94fd0faa86ccfb8b192",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r6_q1_c13/main.py": "9576aaba4ea96512774386a2739a865039254f67f8005a64088771a7543093a5",
+    "/workspace/shared/candidates_wip/hplus/fh_capability/genome0/main.py": "8d64c3090507299c2734630fec761f795a0fcd4ce478f2ed04c453c343d26082",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 20,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

@@ -1,0 +1,56 @@
+{
+  "created_utc": "2026-09-24T23:14:49.636969+00:00",
+  "stage": "capability",
+  "stage_contract": {
+    "worlds": 2,
+    "opponents": 2,
+    "description": "2 worlds \u00d7 g9 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/seeds/hplus_fh_capability.json",
+  "seeds": [
+    184871359,
+    1105115420
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/genome0/main.py",
+      "sha256": "8d64c3090507299c2734630fec761f795a0fcd4ce478f2ed04c453c343d26082"
+    },
+    "d13_19_r2_q1_c12": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q1_c12/main.py",
+      "sha256": "e5b9f172b19764e5ae9606fe5ecafeb19638d3ed2d711cf8435e0da584d8dc47"
+    },
+    "d13_19_r2_q2_c12": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d13_19_r2_q2_c12/main.py",
+      "sha256": "99c14729f9053ae756992d424b371be0c0aea1e1d95c1f4ad812612a18d219a1"
+    },
+    "d16_20_r6_q1_c13": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r6_q1_c13/main.py",
+      "sha256": "ccf61ede49ff140cb0a7e7772e1d1704d0aa9e2fae1808dd9f85f3dc2ed8d035"
+    },
+    "d16_20_r2_q1_c13": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d16_20_r2_q1_c13/main.py",
+      "sha256": "c6d545c9bd3c20f7539f6a7cee532f5c19852e9bf2f96084a55695542f4825ae"
+    },
+    "d20_24_r6_q1_c13": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r6_q1_c13/main.py",
+      "sha256": "9576aaba4ea96512774386a2739a865039254f67f8005a64088771a7543093a5"
+    },
+    "d20_24_r2_q1_c13": {
+      "path": "/workspace/shared/candidates_wip/hplus/fh_capability/d20_24_r2_q1_c13/main.py",
+      "sha256": "b8948cfc0fefcaf8c8345d88575de547096c1f95ab94c94fd0faa86ccfb8b192"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "yhay0913": {
+      "path": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa"
+    }
+  },
+  "expected_games": 56,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}
