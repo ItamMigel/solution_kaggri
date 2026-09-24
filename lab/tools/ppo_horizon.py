@@ -29,9 +29,18 @@ def _validate(weights):
     return [[float(x) for x in row] for row in weights]
 
 
-def make_daily_agent_file(weights, out, *, base_path=None, scale=1.0, anchor=None):
-    """Write a loadable agent that updates all knobs once per simulated day."""
+def make_daily_agent_file(weights, out, *, base_path=None, scale=1.0, anchor=None,
+                          noise_std=0.0, trace=False):
+    """Write a loadable agent that updates all knobs once per simulated day.
+
+    ``noise_std`` and ``trace`` are training-only options.  They are off by
+    default, so the exported candidate contains no exploration or diagnostics.
+    The rollout worker resets the local RNG after loading the source.
+    """
     weights = _validate(weights)
+    noise_std = float(noise_std)
+    if noise_std < 0:
+        raise ValueError("noise_std must be non-negative")
     if base_path is None:
         base_path = Path(__file__).resolve().parents[2] / "agents" / "horizon_v5_market.py"
     source = Path(base_path).read_text().rstrip() + "\n"
@@ -39,12 +48,17 @@ def make_daily_agent_file(weights, out, *, base_path=None, scale=1.0, anchor=Non
     if anchor is not None:
         anchor_params.update({name: float(anchor[name]) for name in NAMES if name in anchor})
     payload = dict(names=NAMES, base=anchor_params, space=SPACE, weights=weights,
-                   scale=float(scale), features=FEATURES)
+                   scale=float(scale), features=FEATURES, noise_std=noise_std,
+                   trace=bool(trace))
     source += "\n# --- T017 daily PPO knob policy; self-contained ---\n"
-    source += "_T017=" + json.dumps(payload, separators=(",", ":")) + "\n"
+    # This is Python source, not JSON: ``repr`` preserves booleans as True/False.
+    source += "_T017=" + repr(payload) + "\n"
     source += r'''
 _T017_PARENT = agent
 _T017_DAY = {}
+_T017_TRACE = []
+import random as _t017_random
+_T017_RNG = _t017_random.Random(0)
 def _t017_clip(v, lo, hi, kind):
     v = min(float(hi), max(float(lo), float(v)))
     return int(round(v)) if kind == 'int' else float(v)
@@ -67,11 +81,15 @@ def _t017_set(obs):
     step = int(obs.get('step', 0)); player = int(obs.get('player', 0)); day = step // 24
     if _T017_DAY.get(player) == day: return
     _T017_DAY[player] = day; x = _t017_features(obs) + [1.0]
-    for name, row in zip(_T017['names'], _T017['weights']):
-        raw = sum(a*b for a,b in zip(row, x)) * _T017['scale']
+    means = [sum(a*b for a,b in zip(row, x)) * _T017['scale'] for row in _T017['weights']]
+    raws = [m + (_T017_RNG.gauss(0., _T017['noise_std']) if _T017['noise_std'] else 0.)
+            for m in means]
+    for name, raw in zip(_T017['names'], raws):
         _, lo, hi, kind = _T017['space'][name]
         base = _T017['base'][name]
         globals()[name] = _t017_clip(base + (hi-lo) * raw / (1.0 + abs(raw)) / 2., lo, hi, kind)
+    if _T017['trace']:
+        _T017_TRACE.append({'day':day, 'features':x[:-1], 'mean':means, 'raw':raws})
 def t017_daily_agent(obs, configuration=None):
     _t017_set(obs)
     return _T017_PARENT(obs, configuration)
