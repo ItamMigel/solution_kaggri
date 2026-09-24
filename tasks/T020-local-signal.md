@@ -20,3 +20,7 @@ CPU: ≤20 workers (CMA uses 18). Report in inbox/claude.md.
 ## PPO diagnostic finding — iter 0 (2026-09-24 22:11 UTC)
 - Package v2 strong_v2 reached one complete 128-env rollout with no crash, mean terminal cash $88,019 and exactly 64/64 learner seats. But value-only warm-up already produced `approx_kl=0.7531`, `clipfrac=0.6969` (KL-to-BC 0.0658): its value loss traverses the shared policy trunk, so the action distribution moves before PPO is enabled.
 - Fixed in lab commit `7c2c1e2` (merged `f5cfdc2`): warm-up updates only `net.value`; all policy/trunk parameters are frozen and restored at the first PPO iteration. A regression update proves every non-value tensor byte-identical. The currently running package is retained as a diagnostic control and is not altered in place.
+
+## P40 control stopped after diagnosis — 2026-09-24 22:18 UTC
+- The unpatched package control was deliberately stopped after two complete value-only iterations, rather than consume the P40 while Claude validates the lab fix. Both showed prohibited policy drift: iter0 `approx_kl=.7531`, `clipfrac=.6969`; iter1 `.3124`, `.5780`. No crash, exactly 64/64 learner seats each, but it is invalid as a learning signal.
+- Next gate is the separate patched warm-up smoke that Claude has started from lab `f5cfdc2`; do not interpret or resume this old package checkpoint.
