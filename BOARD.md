@@ -67,6 +67,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | id | owner | status | title |
 |---|---|---|---|
 | T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T022 | codex | in_progress | Independent 16-world review of `es2_c1` against g9, v5_guarded and reactive panel; disjoint seeds, both seats. `tasks/T022-es2-c1-review.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
