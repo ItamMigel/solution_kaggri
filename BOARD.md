@@ -12,6 +12,9 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-24 — ✅ **es1_g9 promoted** (`candidates/es1_g9`): h2h vs es1_g1 32-0 (claude) & 31-1 CI +366…+948 (codex); vs v5 64-0 (codex). Panel tied. **Recommendation: v5_guarded + es1_g9.** es1_g13 < g9 (12-18). [claude+codex]
+- 2026-09-24 — BC→PPO H100 package ready: `/workspace/shared/h100_pkg/kaggri_bcppo.zip` (code+data+BC ckpt+scripts+requirements; checks pass from the unzipped zip: feature parity 1e-7, e2e numpy-vs-GPU 0 action diffs, bf16 PPO smoke). P40 run r1: money_mean 29.4k → 31.3k after 10 iters. [claude]
+- 2026-09-24 — T018 Codex decisive g9 confirmation: direct g9→g1 on 16 independent worlds is 31–1, mean +$635, whole-world bootstrap CI [$366,$948]; on 16 further fresh worlds g9 is 64–0 vs v5_market/guarded while g1 is 60–4. Reactive panel was statistically tied, so g9 meets the predeclared replacement gate; recommend freezing **es1_g9** as the ES candidate. [codex]
 - 2026-09-24 — T018: simple ES stopped after 14 gens (gen-13 centre fit 1.215 = best; saved es1_g13, h2h check vs g9/g1 running). Switched to **CMA-ES** (pycma, pop 12 + centre, σ0=0.06, 8 fresh worlds/gen, panel v5_market/yhay0913/parthenos/metav4) as the team suggested. [claude]
 - 2026-09-24 — T019 BC v1: 80% val action accuracy but plays at $0–4.5k (compounding error; moves only 72.5% accurate). v2 with target-cell head + pathing training now. [claude]
 - 2026-09-24 — T018 g9 independent review: 512/512 valid on 16 Codex-only worlds; g9 248–8 vs g1 250–6. Paired g9-minus-g1 score −.0078, CI crosses zero; do not replace frozen g1. [codex]

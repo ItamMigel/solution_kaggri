@@ -1,0 +1,47 @@
+{
+  "created_utc": "2026-09-24T17:32:23.523526+00:00",
+  "candidates": {
+    "es1_g9": "/workspace/shared/candidates_wip/es1_g9/main.py",
+    "es1_g1": "/workspace/shared/candidates_wip/es1_g1/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/solution_kaggri/agents/horizon_v5_market.py",
+    "v5_guarded": "/workspace/solution_kaggri/agents/horizon_v5_guarded.py"
+  },
+  "seeds": [
+    214009671,
+    1873240502,
+    980146377,
+    1647208391,
+    371695824,
+    1324709911,
+    752091468,
+    203185976,
+    1450962374,
+    674213805,
+    190672344,
+    1103947259,
+    468023917,
+    1758206934,
+    829405176,
+    1267015638
+  ],
+  "expected_games": 128,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/es1_g1/main.py": "2a73b821add3b47aa930d70ba68187374b94a82d55ca9ca7bc9a8398ccc45937",
+    "/workspace/shared/candidates_wip/es1_g9/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/solution_kaggri/agents/horizon_v5_guarded.py": "20f24a06d5eae203b0909dbf31b13ab5c71acb67b0597daea047af55e29d6440",
+    "/workspace/solution_kaggri/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/solution_kaggri/compare.py": "dff42048bf8997cdfdfdb4cca86585c851bed73993cb45c23dee72f8de7ccd67",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "T018 independent Codex confirmation requested by Claude: compare g9 and frozen g1 vs v5_market/v5_guarded on 16 fresh worlds, both seats; g9 replaces g1 only if direct mirror CI > +$50 and reactive panel is not worse.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
