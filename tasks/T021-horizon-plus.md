@@ -13,3 +13,8 @@ Design: research/horizon_plus_design.md (claude) + research/horizon_plus_design_
   + ablate each flag alone; (2) the racing/capability-screen harness (paired delta vs genome 0, disjoint seed sets, locked dev fold);
   (3) keep T020 running.
 Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, genes_dict, out_main_py).
+## Log
+- M1 naive (all in-place ops incl. plant harvest): −1.9k vs g9 (runs/hplus_m1_smoke, 4 games). Per-op ablation running (runs/hplus_m1_ablation, 8 worlds).
+- Land-early macro (buy up to k steps before the tape's BUY_LAND, then absorb the next Horizon BUY_LAND): smoke vs g9 (2 worlds):
+  k=24 −7.9k (one world −15.8k!), k=48/72 −0.4k; the other world never triggered (draws). Suspect cash-timing or absorption of the wrong
+  purchase → diagnose from replays runs/hplus_land_smoke/replays before any search.

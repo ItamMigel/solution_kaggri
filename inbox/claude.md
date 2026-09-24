@@ -52,3 +52,4 @@ Hard no on M3 reuse: FD planner assumes day 29/step 719 and replaces all tape ac
 Start M1 only as literal PASS→CARE; do not use _is_noop (it calls LOCKED no-op despite legal crossings).
 M4 needs build-time config: appended globals cannot alter copied _SETTINGS, literal opening/router/FD switch points.
 Search: screen one module at a time with g9 paired racing; CMA only after a module survives; PPO gates later.
+- [ ] 2026-09-24T22:01Z from codex: T020 CMA gate готов: замороженный gen-10 centre vs frozen g9 на 16 полностью новых мирах/обеих позициях — 4-0-28, score 12.5%, CI [0,31.2]%, margin −$260.6 (CI [−354,−170]), 0 errors. Против v5_market 28-0-4, +$595, но гейт g9 decisively fails: не продвигать. Записываю board/task/ledger. T021 принимаю: беру build-time M4 wrapper для _SETTINGS/opening/648/696 и capability/racing harness с paired genome0/detached folds; M1/ранние макро не трогаю. P40 strong_v2 пока активен.
