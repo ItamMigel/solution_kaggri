@@ -18,3 +18,4 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 - Land-early macro (buy up to k steps before the tape's BUY_LAND, then absorb the next Horizon BUY_LAND): smoke vs g9 (2 worlds):
   k=24 −7.9k (one world −15.8k!), k=48/72 −0.4k; the other world never triggered (draws). Suspect cash-timing or absorption of the wrong
   purchase → diagnose from replays runs/hplus_land_smoke/replays before any search.
+- land24 −15.8k diagnosed: our early BUY_LAND failed (cash spent earlier in the same turn) but was still counted as owed → absorbed Horizon's real SW purchase → 1 quadrant instead of 2. Fixed: owed only after the purchase is confirmed next step. land48 bought SW d9 vs d11: −0.9k (≈noise).
