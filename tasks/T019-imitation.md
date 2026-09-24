@@ -6,3 +6,4 @@ Plan:
 2. Diff mining vs closest ancestor: at which decisions (op types, days) the top team deviates; categorise (hires, animal buys, planting, sell timing, land).
 3. Reconstruct: implement the top team's deviations on top of its ancestor (or on Horizon) → an **imitation agent** of that team → (a) strong reactive opponent for our gate, (b) candidate if it beats es1_g1.
 4. BC: (obs, action) pairs at the deviation points → learn the deviation rule (small model / decision tree on obs features) where rules aren't obvious.
+- 2026-09-24 ~18:30 — T019 teacher-force run (re)started with fast job listing: 918 jobs (9 teams × 6 eps × 17 agents), 12 workers → research/teacher_force_top.jsonl. Codex T017 PPO runner functional (b9d4d8f), starting training rollouts. ES gen 7 centre 1.046.
