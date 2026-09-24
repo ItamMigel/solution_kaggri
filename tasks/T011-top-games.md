@@ -71,3 +71,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~10:10 — ladder refresh: v5_market **82-6** (n=88, +6.4k), v5_guarded **82-13** (n=95, +6.0k). All new losses are near-mirror clones (−69…−2.4k); two clone losses are to top-250 teams (goodpjw2008 #181, KongKongDe #236) on the sheep route 6/11/0. Still no loss to a genuinely different top agent besides Densike.
 - 2026-09-24 ~11:05 — T015 closed ✗ by codex (r9 best); codex running T016 stage 1 (64 confirmation worlds, 20 workers).
 - 2026-09-24 ~11:25 — T016 stage 1 running: 1008/6144 games (runs/t016_final_pair_64_*/arena), decision rule frozen in manifest.
+- 2026-09-24 ~12:05 — T018 ES gen 0 running slowly (96/864) — box saturated: T016 (codex, 20w) + ES (20w), load 54. Expected ~60–90 min/gen until T016 ends. Not restarting.
