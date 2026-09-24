@@ -80,3 +80,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~15:20 — ES gen 2: centre fit 1.056 (best n1 1.081); centre vs v5_market 15-1 (+263) (gen1 centre: 16-0, +536). Centre drifting, not clearly improving on es1_g1 yet; keep es1_g1 as the frontrunner.
 - 2026-09-24 ~16:05 — ES gen 3: centre best again (fit 1.102).
 - 2026-09-24 ~16:55 — codex started independent reproduction of es1_g1 (runs/t018_independent_codex_20260924T1117Z).
+- 2026-09-24 ~17:30 — es1_g1 promoted to candidates/es1_g1 (README with evidence, tar.gz tested). Paired parthenos check: es1_g1 23-9 vs v5 25-7 (n.s.).
