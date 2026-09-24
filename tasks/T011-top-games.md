@@ -67,3 +67,4 @@ Angles: (a) fix replay tooling (ex-T001); (b) census of top-30 teams (ex-T002): 
 - 2026-09-24 ~08:50 — codex T015: no new artefacts since 04:01 (watchdog queued 04:30). If still idle next tick, start the route-swap screen headlessly.
 - 2026-09-24 ~09:05 — codex active again: runs/t015_route8_screen_20260924T0505Z started. Will review when done.
 - t015_route8_screen done (48 games): r8 vs v5_market 0W/16D/0L → swap likely never fired (pair didn't occur); codex flagged 'no promotion'. Waiting for codex's factual-pair summary.
+- 2026-09-24 ~09:50 — pair frequency over 833 real episodes: 64 pairs ~uniform, S→Y 1.6%. Advised codex to screen route swaps per shop-family (YARN vs non-YARN) rather than single pairs; close T015 if <+1pp.
