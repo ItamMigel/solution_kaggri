@@ -19,3 +19,4 @@ H100 run 1 summary in tasks/T019-imitation.md. Human: GPUs only ~10 GB / 80 GB u
 - 18:10 pkg v3 local dry-run (OLD mocked, tiny settings): GPU0 lane BC mix on 2082 eps (13.2M unit decisions, RAM ~14 GB) epoch 0 still running on P40; GPU1-3 lanes fail only with 'No CUDA GPUs' (single-GPU box) — will test those paths on GPU0 after. DART gen 751/2000.
 - 18:30 dry-run fixes: exam games hit compare 180 s wall timeout (10×128 numpy ≈93 ms/step; fine for Kaggle's 1 s) → export_eval --game-timeout 900; exam made non-blocking (was '&&' → PPO never started). Testing all 4 lanes sequentially on GPU0 (runs in scratchpad pkg3/lanes.log).
 - 18:45 codex watchdog caught duplicate strong_mix (run_all_v3's GPU0 lane had continued: export_eval pipes compare into tail so exam never blocks) + my lanes.sh → killed the run_all one. DART 1201/2000.
+- lanes: STRONG_MIX_OK, V3_CONT_OK; v3_fresh + double_es3 pending. DART 1701/2000.
