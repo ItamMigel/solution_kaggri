@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-25 19:00 — BC→PPO **pkg v3** ready (`h100_pkg/kaggri_bcppo_v3.zip`): codex audit fixes (capped market P0/P1, target-KL P2, subset league, telemetry), vectorised allocator, 2048 envs defaults, es3 + 2000 DART games of es3_g5. Clean-teacher BC es3 failed closed loop (0/96, deterministic teacher → no coverage) → DART. [claude+codex]
 - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
 - 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
 - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]

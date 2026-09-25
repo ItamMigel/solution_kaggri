@@ -20,3 +20,4 @@ H100 run 1 summary in tasks/T019-imitation.md. Human: GPUs only ~10 GB / 80 GB u
 - 18:30 dry-run fixes: exam games hit compare 180 s wall timeout (10×128 numpy ≈93 ms/step; fine for Kaggle's 1 s) → export_eval --game-timeout 900; exam made non-blocking (was '&&' → PPO never started). Testing all 4 lanes sequentially on GPU0 (runs in scratchpad pkg3/lanes.log).
 - 18:45 codex watchdog caught duplicate strong_mix (run_all_v3's GPU0 lane had continued: export_eval pipes compare into tail so exam never blocks) + my lanes.sh → killed the run_all one. DART 1201/2000.
 - lanes: STRONG_MIX_OK, V3_CONT_OK; v3_fresh + double_es3 pending. DART 1701/2000.
+- 19:00 **pkg v3 READY**: h100_pkg/kaggri_bcppo_v3.zip (427 MB, sha256 61fc85dd…), all 4 lanes passed tiny dry-run, DART 2000 games included. Local check started: BC es3+es3dart (6×96, 10 ep) → closed-loop exam (runs/bc_es3dart_v1.log).
