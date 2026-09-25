@@ -1,0 +1,44 @@
+{
+  "created_utc": "2026-09-25T01:03:00.115519+00:00",
+  "stage": "capability",
+  "stage_contract": {
+    "worlds": 2,
+    "opponents": 2,
+    "description": "2 worlds \u00d7 g9 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/seeds/t023_tape_safe_capability.json",
+  "seeds": [
+    1776340931,
+    1433598190
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/candidates/es2_c1/pkg/main.py",
+      "sha256": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072"
+    },
+    "water": {
+      "path": "/workspace/shared/candidates_wip/hplus/t023/water/main.py",
+      "sha256": "cf1f5007b423897f0aabdf57ed3c5fbb771b1272548006c4e1678da514bd79bc"
+    },
+    "feed": {
+      "path": "/workspace/shared/candidates_wip/hplus/t023/feed/main.py",
+      "sha256": "8dd4b28e8f0092697f6050392ff46d6ef53ce9affcd0d6e37fa918c3e45700e7"
+    },
+    "care": {
+      "path": "/workspace/shared/candidates_wip/hplus/t023/care/main.py",
+      "sha256": "8e447cb64956bb9b45e317cc4a6ebed8461c9b083fc3bac56da3ee7ac9779f9a"
+    }
+  },
+  "opponents": {
+    "g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "yhay0913": {
+      "path": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa"
+    }
+  },
+  "expected_games": 32,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}
