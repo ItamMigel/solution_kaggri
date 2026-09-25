@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-09-25T22:31:22.426511+00:00",
+  "candidates": {
+    "cma3_g005": "/workspace/shared/runs/cma3/gen_005/c/main.py"
+  },
+  "opponents": {
+    "es3_g5": "/workspace/shared/candidates/es3_g5/pkg/main.py"
+  },
+  "seeds": [
+    196704105,
+    1827387481,
+    1359106015,
+    1425507223,
+    781408159,
+    1116120487,
+    1822670212,
+    458163437
+  ],
+  "expected_games": 16,
+  "input_sha256": {
+    "/workspace/shared/candidates/es3_g5/pkg/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/runs/cma3/gen_005/c/main.py": "9c93abe2e79daa44b0b8887fabb78350ce5c0bdbad01043fb8a2c35504cfc2b2",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "T025 independent CMA3 gen-5 centre h2h versus promoted es3_g5; eight newly drawn worlds disjoint from Claude gate, both seats; signal only.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

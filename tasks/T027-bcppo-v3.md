@@ -23,3 +23,10 @@ H100 run 1 summary in tasks/T019-imitation.md. Human: GPUs only ~10 GB / 80 GB u
 - 19:00 **pkg v3 READY**: h100_pkg/kaggri_bcppo_v3.zip (427 MB, sha256 61fc85dd…), all 4 lanes passed tiny dry-run, DART 2000 games included. Local check started: BC es3+es3dart (6×96, 10 ep) → closed-loop exam (runs/bc_es3dart_v1.log).
 - 20:20 H100 v3: ENVS 6256 → ~26k steps/s/GPU (174 s/iter for 4.5M samples), value warm-up EV .54; OOM at first policy update with MB 65536 on 10×128 → human told MB=16384 + expandable_segments; package defaults updated. BC es3+DART (6×96, 10 ep): val unit 88.4%, target 88.0%, market-nz 92% → closed-loop exam running (runs/bc_es3dart_closedloop). Codex gen-15 gate was vs es2_c1 (+$94) — asked to gate vs es3_g5.
 - 20:45 **BC es3+DART closed-loop FAIL too** (0/96, −139…−165k) despite val 88%/92% → Horizon's decisions depend on hidden tape/route state not in features; Horizon-double track closed. H100: repurpose GPU3, run strong_mix PPO with team dsm.
+
+## 2026-09-25 23:05Z — PBT (Claude, human request: "all GPUs on the strongest line, evolve it")
+H100 run v3: v3_cont 98k→109k league money (best @32, EV .98) = best RL line; strong_mix/double_es3 dead (es3dart vector).
+Built PBT in the package: 4 members from one START ckpt (v3_cont best), league = each other + frozen BC team doubles,
+CPU controller exams newest roundNNN of all members in official engine vs es3_g5/es1_g9/v5 (6 rotating worlds),
+worst ← best weights + mutated genome {lr, ent, clip, epochs, kl_floor, target_kl, team (teacher style), opps}.
+Codex review fixed 7 issues (research/pbt_codex.md). Smoke on P40 running (scratchpad/pbttest). Then zip + launch cmd for human.
