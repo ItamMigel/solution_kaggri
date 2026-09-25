@@ -6,14 +6,21 @@ import numpy as np, cma
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import knobs, knob_es as E
 
-PANEL4 = ["--baselines", "v5_market", "--opponent", f"yhay0913={E.POOL}/yhay_router0913/main.py",
+PANEL4 = ["--baselines", "v5_market", "--opponent", "best=/workspace/shared/candidates/es2_c1/pkg/main.py", "--opponent", f"yhay0913={E.POOL}/yhay_router0913/main.py",
           "--opponent", f"parthenos={E.POOL}/parthenos_robust/main.py", "--opponent", f"metav4={E.POOL}/tschinkel_metav4_v13/main.py"]
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--init", required=True); ap.add_argument("--out", required=True)
     ap.add_argument("--gens", type=int, default=40); ap.add_argument("--pop", type=int, default=12); ap.add_argument("--sigma", type=float, default=0.06)
     ap.add_argument("--worlds", type=int, default=8); ap.add_argument("--workers", type=int, default=20)
+    ap.add_argument("--collect", action="store_true", help="append Horizon+ M1 COLLECT module to every candidate (es2_c1 family)")
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); E.PANEL = PANEL4
+    if a.collect:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hplus")); import modules as HM
+        _orig = knobs.make_agent_file
+        def _mk(params, out, base=knobs.BASE):
+            ov = _orig(params, out, base); HM.build(out, {"m1_on": True, "m1_ops": ["COLLECT_FERTILIZER"]}, out); return ov
+        knobs.make_agent_file = _mk
     sp = f"{a.out}/cma.pkl"; hp = f"{a.out}/history.json"
     if os.path.exists(sp):
         es = pickle.load(open(sp, "rb")); hist = json.load(open(hp))
