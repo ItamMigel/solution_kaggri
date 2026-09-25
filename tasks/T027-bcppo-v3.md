@@ -6,6 +6,7 @@ H100 run 1 summary in tasks/T019-imitation.md. Human: GPUs only ~10 GB / 80 GB u
 - 16:25 Codex audit (research/bcppo_v3_design_codex.md): P0 market likelihood wrong under 10-order truncation; P1 market entropy ungated; P2 no target-KL stop;
   perf: policy 71% of step time (6 full-batch forwards/step, 5 wasted on league opponents) + per-unit Python loop; B=4096 fp16 board ≈17.7 GB → start B=2048;
   Horizon-double only after a closed-loop competence gate (DAgger infeasible for a tape agent — note).
+- 17:xx Codex P2 merged to `lab` (`92d6093`, `d48b050`, `bbcf325`): non-negative rollout-policy KL estimator with 1.5× target early stop and v3 defaults; PPO records use P0's `mcap`; each opponent is evaluated only on its assigned league rows, with a CPU greedy parity test against the old full-batch path; logs exact gpuenv same-crop plant rejection and hire-cap overflow signals, plus emitted market order count. Torch tests: target-KL, warm-up, market caps and subset parity pass.
 ## Split (v3)
 - claude: P0+P1 (sequential market caps: bucket masked to remaining order slots / hire & land caps; same in numpy export), fixed-width vectorised unit
   allocator, sampled-path parity test (injected uniforms), es3 BC + closed-loop gate, hand-cap instrumentation, package v3.
