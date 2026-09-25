@@ -53,3 +53,4 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 - land-early (fixed) race on top of es2_c1 base (genome0 = g9+collect): k 24/48/72/96, 4 worlds × g9/v5/parthenos → runs/hplus_land_race. Codex T022 independent review of es2_c1 running.
 - **es2_c1 PROMOTED** after codex T022 PASS (29-2-1 vs g9). Land-early race: inert or −0.42 → closed.
 - T023 (codex): residual PASS mining → WATER/CARE inert, FEED −0.5/−$137 after es2 → no survivor.
+- 2026-09-25 ~06:50 — **cma2 gen-5 centre** gated by codex: 15-0-1 vs es2_c1 (+$281 [157,395]) on 8 fresh worlds. Frozen as candidates_wip/es3_g5 (params differ from g9: _ADV_LOOK 17, _RACE_HORIZON_CLONE 10, _Y_MARGIN −2, _CA_CASH 1061, lower herd-gain thresholds…). My promotion gate (16 fresh worlds vs es2_c1, g9, v5×2) → runs/gate_es3_g5. T025 route-conditioned land: −0.25/−$1695 → closed.

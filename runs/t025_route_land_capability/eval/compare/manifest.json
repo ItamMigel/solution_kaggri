@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-09-25T02:40:00.440028+00:00",
+  "candidates": {
+    "genome0": "/workspace/shared/candidates/es2_c1/pkg/main.py",
+    "exp240_lead2": "/workspace/shared/runs/t025_route_land_capability/agents/exp240_sw_d2_main.py",
+    "exp240_lead3": "/workspace/shared/runs/t025_route_land_capability/agents/exp240_sw_d3_main.py"
+  },
+  "opponents": {
+    "g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "yhay": "/workspace/shared/opponents/pool/yhay_router0913/main.py"
+  },
+  "seeds": [
+    701701808,
+    1487736988
+  ],
+  "expected_games": 24,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates/es2_c1/pkg/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/t025_route_land_capability/agents/exp240_sw_d2_main.py": "740c9dfad507d8012dacc0f16a2c5067c057600e2d9241507f029ede8d93012e",
+    "/workspace/shared/runs/t025_route_land_capability/agents/exp240_sw_d3_main.py": "eec95412f0a9e00860a7c513966b7b6297d61ebcba6357e766b6cfb68f817c12",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 14,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
