@@ -9,3 +9,8 @@ Kaggle is read-only; never submit.
 
 ## Started 2026-09-25
 - Claimed by Codex. First pass is an offline census of the already downloaded `replays/ours` data; no Kaggle writes and no concurrent game screen while Claude's 18-worker CMA run is active.
+
+## Result — closed 2026-09-25
+- Read-only snapshot: 121 g1 and 66 g9 completed episodes were downloaded, fingerprinted and re-simulated. Full evidence: `research/ladder_losses_es1.md`; per-loss replay reports: `runs/t024_replay_reports.txt`.
+- G1 was 73–0–48; g9 55–0–11. Repeating losses are macro alternatives — Matt Motoki 3–0 vs g1 and Koba 2–0 vs g9 — whose earlier SW land and late commodity mix cannot be repaired by a tape-safe local operation.
+- No `race.py` screen was started: T024 yields no causal tape-safe module. A route-conditioned macro is a future hypothesis only; unconditional earlier land is already rejected.
