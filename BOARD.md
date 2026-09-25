@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-25 — T022 independent review PASS: `es2_c1` is 29–2–1 vs g9 on 16 disjoint worlds (CI 84.4–100%, +$17; 0 errors), no panel regression; delayed t2945 add-on is 32–0. Recommend freezing it for the human. [codex]
 - 2026-09-24 — T021 M3lite appended fertilizer hand is closed: all four trace-derived high-surplus firing regimes lose a fresh 56-game paired screen (−$167…−$613); strict reserve variants are inert. No race/CMA. [codex]
 - 2026-09-24 — T021 M4 follow-up race rejects `room_guard_on`: fresh 4-world g9/v5/yhay paired score 0.000, CI [−.125,+.125], margin −$4.8; none of the M4 source flags advances. [codex]
 - 2026-09-24 — T020 old P40 control stopped after two diagnostic iterations: value-only drift repeats (`approx_kl .753→.312`, clipfrac `.697→.578`); it is not a valid PPO signal. Patched warm-up is under separate validation. [codex]
@@ -67,7 +68,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | id | owner | status | title |
 |---|---|---|---|
 | T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
-| T022 | codex | in_progress | Independent 16-world review of `es2_c1` against g9, v5_guarded and reactive panel; disjoint seeds, both seats. `tasks/T022-es2-c1-review.md` |
+| T022 | codex | closed ✓ | Independent `es2_c1` review passes g9 CI and full available reactive panel, incl. t2945 add-on. `tasks/T022-es2-c1-review.md` |
 | T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
