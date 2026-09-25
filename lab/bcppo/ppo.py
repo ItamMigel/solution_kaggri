@@ -50,6 +50,11 @@ def _entropy_total(parts):
     return parts["total"] if "total" in parts else sum(parts.values())
 
 
+def _nonnegative_approx_kl(log_ratio):
+    """Per-sample non-negative estimator of KL(old rollout policy || new)."""
+    return (torch.exp(log_ratio) - 1.0 - log_ratio).mean().clamp_min(0.0)
+
+
 def _set_value_warmup_trainable(net, value_only):
     """During critic warm-up, keep the BC policy distribution exactly frozen.
 
@@ -320,16 +325,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--init", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--envs", type=int, default=256)
+    ap.add_argument("--envs", type=int, default=2048)
     ap.add_argument("--iters", type=int, default=50)
-    ap.add_argument("--lr", type=float, default=3e-5)
-    ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--mb", type=int, default=8192)
+    ap.add_argument("--lr", type=float, default=5e-6)
+    ap.add_argument("--epochs", type=int, default=1)
+    ap.add_argument("--mb", type=int, default=65536)
     ap.add_argument("--gamma", type=float, default=1.0)
-    ap.add_argument("--lam", type=float, default=.995)
-    ap.add_argument("--clip", type=float, default=.2)
+    ap.add_argument("--lam", type=float, default=.99)
+    ap.add_argument("--clip", type=float, default=.12)
     ap.add_argument("--ent", type=float, default=.001)
-    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
+    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--target-kl", type=float, default=.015, help="stop PPO updates when rollout-policy KL exceeds 1.5x this value"); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
     ap.add_argument("--team", default="dsm")
     ap.add_argument("--vf", type=float, default=.5)
     ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
@@ -341,8 +346,8 @@ def main():
     ap.add_argument("--league-double", action="append", default=[], metavar="CKPT")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
-    if not 0 < a.gamma <= 1 or not 0 <= a.lam <= 1:
-        ap.error("gamma must be in (0,1] and lambda in [0,1]")
+    if not 0 < a.gamma <= 1 or not 0 <= a.lam <= 1 or a.target_kl < 0:
+        ap.error("gamma must be in (0,1], lambda in [0,1], and target-kl non-negative")
     dev = a.device
     torch.manual_seed(a.seed)
     if a.amp == "bf16":
@@ -392,6 +397,8 @@ def main():
         net.train()
         value_only = it < a.value_warmup
         _set_value_warmup_trainable(net, value_only)
+        early_stop = False
+        max_approx_kl = 0.0
         for epoch in range(a.epochs):
             permutation = torch.randperm(samples, device=dev)
             for offset in range(0, samples, a.mb):
@@ -404,6 +411,12 @@ def main():
                 ent_total = _entropy_total(entropy)
                 log_ratio = logp - data["logp"][idx]
                 ratio = torch.exp(log_ratio)
+                approx_kl = _nonnegative_approx_kl(log_ratio)
+                max_approx_kl = max(max_approx_kl, float(approx_kl))
+                if (not value_only and a.target_kl > 0
+                        and approx_kl > 1.5 * a.target_kl):
+                    early_stop = True
+                    break
                 advantage = data["adv"][idx]
                 policy_loss = -torch.min(ratio * advantage, ratio.clamp(1 - a.clip, 1 + a.clip) * advantage).mean()
                 value_loss = F.smooth_l1_loss(value, data["ret"][idx])
@@ -427,11 +440,13 @@ def main():
                     stats["pg"] += float(policy_loss)
                     stats["vloss"] += float(value_loss)
                     stats["kl_bc"] += float(kl_bc)
-                    stats["approx_kl"] += float((data["logp"][idx] - logp).mean())
+                    stats["approx_kl"] += float(approx_kl)
                     stats["clipfrac"] += float(((ratio - 1).abs() > a.clip).float().mean())
                     for key, val in entropy.items():
                         stats[f"entropy_{key}"] += float(val.mean())
                 n_updates += 1
+            if early_stop:
+                break
         unit_hist = action_metric["unit_hist"].tolist()
         market_hist = action_metric["market_hist"].tolist()
         active_units = max(1, int(action_metric["active_units"]))
@@ -447,6 +462,10 @@ def main():
             "secs_roll": round(roll_seconds),
             "secs": round(time.time() - t0),
             "samples": samples,
+            "ppo_updates": n_updates,
+            "approx_kl_max": max_approx_kl,
+            "target_kl": a.target_kl,
+            "target_kl_early_stop": early_stop,
             "league_envs": league_counts,
             "unit_op_distribution": [x / active_units for x in unit_hist],
             "market_op_distribution": [x / market_slots for x in market_hist],
