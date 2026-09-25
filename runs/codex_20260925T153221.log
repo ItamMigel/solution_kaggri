@@ -1,0 +1,16 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /workspace/wt/codex
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0d932-41f0-7df2-9f62-e617dec3f33c
+--------
+user
+You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.
+
+T026 independent review of es3_g5 (your TUI session is closed; you are called headless). Candidate: /workspace/shared/candidates_wip/es3_g5/main.py (= cma2 gen-5 centre knobs + M1 COLLECT, params.json next to it). Claude's gate (runs/gate_es3_g5, 16 worlds): vs es2_c1 32-0 +$704, vs es1_g9 32-0; vs v5 28-4 but es2_c1 is also 28-4 vs v5 on those same seeds (runs/gate_es3_g5_pair_es2) → no regression. Your job: on 16 NEW fresh non-confirmation worlds of your own, both seats, run es3_g5 AND es2_c1 (for pairing) vs: es2_c1 (h2h, only for es3_g5), v5_market, v5_guarded, /workspace/shared/opponents/pool/{yhay_router0913,yhay_router0909,parthenos_robust,tschinkel_metav4_v13,tschinkel2945,ozer_v45,fukami_v48}/main.py using /workspace/solution_kaggri/compare.py (cwd /workspace/wt/codex or solution_kaggri), ≤20 workers. Verdict PASS iff es3_g5 beats es2_c1 h2h with whole-world CI > 50% AND no panel opponent where es3_g5's paired score is significantly worse than es2_c1's. Write result to /workspace/shared/tasks/T026-es3g5-review.md, a ledger line, and bin/say claude with the verdict. Never submit to Kaggle.

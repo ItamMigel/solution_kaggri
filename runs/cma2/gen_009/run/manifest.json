@@ -1,0 +1,63 @@
+{
+  "created_utc": "2026-09-25T15:32:22.543595+00:00",
+  "candidates": {
+    "c": "/workspace/shared/runs/cma2/gen_009/c/main.py",
+    "x0": "/workspace/shared/runs/cma2/gen_009/x0/main.py",
+    "x1": "/workspace/shared/runs/cma2/gen_009/x1/main.py",
+    "x2": "/workspace/shared/runs/cma2/gen_009/x2/main.py",
+    "x3": "/workspace/shared/runs/cma2/gen_009/x3/main.py",
+    "x4": "/workspace/shared/runs/cma2/gen_009/x4/main.py",
+    "x5": "/workspace/shared/runs/cma2/gen_009/x5/main.py",
+    "x6": "/workspace/shared/runs/cma2/gen_009/x6/main.py",
+    "x7": "/workspace/shared/runs/cma2/gen_009/x7/main.py",
+    "x8": "/workspace/shared/runs/cma2/gen_009/x8/main.py",
+    "x9": "/workspace/shared/runs/cma2/gen_009/x9/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "best": "/workspace/shared/candidates/es2_c1/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    107508973,
+    2349959,
+    1888837994,
+    522633328,
+    478967825,
+    1933245507,
+    1106384942,
+    1055363952
+  ],
+  "expected_games": 880,
+  "input_sha256": {
+    "/workspace/shared/candidates/es2_c1/pkg/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/cma2/gen_009/c/main.py": "424df9b33336facb1f59178530e72b893f056681e22a7491f8b57ff9aa946fe8",
+    "/workspace/shared/runs/cma2/gen_009/x0/main.py": "47ef7327342d982d3cbaf98da5f7113aa23e9a3e2bc908a62f845f7ef407c5fa",
+    "/workspace/shared/runs/cma2/gen_009/x1/main.py": "8f7179fefc8779335dda23667c9b6d62fd5a4a1b65e28bc760898dac83413ed7",
+    "/workspace/shared/runs/cma2/gen_009/x2/main.py": "1dd43ff068d6de1d1d5d9dc01ee6793fe3b77013691e158a08b1017776f8b663",
+    "/workspace/shared/runs/cma2/gen_009/x3/main.py": "81b4dc04f26308d064a029f4bcfd53bc67d38e08302d78bacd42bb47505d6e4d",
+    "/workspace/shared/runs/cma2/gen_009/x4/main.py": "69950751e5fe9608ccf79b4aecf493be106a99ff92af6941d242b1c9c684b8af",
+    "/workspace/shared/runs/cma2/gen_009/x5/main.py": "e4df3e7eca14fa49b683feb447cc96db08b3f2145aa30028daf1be1f3daff50d",
+    "/workspace/shared/runs/cma2/gen_009/x6/main.py": "9aa4c3578e967c3b01d4e718ec220828f08f062e7bdea970a64b3cb4181cee6c",
+    "/workspace/shared/runs/cma2/gen_009/x7/main.py": "b5732081532334984fd665e7cfaa19d4d567cb07212a85deadccd91a1c768aae",
+    "/workspace/shared/runs/cma2/gen_009/x8/main.py": "4909f5dd9ff0e89460ec20fd48edd361c1cf04f6cf242ef2b451898b43e23117",
+    "/workspace/shared/runs/cma2/gen_009/x9/main.py": "a9120b0f2b36e34ff0dd8bc153e48bf66d192e3585ed5881ce7194c8d72c4575",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
