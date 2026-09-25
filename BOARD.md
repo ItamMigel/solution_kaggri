@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
 - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
 - 2026-09-25 — T020 patched P40 K5: warm-up iterations 0–2 keep KL at numerical zero; PPO iterations 3–4 have KL .0173/.0094 and clipfrac .212/.127, with no crash. Training-health pass only, not a performance claim. [codex]
 - 2026-09-25 — T023 tape-safe mining screen: direct replay execution finds residual WATER/FEED/CARE opportunities, but fresh 32-game screen rejects FEED (−0.5/−$137) and finds WATER/CARE inert; no survivor. [codex]
