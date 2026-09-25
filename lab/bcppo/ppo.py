@@ -149,6 +149,41 @@ def _merge_actions(outputs, labels, names):
     return chosen
 
 
+def _shop_order_subset(shop_order, rows):
+    """Carry the per-world shop history into an opponent's selected rows."""
+    sub = gpufeat.ShopOrder(int(rows.numel()), shop_order.first.device)
+    sub.first.copy_(shop_order.first.index_select(0, rows))
+    sub.prev.copy_(shop_order.prev.index_select(0, rows))
+    return sub
+
+
+def _league_subset_actions(league, state, shop_order, labels, names, greedy):
+    """Evaluate each league policy only for the worlds assigned to it.
+
+    Every row belongs to exactly one label.  The state and ShopOrder are both
+    indexed by that label and the resulting player-one actions are scattered
+    back into the original world order.  In evaluation/greedy mode this is
+    byte-identical to evaluating every opponent on the whole batch.
+    """
+    actions = None
+    batch = state.batch_size
+    for label, name in enumerate(names):
+        rows = (labels == label).nonzero(as_tuple=False).flatten()
+        if not rows.numel():
+            continue
+        out = policy.act(league[name][0], state.index(rows), 1,
+                         _shop_order_subset(shop_order, rows), league[name][2],
+                         greedy=greedy)[0]
+        if actions is None:
+            actions = tuple(torch.zeros((batch, *part.shape[1:]), dtype=part.dtype,
+                                        device=part.device) for part in out)
+        for full, part in zip(actions, out):
+            full.index_copy_(0, rows, part)
+    if actions is None:
+        raise RuntimeError("league has no selected opponents")
+    return actions
+
+
 def _league_labels(batch, dev, seed, names, probs):
     generator = torch.Generator(device=dev)
     generator.manual_seed(seed)
@@ -220,11 +255,7 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
             so.update(st)
             learner_state = _learner_view(st, seat_one)
             out0 = policy.act(net, learner_state, 0, so, team, greedy=greedy)
-            # Calling each opponent on the full batch keeps ShopOrder state
-            # aligned and avoids host-side batch slicing in the hot loop.
-            opponent_out = {name: policy.act(league[name][0], learner_state, 1, so, league[name][2], greedy=False)
-                            for name in names}
-            out1 = _merge_actions(opponent_out, labels, names)
+            out1 = _league_subset_actions(league, learner_state, so, labels, names, greedy=False)
             st, _, _, _ = ve.step(st, _world_actions(policy.combine(out0[0], out1), seat_one))
             eq = conservative_equity(st)
             equity_margin = _learner_margin(eq, seat_one)
