@@ -32,3 +32,8 @@ worst ← best weights + mutated genome {lr, ent, clip, epochs, kl_floor, target
 Codex review fixed 7 issues (research/pbt_codex.md). Smoke on P40 running (scratchpad/pbttest). Then zip + launch cmd for human.
 - 23:00Z PBT exam auto-scales to CPU: workers = nproc − OMP×members − 8 (H100 box 128 cpu → ~104), worlds 12 if nproc≥96.
   Smoke on P40 slow (~20+ min/iter at 48 envs, 2 members sharing GPU; earlier 8-env iter was 635 s) — waiting for first round→exam→exploit.
+- 23:35Z PBT smoke (P40, 2 members, 8 envs, K=1, 1 world) passed the full loop: round → publish roundNNN → official exam (+ start control)
+  → EXPLOIT (worst ← best weights, Adam/RNG reset, mutated hp) → next round; hall of fame + tar written.
+  Found: exam worlds rotate and opponents score 94k on one world vs 162k on another → fitness now RELATIVE to the start control
+  evaluated every generation on the same worlds (smoothing/hall-of-fame were comparing different worlds). nproc bug (obeys OMP_NUM_THREADS)
+  fixed; CPU = min(nproc, cgroup quota). Human's box: 224 visible / 128 quota → ~104 exam workers, 12 worlds.
