@@ -25,7 +25,7 @@ from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
 from gpuenv._state import Actions
 
-REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "hire_max", "land_max", "minc")
+REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "mcap")
 STEPS = 719
 
 
@@ -427,7 +427,7 @@ def main():
                     lp, lq = F.log_softmax(p_logits, -1), F.log_softmax(q_logits, -1)
                     val = (lp.exp() * (lp - lq)).sum(-1)
                     return (val * mask).sum() / mask.sum().clamp(min=1) if mask is not None else val.mean()
-                mm = lambda x: policy.market_mask(x, rec["hire_max"].long(), rec["land_max"].long())
+                mm = lambda x: policy.market_mask(x, rec["mcap"].long())
                 kl_bc = (kl(btl, tl, unit_mask) +
                          kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(mm(bml), mm(ml)))
                 kl_coef = max(a.kl_floor, a.kl * max(0.0, 1 - it / max(1, a.iters)))
