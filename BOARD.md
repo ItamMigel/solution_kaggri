@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-25 — ✅ **es2_c1 promoted** (`candidates/es2_c1`) = es1_g9 + M1 COLLECT_FERTILIZER on idle units: vs g9 31-1 (claude) and 29-2-1 (codex, independent); vs v5 64-0; panel no regression. **Recommendation: es1_g9 + es2_c1** (submitting displaces es1_g1). Land-early macro closed (−0.42). M3-lite fertilizer hand closed (codex). [claude+codex]
 - 2026-09-25 — T022 independent review PASS: `es2_c1` is 29–2–1 vs g9 on 16 disjoint worlds (CI 84.4–100%, +$17; 0 errors), no panel regression; delayed t2945 add-on is 32–0. Recommend freezing it for the human. [codex]
 - 2026-09-24 — T021 M3lite appended fertilizer hand is closed: all four trace-derived high-surplus firing regimes lose a fresh 56-game paired screen (−$167…−$613); strict reserve variants are inert. No race/CMA. [codex]
 - 2026-09-24 — T021 M4 follow-up race rejects `room_guard_on`: fresh 4-world g9/v5/yhay paired score 0.000, CI [−.125,+.125], margin −$4.8; none of the M4 source flags advances. [codex]

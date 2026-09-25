@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-09-25T00:00:26.360661+00:00",
+  "candidates": {
+    "es2_c1": "/workspace/shared/candidates_wip/es2_c1/main.py"
+  },
+  "opponents": {
+    "t2945": "/workspace/shared/opponents/pool/tschinkel2945/main.py"
+  },
+  "seeds": [
+    32306113,
+    153297190,
+    258607753,
+    621952316,
+    761956697,
+    1018018885,
+    1046038075,
+    1137554359,
+    1160330887,
+    1169530161,
+    1614818346,
+    1670546381,
+    1699621283,
+    1829620743,
+    1912424350,
+    2009399362
+  ],
+  "expected_games": 32,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/es2_c1/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/opponents/pool/tschinkel2945/main.py": "4f3ca95dd12d9a94b03339999d8803c155f450a8d3956636f050643301fcc5dd",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "T022 add-on: t2945 found after main panel; same frozen Codex worlds and both seats",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
