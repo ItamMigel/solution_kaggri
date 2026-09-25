@@ -30,3 +30,5 @@ Built PBT in the package: 4 members from one START ckpt (v3_cont best), league =
 CPU controller exams newest roundNNN of all members in official engine vs es3_g5/es1_g9/v5 (6 rotating worlds),
 worst ← best weights + mutated genome {lr, ent, clip, epochs, kl_floor, target_kl, team (teacher style), opps}.
 Codex review fixed 7 issues (research/pbt_codex.md). Smoke on P40 running (scratchpad/pbttest). Then zip + launch cmd for human.
+- 23:00Z PBT exam auto-scales to CPU: workers = nproc − OMP×members − 8 (H100 box 128 cpu → ~104), worlds 12 if nproc≥96.
+  Smoke on P40 slow (~20+ min/iter at 48 envs, 2 members sharing GPU; earlier 8-env iter was 635 s) — waiting for first round→exam→exploit.
