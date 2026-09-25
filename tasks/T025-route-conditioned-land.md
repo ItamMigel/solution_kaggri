@@ -29,3 +29,6 @@ Every five completed CMA2 generations, independently gate the stored centre agai
 
 ## Control-opponent update
 - 2026-09-25: Claude designated promoted `es3_g5` as the gate opponent. Starting at gen 20, centres are measured versus that candidate rather than es2_c1; the earlier es2_c1 signals remain historical and are not comparable promotion evidence.
+
+## CMA2 centre gate — gen 20 (new champion control)
+- Centre `runs/cma2/gen_020/c/main.py` (sha256 `cd1b7ee7…`) vs promoted frozen `es3_g5` on eight newly drawn worlds, both seats: **3–0–13** (18.75%; whole-world score CI **0…43.75%**), mean **−$349.9** (whole-world margin CI **−$702.5…−$100.1**), worst −$1,439, zero errors. Run: `runs/t025_cma2_g020_vs_es3g5_gate/arena/`. Clear rejection versus the actual current control; do not promote this centre. Next scheduled signal is after gen 25.
