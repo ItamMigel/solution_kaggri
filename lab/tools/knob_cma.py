@@ -6,7 +6,7 @@ import numpy as np, cma
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import knobs, knob_es as E
 
-PANEL4 = ["--baselines", "v5_market", "--opponent", "best=/workspace/shared/candidates/es2_c1/pkg/main.py", "--opponent", f"yhay0913={E.POOL}/yhay_router0913/main.py",
+PANEL4 = ["--baselines", "v5_market", "--opponent", "best=" + os.environ.get("CMA_BEST", "/workspace/shared/candidates/es2_c1/pkg/main.py"), "--opponent", f"yhay0913={E.POOL}/yhay_router0913/main.py",
           "--opponent", f"parthenos={E.POOL}/parthenos_robust/main.py", "--opponent", f"metav4={E.POOL}/tschinkel_metav4_v13/main.py"]
 
 def main():
