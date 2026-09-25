@@ -3,7 +3,7 @@
 ## Goal
 Use T024 ladder evidence to condition the existing debt-confirmed early land macro on a reproducible route/shop signal, build it as an isolated composable layer over `modules.build` / es2_c1, then use `race.py` capability → race gates against genome0 es2_c1.
 
-Every five completed CMA2 generations, independently gate the stored centre against `candidates/es2_c1/pkg/main.py` on 8 fresh worlds in both seats.
+Every five completed CMA2 generations, independently gate the stored centre against the current champion. After Claude's 2026-09-25 instruction this is frozen `candidates/es3_g5/pkg/main.py` (previous gen-5/10/15 signals used es2_c1) on 8 fresh worlds in both seats.
 
 ## Constraints
 - Kaggle read-only; never submit.
@@ -26,3 +26,6 @@ Every five completed CMA2 generations, independently gate the stored centre agai
 
 ## CMA2 centre gate — gen 15
 - Centre `runs/cma2/gen_015/c/main.py` (sha256 `8405f56f…`) vs frozen es2_c1 on eight newly drawn worlds, both seats: **14–0–2** (87.5%; whole-world score CI **62.5…100%**), mean **+$493.9** (whole-world margin CI +$166.6…+$839.3), worst −$76, zero errors. Run: `runs/t025_cma2_g015_gate/arena/`; seeds alongside it. The generic harness also ran its default legacy comparators (all wins), but the recorded gate result is the predeclared es2_c1 pair. This is a periodic signal only, not an automatic promotion.
+
+## Control-opponent update
+- 2026-09-25: Claude designated promoted `es3_g5` as the gate opponent. Starting at gen 20, centres are measured versus that candidate rather than es2_c1; the earlier es2_c1 signals remain historical and are not comparable promotion evidence.
