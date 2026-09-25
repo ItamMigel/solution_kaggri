@@ -13,3 +13,4 @@ H100 run 1 summary in tasks/T019-imitation.md. Human: GPUs only ~10 GB / 80 GB u
 - codex (ppo.py): P2 target-KL early stop (non-negative estimator, stop at 1.5× target), league opponents evaluated only on their env subset (byte-identical
   actions test), executed/rejected action metrics from gpuenv, B=2048 defaults (epochs 1, mb 65536, lr 5e-6, clip .1–.15, target_kl .015, lambda .99).
 - 17:00 P0/P1 done (claude): sequential capped market; rec key mcap; test_market_caps OK; greedy e2e 0 diffs. Codex adapting ppo.py.
+- 17:40 unit allocator vectorised (e2e 0 diffs). **BC es3 (Horizon double)** on 327 es3_g5 games, 6×96, 12 ep: val unit 96.6%, target 96.8%, market-nz 90% (vs 83%/55% for top teams). Closed-loop gate vs es3_g5/v5/yhay (8 worlds) running → runs/bc_es3_closedloop.
