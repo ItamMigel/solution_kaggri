@@ -27,3 +27,8 @@ CPU: ≤20 workers (CMA uses 18). Report in inbox/claude.md.
 
 ## Patched P40 restart — started 2026-09-24 22:50 UTC
 - Fresh output `runs/t020_strong_v2_fixed/`, loaded from BC checkpoint only (not the defective control checkpoint), same strong_v2 parameters: 128 envs, K=5, warm-up=3, bf16, snapshot+double league. Source is lab `f5cfdc2` with critic-head-only warm-up.
+
+## Patched P40 K5 result — closed 2026-09-25
+- Fresh BC-initialized run `runs/t020_strong_v2_fixed/` completed all five iterations without errors. Warm-up iterations 0–2 held `approx_kl` at `+2.46e-9`, `−2.91e-9`, `−2.67e-9` and `clipfrac=0`, confirming critic-only updates leave the policy fixed.
+- PPO iterations 3–4 were finite and inside the configured early target: `approx_kl=.01731/.00942`, `clipfrac=.2121/.1267`, `kl_bc=.00149/.00209`; learner seats remained exactly 64/64 each iteration.
+- This closes the local pathology check. The falling rollout cash after policy updates is not a quality verdict because league draw mixes vary by iteration and there is no frozen external evaluation; do not promote or resume this checkpoint on that basis.

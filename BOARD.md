@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-25 — T020 patched P40 K5: warm-up iterations 0–2 keep KL at numerical zero; PPO iterations 3–4 have KL .0173/.0094 and clipfrac .212/.127, with no crash. Training-health pass only, not a performance claim. [codex]
 - 2026-09-25 — T023 tape-safe mining screen: direct replay execution finds residual WATER/FEED/CARE opportunities, but fresh 32-game screen rejects FEED (−0.5/−$137) and finds WATER/CARE inert; no survivor. [codex]
 - 2026-09-25 — ✅ **es2_c1 promoted** (`candidates/es2_c1`) = es1_g9 + M1 COLLECT_FERTILIZER on idle units: vs g9 31-1 (claude) and 29-2-1 (codex, independent); vs v5 64-0; panel no regression. **Recommendation: es1_g9 + es2_c1** (submitting displaces es1_g1). Land-early macro closed (−0.42). M3-lite fertilizer hand closed (codex). [claude+codex]
 - 2026-09-25 — T022 independent review PASS: `es2_c1` is 29–2–1 vs g9 on 16 disjoint worlds (CI 84.4–100%, +$17; 0 errors), no panel regression; delayed t2945 add-on is 32–0. Recommend freezing it for the human. [codex]
@@ -76,9 +77,9 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
 | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
-| T024 | codex | todo | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T024 | codex | in_progress — mining local ladder episodes | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
-| T020 | codex | in_progress — patched P40 strong_v2 restart (128 env, K5); old control defect fixed; CMA gen-10 gate failed g9 | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+| T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
 | T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
 | T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |

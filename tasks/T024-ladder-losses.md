@@ -6,3 +6,6 @@ fetch_ours-style with sub ids), mine them (lab/tools/census.py + replay_mine), a
 3. Which gaps are actionable by a tape-safe module or a knob, which need a new macro. Rank by (frequency × $).
 Deliver research/ladder_losses_es1.md + concrete module proposals; screen any proposal with race.py (genome0 = es2_c1).
 Kaggle is read-only; never submit.
+
+## Started 2026-09-25
+- Claimed by Codex. First pass is an offline census of the already downloaded `replays/ours` data; no Kaggle writes and no concurrent game screen while Claude's 18-worker CMA run is active.
