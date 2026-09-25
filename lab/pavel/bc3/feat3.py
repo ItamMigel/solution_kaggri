@@ -22,7 +22,7 @@ OPP_CH = list(range(26)) + [29]
 C_BOARD = feat.C_BOARD + len(OPP_CH)
 HIST_DIM = 9 + 9 + 2
 G_DIM = feat.G_DIM + 24 + LAGS * HIST_DIM
-U_DIM = feat.U_DIM + MAX_UNITS
+U_DIM = feat.U_DIM + MAX_UNITS  # v1; v2 (motion) adds MOTION_DIM
 
 QTY_VALS = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 99]
 QTY_ARR = np.array(QTY_VALS)
@@ -77,12 +77,76 @@ def glob3(obs, p, hist):
     return np.concatenate([feat.glob_vec(obs, p), oh, hist]).astype(np.float32)
 
 
-def units3(obs, p):
+U_DIM_V1 = feat.U_DIM + MAX_UNITS
+MOTION_DIM = 5
+
+
+def unit_positions(obs, p):
+    f = _g(obs, "farms")[p]
+    return [tuple(f["farmer"])] + [tuple(h) for h in (f.get("hands") or [])]
+
+
+MEM_GROUP = {"WATER": 0, "HARVEST": 1, "FERTILIZE": 2, "FEED": 3, "CARE": 3, "COLLECT_FERTILIZER": 3, "PLANT": 4,
+             "PICKUP": 5, "PLACE": 5, "DROP": 5, "BUILD_COOP": 6, "BUILD_PASTURE": 6, "DIG": 6}
+MEM_DIM = 5 + 7
+
+
+class UnitMemory:
+    """Per-day memory of each unit's work (the expert's route progress): last non-move action cell and type,
+    steps since it, number of such actions today. Reset at every day boundary (hands are re-hired daily)."""
+    def __init__(self):
+        self.day = None; self.m = {}
+
+    def features(self, n_units, step, day):
+        if day != self.day:
+            self.day = day; self.m = {}
+        out = []
+        for i in range(n_units):
+            v = np.zeros(MEM_DIM, np.float32)
+            if i in self.m:
+                x, y, g, s, c = self.m[i]
+                v[0] = x / 9.0; v[1] = y / 9.0; v[2] = 1; v[3] = min(step - s, 24) / 24.0; v[4] = min(c, 24) / 24.0; v[5 + g] = 1
+            out.append(v)
+        return out
+
+    def update(self, actions, positions, step):
+        for i, a in enumerate(actions or []):
+            if not a or i >= len(positions) or a[0] not in MEM_GROUP:
+                continue
+            x, y = positions[i]; c = self.m.get(i, (0, 0, 0, 0, 0))[4] + 1
+            self.m[i] = (int(x), int(y), MEM_GROUP[a[0]], step, c)
+
+
+def units3(obs, p, motion=None, mem=None):
+    """motion=None: v1 features. motion=(prev1, prev2): lists of unit positions at t-1 and t-2 (same indexing; for hands
+    only valid within the same day — pass [] across a day boundary) -> adds (dx1, dy1, dx2, dy2, continued).
+    mem: list of per-unit UnitMemory feature vectors (appended last)."""
     out = []
     for i, (x, y, v) in enumerate(feat.unit_list(obs, p)):
         oh = np.zeros(MAX_UNITS, np.float32); oh[min(i, MAX_UNITS - 1)] = 1
-        out.append((x, y, np.concatenate([v, oh])))
+        parts = [v, oh]
+        if motion is not None:
+            p1, p2 = motion; m = np.zeros(MOTION_DIM, np.float32)
+            if i < len(p1):
+                m[0] = x - p1[i][0]; m[1] = y - p1[i][1]; m[4] = 1
+                if i < len(p2):
+                    m[2] = p1[i][0] - p2[i][0]; m[3] = p1[i][1] - p2[i][1]
+            parts.append(np.clip(m, -1, 1))
+        if mem is not None:
+            parts.append(mem[i] if i < len(mem) else np.zeros(MEM_DIM, np.float32))
+        out.append((x, y, np.concatenate(parts)))
     return out
+
+
+def motion_context(pos_hist, day_hist):
+    """pos_hist/day_hist: per-step unit position lists and days, current step last. Hands reset every day, the farmer
+    (index 0) persists. Returns (prev1, prev2) for units3."""
+    def prev(k):
+        if len(pos_hist) <= k:
+            return []
+        cur_day = day_hist[-1]; ps = pos_hist[-1 - k]
+        return ps if day_hist[-1 - k] == cur_day else ps[:1]
+    return prev(1), prev(2)
 
 
 # ------------------------------------------------------------------ unit codec

@@ -104,21 +104,94 @@ def _filler(obs, p, x, y, inv, day, claimed, shed_left):
     return None
 
 
-class Agent:
-    def __init__(self, ckpt, sample=False, temp=1.0, seed=12345, persist=False, dedupe=False, msample=False, fill=False,
-                 smask=False, notrip=False):
-        import torch
-        torch.set_num_threads(1)
+class _One:
+    """One BC v3 network behind the decoding interface used by Agent (all outputs are log-probabilities)."""
+    def __init__(self, ckpt, torch):
         from train3 import Net
         ck = torch.load(ckpt, map_location="cpu", weights_only=False)
         self.net = Net(**ck["cfg"]); sd = ck["state"]
         w = sd["m_ctx.0.weight"]; need = self.net.m_ctx[0].weight.shape[1]
         if w.shape[1] < need:  # checkpoint trained before the shed-after-units market input: zero weights = old behaviour
             sd["m_ctx.0.weight"] = torch.cat([w, torch.zeros(w.shape[0], need - w.shape[1])], 1)
-        self.net.load_state_dict(sd); self.net.eval()
+        self.net.load_state_dict(sd); self.net.eval(); self.cfg = self.net.cfg; self.T = torch
+
+    def encode(self, B, G):
+        return self.net.trunk(B, G)
+
+    def units(self, h, G, ux, uy, uv):
+        T = self.T; bi = T.zeros(len(ux), dtype=T.long)
+        z0 = T.cat([h[bi, :, uy, ux], uv, G[bi]], 1); z = self.net.unit(z0)
+        opl = T.log_softmax(self.net.u_op(z), 1).numpy()
+        tl = T.log_softmax(T.einsum("uc,ucp->up", self.net.tq(z0), h.flatten(2)[bi]) / (h.shape[1] ** 0.5), 1).numpy()
+        return opl, tl, z
+
+    def qty(self, z, i, cls):
+        oh = self.T.zeros(1, len(F.UNIT_OPS)); oh[0, cls] = 1
+        return self.T.log_softmax(self.net.u_q(self.T.cat([z[i:i + 1], oh], 1)), 1).numpy()[0]
+
+    def m_start(self, h, G, MS):
+        ctx = self.net.m_context(h, G, MS); return (ctx, ctx)
+
+    def m_step(self, st, prev_t, prev_q, sl):
+        state, ctx = st
+        state, logit = self.net.m_step(state, ctx, prev_t, prev_q, self.T.tensor([sl]))
+        return (state, ctx), self.T.log_softmax(logit, 1).numpy()[0]
+
+    def m_qty(self, st, tok):
+        return self.T.log_softmax(self.net.m_qty(st[0], self.T.tensor([tok])), 1).numpy()[0]
+
+
+class _Ens:
+    """Ensemble of _One models with identical feature config: averages log-probabilities (geometric mean)."""
+    def __init__(self, members):
+        self.m = members; self.cfg = members[0].cfg
+        for x in members[1:]:
+            assert (x.cfg.get("u_dim"), x.cfg.get("g_dim"), x.cfg.get("teams")) == (self.cfg.get("u_dim"), self.cfg.get("g_dim"), self.cfg.get("teams"))
+
+    def encode(self, B, G):
+        return [x.encode(B, G) for x in self.m]
+
+    def units(self, hs, G, ux, uy, uv):
+        outs = [x.units(h, G, ux, uy, uv) for x, h in zip(self.m, hs)]
+        return np.mean([o[0] for o in outs], 0), np.mean([o[1] for o in outs], 0), [o[2] for o in outs]
+
+    def qty(self, zs, i, cls):
+        return np.mean([x.qty(z, i, cls) for x, z in zip(self.m, zs)], 0)
+
+    def m_start(self, hs, G, MS):
+        return [x.m_start(h, G, MS) for x, h in zip(self.m, hs)]
+
+    def m_step(self, sts, prev_t, prev_q, sl):
+        outs = [x.m_step(st, prev_t, prev_q, sl) for x, st in zip(self.m, sts)]
+        return [o[0] for o in outs], np.mean([o[1] for o in outs], 0)
+
+    def m_qty(self, sts, tok):
+        return np.mean([x.m_qty(st, tok) for x, st in zip(self.m, sts)], 0)
+
+
+class Agent:
+    def __init__(self, ckpt, sample=False, temp=1.0, seed=12345, persist=False, dedupe=False, msample=False, fill=False,
+                 smask=False, notrip=False, team=None, trustop=False):
+        import torch
+        torch.set_num_threads(1)
+        try:
+            torch.set_num_interop_threads(1)
+        except RuntimeError:
+            pass
+        cks = [c for c in str(ckpt).split(",") if c]
+        self.model = _One(cks[0], torch) if len(cks) == 1 else _Ens([_One(c, torch) for c in cks])
         self.torch = torch; self.sample = sample; self.temp = temp; self.rng = np.random.default_rng(seed)
         self.snaps = []; self.last_step = None
-        self.persist = persist; self.dedupe = dedupe; self.tgt = {}; self.tgt_day = -1; self.msample = msample; self.fill = fill; self.smask = smask; self.notrip = notrip
+        uext = self.model.cfg.get("uext")
+        if uext is None:
+            uext = ["motion"] if self.model.cfg.get("u_dim", F.U_DIM_V1) > F.U_DIM_V1 else []
+        self.motion = "motion" in uext; self.memory = "memory" in uext; self.umem = F.UnitMemory()
+        self.pos_hist = []; self.day_hist = []
+        teams = self.model.cfg.get("teams") or []
+        self.team_vec = None
+        if teams:  # multi-team model: condition on the chosen team (default: first)
+            self.team_vec = np.zeros(len(teams), np.float32); self.team_vec[teams.index(team) if team in teams else 0] = 1
+        self.persist = persist; self.dedupe = dedupe; self.tgt = {}; self.tgt_day = -1; self.msample = msample; self.fill = fill; self.smask = smask; self.notrip = notrip; self.trustop = trustop
         self.stats = {"n": 0, "pass": 0, "pass_forced": 0, "at_tgt_wants_move": 0, "top_masked": 0} if os.environ.get("BC3_STATS") else None
 
     def _pick(self, logits, mask=None, market=False):
@@ -134,25 +207,28 @@ class Agent:
         torch = self.torch
         p = int(obs.get("player", 0)); step = int(obs.get("step", 0)); day = int(obs.get("day", step // 24))
         if self.last_step is None or step <= self.last_step:
-            self.snaps = []; self.tgt = {}
+            self.snaps = []; self.tgt = {}; self.pos_hist = []; self.day_hist = []; self.umem = F.UnitMemory()
         if day != self.tgt_day:
             self.tgt = {}; self.tgt_day = day
         self.last_step = step
         self.snaps.append(F.snapshot(obs, p)); self.snaps = self.snaps[-(F.LAGS + 1):]
-        Bd = F.board3(obs, p); g = F.glob3(obs, p, F.hist_features(self.snaps)); ul = F.units3(obs, p)
+        self.pos_hist.append(F.unit_positions(obs, p)); self.day_hist.append(day)
+        self.pos_hist = self.pos_hist[-3:]; self.day_hist = self.day_hist[-3:]
+        Bd = F.board3(obs, p); g = F.glob3(obs, p, F.hist_features(self.snaps))
+        if self.team_vec is not None:
+            g = np.concatenate([g, self.team_vec])
+        memf = self.umem.features(len(self.pos_hist[-1]), step, day) if self.memory else None
+        ul = F.units3(obs, p, F.motion_context(self.pos_hist, self.day_hist) if self.motion else None, memf)
         priv = obs.get("private") or {}; invs = priv.get("inventories") or []
         farm = obs["farms"][p]
         with torch.no_grad():
             B = torch.from_numpy(Bd[None]).float(); G = torch.from_numpy(g[None])
-            h = self.net.trunk(B, G)
+            h = self.model.encode(B, G)
             acts = []
             if ul:
-                bi = torch.zeros(len(ul), dtype=torch.long)
                 ux = torch.tensor([u[0] for u in ul]); uy = torch.tensor([u[1] for u in ul])
                 uv = torch.from_numpy(np.stack([u[2] for u in ul]))
-                z0 = torch.cat([h[bi, :, uy, ux], uv, G[bi]], 1); z = self.net.unit(z0)
-                opl = self.net.u_op(z).numpy()
-                tl = (torch.einsum("uc,ucp->up", self.net.tq(z0), h.flatten(2)[bi]) / (h.shape[1] ** 0.5)).numpy()
+                opl, tl, z = self.model.units(h, G, ux, uy, uv)
                 seeds_left = {c: int((priv.get("seeds") or {}).get(c, 0)) for c in F.CROPS}
                 shed_left = {it: int((priv.get("shed") or {}).get(it, 0)) for it in F.ITEMS}
                 claimed = set()
@@ -181,8 +257,11 @@ class Agent:
                     want[F.UNIT_IDX["EAST"]] = tx > x; want[F.UNIT_IDX["WEST"]] = tx < x
                     want[F.UNIT_IDX["SOUTH"]] = ty > y; want[F.UNIT_IDX["NORTH"]] = ty < y
                     mv = want & mu
+                    top_op = F.UNIT_OPS[int(np.argmax(opl[i]))]
                     if (tx, ty) != (x, y) and mv.any():
                         mask = mv
+                    elif self.trustop and (tx, ty) == (x, y) and top_op in _MOVES and mu[F.UNIT_IDX[top_op]]:
+                        mask = mu.copy()  # target head says "here" but the op head wants to move: trust the op head
                     else:
                         mask = mu.copy()
                         for k in _MOVES:
@@ -203,8 +282,7 @@ class Agent:
                     if k.startswith("PLANT:"):
                         seeds_left[k[6:]] -= 1; acts.append(["PLANT", k[6:]])
                     elif k.startswith("PICKUP:") or k.startswith("PLACE:"):
-                        oh = torch.zeros(1, len(F.UNIT_OPS)); oh[0, cls] = 1
-                        ql = self.net.u_q(torch.cat([z[i:i + 1], oh], 1)).numpy()[0]
+                        ql = self.model.qty(z, i, cls)
                         n = F.QTY_VALS[self._pick(ql)]; op, it = k.split(":")
                         if op == "PICKUP":
                             n = max(1, min(n, shed_left[it])); shed_left[it] -= n
@@ -214,13 +292,15 @@ class Agent:
             # market: autoregressive slot decoding
             n_hands = len(farm.get("hands") or []); hires = 0
             lands_left = max(0, 3 - (len(farm.get("unlocked_quadrants") or []) - 1)); lands = 0
+            if self.memory:
+                self.umem.update(acts, self.pos_hist[-1], step)
             ms = F.shed_after_units(obs, p, acts)
             sell_left = {it: int(round(v * 50)) for it, v in zip(F.ITEMS, ms)}
             MS = torch.from_numpy(ms[None])
-            ctx = self.net.m_context(h, G, MS); state = ctx
+            state = self.model.m_start(h, G, MS)
             prev_t = torch.tensor([F.N_TOK]); prev_q = torch.tensor([F.QMAX]); orders = []; sold = set()
             for sl in range(F.N_SLOTS):
-                state, logit = self.net.m_step(state, ctx, prev_t, prev_q, torch.tensor([sl]))
+                state, logit = self.model.m_step(state, prev_t, prev_q, sl)
                 mask = np.ones(F.N_TOK, bool)
                 mask[F.TOK_IDX["HIRE"]] = n_hands + hires < _MAX_HANDS
                 mask[F.TOK_IDX["BUY_LAND"]] = lands < lands_left
@@ -231,14 +311,14 @@ class Agent:
                     for it in ("WHEAT", "FERTILIZER"):
                         if it in sold:
                             mask[F.TOK_IDX["BUY_PRODUCT:" + it]] = False
-                tok = self._pick(logit.numpy()[0], mask, market=True); key = F.TOKENS[tok]
+                tok = self._pick(logit, mask, market=True); key = F.TOKENS[tok]
                 if key == "END":
                     break
                 if key in ("NOOP", "HIRE", "BUY_LAND"):
                     orders.append([key]); q = F.QMAX
                     hires += key == "HIRE"; lands += key == "BUY_LAND"
                 else:
-                    ql = self.net.m_qty(state, torch.tensor([tok])).numpy()[0]; q = self._pick(ql, market=True)
+                    ql = self.model.m_qty(state, tok); q = self._pick(ql, market=True)
                     op, it = key.split(":"); n = q + 1
                     if op == "SELL":
                         sold.add(it)
@@ -253,7 +333,7 @@ MAIN_TEMPLATE = '''"""BC v3 agent (local evaluation). Generated by lab/pavel/bc3
 import sys
 sys.path.insert(0, {here!r})
 import agent3 as _a3
-_AG = _a3.Agent({ckpt!r}, sample={sample!r}, temp={temp!r}, seed={seed!r}, persist={persist!r}, dedupe={dedupe!r}, msample={msample!r}, fill={fill!r}, smask={smask!r}, notrip={notrip!r})
+_AG = _a3.Agent({ckpt!r}, sample={sample!r}, temp={temp!r}, seed={seed!r}, persist={persist!r}, dedupe={dedupe!r}, msample={msample!r}, fill={fill!r}, smask={smask!r}, notrip={notrip!r}, team={team!r}, trustop={trustop!r})
 
 
 def agent(obs, config=None):
@@ -267,11 +347,14 @@ def agent(obs, config=None):
 
 
 def make_agent_dir(ckpt, out_dir, sample=False, temp=1.0, seed=12345, persist=False, dedupe=False, msample=False, fill=False,
-                   smask=False, notrip=False):
+                   smask=False, notrip=False, team=None, trustop=False):
     os.makedirs(out_dir, exist_ok=True)
-    dst = os.path.join(os.path.abspath(out_dir), "model.pt"); shutil.copy(ckpt, dst)
+    cks = [c for c in str(ckpt).split(",") if c]; dsts = []
+    for j, c in enumerate(cks):
+        dst = os.path.join(os.path.abspath(out_dir), "model.pt" if len(cks) == 1 else f"model{j}.pt"); shutil.copy(c, dst); dsts.append(dst)
+    dst = ",".join(dsts)
     with open(os.path.join(out_dir, "main.py"), "w") as f:
-        f.write(MAIN_TEMPLATE.format(here=HERE, ckpt=dst, sample=sample, temp=temp, seed=seed, persist=persist, dedupe=dedupe, msample=msample, fill=fill, smask=smask, notrip=notrip))
+        f.write(MAIN_TEMPLATE.format(here=HERE, ckpt=dst, sample=sample, temp=temp, seed=seed, persist=persist, dedupe=dedupe, msample=msample, fill=fill, smask=smask, notrip=notrip, team=team, trustop=trustop))
     return os.path.join(out_dir, "main.py")
 
 
@@ -281,4 +364,5 @@ if __name__ == "__main__":
     ap.add_argument("--sample", action="store_true"); ap.add_argument("--temp", type=float, default=1.0); ap.add_argument("--seed", type=int, default=12345)
     ap.add_argument("--persist", action="store_true"); ap.add_argument("--dedupe", action="store_true"); ap.add_argument("--msample", action="store_true")
     ap.add_argument("--fill", action="store_true"); ap.add_argument("--smask", action="store_true"); ap.add_argument("--notrip", action="store_true")
-    a = ap.parse_args(); print(make_agent_dir(a.ckpt, a.out, a.sample, a.temp, a.seed, a.persist, a.dedupe, a.msample, a.fill, a.smask, a.notrip))
+    ap.add_argument("--team", default=None); ap.add_argument("--trustop", action="store_true")
+    a = ap.parse_args(); print(make_agent_dir(a.ckpt, a.out, a.sample, a.temp, a.seed, a.persist, a.dedupe, a.msample, a.fill, a.smask, a.notrip, a.team, a.trustop))

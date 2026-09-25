@@ -11,7 +11,7 @@ MOVES = {F.UNIT_IDX[k] for k in ("NORTH", "SOUTH", "EAST", "WEST")}
 
 
 def one(args):
-    f, team, out, check, canon_dir, nonoop = args
+    f, team, out, check, canon_dir, nonoop, motion, memory = args
     dst = f"{out}/{os.path.basename(f).split('-replay')[0]}.npz"
     if os.path.exists(dst):
         return "skip"
@@ -32,7 +32,7 @@ def one(args):
         B = np.zeros((T, F.C_BOARD, 10, 10), np.float16); G = np.zeros((T, F.G_DIM), np.float32)
         MT = np.zeros((T, F.N_SLOTS), np.int16); MQ = np.zeros((T, F.N_SLOTS), np.int16)
         ut, ui, ux, uy, uv, ua, uq = [], [], [], [], [], [], []
-        snaps = []; bad = 0
+        snaps = []; bad = 0; pos_hist = []; day_hist = []; umem = F.UnitMemory() if memory else None
         for t in range(T):
             o = F.merged_obs(d, t, p); a = d["steps"][t + 1][p]["action"] or {}
             snaps.append(F.snapshot(o, p)); snaps = snaps[-(F.LAGS + 1):]
@@ -47,9 +47,14 @@ def one(args):
                     bad += 1
             acts = [a.get("farmer")] + list(a.get("hands") or [])
             MS[t] = F.shed_after_units(o, p, acts)
-            for i, (x, y, vec) in enumerate(F.units3(o, p)):
+            pos_hist.append(F.unit_positions(o, p)); day_hist.append(int(o.get("day", t // 24)))
+            pos_hist = pos_hist[-3:]; day_hist = day_hist[-3:]
+            memf = umem.features(len(pos_hist[-1]), t, day_hist[-1]) if memory else None
+            for i, (x, y, vec) in enumerate(F.units3(o, p, F.motion_context(pos_hist, day_hist) if motion else None, memf)):
                 c, q = F.encode_unit(acts[i] if i < len(acts) else None)
                 ut.append(t); ui.append(i); ux.append(x); uy.append(y); uv.append(vec); ua.append(c); uq.append(q)
+            if memory:  # after this step's features: the memory only reflects actions of earlier steps
+                umem.update(acts, pos_hist[-1], t)
         ut_a = np.array(ut); ui_a = np.array(ui); ux_a = np.array(ux); uy_a = np.array(uy); ua_a = np.array(ua)
         key = {(int(t_), int(i_)): k for k, (t_, i_) in enumerate(zip(ut_a, ui_a))}
         tx = ux_a.copy(); ty = uy_a.copy()
@@ -66,7 +71,8 @@ def one(args):
                     break
             tx[k], ty[k] = ux_a[j], uy_a[j]
         r = d["rewards"]
-        np.savez_compressed(dst, B=B, G=G, MT=MT, MQ=MQ, MS=MS, ut=ut_a.astype(np.int32), ui=ui_a.astype(np.int8),
+        uext = np.array(["motion"] * bool(motion) + ["memory"] * bool(memory))
+        np.savez_compressed(dst, uext=uext, B=B, G=G, MT=MT, MQ=MQ, MS=MS, ut=ut_a.astype(np.int32), ui=ui_a.astype(np.int8),
                             ux=ux_a.astype(np.int8), uy=uy_a.astype(np.int8), uv=np.array(uv, np.float32),
                             ua=ua_a.astype(np.int16), uq=np.array(uq, np.int16), tx=tx.astype(np.int8), ty=ty.astype(np.int8),
                             won=np.array(r[p] > r[1 - p]), margin=np.array(r[p] - r[1 - p]), seat=np.array(p))
@@ -81,11 +87,13 @@ if __name__ == "__main__":
     ap.add_argument("--workers", type=int, default=16); ap.add_argument("--check", action="store_true"); ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--canon", default="", help="dir with canon_market.py outputs for these replays")
     ap.add_argument("--nonoop", action="store_true", help="drop NOOP slots from market labels")
+    ap.add_argument("--motion", action="store_true", help="v2 unit features: unit displacement over the last 2 steps")
+    ap.add_argument("--memory", action="store_true", help="unit features: per-day memory of each unit's last work cell/type")
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
     fs = sorted(glob.glob(a.glob))
     if a.limit:
         fs = fs[: a.limit]
     with ProcessPoolExecutor(a.workers) as ex:
-        res = list(ex.map(one, [(f, a.team, a.out, a.check, a.canon, a.nonoop) for f in fs]))
+        res = list(ex.map(one, [(f, a.team, a.out, a.check, a.canon, a.nonoop, a.motion, a.memory) for f in fs]))
     from collections import Counter
     print(Counter(r.split(" ")[0] for r in res)); print([r for r in res if not r.startswith(("ok", "skip"))][:3]); print(Counter(r for r in res if r.startswith("ok")))

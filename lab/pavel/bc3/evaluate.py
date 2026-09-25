@@ -4,6 +4,9 @@ usage: python evaluate.py --run ../../../../bc3_runs/boey_r2 --replays ../../../
 Variants: greedy | persist | dedupe | sample | persist+sample ... ('+'-joined flags)."""
 import argparse, json, os, subprocess, sys
 
+# one thread per game process: torch/numpy otherwise spawn ~64 threads each and oversubscribe the shared machine
+for _v in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
+    os.environ[_v] = "1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))  # ~/personal/kaggle/kaggriculture
 PY = os.path.join(ROOT, ".venv", "bin", "python")
@@ -24,28 +27,34 @@ def main():
     ap.add_argument("--seeds", type=int, default=16); ap.add_argument("--workers", type=int, default=24); ap.add_argument("--ckpt", default="best.pt")
     ap.add_argument("--opponents", default="v5_market", help="compare.py baselines, plus es2c1 for the adil candidate")
     ap.add_argument("--skip-handover", action="store_true"); ap.add_argument("--skip-compare", action="store_true")
+    ap.add_argument("--cond", default="", help="multi-team model: team (data dir basename) to condition on")
     a = ap.parse_args()
-    run = os.path.abspath(a.run); name = os.path.basename(run); ckpt = os.path.join(run, a.ckpt)
+    run = os.path.abspath(a.run); name = os.path.basename(run) + (f"_{a.cond}" if a.cond else ""); ckpt = ",".join(c if os.path.isabs(c) else os.path.join(run, c) for c in a.ckpt.split(","))
     split = json.load(open(os.path.join(run, "split.json")))
     val_dir = os.path.join(ROOT, "runs", "val", name); os.makedirs(val_dir, exist_ok=True)
-    for f in split["val_files"]:
+    vf = split["val_files"]
+    if a.cond and split.get("teams"):
+        ti = split["teams"].index(a.cond); vf = [f for f, t in zip(vf, split["val_file_team"]) if t == ti]
+    for f in vf:
         src = os.path.join(os.path.abspath(a.replays), f.replace(".npz", "-replay.json.gz")); dst = os.path.join(val_dir, os.path.basename(src))
         if not os.path.exists(dst):
             os.symlink(src, dst)
     agents = {}
     for v in a.variants.split(","):
         flags = v.split("+"); out = os.path.join(ROOT, "runs", "agents", f"{name}_{v.replace('+', '_')}")
-        cmd = [PY, os.path.join(HERE, "agent3.py"), "--ckpt", ckpt, "--out", out]
-        cmd += ["--persist"] * ("persist" in flags) + ["--dedupe"] * ("dedupe" in flags) + ["--sample"] * ("sample" in flags) + ["--msample"] * ("msample" in flags) + ["--fill"] * ("fill" in flags) + ["--smask"] * ("smask" in flags) + ["--notrip"] * ("notrip" in flags)
+        cmd = [PY, os.path.join(HERE, "agent3.py"), "--ckpt", ckpt, "--out", out] + (["--team", a.cond] if a.cond else [])
+        cmd += ["--persist"] * ("persist" in flags) + ["--dedupe"] * ("dedupe" in flags) + ["--sample"] * ("sample" in flags) + ["--msample"] * ("msample" in flags) + ["--fill"] * ("fill" in flags) + ["--smask"] * ("smask" in flags) + ["--notrip"] * ("notrip" in flags) + ["--trustop"] * ("trustop" in flags)
         sh(cmd); agents[v] = os.path.join(out, "main.py")
     summary = {}
     if not a.skip_handover:
         for v in a.variants.split(","):
-            flags = v.split("+"); opts = ",".join(f for f in flags if f in ("persist", "dedupe", "msample", "fill", "smask", "notrip"))
+            flags = v.split("+"); opts = ",".join(f for f in flags if f in ("persist", "dedupe", "msample", "fill", "smask", "notrip", "trustop"))
             cmd = [PY, os.path.join(HERE, "..", "handover.py"), "--ckpt", ckpt, "--glob", os.path.join(val_dir, "*.gz"), "--team", a.team,
                    "--ks", a.ks, "--out", os.path.join(ROOT, "runs", "handover", f"{name}_{v.replace('+', '_')}.jsonl"), "--workers", str(a.workers)]
             if opts:
                 cmd += ["--opts", opts]
+            if a.cond:
+                cmd += ["--cond", a.cond]
             if "sample" in flags:
                 cmd += ["--sample"]
             print(f"== handover {name} {v}\n" + sh(cmd), flush=True)

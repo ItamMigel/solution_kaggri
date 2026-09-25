@@ -10,19 +10,27 @@ IGN = F.IGNORE
 
 
 def load(root, val_eps=12, seed=0):
-    fs = sorted(glob.glob(f"{root}/*.npz")); rng = np.random.default_rng(seed); rng.shuffle(fs)
-    parts = {"val": fs[:val_eps], "train": fs[val_eps:]}; out = {}
+    """root: one dir, or comma-separated dirs (multi-team: a team one-hot is appended to G, team = dir basename)."""
+    roots = root.split(","); multi = len(roots) > 1; parts = {"val": [], "train": []}
+    for ti, r in enumerate(roots):
+        fs = sorted(glob.glob(f"{r}/*.npz")); rng = np.random.default_rng(seed); rng.shuffle(fs)
+        parts["val"] += [(ti, f) for f in fs[:val_eps]]; parts["train"] += [(ti, f) for f in fs[val_eps:]]
+    out = {}
     for split, lst in parts.items():
         cols = {k: [] for k in ("B", "G", "MS", "MT", "MQ", "ut", "ui", "ux", "uy", "uv", "ua", "uq", "tx", "ty")}; off = 0
-        for f in lst:
+        for ti, f in lst:
             d = np.load(f); T = len(d["G"])
             for k in cols:
-                cols[k].append(d[k] + off if k == "ut" else d[k])
+                v = d[k] + off if k == "ut" else d[k]
+                if k == "G" and multi:
+                    oh = np.zeros((T, len(roots)), np.float32); oh[:, ti] = 1; v = np.concatenate([v, oh], 1)
+                cols[k].append(v)
             off += T
         o = {k: np.concatenate(v) for k, v in cols.items()}
         o["tc"] = o["ty"].astype(np.int64) * 10 + o["tx"].astype(np.int64)
         o["ustart"] = np.searchsorted(o["ut"], np.arange(len(o["G"]) + 1))
-        o["files"] = [os.path.basename(f) for f in lst]
+        o["files"] = [os.path.basename(f) for _, f in lst]; o["file_team"] = [ti for ti, _ in lst]
+        o["teams"] = [os.path.basename(r.rstrip("/")) for r in roots] if multi else []
         out[split] = o; print(split, len(lst), "eps", len(o["G"]), "steps", len(o["ua"]), "units", flush=True)
     return out
 
@@ -47,16 +55,19 @@ class Res(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(s, ch=128, blocks=8, hid=256):
+    def __init__(s, ch=128, blocks=8, hid=256, u_dim=None, g_dim=None, teams=None, uext=None):
         super().__init__()
-        s.cfg = dict(ch=ch, blocks=blocks, hid=hid)
-        s.inp = nn.Conv2d(F.C_BOARD + F.G_DIM, ch, 3, padding=1)
+        u_dim = u_dim or F.U_DIM_V1; g_dim = g_dim or F.G_DIM
+        if uext is None:  # older checkpoints: extra unit dims could only be motion
+            uext = ["motion"] if u_dim > F.U_DIM_V1 else []
+        s.cfg = dict(ch=ch, blocks=blocks, hid=hid, u_dim=u_dim, g_dim=g_dim, teams=list(teams or []), uext=list(uext))
+        s.inp = nn.Conv2d(F.C_BOARD + g_dim, ch, 3, padding=1)
         s.body = nn.Sequential(*[Res(ch) for _ in range(blocks)])
-        uin = ch + F.U_DIM + F.G_DIM
+        uin = ch + u_dim + g_dim
         s.unit = nn.Sequential(nn.Linear(uin, hid), nn.ReLU(), nn.Linear(hid, hid), nn.ReLU())
         s.u_op = nn.Linear(hid, len(F.UNIT_OPS)); s.u_q = nn.Linear(hid + len(F.UNIT_OPS), len(F.QTY_VALS))
         s.tq = nn.Sequential(nn.Linear(uin, hid), nn.ReLU(), nn.Linear(hid, ch))
-        s.m_ctx = nn.Sequential(nn.Linear(2 * ch + F.G_DIM + F.MS_DIM, hid), nn.ReLU(), nn.Linear(hid, hid), nn.Tanh())
+        s.m_ctx = nn.Sequential(nn.Linear(2 * ch + g_dim + F.MS_DIM, hid), nn.ReLU(), nn.Linear(hid, hid), nn.Tanh())
         s.m_tok_emb = nn.Embedding(F.N_TOK + 1, 48)  # index N_TOK = <start>
         s.m_q_emb = nn.Embedding(F.QMAX + 1, 16)     # index QMAX = no qty
         s.m_slot_emb = nn.Embedding(F.N_SLOTS, 16)
@@ -149,8 +160,11 @@ if __name__ == "__main__":
     ap.add_argument("--val-eps", type=int, default=12); ap.add_argument("--wd", type=float, default=1e-4); ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = "cuda"; torch.manual_seed(a.seed)
     D = load(a.data, a.val_eps, a.seed); TR = to_dev(D["train"], dev); VA = to_dev(D["val"], dev)
-    json.dump({"val_files": D["val"]["files"], "args": vars(a)}, open(f"{a.out}/split.json", "w"))
-    net = Net(a.ch, a.blocks, a.hid).to(dev)
+    json.dump({"val_files": D["val"]["files"], "val_file_team": D["val"]["file_team"], "teams": D["val"]["teams"], "args": vars(a)},
+              open(f"{a.out}/split.json", "w"))
+    f0 = np.load(sorted(glob.glob(f"{a.data.split(',')[0]}/*.npz"))[0])
+    uext = [str(x) for x in f0["uext"]] if "uext" in f0 else None
+    net = Net(a.ch, a.blocks, a.hid, u_dim=D["train"]["uv"].shape[1], g_dim=D["train"]["G"].shape[1], teams=D["train"]["teams"], uext=uext).to(dev)
     decay = [p for n_, p in net.named_parameters() if p.ndim > 1 and "emb" not in n_]
     no_decay = [p for n_, p in net.named_parameters() if not (p.ndim > 1 and "emb" not in n_)]
     opt = torch.optim.AdamW([{"params": decay, "weight_decay": a.wd}, {"params": no_decay, "weight_decay": 0.0}], a.lr)

@@ -7,13 +7,16 @@ usage: python handover.py --ckpt ../../../bc3_runs/boey_r1/best.pt --glob '../..
 import argparse, contextlib, glob, gzip, io, json, os, sys
 from concurrent.futures import ProcessPoolExecutor
 
+for _v in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
+    os.environ[_v] = "1"  # set before workers fork/import torch
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "bc3"))
 
 
 def job(args):
-    path, team, ckpt, K, sample, mix, opts = args
-    os.environ.setdefault("OMP_NUM_THREADS", "1")
+    path, team, ckpt, K, sample, mix, opts, cond = args
+    for v in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
+        os.environ[v] = "1"
     from kaggle_environments import make
     import agent3
     d = json.load(gzip.open(path, "rt"))
@@ -23,7 +26,7 @@ def job(args):
     tapes = [[d["steps"][k + 1][s]["action"] for k in range(len(d["steps"]) - 1)] for s in (0, 1)]
     cfg = {k: v for k, v in d["configuration"].items() if k not in ("agents", "seed")}; cfg["seed"] = d["info"]["seed"]
     bc = agent3.Agent(ckpt, sample=sample, persist="persist" in opts, dedupe="dedupe" in opts, msample="msample" in opts, fill="fill" in opts,
-                         smask="smask" in opts, notrip="notrip" in opts)
+                         smask="smask" in opts, notrip="notrip" in opts, team=cond or None, trustop="trustop" in opts)
 
     def expert_seat(obs, config=None):
         k = int(obs.get("step", 0)); out = bc(obs, config)
@@ -52,9 +55,11 @@ def main():
     ap.add_argument("--team", required=True); ap.add_argument("--ks", default="0,72,168,240,360,480,600,696")
     ap.add_argument("--out", required=True); ap.add_argument("--workers", type=int, default=16); ap.add_argument("--sample", action="store_true")
     ap.add_argument("--opts", default="", help="comma list: persist,dedupe")
+    ap.add_argument("--cond", default="", help="multi-team model: team to condition on (data dir basename)")
     ap.add_argument("--mix", default="all", help="all | units (BC units + recorded market) | market (recorded units + BC market)")
     a = ap.parse_args(); os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
-    jobs = [(f, a.team, os.path.abspath(a.ckpt), int(k), a.sample, a.mix, a.opts) for f in sorted(glob.glob(a.glob)) for k in a.ks.split(",")]
+    ck = ",".join(os.path.abspath(c) for c in a.ckpt.split(",") if c)
+    jobs = [(f, a.team, ck, int(k), a.sample, a.mix, a.opts, a.cond) for f in sorted(glob.glob(a.glob)) for k in a.ks.split(",")]
     rows = []
     with ProcessPoolExecutor(a.workers, max_tasks_per_child=1) as ex, open(a.out, "w") as fo:
         for r in ex.map(job, jobs):
