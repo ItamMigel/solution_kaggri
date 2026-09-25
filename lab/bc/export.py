@@ -164,11 +164,17 @@ def agent(obs, config=None):
         farm = obs["farms"][p]
         hire_max = max(0, min(MKT_MAX, _MAX_HANDS - len(farm.get("hands") or [])))
         land_max = max(0, 3 - (len(farm.get("unlocked_quadrants") or []) - 1))
-        b = np.arange(MKT_MAX + 1)
-        m = m.copy()
-        m[MKT_IDX["HIRE"]] = np.where(b > hire_max, -1e9, m[MKT_IDX["HIRE"]])
-        m[MKT_IDX["BUY_LAND"]] = np.where(b > land_max, -1e9, m[MKT_IDX["BUY_LAND"]])
-        q = [_pick(m[k]) for k in range(len(MKT_KEYS))]
+        b = np.arange(MKT_MAX + 1); remaining = 10; q = [0] * len(MKT_KEYS)
+        for k in _MKT_ORDER_IDX:   # mirror of policy.sample_market (P0 fix): cap by remaining slots before sampling
+            key = MKT_KEYS[k]; op = key.split(":")[0]
+            if op in ("HIRE", "BUY_LAND", "BUY_ANIMAL"):
+                cap = min(remaining, MKT_MAX)
+                if op == "HIRE": cap = min(cap, hire_max)
+                if op == "BUY_LAND": cap = min(cap, land_max)
+            else:
+                cap = MKT_MAX if remaining > 0 else 0
+            q[k] = _pick(m[k], b <= cap)
+            remaining -= q[k] if op in ("HIRE", "BUY_LAND", "BUY_ANIMAL") else int(q[k] > 0)
         return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": _market(q)}
     except Exception:
         return {"farmer": ["PASS"], "hands": [], "market": []}
