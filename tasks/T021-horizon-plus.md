@@ -52,3 +52,4 @@ Code: lab/hplus/modules.py (claude). Interface: modules.build(base_main_py, gene
 - **es2_c1 promotion gate PASS** (runs/gate_es2_c1): vs g9 31-1 CI [90.6,100]% (+$15), vs g1 30-2, vs v5×2 64-0. Awaiting codex independent reproduction. Codex M3-lite fertilizer hand: closed negative (firing variants −0.25).
 - land-early (fixed) race on top of es2_c1 base (genome0 = g9+collect): k 24/48/72/96, 4 worlds × g9/v5/parthenos → runs/hplus_land_race. Codex T022 independent review of es2_c1 running.
 - **es2_c1 PROMOTED** after codex T022 PASS (29-2-1 vs g9). Land-early race: inert or −0.42 → closed.
+- T023 (codex): residual PASS mining → WATER/CARE inert, FEED −0.5/−$137 after es2 → no survivor.
