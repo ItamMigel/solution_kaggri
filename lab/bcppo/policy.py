@@ -108,6 +108,8 @@ def tile_masks(st, p, ux, uy, umask):
 PLANT_IDS = [IDX["PLANT:" + c] for c in feat.CROPS]
 PICK_IDS = [IDX["PICKUP:" + i] for i in feat.ITEMS]
 MOVE_T = torch.tensor(MOVE_IDS)
+PLANT_T = torch.tensor(PLANT_IDS)
+PICK_T = torch.tensor(PICK_IDS)
 
 
 def act(net, st, p, so, team_vec, greedy=False):
@@ -125,10 +127,12 @@ def act(net, st, p, so, team_vec, greedy=False):
     used = torch.zeros((B, U, NOP), dtype=torch.bool, device=dev); o = torch.zeros((B, U), dtype=torch.long, device=dev)
     qty = torch.zeros((B, U), dtype=torch.long, device=dev)
     U_eff = int(umask.any(0).sum())  # slots beyond the largest hand count in the batch are PASS
+    plant_ids = PLANT_T.to(dev); pick_ids = PICK_T.to(dev)
     for u in range(U_eff):
         mu = base[:, u].clone()
-        for c, pid in enumerate(PLANT_IDS): mu[:, pid] = aux["empty"][:, u] & (seeds_left[:, c] > 0) & umask[:, u]
-        for it, pid in enumerate(PICK_IDS): mu[:, pid] = aux["adj"][:, u] & (shed_left[:, it] > 0) & umask[:, u]
+        um = umask[:, u:u + 1]
+        mu[:, plant_ids] = aux["empty"][:, u:u + 1] & (seeds_left > 0) & um          # PLANT c needs empty tile + seeds left
+        mu[:, pick_ids] = aux["adj"][:, u:u + 1] & (shed_left > 0) & um              # PICKUP i needs shed-adjacent + stock left
         mv = want[:, u] & mu
         off = (t[:, u] != cur[:, u]) & mv.any(-1)
         nonmove = mu.clone(); nonmove[:, MOVE_T.to(dev)] = False
@@ -136,7 +140,7 @@ def act(net, st, p, so, team_vec, greedy=False):
         lg = ul[:, u].masked_fill(~mask, -1e9)
         ou = lg.argmax(-1) if greedy else torch.distributions.Categorical(logits=lg).sample()
         used[:, u] = mask; o[:, u] = ou
-        for c, pid in enumerate(PLANT_IDS): seeds_left[:, c] -= (ou == pid).long()
+        seeds_left -= (ou[:, None] == plant_ids[None, :]).long()
         it_ = ARG1.to(dev)[ou].clamp(0, 11); is_pick = OPT.to(dev)[ou] == O.OP_PICKUP
         n = torch.where(it_ >= 9, torch.ones_like(it_), torch.where(it_ == O.ITEM_FERTILIZER, 4, 3))
         n = torch.minimum(n, shed_left.gather(1, it_[:, None]).squeeze(1)).clamp(min=1)
