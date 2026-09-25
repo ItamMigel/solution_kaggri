@@ -81,6 +81,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
 | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | in_progress — independent es3_g5 red-team review | 16 new non-confirmation worlds, both seats; paired es3_g5/es2_c1 panel gate. `tasks/T026-es3g5-review.md` |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
 | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |

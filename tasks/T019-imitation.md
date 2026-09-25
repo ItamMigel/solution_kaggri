@@ -29,3 +29,9 @@ Plan:
 - Speed P40: B=1024: net 64 ms, features 16 ms, env step 36 ms per player-step → ~4k game-steps/s. (H100 bf16 should be ≥10×.)
 - `ppo.py`: self-play PPO, reward = Δmoney/1e4 dense + 0.5·margin/1e4 terminal, GAE(0.999, 0.95), KL-to-BC anchor annealed. Run r1: 256 envs × 40 iters on P40 → /workspace/shared/bcppo_runs/r1, log runs/bcppo_r1.log.
 - 2026-09-24 ~01:00 — **BC→PPO package v2 READY**: h100_pkg/kaggri_bcppo_v2.zip (168 MB, sha256 alongside). From the unzipped zip: parity 1e-7, e2e 0 diffs ($55–58k greedy), bf16 league smoke $88k, 2 PPO rounds with resume OK. Codex reviewed scripts: PASS.
+## H100 run 1 (pkg v2.1, human-reported 2026-09-25 ~16:00)
+- BC v3 (13 teams, 10×128): unit 83.8%, target 84.8%, market non-zero 55.7%.
+- PPO 400 iters each: money vs league — strong_v2 85→99k, double_dsm 84→99k, double_mmpq 77→94k, strong_v3 98→101k (peak 106k @17).
+  EV ≈0.8, clipfrac .14–.24, kl_bc .28–.44 (large drift from BC).
+- Official-engine auto-eval (4 worlds × 2 seats): nothing beats es1_g9/v5/parthenos. Best lineage strong_v3: vs g9 up to 4/8 (it319 −1.7k), typically −5…−10k; beats yhay clone up to 6/8. v2/doubles −11…−25k.
+- Next on H100 (sent to human): all 4 GPUs on the v3 lineage — continue strong_v3 (+400 it), v3_from319 (lr 1e-5), v3_big (ENVS 1024, lr 1e-5), v3_mgoose double; EVAL_WORLDS=8.
