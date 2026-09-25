@@ -32,3 +32,6 @@ Every five completed CMA2 generations, independently gate the stored centre agai
 
 ## CMA2 centre gate — gen 20 (new champion control)
 - Centre `runs/cma2/gen_020/c/main.py` (sha256 `cd1b7ee7…`) vs promoted frozen `es3_g5` on eight newly drawn worlds, both seats: **3–0–13** (18.75%; whole-world score CI **0…43.75%**), mean **−$349.9** (whole-world margin CI **−$702.5…−$100.1**), worst −$1,439, zero errors. Run: `runs/t025_cma2_g020_vs_es3g5_gate/arena/`. Clear rejection versus the actual current control; do not promote this centre. Next scheduled signal is after gen 25.
+
+## CMA3 handoff
+- 2026-09-25: Claude stopped CMA2 after the gen-20 rejection and launched `runs/cma3` from promoted es3_g5 parameters (`sigma=0.03`, es3_g5 mirror control). The scheduled independent gates now apply to CMA3 centres versus frozen es3_g5 every five completed generations. First gate: after gen 5.
