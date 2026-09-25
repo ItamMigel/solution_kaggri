@@ -1,0 +1,41 @@
+{
+  "created_utc": "2026-09-25T20:00:45.320843+00:00",
+  "candidates": {
+    "centre_g15": "/workspace/shared/runs/cma2/gen_015/c/main.py"
+  },
+  "opponents": {
+    "v3": "/workspace/solution_kaggri/agents/horizon_v3.py",
+    "v4_8turn": "/workspace/solution_kaggri/agents/horizon_v4_8turn.py",
+    "v4_12turn": "/workspace/solution_kaggri/agents/horizon_v4.py",
+    "es2_c1": "/workspace/shared/candidates/es2_c1/pkg/main.py"
+  },
+  "seeds": [
+    583932584,
+    306045532,
+    1069963249,
+    295449990,
+    481864621,
+    519864169,
+    1572945446,
+    1483889445
+  ],
+  "expected_games": 64,
+  "input_sha256": {
+    "/workspace/shared/candidates/es2_c1/pkg/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/runs/cma2/gen_015/c/main.py": "8405f56fc9259747a3fcb9040ae4f479383d05bbba966e6eee7da4242a5cca22",
+    "/workspace/solution_kaggri/agents/horizon_v3.py": "1cff2bd49f0800171199a87718e92da32db8e5f811d56fc5ee01e27d674cd6f9",
+    "/workspace/solution_kaggri/agents/horizon_v4.py": "8934ed21b6806556a73f6aeae9ed1a611498ae2abfec13b79b281a0e24ad9483",
+    "/workspace/solution_kaggri/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
