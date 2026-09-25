@@ -37,3 +37,5 @@ Codex review fixed 7 issues (research/pbt_codex.md). Smoke on P40 running (scrat
   Found: exam worlds rotate and opponents score 94k on one world vs 162k on another → fitness now RELATIVE to the start control
   evaluated every generation on the same worlds (smoothing/hall-of-fame were comparing different worlds). nproc bug (obeys OMP_NUM_THREADS)
   fixed; CPU = min(nproc, cgroup quota). Human's box: 224 visible / 128 quota → ~104 exam workers, 12 worlds.
+- 23:45Z PBT patch shipped: h100_pkg/kaggri_bcppo_v3_pbt_patch.zip (sha 86984c46…; 7 files over v3: pbt*.sh, pbt_ctl.py, ppo.py, README).
+  Smoke gen 3 with control: m1 +1.55 vs control, m0 −0.10 → EXPLOIT m0←m1. RESUME no longer needs START. Waiting for human's H100 launch.
