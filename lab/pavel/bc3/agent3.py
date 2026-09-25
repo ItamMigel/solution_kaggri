@@ -104,9 +104,22 @@ def _filler(obs, p, x, y, inv, day, claimed, shed_left):
     return None
 
 
+def _team_vec(cfg, team):
+    teams = cfg.get("teams") or []
+    if not teams:
+        return None
+    v = np.zeros(len(teams), np.float32); v[teams.index(team) if team in teams else 0] = 1
+    return v
+
+
+def _with_team(G, tv):
+    return G if tv is None else np.concatenate([G, np.broadcast_to(tv, (G.shape[0], len(tv)))], 1).astype(np.float32)
+
+
 class _One:
-    """One BC v3 network behind the decoding interface used by Agent (all outputs are log-probabilities)."""
-    def __init__(self, ckpt, torch):
+    """One BC v3 network behind the decoding interface used by Agent (all outputs are log-probabilities).
+    G passed in is the base global vector; the member appends its own team one-hot (members may differ in teams)."""
+    def __init__(self, ckpt, torch, team=None):
         from train3 import Net
         ck = torch.load(ckpt, map_location="cpu", weights_only=False)
         self.net = Net(**ck["cfg"]); sd = ck["state"]
@@ -114,39 +127,61 @@ class _One:
         if w.shape[1] < need:  # checkpoint trained before the shed-after-units market input: zero weights = old behaviour
             sd["m_ctx.0.weight"] = torch.cat([w, torch.zeros(w.shape[0], need - w.shape[1])], 1)
         self.net.load_state_dict(sd); self.net.eval(); self.cfg = self.net.cfg; self.T = torch
+        self.tv = _team_vec(self.cfg, team)
 
     def encode(self, B, G):
-        return self.net.trunk(B, G)
+        with self.T.no_grad():
+            return self.net.trunk(self.T.from_numpy(B), self.T.from_numpy(_with_team(G, self.tv)))
 
     def units(self, h, G, ux, uy, uv):
-        T = self.T; bi = T.zeros(len(ux), dtype=T.long)
-        z0 = T.cat([h[bi, :, uy, ux], uv, G[bi]], 1); z = self.net.unit(z0)
-        opl = T.log_softmax(self.net.u_op(z), 1).numpy()
-        tl = T.log_softmax(T.einsum("uc,ucp->up", self.net.tq(z0), h.flatten(2)[bi]) / (h.shape[1] ** 0.5), 1).numpy()
+        T = self.T
+        with T.no_grad():
+            G = T.from_numpy(_with_team(G, self.tv)); ux = T.from_numpy(ux); uy = T.from_numpy(uy); uv = T.from_numpy(uv)
+            bi = T.zeros(len(ux), dtype=T.long)
+            z0 = T.cat([h[bi, :, uy, ux], uv, G[bi]], 1); z = self.net.unit(z0)
+            opl = T.log_softmax(self.net.u_op(z), 1).numpy()
+            tl = T.log_softmax(T.einsum("uc,ucp->up", self.net.tq(z0), h.flatten(2)[bi]) / (h.shape[1] ** 0.5), 1).numpy()
         return opl, tl, z
 
     def qty(self, z, i, cls):
-        oh = self.T.zeros(1, len(F.UNIT_OPS)); oh[0, cls] = 1
-        return self.T.log_softmax(self.net.u_q(self.T.cat([z[i:i + 1], oh], 1)), 1).numpy()[0]
+        with self.T.no_grad():
+            oh = self.T.zeros(1, len(F.UNIT_OPS)); oh[0, cls] = 1
+            return self.T.log_softmax(self.net.u_q(self.T.cat([z[i:i + 1], oh], 1)), 1).numpy()[0]
 
     def m_start(self, h, G, MS):
-        ctx = self.net.m_context(h, G, MS); return (ctx, ctx)
+        with self.T.no_grad():
+            ctx = self.net.m_context(h, self.T.from_numpy(_with_team(G, self.tv)), self.T.from_numpy(MS)); return (ctx, ctx)
 
     def m_step(self, st, prev_t, prev_q, sl):
-        state, ctx = st
-        state, logit = self.net.m_step(state, ctx, prev_t, prev_q, self.T.tensor([sl]))
-        return (state, ctx), self.T.log_softmax(logit, 1).numpy()[0]
+        T = self.T
+        with T.no_grad():
+            state, ctx = st
+            state, logit = self.net.m_step(state, ctx, T.tensor([prev_t]), T.tensor([prev_q]), T.tensor([sl]))
+            return (state, ctx), T.log_softmax(logit, 1).numpy()[0]
 
     def m_qty(self, st, tok):
-        return self.T.log_softmax(self.net.m_qty(st[0], self.T.tensor([tok])), 1).numpy()[0]
+        with self.T.no_grad():
+            return self.T.log_softmax(self.net.m_qty(st[0], self.T.tensor([tok])), 1).numpy()[0]
 
 
+def _make_model(ckpt, team=None):
+    import torch
+    torch.set_num_threads(1)
+    try:
+        torch.set_num_interop_threads(1)
+    except RuntimeError:
+        pass
+    cks = [c for c in str(ckpt).split(",") if c]
+    return _One(cks[0], torch, team) if len(cks) == 1 else _Ens([_One(c, torch, team) for c in cks])
+
+
+# ============================== BUNDLE START (torch-free; copied verbatim into the numpy Kaggle agent) ==============
 class _Ens:
     """Ensemble of _One models with identical feature config: averages log-probabilities (geometric mean)."""
     def __init__(self, members):
         self.m = members; self.cfg = members[0].cfg
-        for x in members[1:]:
-            assert (x.cfg.get("u_dim"), x.cfg.get("g_dim"), x.cfg.get("teams")) == (self.cfg.get("u_dim"), self.cfg.get("g_dim"), self.cfg.get("teams"))
+        for x in members[1:]:  # unit features must match; team sets may differ (each member appends its own one-hot)
+            assert (x.cfg.get("u_dim"), x.cfg.get("uext")) == (self.cfg.get("u_dim"), self.cfg.get("uext"))
 
     def encode(self, B, G):
         return [x.encode(B, G) for x in self.m]
@@ -172,25 +207,14 @@ class _Ens:
 class Agent:
     def __init__(self, ckpt, sample=False, temp=1.0, seed=12345, persist=False, dedupe=False, msample=False, fill=False,
                  smask=False, notrip=False, team=None, trustop=False):
-        import torch
-        torch.set_num_threads(1)
-        try:
-            torch.set_num_interop_threads(1)
-        except RuntimeError:
-            pass
-        cks = [c for c in str(ckpt).split(",") if c]
-        self.model = _One(cks[0], torch) if len(cks) == 1 else _Ens([_One(c, torch) for c in cks])
-        self.torch = torch; self.sample = sample; self.temp = temp; self.rng = np.random.default_rng(seed)
+        self.model = _make_model(ckpt, team)
+        self.sample = sample; self.temp = temp; self.rng = np.random.default_rng(seed)
         self.snaps = []; self.last_step = None
         uext = self.model.cfg.get("uext")
         if uext is None:
             uext = ["motion"] if self.model.cfg.get("u_dim", F.U_DIM_V1) > F.U_DIM_V1 else []
         self.motion = "motion" in uext; self.memory = "memory" in uext; self.umem = F.UnitMemory()
         self.pos_hist = []; self.day_hist = []
-        teams = self.model.cfg.get("teams") or []
-        self.team_vec = None
-        if teams:  # multi-team model: condition on the chosen team (default: first)
-            self.team_vec = np.zeros(len(teams), np.float32); self.team_vec[teams.index(team) if team in teams else 0] = 1
         self.persist = persist; self.dedupe = dedupe; self.tgt = {}; self.tgt_day = -1; self.msample = msample; self.fill = fill; self.smask = smask; self.notrip = notrip; self.trustop = trustop
         self.stats = {"n": 0, "pass": 0, "pass_forced": 0, "at_tgt_wants_move": 0, "top_masked": 0} if os.environ.get("BC3_STATS") else None
 
@@ -204,7 +228,6 @@ class Agent:
         return int((z / self.temp + g).argmax())
 
     def __call__(self, obs, config=None):
-        torch = self.torch
         p = int(obs.get("player", 0)); step = int(obs.get("step", 0)); day = int(obs.get("day", step // 24))
         if self.last_step is None or step <= self.last_step:
             self.snaps = []; self.tgt = {}; self.pos_hist = []; self.day_hist = []; self.umem = F.UnitMemory()
@@ -215,19 +238,17 @@ class Agent:
         self.pos_hist.append(F.unit_positions(obs, p)); self.day_hist.append(day)
         self.pos_hist = self.pos_hist[-3:]; self.day_hist = self.day_hist[-3:]
         Bd = F.board3(obs, p); g = F.glob3(obs, p, F.hist_features(self.snaps))
-        if self.team_vec is not None:
-            g = np.concatenate([g, self.team_vec])
         memf = self.umem.features(len(self.pos_hist[-1]), step, day) if self.memory else None
         ul = F.units3(obs, p, F.motion_context(self.pos_hist, self.day_hist) if self.motion else None, memf)
         priv = obs.get("private") or {}; invs = priv.get("inventories") or []
         farm = obs["farms"][p]
-        with torch.no_grad():
-            B = torch.from_numpy(Bd[None]).float(); G = torch.from_numpy(g[None])
+        if True:
+            B = Bd[None].astype(np.float32); G = g[None].astype(np.float32)
             h = self.model.encode(B, G)
             acts = []
             if ul:
-                ux = torch.tensor([u[0] for u in ul]); uy = torch.tensor([u[1] for u in ul])
-                uv = torch.from_numpy(np.stack([u[2] for u in ul]))
+                ux = np.array([u[0] for u in ul], np.int64); uy = np.array([u[1] for u in ul], np.int64)
+                uv = np.stack([u[2] for u in ul]).astype(np.float32)
                 opl, tl, z = self.model.units(h, G, ux, uy, uv)
                 seeds_left = {c: int((priv.get("seeds") or {}).get(c, 0)) for c in F.CROPS}
                 shed_left = {it: int((priv.get("shed") or {}).get(it, 0)) for it in F.ITEMS}
@@ -296,9 +317,9 @@ class Agent:
                 self.umem.update(acts, self.pos_hist[-1], step)
             ms = F.shed_after_units(obs, p, acts)
             sell_left = {it: int(round(v * 50)) for it, v in zip(F.ITEMS, ms)}
-            MS = torch.from_numpy(ms[None])
+            MS = ms[None].astype(np.float32)
             state = self.model.m_start(h, G, MS)
-            prev_t = torch.tensor([F.N_TOK]); prev_q = torch.tensor([F.QMAX]); orders = []; sold = set()
+            prev_t = F.N_TOK; prev_q = F.QMAX; orders = []; sold = set()
             for sl in range(F.N_SLOTS):
                 state, logit = self.model.m_step(state, prev_t, prev_q, sl)
                 mask = np.ones(F.N_TOK, bool)
@@ -325,8 +346,9 @@ class Agent:
                         if self.smask:
                             n = max(1, min(n, sell_left.get(it, 0))); sell_left[it] -= n
                     orders.append([op, it, n])
-                prev_t = torch.tensor([tok]); prev_q = torch.tensor([q])
+                prev_t = tok; prev_q = q
         return {"farmer": acts[0] if acts else ["PASS"], "hands": acts[1:], "market": orders}
+# ============================== BUNDLE END ============================================================================
 
 
 MAIN_TEMPLATE = '''"""BC v3 agent (local evaluation). Generated by lab/pavel/bc3/agent3.py."""

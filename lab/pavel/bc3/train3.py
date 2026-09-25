@@ -17,16 +17,36 @@ def load(root, val_eps=12, seed=0):
         parts["val"] += [(ti, f) for f in fs[:val_eps]]; parts["train"] += [(ti, f) for f in fs[val_eps:]]
     out = {}
     for split, lst in parts.items():
-        cols = {k: [] for k in ("B", "G", "MS", "MT", "MQ", "ut", "ui", "ux", "uy", "uv", "ua", "uq", "tx", "ty")}; off = 0
+        keys = ("B", "G", "MS", "MT", "MQ", "ut", "ui", "ux", "uy", "uv", "ua", "uq", "tx", "ty")
+        step_keys = {"B", "G", "MS", "MT", "MQ"}
+        # pass 1: sizes and dtypes (reads only small arrays); pass 2: fill preallocated arrays (no 2x concatenate peak)
+        sizes = []; proto = {}
         for ti, f in lst:
-            d = np.load(f); T = len(d["G"])
-            for k in cols:
-                v = d[k] + off if k == "ut" else d[k]
+            d = np.load(f); sizes.append((len(d["G"]), len(d["ut"])))
+            if not proto:
+                for k in keys:
+                    a = d[k]; proto[k] = (a.shape[1:], a.dtype)
+        NT = sum(s[0] for s in sizes); NU = sum(s[1] for s in sizes)
+        o = {}
+        for k in keys:
+            shp, dt = proto[k]
+            if k == "G" and multi:
+                shp = (shp[0] + len(roots),)
+            o[k] = np.empty(((NT if k in step_keys else NU),) + tuple(shp), dt)
+        off = 0; uoff = 0
+        for (ti, f), (T, U) in zip(lst, sizes):
+            d = np.load(f)
+            for k in keys:
+                v = d[k]
+                if k == "ut":
+                    v = v + off
                 if k == "G" and multi:
                     oh = np.zeros((T, len(roots)), np.float32); oh[:, ti] = 1; v = np.concatenate([v, oh], 1)
-                cols[k].append(v)
-            off += T
-        o = {k: np.concatenate(v) for k, v in cols.items()}
+                if k in step_keys:
+                    o[k][off:off + T] = v
+                else:
+                    o[k][uoff:uoff + U] = v
+            off += T; uoff += U
         o["tc"] = o["ty"].astype(np.int64) * 10 + o["tx"].astype(np.int64)
         o["ustart"] = np.searchsorted(o["ut"], np.arange(len(o["G"]) + 1))
         o["files"] = [os.path.basename(f) for _, f in lst]; o["file_team"] = [ti for ti, _ in lst]
@@ -35,9 +55,16 @@ def load(root, val_eps=12, seed=0):
     return out
 
 
-def to_dev(D, dev):
+def to_dev(D, dev, cpu_board=False):
     t = {}
-    t["B"] = torch.from_numpy(D["B"]).to(dev)  # fp16
+    # fp16 boards; with cpu_board they stay in pinned host memory and only the batch is copied (large multi-team data)
+    if cpu_board:
+        try:
+            t["B"] = torch.from_numpy(D["B"]).pin_memory()
+        except RuntimeError:  # page-locked host memory exhausted (e.g. another run pinned its boards): use pageable memory
+            t["B"] = torch.from_numpy(D["B"])
+    else:
+        t["B"] = torch.from_numpy(D["B"]).to(dev)
     for k in ("G", "uv", "MS"):
         t[k] = torch.from_numpy(D[k]).to(dev)
     for k in ("MT", "MQ", "ut", "ui", "ux", "uy", "ua", "uq", "tc"):
@@ -120,7 +147,8 @@ def gather_units(T, idx):
 
 
 def losses(net, T, idx):
-    B = T["B"][idx]; G = T["G"][idx]; h = net.trunk(B, G)
+    B = T["B"][idx] if T["B"].device == idx.device else T["B"][idx.cpu()].to(idx.device, non_blocking=True)
+    G = T["G"][idx]; h = net.trunk(B, G)
     bi, ui = gather_units(T, idx)
     ua = T["ua"][ui]; uq = T["uq"][ui]; tc = T["tc"][ui]
     opl, ql, tl = net.units(h, G, bi, T["ux"][ui], T["uy"][ui], T["uv"][ui], op_for_q=ua)
@@ -158,8 +186,9 @@ if __name__ == "__main__":
     ap.add_argument("--epochs", type=int, default=30); ap.add_argument("--bs", type=int, default=256); ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--ch", type=int, default=128); ap.add_argument("--blocks", type=int, default=8); ap.add_argument("--hid", type=int, default=256)
     ap.add_argument("--val-eps", type=int, default=12); ap.add_argument("--wd", type=float, default=1e-4); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--cpu-board", action="store_true", help="keep boards in pinned host memory (datasets larger than GPU memory)")
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); dev = "cuda"; torch.manual_seed(a.seed)
-    D = load(a.data, a.val_eps, a.seed); TR = to_dev(D["train"], dev); VA = to_dev(D["val"], dev)
+    D = load(a.data, a.val_eps, a.seed); TR = to_dev(D["train"], dev, a.cpu_board); VA = to_dev(D["val"], dev, a.cpu_board)
     json.dump({"val_files": D["val"]["files"], "val_file_team": D["val"]["file_team"], "teams": D["val"]["teams"], "args": vars(a)},
               open(f"{a.out}/split.json", "w"))
     f0 = np.load(sorted(glob.glob(f"{a.data.split(',')[0]}/*.npz"))[0])
