@@ -124,7 +124,9 @@ def mine(path, verbose=True):
             farms_ref.clear()
             farms_ref[id(f0[0])] = 0
             farms_ref[id(f0[1])] = 1
-            acts = [steps[t][p]["action"] for p in range(2)]
+            # Ladder replays may encode a timed-out/no-op turn as `"action": null`.
+            # The engine accepts the equivalent empty action object.
+            acts = [steps[t][p].get("action") or {} for p in range(2)]
             for p in range(2):
                 m = acts[p].get("market") or []
                 for i, o in enumerate(m[:10]):
