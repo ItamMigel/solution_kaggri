@@ -1,0 +1,68 @@
+{
+  "created_utc": "2026-09-25T20:47:23.493042+00:00",
+  "candidates": {
+    "c": "/workspace/shared/runs/cma3/gen_000/c/main.py",
+    "x0": "/workspace/shared/runs/cma3/gen_000/x0/main.py",
+    "x1": "/workspace/shared/runs/cma3/gen_000/x1/main.py",
+    "x2": "/workspace/shared/runs/cma3/gen_000/x2/main.py",
+    "x3": "/workspace/shared/runs/cma3/gen_000/x3/main.py",
+    "x4": "/workspace/shared/runs/cma3/gen_000/x4/main.py",
+    "x5": "/workspace/shared/runs/cma3/gen_000/x5/main.py",
+    "x6": "/workspace/shared/runs/cma3/gen_000/x6/main.py",
+    "x7": "/workspace/shared/runs/cma3/gen_000/x7/main.py",
+    "x8": "/workspace/shared/runs/cma3/gen_000/x8/main.py",
+    "x9": "/workspace/shared/runs/cma3/gen_000/x9/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "best": "/workspace/shared/candidates/es3_g5/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    1229201285,
+    1572729505,
+    1602855732,
+    86389677,
+    1734358091,
+    2025521353,
+    1982534935,
+    1156392887
+  ],
+  "expected_games": 880,
+  "input_sha256": {
+    "/workspace/shared/candidates/es3_g5/pkg/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/cma3/gen_000/c/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/runs/cma3/gen_000/x0/main.py": "4ad9fbee07a4d5693c339e97a6ea4f65e8d1ec91e71089281c82f82aa8f149b3",
+    "/workspace/shared/runs/cma3/gen_000/x1/main.py": "c857011b1f4c793cd611eea9d0a2eaaf41de3a95e79a527a325c47bf398265a4",
+    "/workspace/shared/runs/cma3/gen_000/x2/main.py": "20daee6f346fd26cd382434c86a2c402c5410df3629eedbb50952c91a8892871",
+    "/workspace/shared/runs/cma3/gen_000/x3/main.py": "a328006fb0d8495b201a4bc572391f2e55925060af46a2f8aa0f4e99735d98c8",
+    "/workspace/shared/runs/cma3/gen_000/x4/main.py": "335d3a47e51079f5ff14950242531569706532eed60da844ed0c02df5b605ba3",
+    "/workspace/shared/runs/cma3/gen_000/x5/main.py": "dda8f6400cd909a29f8b07bcf32c2364f05d871856a1b1f267d98b5fb0642c40",
+    "/workspace/shared/runs/cma3/gen_000/x6/main.py": "1c5cde56a2984107a2770c57c229e350d7f114c16c07373e428152ad316f307f",
+    "/workspace/shared/runs/cma3/gen_000/x7/main.py": "493be7d5197c29722c00316cd174976617bbffdc08c085676f4c88685506bddd",
+    "/workspace/shared/runs/cma3/gen_000/x8/main.py": "24adf746de7796547f46d1b42771c70ce2dfe39580aad99a8be8c9927b30dd52",
+    "/workspace/shared/runs/cma3/gen_000/x9/main.py": "14342fe12253903f9b1eacd7a805a27236e20073912e8dba4b9b00bcf9e7b2dd",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 18,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "c",
+      "best"
+    ]
+  ]
+}
