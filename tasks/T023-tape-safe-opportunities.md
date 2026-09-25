@@ -1,7 +1,7 @@
 # T023 — tape-safe idle-unit opportunities
 
 Owner: Codex
-Status: in_progress
+Status: closed ✗
 
 ## Goal
 Mine our ladder replays for actions that can safely replace a parent `PASS` without movement, then implement two or three bounded Horizon+ modules and screen them against `es2_c1`.
@@ -18,4 +18,6 @@ A raw 307-replay scan records historical action/state pairs but its action timin
 HARVEST_PLANT is deliberately excluded despite 159 observed states: its M1 ablation was catastrophic from early harvest. FERTILIZE is excluded because its prior ablation lost; DIG_WEED has zero observed residual PASS states. The first capability screen therefore tests individual WATER, FEED and CARE only.
 
 ## Result
-Screen pending.
+The first screen was invalid (24/32 errors): appending Claude's `modules.build` twice re-bound its process-global parent callback and recursed. The failure is retained at `runs/t023_tape_safe_capability/` and is not scored. Codex added an isolated `_TS` namespace wrapper in `lab/hplus/tape_safe.py` (commit `ac7eb48`, 9 tests pass) to compose safely after es2_c1.
+
+A fresh locked two-world screen of the corrected agents against g9+yhay0913 completed **32/32 valid**: WATER and CARE are exactly inert; FEED is **−0.5000** paired score, −$137.0 (CI −$316.5…+$42.5). Evidence: `runs/t023_tape_safe_capability_fixed/`. None advances to race/CMA.
