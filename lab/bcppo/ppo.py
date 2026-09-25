@@ -24,6 +24,7 @@ from gpuenv import ops as O
 from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
 from gpuenv._state import Actions
+from gpuenv._units import plant_blocked
 
 REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "mcap")
 STEPS = 719
@@ -247,6 +248,11 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
         "active_units": torch.zeros((), dtype=torch.int64, device=dev),
         "unit_noop": torch.zeros((), dtype=torch.int64, device=dev),
         "market_noop": torch.zeros((), dtype=torch.int64, device=dev),
+        "unit_requested": torch.zeros((), dtype=torch.int64, device=dev),
+        "plant_requested": torch.zeros((), dtype=torch.int64, device=dev),
+        "plant_rejected": torch.zeros((), dtype=torch.int64, device=dev),
+        "market_orders_emitted": torch.zeros((), dtype=torch.int64, device=dev),
+        "hire_overflow": torch.zeros((), dtype=torch.int64, device=dev),
         "league_counts": torch.bincount(labels, minlength=len(names)),
         "learner_seat_one": seat_one.sum(),
     }
@@ -256,16 +262,30 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
             learner_state = _learner_view(st, seat_one)
             out0 = policy.act(net, learner_state, 0, so, team, greedy=greedy)
             out1 = _league_subset_actions(league, learner_state, so, labels, names, greedy=False)
-            st, _, _, _ = ve.step(st, _world_actions(policy.combine(out0[0], out1), seat_one))
+            _, logp, value, _, rec = out0
+            farmer, hands, market = out0[0]
+            unit_ops = torch.cat((farmer[:, None, 0], hands[..., 0]), 1).long()
+            unit_items = torch.cat((farmer[:, None, 1], hands[..., 1]), 1).long()
+            active = rec["umask"]
+            is_plant = unit_ops == O.OP_PLANT
+            actions = _world_actions(policy.combine(out0[0], out1), seat_one)
+            # The environment atomically rejects every same-crop PLANT in a
+            # turn when their combined demand exceeds seeds.  This is an exact
+            # engine rejection signal, unlike an inferred state delta.
+            blocked = _swap_player_tensor(plant_blocked(actions.unit_actions(), st.seeds), seat_one)[:, 0]
+            plant_rejected = is_plant & active & blocked.gather(1, unit_items.clamp(0, O.N_CROPS - 1))
+            before_overflow = _learner_value(st.overflow, seat_one)
+            st, _, _, _ = ve.step(st, actions)
+            metric["unit_requested"] += ((unit_ops != O.OP_PASS) & active).sum()
+            metric["plant_requested"] += (is_plant & active).sum()
+            metric["plant_rejected"] += plant_rejected.sum()
+            metric["market_orders_emitted"] += (market[..., 0] != O.MKT_NONE).sum()
+            metric["hire_overflow"] += (_learner_value(st.overflow, seat_one) - before_overflow).sum()
             eq = conservative_equity(st)
             equity_margin = _learner_margin(eq, seat_one)
             reward = (equity_margin - eq_prev) / 1e4
             eq_prev = equity_margin
-            _, logp, value, _, rec = out0
             buf.put(rec, logp, value, reward)
-            farmer, hands, market = out0[0]
-            unit_ops = torch.cat((farmer[:, None, 0], hands[..., 0]), 1).long()
-            active = rec["umask"]
             metric["unit_hist"] += torch.bincount(unit_ops[active], minlength=O.N_UNIT_OPS)
             metric["active_units"] += active.sum()
             metric["unit_noop"] += (unit_ops[active] == O.OP_PASS).sum()
@@ -502,9 +522,12 @@ def main():
             "market_op_distribution": [x / market_slots for x in market_hist],
             "unit_noop_fraction": int(action_metric["unit_noop"]) / active_units,
             "market_noop_fraction": int(action_metric["market_noop"]) / market_slots,
-            # The gpuenv currently exposes no per-action rejection bit.  F11
-            # will add it; until then this is explicitly an honest placeholder.
-            "rejected_actions": None,
+            "unit_requested": int(action_metric["unit_requested"]),
+            "plant_requested": int(action_metric["plant_requested"]),
+            "plant_rejected_engine": int(action_metric["plant_rejected"]),
+            "plant_rejected_fraction": int(action_metric["plant_rejected"]) / max(1, int(action_metric["plant_requested"])),
+            "market_orders_emitted": int(action_metric["market_orders_emitted"]),
+            "hire_overflow_engine": int(action_metric["hire_overflow"]),
         }
         record.update({key: value / max(1, n_updates) for key, value in stats.items()})
         print(json.dumps(record), flush=True)
