@@ -1968,3 +1968,1682 @@ index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194
 +
 +Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
 
+exec
+/bin/bash -lc "sed -n '1,260p' /workspace/solution_kaggri/lab/bcppo/smoke.py; sed -n '1,260p' /workspace/solution_kaggri/lab/bcppo/parity_test.py; sed -n '1,160p' /workspace/shared/bcppo_runs/smoke2/log.jsonl" in /workspace/wt/codex
+ succeeded in 0ms:
+import sys, os, time, torch
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import policy, gpufeat
+from gpuenv.env import VecKaggriculture
+B = int(sys.argv[1]) if len(sys.argv) > 1 else 64
+dev = "cuda"
+ck = torch.load("/workspace/shared/bc_runs/v2/final.pt", map_location=dev)
+net = policy.PolicyNet(ck["gdim"]).to(dev); missing = net.load_state_dict(ck["state"], strict=False); print("missing", missing.missing_keys)
+net.eval(); team = torch.tensor([[0., 1., 0.]], device=dev)
+ve = VecKaggriculture(B, device=dev); st = ve.reset(torch.arange(1, B + 1, device=dev) * 7919)
+so = gpufeat.ShopOrder(B, dev); t0 = time.time()
+with torch.no_grad():
+    for t in range(719):
+        so.update(st)
+        a0, lp0, v0, e0, r0 = policy.act(net, st, 0, so, team, greedy=True)
+        a1, lp1, v1, e1, r1 = policy.act(net, st, 1, so, team, greedy=False)
+        st, rew, done, info = ve.step(st, policy.combine(a0, a1))
+        if t in (0, 100, 300, 718): print(t, "money p0 mean %.0f p1 %.0f" % (st.money[:, 0].float().mean(), st.money[:, 1].float().mean()), "%.1fs" % (time.time() - t0), flush=True)
+print("final p0 (greedy) mean %.0f max %.0f | p1 (sampled) mean %.0f max %.0f" % (st.money[:, 0].float().mean(), st.money[:, 0].max(), st.money[:, 1].float().mean(), st.money[:, 1].max()))
+print("steps/s", B * 719 / (time.time() - t0))
+"""Lockstep official env vs gpuenv; compare feat.py(obs) against gpufeat(State) at every step for both players.
+usage: python parity_test.py [--seed S] [--agents A,B] [--steps N]"""
+import argparse, copy, json, os, sys
+import numpy as np, torch
+torch.backends.cudnn.allow_tf32 = False; torch.backends.cuda.matmul.allow_tf32 = False  # exact fp32 for parity tests (H100 defaults to TF32 convs)
+HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "bc")); sys.path.insert(0, os.path.join(HERE, ".."))
+import feat, gpufeat
+from gpuenv.env import VecKaggriculture
+from gpuenv._encode import encode_actions
+from kaggle_environments import make
+
+def obs_at(steps, t, p):
+    o = copy.deepcopy(steps[t][p]["observation"]); sh = steps[t][0]["observation"]
+    for k in ("step", "day", "hour", "farms", "market", "town"):
+        if k not in o and k in sh: o[k] = sh[k]
+    o["player"] = p; return o
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser(); ap.add_argument("--seed", type=int, default=851094592)
+    ap.add_argument("--agents", default="/workspace/wt/claude/agents/horizon_v5_market.py,/workspace/wt/claude/agents/horizon_v4.py")
+    ap.add_argument("--steps", type=int, default=719); a = ap.parse_args()
+    env = make("kaggriculture", configuration={"seed": a.seed}); env.run(a.agents.split(",")); steps = env.steps
+    dev = "cuda"; ve = VecKaggriculture(1, device=dev, cuda_graph=False); st = ve.reset(torch.tensor([a.seed], device=dev))
+    so = gpufeat.ShopOrder(1, dev); worst = {}
+    for t in range(min(a.steps, len(steps) - 1)):
+        so.update(st)
+        for p in range(2):
+            o = obs_at(steps, t, p)
+            B_ref = feat.board_tensor(o, p); G_ref = feat.glob_vec(o, p); U_ref = feat.unit_list(o, p)
+            B, G, uv, ux, uy, um = gpufeat.features(st, p, so)
+            B = B[0].cpu().numpy(); G = G[0].cpu().numpy()
+            db = np.abs(B - B_ref); dg = np.abs(G - G_ref)
+            nu = int(um[0].sum()); du = max([float(np.abs(uv[0, i].cpu().numpy() - U_ref[i][2]).max()) for i in range(len(U_ref))] + [0.0])
+            for name, d, extra in (("board", db.max(), np.unravel_index(db.argmax(), db.shape)), ("glob", dg.max(), int(dg.argmax())), ("units", du, (nu, len(U_ref)))):
+                if d > worst.get(name, (0,))[0]: worst[name] = (float(d), t, p, str(extra))
+            if nu != len(U_ref): worst["unit_count"] = (1.0, t, p, f"{nu} vs {len(U_ref)}")
+        acts = [[steps[t + 1][0]["action"], steps[t + 1][1]["action"]]]
+        st, r, done, info = ve.step(st, encode_actions(acts, device=dev))
+    print(json.dumps(worst, indent=1))
+{"iter": 0, "money_mean": 27726.46875, "money_p90": 44435.09765625, "money_max": 61310.0, "pg": -0.015251577831804752, "vloss": 0.03977722302079201, "ent": 8.424894332885742, "kl_bc": 0.0019271839410066605, "ratio_dev": 0.1345575451850891, "ratio_first": 1.4141856809146702e-05, "secs_roll": 183, "secs": 204, "samples": 46016}
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc "/workspace/kaggriculture/.venv/bin/python - <<'PY'
+import os, sys, torch
+sys.path.insert(0, '/workspace/solution_kaggri/lab/bcppo')
+sys.path.insert(0, '/workspace/solution_kaggri/lab')
+import policy, gpufeat
+from gpuenv.env import VecKaggriculture
+B, N, dev = 64, 24, 'cuda'
+ck = torch.load('/workspace/shared/bc_runs/v2/final.pt', map_location=dev, weights_only=False)
+net = policy.PolicyNet(ck['gdim']).to(dev).eval(); net.load_state_dict(ck['state'], strict=False)
+ve = VecKaggriculture(B, device=dev)
+st = ve.reset(torch.arange(B, device=dev) + 881001)
+so = gpufeat.ShopOrder(B, dev); team = torch.tensor([[0.,1.,0.]], device=dev)
+with torch.no_grad():
+  for _ in range(3):
+    so.update(st); aa=[]
+    for _ in range(6): aa.append(policy.act(net,st,0,so,team)[0])
+    st,_,_,_=ve.step(st,policy.combine(aa[0],aa[1]))
+  torch.cuda.synchronize()
+  ev0,ev1,ev2=torch.cuda.Event(True),torch.cuda.Event(True),torch.cuda.Event(True)
+  act_ms=env_ms=0.
+  for _ in range(N):
+    so.update(st); ev0.record()
+    aa=[]
+    for _ in range(6): aa.append(policy.act(net,st,0,so,team)[0])
+    ev1.record(); st,_,_,_=ve.step(st,policy.combine(aa[0],aa[1])); ev2.record(); torch.cuda.synchronize()
+    act_ms += ev0.elapsed_time(ev1); env_ms += ev1.elapsed_time(ev2)
+print({'batch':B,'policy_calls_per_step':6,'steps':N,'policy_ms_per_step':round(act_ms/N,2),'env_ms_per_step':round(env_ms/N,2),'policy_share':round(act_ms/(act_ms+env_ms),3),'env_ms_per_step':round(env_ms/N,2),'env_steps_s':round(B*N/((act_ms+env_ms)/1000),1)})
+PY" in /workspace/wt/codex
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc "ps -eo pid,ppid,etime,pcpu,pmem,cmd | rg 'python.*(bcppo|881001)|PID' || true; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader" in /workspace/wt/codex
+ succeeded in 164ms:
+1767076, [Not Found], 336 MiB
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc 'ps -p 52740 -o pid,etime,stat,cmd; nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader' in /workspace/wt/codex
+ succeeded in 27ms:
+0 %, 339 MiB
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+ succeeded in 40254ms:
+{'batch': 64, 'policy_calls_per_step': 6, 'steps': 24, 'policy_ms_per_step': 535.62, 'env_ms_per_step': 88.26, 'policy_share': 0.859, 'env_steps_s': 102.6}
+
+exec
+/bin/bash -lc "ps -eo pid,ppid,etime,stat,pcpu,cmd | awk '"'$2==52740 || $1==52740 {print}'"'" in /workspace/wt/codex
+ succeeded in 0ms:
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc 'ps -p 52740 -o pid,etime,stat,cmd || true; nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader' in /workspace/wt/codex
+ succeeded in 99ms:
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc "/workspace/kaggriculture/.venv/bin/python - <<'PY'
+import os, sys, torch
+sys.path.insert(0, '/workspace/solution_kaggri/lab/bcppo'); sys.path.insert(0, '/workspace/solution_kaggri/lab')
+import policy, gpufeat
+from gpuenv.env import VecKaggriculture
+B,N,dev=16,4,'cuda'; ck=torch.load('/workspace/shared/bc_runs/v2/final.pt',map_location=dev,weights_only=False)
+net=policy.PolicyNet(ck['gdim']).to(dev).eval(); net.load_state_dict(ck['state'],strict=False)
+ve=VecKaggriculture(B,device=dev); st=ve.reset(torch.arange(B,device=dev)+881001); so=gpufeat.ShopOrder(B,dev); team=torch.tensor([[0.,1.,0.]],device=dev)
+with torch.no_grad():
+ so.update(st); acts=[policy.act(net,st,0,so,team)[0] for i in range(6)]; st,_,_,_=ve.step(st,policy.combine(acts[0],acts[1])); torch.cuda.synchronize()
+ a0,a1,a2=torch.cuda.Event(True),torch.cuda.Event(True),torch.cuda.Event(True); pa=pe=0
+ for j in range(N):
+  so.update(st); a0.record(); acts=[policy.act(net,st,0,so,team)[0] for i in range(6)]; a1.record(); st,_,_,_=ve.step(st,policy.combine(acts[0],acts[1])); a2.record(); torch.cuda.synchronize(); pa+=a0.elapsed_time(a1); pe+=a1.elapsed_time(a2)
+print(f'B={B} six_policy_calls: policy={pa/N:.1f}ms step, env={pe/N:.1f}ms step, policy_share={pa/(pa+pe):.1%}, env_steps/s={B*N/((pa+pe)/1000):.1f}')
+PY" in /workspace/wt/codex
+ succeeded in 17218ms:
+B=16 six_policy_calls: policy=433.1ms step, env=176.1ms step, policy_share=71.1%, env_steps/s=26.3
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc "/workspace/kaggriculture/.venv/bin/python - <<'PY'
+import os,sys,torch
+sys.path.insert(0,'/workspace/solution_kaggri/lab/bcppo');sys.path.insert(0,'/workspace/solution_kaggri/lab')
+import policy,gpufeat
+from gpuenv.env import VecKaggriculture
+B,N,dev=16,6,'cuda'; ck=torch.load('/workspace/shared/bc_runs/v2/final.pt',map_location=dev,weights_only=False); net=policy.PolicyNet(ck['gdim']).to(dev).eval();net.load_state_dict(ck['state'],strict=False); ve=VecKaggriculture(B,device=dev);st=ve.reset(torch.arange(B,device=dev)+191);so=gpufeat.ShopOrder(B,dev);so.update(st);team=torch.tensor([[0.,1.,0.]],device=dev)
+def ms(fn):
+ a,b=torch.cuda.Event(True),torch.cuda.Event(True); a.record();
+ for _ in range(N): fn()
+ b.record();torch.cuda.synchronize();return a.elapsed_time(b)/N
+with torch.no_grad():
+ f=lambda: (lambda x: net.full(x[0],torch.cat([x[1],team.expand(B,-1)],1),x[2],x[3],x[4],x[5]))(gpufeat.features(st,0,so))
+ print(f'B={B} feat+net.full={ms(f):.1f}ms; policy.act={ms(lambda:policy.act(net,st,0,so,team,greedy=False)):.1f}ms; allocator+sampling+masks residual={ms(lambda:policy.act(net,st,0,so,team,greedy=False))-ms(f):.1f}ms (noisy sequential timing)')
+PY" in /workspace/wt/codex
+ succeeded in 14400ms:
+B=16 feat+net.full=197.5ms; policy.act=116.6ms; allocator+sampling+masks residual=35.0ms (noisy sequential timing)
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc 'rg -n "TILE_ANIMAL|tflag|tfavail|OP_PLACE|OP_PICKUP|MAX_HANDS|MKT_" /workspace/solution_kaggri/lab/gpuenv | head -180; rg -n "encode_market|decode_market|MKT_ORDER|orders" /workspace/solution_kaggri/lab/bc /workspace/solution_kaggri/lab/bcppo | head -140; git -C /workspace/solution_kaggri status --short' in /workspace/wt/codex
+ succeeded in 0ms:
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:87:OP_PICKUP = UNIT_OP_ID["PICKUP"]
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:88:OP_PLACE = UNIT_OP_ID["PLACE"]
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:101:MAX_HANDS = 16
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:102:MAX_UNITS = MAX_HANDS + 1
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:122:    "money": (2,), "farmer": (2, 2), "n_hands": (2,), "hands": (2, MAX_HANDS, 2),
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:146:        "hands": np.full((2, MAX_HANDS, 2), -1, np.int16),
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:162:        if len(hands) > MAX_HANDS:
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:163:            raise EncodeError(f"{len(hands)} hands exceeds MAX_HANDS={MAX_HANDS}")
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:191:                        kind = K_ANIMAL          # occupied structure is its own kind (ops.TILE_ANIMAL)
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:247:    if oid in (OP_PICKUP, OP_PLACE):
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:287:    ah = np.zeros((2, MAX_HANDS, 3), np.int16)
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:298:        if len(hands) > MAX_HANDS:
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:299:            raise EncodeError(f"{len(hands)} hand actions exceeds MAX_HANDS={MAX_HANDS}")
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:318:    if op in (OP_PICKUP, OP_PLACE):
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:337:def decode_actions(af, ah, am, n_hand_slots=MAX_HANDS):
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:630:        hands = hands[:MAX_HANDS]
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:643:        room = MAX_HANDS - len(farm["hands"])
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:921:    return {"farmer": farmer, "hands": hands[:MAX_HANDS], "market": market[:MAX_ORDERS]}
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:1040:    a_hands = np.zeros((A, 2, MAX_HANDS, 3), np.int16)
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:1057:                for trip in [af[p]] + [ah[p, h] for h in range(MAX_HANDS)]:
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:1326:        "max_hands_cap": MAX_HANDS,
+/workspace/solution_kaggri/lab/gpuenv/record_vectors.py:1343:    print(f"  max hands ever alive: {agg['max_hands']} (cap {MAX_HANDS})")
+/workspace/solution_kaggri/lab/gpuenv/spec.md:177:`MAX_HANDS` slots that the policy actually emitted; padding slots with `PASS` is safe — see §14.)
+/workspace/solution_kaggri/lab/gpuenv/spec.md:749:OP_PASS               = 0           MKT_NONE        = 0   # empty / unused lane
+/workspace/solution_kaggri/lab/gpuenv/spec.md:750:OP_NORTH              = 1           MKT_HIRE        = 1
+/workspace/solution_kaggri/lab/gpuenv/spec.md:751:OP_SOUTH              = 2           MKT_BUY_LAND    = 2
+/workspace/solution_kaggri/lab/gpuenv/spec.md:752:OP_EAST               = 3           MKT_SELL        = 3   # item = any PRODUCT 0..8
+/workspace/solution_kaggri/lab/gpuenv/spec.md:753:OP_WEST               = 4           MKT_BUY_PRODUCT = 4   # item ∈ {WHEAT=0, FERTILIZER=8}
+/workspace/solution_kaggri/lab/gpuenv/spec.md:754:OP_PLANT              = 5   # arg1 = crop item id 0..4    MKT_BUY_SEED = 5   # item = crop 0..4
+/workspace/solution_kaggri/lab/gpuenv/spec.md:755:OP_WATER              = 6           MKT_BUY_ANIMAL  = 6   # item = animal 9..11
+/workspace/solution_kaggri/lab/gpuenv/spec.md:761:OP_PLACE              = 12  # arg1 = item id, arg2 = n
+/workspace/solution_kaggri/lab/gpuenv/spec.md:765:OP_PICKUP             = 16  # arg1 = item id, arg2 = n
+/workspace/solution_kaggri/lab/gpuenv/spec.md:778:- a market order that `_parse_order` rejects (`len < 3`, `n <= 0`, unknown op) encodes as `MKT_NONE`,
+/workspace/solution_kaggri/lab/gpuenv/spec.md:796:The contract writes `farmer int16 [B,3]`, `hands int16 [B,MAX_HANDS,3]`, `market int16 [B,MAX_ORDERS,3]`
+/workspace/solution_kaggri/lab/gpuenv/spec.md:802:hands  : int16 [B, 2, MAX_HANDS, 3]     MAX_HANDS  = 16
+/workspace/solution_kaggri/lab/gpuenv/spec.md:812:`MAX_HANDS = 16` is a **contract cap, not a game rule** — the game has no hand limit. See §16.
+/workspace/solution_kaggri/lab/gpuenv/spec.md:941:18. **There is no cap on hands.** `MAX_HANDS = 16` is the contract's tensor width. In the recorded
+/workspace/solution_kaggri/lab/gpuenv/spec.md:985:- **`MAX_HANDS = 16` is uncomfortably tight.** The game imposes no hand limit; 16 is a contract choice.
+/workspace/solution_kaggri/lab/gpuenv/spec.md:988:  more: 16 hands in a day costs only `fib(17)-1 = $2 583`, 20 costs `$17 710`. If `MAX_HANDS` is ever
+/workspace/solution_kaggri/lab/gpuenv/env.py:25:  The default cap is 16 == the contract's ``MAX_HANDS``; the observed maximum in
+/workspace/solution_kaggri/lab/gpuenv/env.py:58:                 max_hands: int = O.MAX_HANDS, max_orders: int = O.MAX_ORDERS,
+/workspace/solution_kaggri/lab/gpuenv/env.py:113:    _MUTABLE = ("kind", "species", "tday", "tyield", "tflag", "tcons", "tmls",
+/workspace/solution_kaggri/lab/gpuenv/env.py:114:                "tfert", "tcared", "tfavail", "tcare", "ux", "uy", "shed",
+/workspace/solution_kaggri/lab/gpuenv/env.py:253:            tflag=z((b, 2, N_TILES), torch.bool),
+/workspace/solution_kaggri/lab/gpuenv/env.py:258:            tfavail=z((b, 2, N_TILES), torch.bool),
+/workspace/solution_kaggri/lab/gpuenv/env.py:427:        is_animal = st.kind == O.TILE_ANIMAL
+/workspace/solution_kaggri/lab/gpuenv/env.py:435:            st.tflag.to(st.kind.dtype),
+/workspace/solution_kaggri/lab/gpuenv/env.py:441:            st.tfavail.to(st.kind.dtype),
+/workspace/solution_kaggri/lab/gpuenv/ops.py:40:OP_PLACE = 12                # arg1 = item id, arg2 = qty (shed-drop branch)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:44:OP_PICKUP = 16               # arg1 = item id, arg2 = qty
+/workspace/solution_kaggri/lab/gpuenv/ops.py:57:UNIT_OPS_WITH_ITEM = (OP_PLANT, OP_PLACE, OP_PICKUP)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:59:UNIT_OPS_WITH_COUNT = (OP_PLACE, OP_PICKUP)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:64:MKT_NONE = 0                 # empty / unused order slot
+/workspace/solution_kaggri/lab/gpuenv/ops.py:65:MKT_HIRE = 1
+/workspace/solution_kaggri/lab/gpuenv/ops.py:66:MKT_BUY_LAND = 2
+/workspace/solution_kaggri/lab/gpuenv/ops.py:67:MKT_SELL = 3                 # item = any PRODUCT (0..8), qty > 0
+/workspace/solution_kaggri/lab/gpuenv/ops.py:68:MKT_BUY_PRODUCT = 4          # item must be WHEAT or FERTILIZER
+/workspace/solution_kaggri/lab/gpuenv/ops.py:69:MKT_BUY_SEED = 5             # item must be a crop (0..4)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:70:MKT_BUY_ANIMAL = 6           # item must be an animal (9..11)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:119:TILE_ANIMAL = 6       # source: {"kind": COOP|PASTURE, "animal": ...}
+/workspace/solution_kaggri/lab/gpuenv/ops.py:129:MAX_HANDS = 16               # hand action slots per player (unit slots = 1 + MAX_HANDS)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:138:    """``["PICKUP", "WHEAT", 3]`` -> ``(OP_PICKUP, ITEM_WHEAT, 3)``.
+/workspace/solution_kaggri/lab/gpuenv/ops.py:170:    """``["SELL", "MELON", 120]`` -> ``(MKT_SELL, ITEM_MELON, 120)``.
+/workspace/solution_kaggri/lab/gpuenv/ops.py:172:    Orders the source's ``_parse_order`` rejects map to ``(MKT_NONE, 0, 0)``.
+/workspace/solution_kaggri/lab/gpuenv/ops.py:175:        return (MKT_NONE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:178:        return (MKT_HIRE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:180:        return (MKT_BUY_LAND, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:183:            return (MKT_NONE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:187:            return (MKT_NONE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:189:            return (MKT_NONE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:192:    return (MKT_NONE, 0, 0)
+/workspace/solution_kaggri/lab/gpuenv/ops.py:208:    if op_id == MKT_NONE:
+/workspace/solution_kaggri/lab/gpuenv/ops.py:210:    if op_id in (MKT_HIRE, MKT_BUY_LAND):
+/workspace/solution_kaggri/lab/gpuenv/_units.py:6:``1 + MAX_HANDS`` iterations; every iteration is fully batched over ``[B, 2]``
+/workspace/solution_kaggri/lab/gpuenv/_units.py:133:    tw = st.tflag.gather(-1, flat).squeeze(-1)
+/workspace/solution_kaggri/lab/gpuenv/_units.py:138:    tfa = st.tfavail.gather(-1, flat).squeeze(-1)
+/workspace/solution_kaggri/lab/gpuenv/_units.py:144:    shed_op = ((op == O.OP_PICKUP) | (op == O.OP_DROP) | (op == O.OP_PLACE))
+/workspace/solution_kaggri/lab/gpuenv/_units.py:148:    is_animal = k == O.TILE_ANIMAL
+/workspace/solution_kaggri/lab/gpuenv/_units.py:174:    m_pick = act & (op == O.OP_PICKUP) & shed_adj & (a2 > 0) & item_ok
+/workspace/solution_kaggri/lab/gpuenv/_units.py:239:    m_place = act & (op == O.OP_PLACE)
+/workspace/solution_kaggri/lab/gpuenv/_units.py:245:    new_k = torch.where(m_pa, O.TILE_ANIMAL, new_k)
+/workspace/solution_kaggri/lab/gpuenv/_units.py:278:    bare = (new_k != k) & (new_k != O.TILE_ANIMAL) & (new_k != O.TILE_PLANT)
+/workspace/solution_kaggri/lab/gpuenv/_units.py:295:    st.tflag.scatter_(-1, flat, new_tw.unsqueeze(-1))
+/workspace/solution_kaggri/lab/gpuenv/_units.py:300:    st.tfavail.scatter_(-1, flat, new_tfa.unsqueeze(-1))
+/workspace/solution_kaggri/lab/gpuenv/_encode.py:18:_TILE_FIELDS = ("kind", "species", "tday", "tyield", "tflag", "tcons", "tmls",
+/workspace/solution_kaggri/lab/gpuenv/_encode.py:19:                "tfert", "tcared", "tfavail", "tcare")
+/workspace/solution_kaggri/lab/gpuenv/_encode.py:26:def encode_actions(action_pairs, max_hands=O.MAX_HANDS, max_orders=O.MAX_ORDERS,
+/workspace/solution_kaggri/lab/gpuenv/_encode.py:66:        out[0] = O.TILE_ANIMAL
+/workspace/solution_kaggri/lab/gpuenv/_encode.py:91:def ref_snapshot(state, max_units=O.MAX_HANDS + 1) -> dict:
+/workspace/solution_kaggri/lab/gpuenv/_state.py:18:PLANT            species=crop id, tday=planted_day, tflag=watered_today,
+/workspace/solution_kaggri/lab/gpuenv/_state.py:22:                 tcons=consecutive_unfed, tflag=fed_today, tcared=cared_today,
+/workspace/solution_kaggri/lab/gpuenv/_state.py:23:                 tfavail=fertilizer_available, tcare=pending_care_bonus
+/workspace/solution_kaggri/lab/gpuenv/_state.py:50:    tflag: torch.Tensor         # bool  [B, 2, 100]  watered_today / fed_today
+/workspace/solution_kaggri/lab/gpuenv/_state.py:55:    tfavail: torch.Tensor       # bool  [B, 2, 100]  fertilizer_available
+/workspace/solution_kaggri/lab/gpuenv/_state.py:58:    ux: torch.Tensor            # int32 [B, 2, U]    unit x  (U = 1 + MAX_HANDS)
+/workspace/solution_kaggri/lab/gpuenv/_state.py:77:    overflow: torch.Tensor      # int32 [B, 2]  hires dropped past MAX_HANDS
+/workspace/solution_kaggri/lab/gpuenv/_state.py:150:            "tflag": self.tflag,                       # watered_today | fed_today
+/workspace/solution_kaggri/lab/gpuenv/_state.py:155:            "tfavail": self.tfavail,                   # fertilizer_available
+/workspace/solution_kaggri/lab/gpuenv/_state.py:176:    ``hands``   int16/int32 ``[B, 2, MAX_HANDS, 3]`` unused slots op_id = OP_PASS
+/workspace/solution_kaggri/lab/gpuenv/_state.py:177:    ``market``  int16/int32 ``[B, 2, MAX_ORDERS, 3]`` unused slots op_id = MKT_NONE
+/workspace/solution_kaggri/lab/gpuenv/_state.py:185:        """``[B, 2, 1 + MAX_HANDS, 3]`` int64 -- farmer first, then hands."""
+/workspace/solution_kaggri/lab/gpuenv/CONTRACT.md:56:hands  : int16 [B, MAX_HANDS, 3]      # MAX_HANDS = 16; unused slots op_id = OP_PASS
+/workspace/solution_kaggri/lab/gpuenv/CONTRACT.md:75:`actions` carries both players, batch-first: `farmer int16 [B, 2, 3]`, `hands int16 [B, 2, MAX_HANDS, 3]`,
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:28:    st.tflag.copy_(torch.where(mask, torch.zeros_like(st.tflag), st.tflag))
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:33:    st.tfavail.copy_(torch.where(mask, torch.zeros_like(st.tfavail), st.tfavail))
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:79:    was_watered = st.tflag & is_p
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:83:    st.tflag.copy_(torch.where(is_p, torch.zeros_like(st.tflag), st.tflag))
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:112:    is_a = st.kind == O.TILE_ANIMAL
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:113:    fed = st.tflag & is_a
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:132:    st.tfavail.copy_(torch.where(alive, torch.ones_like(st.tfavail), st.tfavail))
+/workspace/solution_kaggri/lab/gpuenv/_daily.py:133:    st.tflag.copy_(torch.where(alive, torch.zeros_like(st.tflag), st.tflag))
+/workspace/solution_kaggri/lab/gpuenv/_market.py:83:    is_sell = (op == O.MKT_SELL) & (item >= 0) & (item < O.N_PRODUCTS)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:84:    is_bp = (op == O.MKT_BUY_PRODUCT) & ((item == O.ITEM_WHEAT) | (item == O.ITEM_FERTILIZER))
+/workspace/solution_kaggri/lab/gpuenv/_market.py:85:    is_bs = (op == O.MKT_BUY_SEED) & (item >= 0) & (item < O.N_CROPS)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:86:    is_ba = (op == O.MKT_BUY_ANIMAL) & (item >= O.ITEM_GOOSE) & (item < O.ITEM_GOOSE + O.N_ANIMALS)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:287:        (ops_all != O.MKT_NONE).any(1).any(0),
+/workspace/solution_kaggri/lab/gpuenv/_market.py:288:        (ops_all == O.MKT_HIRE).any(1).any(0),
+/workspace/solution_kaggri/lab/gpuenv/_market.py:289:        (ops_all == O.MKT_BUY_LAND).any(1).any(0),
+/workspace/solution_kaggri/lab/gpuenv/_market.py:325:            _do_hire(st, op == O.MKT_HIRE, tab, max_hands)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:327:            _do_buy_land(st, op == O.MKT_BUY_LAND, tab)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:343:    _do_hire(st, op == O.MKT_HIRE, tab, max_hands)
+/workspace/solution_kaggri/lab/gpuenv/_market.py:344:    _do_buy_land(st, op == O.MKT_BUY_LAND, tab)
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:46:    CANON_DTYPE, CANON_KEYS, CANON_SHAPE, ITEMS, MAX_HANDS, MAX_ORDERS, MAX_UNITS, PRODUCTS,
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:139:    slot = np.arange(MAX_HANDS)[None, None, :]
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:140:    hand_live = slot < n_hands[..., None]                        # [B,2,MAX_HANDS]
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:290:    need = ("money", "kind", "species", "tday", "tyield", "tflag", "tcons", "tmls", "tfert",
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:291:            "tcared", "tfavail", "tcare", "ux", "uy", "n_hands", "hires_today", "shed",
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:304:    for f, a in ((3, "tday"), (4, "tflag"), (5, "tcons"), (6, "tyield"),
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:305:                 (7, "tmls"), (8, "tfert"), (9, "tcared"), (10, "tfavail"), (11, "tcare")):
+/workspace/solution_kaggri/lab/gpuenv/difftest.py:309:    hands = np.stack([ux[:, :, 1:1 + MAX_HANDS], uy[:, :, 1:1 + MAX_HANDS]], axis=-1)
+/workspace/solution_kaggri/lab/bcppo/e2e_test.py:30:            got_mkt = [x for x in (O.decode_market_order(acts.market[0, p, j].tolist()) for j in range(O.MAX_ORDERS)) if x]
+/workspace/solution_kaggri/lab/bc/export.py:120:_MKT_ORDER_IDX = [MKT_IDX[k] for k in MKT_ORDER]
+/workspace/solution_kaggri/lab/bc/export.py:123:    """Mirror of policy.build_market: fixed key order, HIRE/LAND/ANIMAL one per order (<=10), first 10 orders; no affordability filter."""
+/workspace/solution_kaggri/lab/bc/export.py:125:    for k in _MKT_ORDER_IDX:
+/workspace/solution_kaggri/lab/bc/build.py:22:        B[t] = feat.board_tensor(o, p); G[t] = feat.glob_vec(o, p); Q[t] = feat.encode_market(a.get("market"))
+/workspace/solution_kaggri/lab/bcppo/policy.py:5:Market: per key bucket ~ Cat(market logits); orders built in fixed order, then sequential affordability filter.
+/workspace/solution_kaggri/lab/bcppo/policy.py:36:    order = torch.tensor([feat.MKT_IDX[k] for k in feat.MKT_ORDER])
+/workspace/solution_kaggri/lab/bcppo/policy.py:150:    orders, inc = build_market(mb)
+/workspace/solution_kaggri/lab/bcppo/policy.py:155:    return (farmer, hands, orders), logp, v, ent, rec
+/workspace/solution_kaggri/lab/bcppo/policy.py:200:    Returns orders [B,10,3] and inc [B,NK] = key is decision-relevant (bucket 0, or >=1 order emitted)."""
+/workspace/solution_kaggri/lab/bc/feat.py:136:def encode_market(orders):
+/workspace/solution_kaggri/lab/bc/feat.py:138:    for o in orders or []:
+/workspace/solution_kaggri/lab/bc/feat.py:147:MKT_ORDER = (["SELL:" + p for p in PRODUCTS] + ["HIRE"] + ["BUY_ANIMAL:" + a for a in ANIMALS]
+/workspace/solution_kaggri/lab/bc/feat.py:151:def decode_market(q):
+/workspace/solution_kaggri/lab/bc/feat.py:152:    orders = []
+/workspace/solution_kaggri/lab/bc/feat.py:153:    for key in MKT_ORDER:
+/workspace/solution_kaggri/lab/bc/feat.py:158:            orders += [[key]] * n
+/workspace/solution_kaggri/lab/bc/feat.py:160:            orders += [["BUY_ANIMAL", key.split(":")[1], 1]] * n
+/workspace/solution_kaggri/lab/bc/feat.py:162:            op, it = key.split(":"); orders.append([op, it, n])
+/workspace/solution_kaggri/lab/bc/feat.py:163:    return orders[:10]
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+exec
+/bin/bash -lc "nl -ba /workspace/solution_kaggri/lab/bcppo/e2e_test.py | sed -n '1,260p'; nl -ba /workspace/solution_kaggri/lab/gpuenv/_market.py | sed -n '50,380p'; nl -ba /workspace/solution_kaggri/lab/gpuenv/_units.py | sed -n '110,285p'" in /workspace/wt/codex
+ succeeded in 0ms:
+     1	"""End-to-end: exported numpy agent (official engine) vs GPU policy (gpuenv), greedy, same seed, both seats.
+     2	Reports first step where money/actions diverge. usage: python e2e_test.py --ckpt X --team dsm [--seed S]"""
+     3	import argparse, json, os, subprocess, sys, torch
+     4	torch.backends.cudnn.allow_tf32 = False; torch.backends.cuda.matmul.allow_tf32 = False  # exact fp32 for parity tests (H100 defaults to TF32 convs)
+     5	HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
+     6	import policy, gpufeat
+     7	from gpuenv.env import VecKaggriculture
+     8	from gpuenv import ops as O
+     9	from kaggle_environments import make
+    10	ap = argparse.ArgumentParser(); ap.add_argument("--ckpt", required=True); ap.add_argument("--team", default="dsm"); ap.add_argument("--seed", type=int, default=851094592)
+    11	ap.add_argument("--agent", default="/tmp/e2e_agent_main.py"); a = ap.parse_args()
+    12	subprocess.run([sys.executable, os.path.join(HERE, "..", "bc", "export.py"), "--ckpt", a.ckpt, "--team", a.team, "--out", a.agent], check=True)
+    13	env = make("kaggriculture", configuration={"seed": a.seed}); env.run([a.agent, a.agent]); steps = env.steps
+    14	dev = "cuda" if torch.cuda.is_available() else "cpu"
+    15	ck = torch.load(a.ckpt, map_location=dev); net = policy.PolicyNet(ck["gdim"]).to(dev); net.load_state_dict(ck["state"], strict=False); net.eval()
+    16	teams = ck.get("teams", ["mmpq", "dsm", "mgoose"]); team = torch.zeros((1, len(teams)), device=dev); team[0, teams.index(a.team)] = 1
+    17	ve = VecKaggriculture(1, device=dev, cuda_graph=False); st = ve.reset(torch.tensor([a.seed], device=dev)); so = gpufeat.ShopOrder(1, dev)
+    18	first = None; n_act_diff = 0
+    19	with torch.no_grad():
+    20	    for t in range(len(steps) - 1):
+    21	        so.update(st)
+    22	        outs = [policy.act(net, st, p, so, team, greedy=True) for p in (0, 1)]
+    23	        acts = policy.combine(outs[0][0], outs[1][0])
+    24	        for p in (0, 1):
+    25	            ref = steps[t + 1][p]["action"] or {}
+    26	            nh = int(st.n_hands[0, p])
+    27	            got_units = [O.decode_unit_action(acts.farmer[0, p].tolist())] + [O.decode_unit_action(acts.hands[0, p, j].tolist()) for j in range(nh)]
+    28	            ref_units = [ref.get("farmer") or ["PASS"]] + list(ref.get("hands") or [])
+    29	            norm = lambda u: [u[0]] + ([u[1]] if len(u) > 1 else []) + ([int(u[2])] if len(u) > 2 else [])
+    30	            got_mkt = [x for x in (O.decode_market_order(acts.market[0, p, j].tolist()) for j in range(O.MAX_ORDERS)) if x]
+    31	            same = [norm(u) for u in got_units] == [norm(u) for u in ref_units[:len(got_units)]] and got_mkt == [list(x) for x in (ref.get("market") or [])]
+    32	            if not same:
+    33	                n_act_diff += 1
+    34	                if first is None:
+    35	                    first = (t, p); print("FIRST ACTION DIFF step", t, "player", p); print(" official:", json.dumps(ref)[:400]); print(" gpu     :", json.dumps({"units": got_units, "market": got_mkt})[:400])
+    36	        st, *_ = ve.step(st, acts)
+    37	        m_ref = [steps[t + 1][p]["observation"]["farms"][p]["money"] if "farms" in steps[t + 1][p]["observation"] else steps[t + 1][0]["observation"]["farms"][p]["money"] for p in (0, 1)]
+    38	        m_gpu = st.money[0].tolist()
+    39	        if [int(x) for x in m_ref] != m_gpu and first is None:
+    40	            first = (t, "money"); print("MONEY DIFF step", t, m_ref, m_gpu)
+    41	print("final official", env.state[0]["reward"], env.state[1]["reward"], "| gpu", st.money[0].tolist(), "| action-diff player-steps:", n_act_diff)
+    50	
+    51	    u_range = torch.arange(st.ux.shape[2], device=st.ux.device)
+    52	    live = u_range.view(1, 1, -1) <= st.n_hands.unsqueeze(-1)
+    53	    pos = st.uy.to(torch.int64) * 10 + st.ux.to(torch.int64)
+    54	    occ = ((pos.unsqueeze(-1) == tab.shed_access_flat.view(1, 1, 1, -1))
+    55	           & live.unsqueeze(-1)).sum(2)                       # [B, 2, 4]
+    56	    key = occ * 8 + torch.arange(4, device=occ.device).view(1, 1, -1)
+    57	    tile = tab.shed_access_flat[key.argmin(dim=-1)]
+    58	    nx = (tile % 10).to(st.ux.dtype)
+    59	    ny = (tile // 10).to(st.uy.dtype)
+    60	
+    61	    stored = ok & (st.n_hands < max_hands)
+    62	    slot = (st.n_hands.to(torch.int64) + 1).clamp(0, st.ux.shape[2] - 1).unsqueeze(-1)
+    63	    st.ux.scatter_(-1, slot, torch.where(stored, nx, st.ux.gather(-1, slot).squeeze(-1)).unsqueeze(-1))
+    64	    st.uy.scatter_(-1, slot, torch.where(stored, ny, st.uy.gather(-1, slot).squeeze(-1)).unsqueeze(-1))
+    65	    st.n_hands += stored.to(st.n_hands.dtype)
+    66	    st.overflow += (ok & ~stored).to(st.overflow.dtype)
+    67	
+    68	
+    69	def _do_buy_land(st, mask, tab):
+    70	    """Source 680-693."""
+    71	    li = st.land.to(torch.int64).clamp(0, 2)
+    72	    cost = tab.land_prices[li]
+    73	    ok = mask & (st.land < 3) & (st.money >= cost)
+    74	    st.money -= torch.where(ok, cost, 0)
+    75	    qmask = tab.quadrant_mask[tab.land_quadrant[li]]          # [B, 2, 100]
+    76	    unlock = ok.unsqueeze(-1) & qmask & (st.kind == O.TILE_LOCKED)
+    77	    st.kind.copy_(torch.where(unlock, O.TILE_EMPTY, st.kind))
+    78	    st.land += ok.to(st.land.dtype)
+    79	
+    80	
+    81	# --------------------------------------------------------------------------- #
+    82	def _classify(op, item, qty):
+    83	    is_sell = (op == O.MKT_SELL) & (item >= 0) & (item < O.N_PRODUCTS)
+    84	    is_bp = (op == O.MKT_BUY_PRODUCT) & ((item == O.ITEM_WHEAT) | (item == O.ITEM_FERTILIZER))
+    85	    is_bs = (op == O.MKT_BUY_SEED) & (item >= 0) & (item < O.N_CROPS)
+    86	    is_ba = (op == O.MKT_BUY_ANIMAL) & (item >= O.ITEM_GOOSE) & (item < O.ITEM_GOOSE + O.N_ANIMALS)
+    87	    active = (is_sell | is_bp | is_bs | is_ba) & (qty > 0)
+    88	    return is_sell, is_bp, is_bs, is_ba, active
+    89	
+    90	
+    91	def _quote(st, tab, is_sell, is_bp, is_bs, is_ba, item):
+    92	    inv_here = st.market_inv.gather(-1, item.clamp(0, O.N_PRODUCTS - 1))
+    93	    ip = item.clamp(0, O.N_PRODUCTS - 1)
+    94	    p_sell = tab.price[ip, (inv_here - tab.inv_lo).clamp(0, tab.inv_n - 1)]
+    95	    p_buy = tab.price[ip, (inv_here - 1 - tab.inv_lo).clamp(0, tab.inv_n - 1)]
+    96	    price = torch.where(is_sell, p_sell, torch.zeros_like(p_sell))
+    97	    price = torch.where(is_bp, p_buy, price)
+    98	    price = torch.where(is_bs, tab.crop_seed_cost[item.clamp(0, O.N_CROPS - 1)], price)
+    99	    price = torch.where(is_ba, tab.animal_cost[(item - O.ITEM_GOOSE).clamp(0, O.N_ANIMALS - 1)],
+   100	                        price)
+   101	    return price
+   102	
+   103	
+   104	# --------------------------------------------------------------------------- #
+   105	def _lane_loop(st, tab, op, item, qty, active_in=None, stats=None):
+   106	    """Literal per-unit lockstep (source 557-601)."""
+   107	    is_sell, is_bp, is_bs, is_ba, active = _classify(op, item, qty)
+   108	    if active_in is not None:
+   109	        active = active & active_in
+   110	    remaining = torch.where(active, qty, 0)
+   111	
+   112	    price0 = _quote(st, tab, is_sell, is_bp, is_bs, is_ba, item)
+   113	    item_i = item.clamp(0, O.N_ITEMS - 1)
+   114	    shed_here = st.shed.gather(-1, item_i.unsqueeze(-1)).squeeze(-1)
+   115	    bound = torch.where(is_sell, torch.minimum(remaining, shed_here), torch.zeros_like(remaining))
+   116	    bound = torch.where(is_bp | is_bs | is_ba,
+   117	                        torch.minimum(remaining, st.money // price0.clamp(min=1)), bound)
+   118	    bound = torch.where(active, bound, torch.zeros_like(bound))
+   119	    n_rounds = int(bound.max().item())
+   120	    if n_rounds <= 0:
+   121	        return
+   122	    n_rounds = min(n_rounds, MARKET_UNIT_CAP)
+   123	    if stats is not None:
+   124	        stats["market_rounds"] = stats.get("market_rounds", 0) + n_rounds
+   125	
+   126	    item_p = item.clamp(0, O.N_PRODUCTS - 1)
+   127	    crop_i = item.clamp(0, O.N_CROPS - 1).unsqueeze(-1)
+   128	    item_iu = item_i.unsqueeze(-1)
+   129	    for _ in range(n_rounds):
+   130	        alive = active & (remaining > 0)
+   131	        price = _quote(st, tab, is_sell, is_bp, is_bs, is_ba, item)
+   132	        shed_here = st.shed.gather(-1, item_iu).squeeze(-1)
+   133	        ok_sell = alive & is_sell & (shed_here > 0)
+   134	        # kaggle-environments 1.32.7 applies shedCapacity to every market
+   135	        # purchase that lands in the shed (BUY_PRODUCT and BUY_ANIMAL), but
+   136	        # never to seeds.  Check it on each lockstep unit as the interpreter
+   137	        # does, because an order can run out of room mid-quantity.
+   138	        shed_room = st.shed.sum(-1) < SHED_CAPACITY
+   139	        needs_shed = is_bp | is_ba
+   140	        ok_buy = (alive & (is_bp | is_bs | is_ba) & (st.money >= price)
+   141	                  & (~needs_shed | shed_room))
+   142	        ok = ok_sell | ok_buy
+   143	
+   144	        st.money += torch.where(ok_sell, price, 0) - torch.where(ok_buy, price, 0)
+   145	        d_shed = (ok & (is_bp | is_ba)).to(torch.int64) - ok_sell.to(torch.int64)
+   146	        st.shed.scatter_add_(-1, item_iu, d_shed.unsqueeze(-1))
+   147	        st.seeds.scatter_add_(-1, crop_i, (ok & is_bs).to(torch.int64).unsqueeze(-1))
+   148	        d_mkt = (ok_sell & (price > 1)).to(torch.int64) - (ok & is_bp).to(torch.int64)
+   149	        st.market_inv.scatter_add_(-1, item_p, d_mkt)
+   150	
+   151	        remaining = remaining - ok.to(remaining.dtype)
+   152	        active = active & (~alive | ok)
+   153	
+   154	
+   155	# --------------------------------------------------------------------------- #
+   156	def _sell_closed(tab, item, v0, cmax):
+   157	    """One player selling ``cmax`` units alone from table coord ``v0``.
+   158	
+   159	    Returns (revenue, market-inventory delta).  Once the price reaches the floor
+   160	    the source stops crediting supply (``if price > 1``), so inventory advances
+   161	    by at most ``floor_idx - v0`` and the rest sells at $1.
+   162	    """
+   163	    n = tab.inv_n
+   164	    floor = tab.price_floor_idx[item]
+   165	    k = torch.minimum(cmax, (floor - v0).clamp(min=0))
+   166	    cum = tab.price_cumsum
+   167	    rev = (cum[item, (v0 + k).clamp(0, n)] - cum[item, v0.clamp(0, n)]) + (cmax - k)
+   168	    return rev, k
+   169	
+   170	
+   171	def _bp_closed(tab, item, v0, money, n):
+   172	    """BUY_PRODUCT: prices are P(v0-1), P(v0-2), ... (rising).  The largest k with
+   173	    cumulative cost <= money, found by binary search on the price prefix sums."""
+   174	    cum = tab.price_cumsum
+   175	    base = cum[item, v0.clamp(0, tab.inv_n)]
+   176	    target = base - money
+   177	    lo = (v0 - n).clamp(min=0)
+   178	    hi = v0.clone()
+   179	    for _ in range(_BSEARCH_ITERS):
+   180	        mid = (lo + hi) // 2
+   181	        ge = cum[item, mid.clamp(0, tab.inv_n)] >= target
+   182	        hi = torch.where(ge, mid, hi)
+   183	        lo = torch.where(ge, lo, mid + 1)
+   184	    k = (v0 - lo).clamp(min=0).minimum(n)
+   185	    cost = base - cum[item, (v0 - k).clamp(0, tab.inv_n)]
+   186	    return k, cost
+   187	
+   188	
+   189	def _lane_fast(st, tab, op, item, qty, need_bp: bool, coupled_any: bool, stats=None):
+   190	    is_sell, is_bp, is_bs, is_ba, active = _classify(op, item, qty)
+   191	
+   192	    is_mkt = is_sell | is_bp
+   193	    both = active[:, 0] & active[:, 1]
+   194	    same = both & is_mkt[:, 0] & is_mkt[:, 1] & (item[:, 0] == item[:, 1])
+   195	    both_sell = same & is_sell[:, 0] & is_sell[:, 1]
+   196	    coupled = same & ~both_sell
+   197	
+   198	    if coupled_any:
+   199	        _lane_loop(st, tab, op, item, qty, active_in=coupled.unsqueeze(-1), stats=stats)
+   200	    fast = active & ~coupled.unsqueeze(-1)
+   201	
+   202	    item_i = item.clamp(0, O.N_ITEMS - 1)
+   203	    item_p = item.clamp(0, O.N_PRODUCTS - 1)
+   204	    crop_i = item.clamp(0, O.N_CROPS - 1)
+   205	    v0 = st.market_inv.gather(-1, item_p) - tab.inv_lo
+   206	
+   207	    # ---- fixed-price orders (BUY_SEED / BUY_ANIMAL) -------------------------
+   208	    m_fixed = fast & (is_bs | is_ba)
+   209	    cost1 = torch.where(is_bs, tab.crop_seed_cost[crop_i],
+   210	                        tab.animal_cost[(item - O.ITEM_GOOSE).clamp(0, O.N_ANIMALS - 1)])
+   211	    shed_room = (SHED_CAPACITY - st.shed.sum(-1)).clamp(min=0)
+   212	    affordable = torch.minimum(qty, st.money // cost1.clamp(min=1))
+   213	    cnt = torch.where(m_fixed,
+   214	                      torch.where(is_ba, torch.minimum(affordable, shed_room), affordable),
+   215	                      0)
+   216	    st.money -= cnt * cost1
+   217	    st.seeds.scatter_add_(-1, crop_i.unsqueeze(-1),
+   218	                          torch.where(is_bs, cnt, 0).unsqueeze(-1))
+   219	    st.shed.scatter_add_(-1, item_i.unsqueeze(-1),
+   220	                         torch.where(is_ba, cnt, 0).unsqueeze(-1))
+   221	
+   222	    # ---- BUY_PRODUCT (never same-item across players here) ------------------
+   223	    if need_bp:
+   224	        m_bp = fast & is_bp
+   225	        bp_qty = torch.minimum(qty, shed_room)
+   226	        kbp, cost = _bp_closed(tab, item_p, v0, st.money, bp_qty)
+   227	        kbp = torch.where(m_bp, kbp, 0)
+   228	        cost = torch.where(m_bp, cost, 0)
+   229	        st.money -= cost
+   230	        st.shed.scatter_add_(-1, item_i.unsqueeze(-1), kbp.unsqueeze(-1))
+   231	        st.market_inv.scatter_add_(-1, item_p, -kbp)
+   232	        v0 = v0 - kbp                      # keep the local copy in sync
+   233	
+   234	    # ---- SELL ---------------------------------------------------------------
+   235	    m_sell = fast & is_sell
+   236	    shed_here = st.shed.gather(-1, item_i.unsqueeze(-1)).squeeze(-1)
+   237	    cmax = torch.where(m_sell, torch.minimum(qty, shed_here), 0)
+   238	
+   239	    solo = m_sell & ~both_sell.unsqueeze(-1)
+   240	    rev, dinv = _sell_closed(tab, item_p, v0, cmax)
+   241	    rev = torch.where(solo, rev, 0)
+   242	    dinv = torch.where(solo, dinv, 0)
+   243	
+   244	    if True:                                # mirror (both players, same item)
+   245	        i0 = item_p[:, 0]
+   246	        w0 = v0[:, 0]
+   247	        c0, c1 = cmax[:, 0], cmax[:, 1]
+   248	        kmin = torch.minimum(c0, c1)
+   249	        d = (tab.price_floor_idx[i0] - w0).clamp(min=0)
+   250	        kk = torch.minimum(kmin, (d + 1) // 2)
+   251	        suf = tab.price_suf2
+   252	        rev_each = (suf[i0, w0.clamp(0, tab.inv_n)] - suf[i0, (w0 + 2 * kk).clamp(0, tab.inv_n)]
+   253	                    + (kmin - kk))
+   254	        rev_x, dinv_x = _sell_closed(tab, i0, w0 + 2 * kk, torch.maximum(c0, c1) - kmin)
+   255	        rev_each = torch.where(both_sell, rev_each, 0)
+   256	        rev_x = torch.where(both_sell, rev_x, 0)
+   257	        dinv_j = torch.where(both_sell, 2 * kk + dinv_x, 0)
+   258	        rev = rev + torch.stack([rev_each + torch.where(c0 > c1, rev_x, 0),
+   259	                                 rev_each + torch.where(c1 > c0, rev_x, 0)], dim=1)
+   260	        st.market_inv.scatter_add_(-1, i0.unsqueeze(-1), dinv_j.unsqueeze(-1))
+   261	
+   262	    st.money += rev
+   263	    st.shed.scatter_add_(-1, item_i.unsqueeze(-1), -cmax.unsqueeze(-1))
+   264	    st.market_inv.scatter_add_(-1, item_p, dinv)
+   265	
+   266	
+   267	# --------------------------------------------------------------------------- #
+   268	N_SLOT_FLAGS = 5
+   269	
+   270	
+   271	def slot_flags(market_actions) -> torch.Tensor:
+   272	    """``[n_slots, 5]`` bool: (any order, any HIRE, any BUY_LAND, any BUY_PRODUCT,
+   273	    any same-item SELL/BUY_PRODUCT collision) -- which passes each order slot
+   274	    needs.  Derived from the actions alone, so the caller can fetch it to the
+   275	    host in the same transfer as everything else it needs this step.
+   276	    """
+   277	    n_slots = min(market_actions.shape[2], MAX_MARKET_ORDERS)
+   278	    ops_all = market_actions[:, :, :n_slots, 0]
+   279	    items_all = market_actions[:, :, :n_slots, 1]
+   280	    qty_all = market_actions[:, :, :n_slots, 2]
+   281	    is_sell, is_bp, is_bs, is_ba, active = _classify(ops_all, items_all, qty_all)
+   282	    is_mkt = is_sell | is_bp
+   283	    same = (active[:, 0] & active[:, 1] & is_mkt[:, 0] & is_mkt[:, 1]
+   284	            & (items_all[:, 0] == items_all[:, 1]))
+   285	    coupled = same & ~(is_sell[:, 0] & is_sell[:, 1])
+   286	    return torch.stack([
+   287	        (ops_all != O.MKT_NONE).any(1).any(0),
+   288	        (ops_all == O.MKT_HIRE).any(1).any(0),
+   289	        (ops_all == O.MKT_BUY_LAND).any(1).any(0),
+   290	        is_bp.any(1).any(0),
+   291	        coupled.any(0),
+   292	    ]).t()
+   293	
+   294	
+   295	def process_market(st, market_actions, max_hands: int, stats=None, exact_loop=False,
+   296	                   flags=None, graph_slot=None):
+   297	    """``market_actions``: int64 ``[B, 2, MAX_ORDERS, 3]``.
+   298	
+   299	    ``flags``: optional host-side list of lists from ``slot_flags`` (pass it in to
+   300	    avoid a second device->host sync per step).
+   301	    ``graph_slot``: optional callable taking the slot's ``[B, 2, 3]`` action
+   302	    tensor; when supplied it handles every slot that needs no host-side
+   303	    branching (see ``market_slot_static``)."""
+   304	    tab = get_tables(str(st.money.device))
+   305	    n_slots = min(market_actions.shape[2], MAX_MARKET_ORDERS)
+   306	    ops_all = market_actions[:, :, :n_slots, 0]
+   307	    items_all = market_actions[:, :, :n_slots, 1]
+   308	    qty_all = market_actions[:, :, :n_slots, 2]
+   309	    if flags is None:
+   310	        flags = slot_flags(market_actions).tolist()
+   311	
+   312	    for i in range(n_slots):
+   313	        used, has_hire, has_land, has_bp, has_coupled = flags[i]
+   314	        if not used:
+   315	            continue
+   316	        if (graph_slot is not None and not exact_loop
+   317	                and not has_bp and not has_coupled):
+   318	            # Cheap common case: no BUY_PRODUCT (no binary search) and no
+   319	            # same-item SELL/BUY_PRODUCT collision (no lockstep fallback), so the
+   320	            # slot is a fixed sequence of kernels -> replay it from a CUDA graph.
+   321	            graph_slot(market_actions[:, :, i, :])
+   322	            continue
+   323	        op = ops_all[:, :, i]
+   324	        if has_hire:
+   325	            _do_hire(st, op == O.MKT_HIRE, tab, max_hands)
+   326	        if has_land:
+   327	            _do_buy_land(st, op == O.MKT_BUY_LAND, tab)
+   328	        item = items_all[:, :, i]
+   329	        qty = qty_all[:, :, i]
+   330	        if exact_loop:
+   331	            _lane_loop(st, tab, op, item, qty, stats=stats)
+   332	        else:
+   333	            _lane_fast(st, tab, op, item, qty, bool(has_bp), bool(has_coupled), stats)
+   334	
+   335	
+   336	def market_slot_static(st, slot, max_hands: int):
+   337	    """One order slot with no host-side branching: HIRE, BUY_LAND and the
+   338	    closed-form lane, all mask-gated.  Assumes the slot needs neither the
+   339	    BUY_PRODUCT binary search nor the coupled-lane fallback (the caller checks
+   340	    that with the one sync it already does).  This is the CUDA-graph body."""
+   341	    tab = get_tables(str(st.money.device))
+   342	    op, item, qty = slot[:, :, 0], slot[:, :, 1], slot[:, :, 2]
+   343	    _do_hire(st, op == O.MKT_HIRE, tab, max_hands)
+   344	    _do_buy_land(st, op == O.MKT_BUY_LAND, tab)
+   345	    _lane_fast(st, tab, op, item, qty, False, False, None)
+   110	    fy = st.uy[:, :, u].to(torch.int64)
+   111	
+   112	    # ---------------- moves (source 308-316) ---------------------------------
+   113	    is_move = act & (op <= O.OP_WEST)
+   114	    mi = (op - O.OP_NORTH).clamp(0, 3)
+   115	    nx = fx + tab.move_dx[mi]
+   116	    ny = fy + tab.move_dy[mi]
+   117	    inb = (nx >= 0) & (nx < BOARD_SIZE) & (ny >= 0) & (ny < BOARD_SIZE)
+   118	    nflat = (ny.clamp(0, BOARD_SIZE - 1) * BOARD_SIZE + nx.clamp(0, BOARD_SIZE - 1)).unsqueeze(-1)
+   119	    # 1.32.7 permits crossing into a LOCKED tile.  This matters at the shed:
+   120	    # hands can spawn on one of its initially locked access tiles and otherwise
+   121	    # would be stranded.  Tile operations still retain the guard below.
+   122	    can_move = is_move & inb
+   123	    st.ux[:, :, u] = torch.where(can_move, nx, fx).to(st.ux.dtype)
+   124	    st.uy[:, :, u] = torch.where(can_move, ny, fy).to(st.uy.dtype)
+   125	
+   126	    flat = (fy * BOARD_SIZE + fx).unsqueeze(-1)
+   127	
+   128	    # ---------------- gather the standing tile -------------------------------
+   129	    k = st.kind.gather(-1, flat).squeeze(-1).to(torch.int64)
+   130	    sp = st.species.gather(-1, flat).squeeze(-1).to(torch.int64)
+   131	    td = st.tday.gather(-1, flat).squeeze(-1).to(torch.int64)
+   132	    ty = st.tyield.gather(-1, flat).squeeze(-1).to(torch.int64)
+   133	    tw = st.tflag.gather(-1, flat).squeeze(-1)
+   134	    tc = st.tcons.gather(-1, flat).squeeze(-1).to(torch.int64)
+   135	    tm = st.tmls.gather(-1, flat).squeeze(-1).to(torch.int64)
+   136	    tf = st.tfert.gather(-1, flat).squeeze(-1).to(torch.int64)
+   137	    tcr = st.tcared.gather(-1, flat).squeeze(-1)
+   138	    tfa = st.tfavail.gather(-1, flat).squeeze(-1)
+   139	    tcb = st.tcare.gather(-1, flat).squeeze(-1).to(torch.int64)
+   140	
+   141	    # The 1.32.7 interpreter resolves PICKUP/DROP before rejecting operations
+   142	    # on a LOCKED tile: three shed-access tiles begin locked, yet must remain
+   143	    # usable as standing positions.  Other tile operations still no-op there.
+   144	    shed_op = ((op == O.OP_PICKUP) | (op == O.OP_DROP) | (op == O.OP_PLACE))
+   145	    act = act & ~is_move & ((k != O.TILE_LOCKED) | shed_op)
+   146	
+   147	    is_plant = k == O.TILE_PLANT
+   148	    is_animal = k == O.TILE_ANIMAL
+   149	    is_empty = k == O.TILE_EMPTY
+   150	
+   151	    inv = st.inv[:, :, u, :]
+   152	    order = st.inv_order[:, :, u, :]
+   153	    shed = st.shed
+   154	
+   155	    item_ok = (a1 >= 0) & (a1 < O.N_ITEMS)
+   156	    item_i = a1.clamp(0, O.N_ITEMS - 1).unsqueeze(-1)
+   157	    crop = a1.clamp(0, O.N_CROPS - 1)
+   158	    crop_i = crop.unsqueeze(-1)
+   159	    fert_i = torch.full_like(item_i, O.ITEM_FERTILIZER)
+   160	    wheat_i = torch.zeros_like(item_i)          # ITEM_WHEAT == 0
+   161	    one = torch.ones_like(td)
+   162	
+   163	    shed_adj = ((fx == HALF - 1) | (fx == HALF)) & ((fy == HALF - 1) | (fy == HALF))
+   164	    room = (SHED_CAPACITY - shed.sum(-1)).clamp(min=0)
+   165	
+   166	    new_k, new_sp, new_td, new_ty = k, sp, td, ty
+   167	    new_tw, new_tc, new_tm, new_tf = tw, tc, tm, tf
+   168	    new_tcr, new_tfa, new_tcb = tcr, tfa, tcb
+   169	
+   170	    # ---------------- DROP (325-338) -----------------------------------------
+   171	    greedy_drop(shed, inv, order, room, act & (op == O.OP_DROP) & shed_adj)
+   172	
+   173	    # ---------------- PICKUP (340-357) ---------------------------------------
+   174	    m_pick = act & (op == O.OP_PICKUP) & shed_adj & (a2 > 0) & item_ok
+   175	    npick = torch.minimum(a2, shed.gather(-1, item_i).squeeze(-1))
+   176	    m_pick = m_pick & (npick > 0)
+   177	    shed.scatter_add_(-1, item_i, -torch.where(m_pick, npick, 0).unsqueeze(-1))
+   178	    _inv_add(inv, order, item_i, npick, m_pick, step)
+   179	
+   180	    # ---------------- PLANT (359-371) ----------------------------------------
+   181	    m_plant = (act & (op == O.OP_PLANT) & (a1 >= 0) & (a1 < O.N_CROPS)
+   182	               & is_empty & (st.seeds.gather(-1, crop_i).squeeze(-1) > 0)
+   183	               & ~blocked.gather(-1, crop_i).squeeze(-1))
+   184	    st.seeds.scatter_add_(-1, crop_i, -m_plant.to(torch.int64).unsqueeze(-1))
+   185	    ongoing = tab.crop_ongoing[crop]
+   186	    new_k = torch.where(m_plant, O.TILE_PLANT, new_k)
+   187	    new_sp = torch.where(m_plant, crop, new_sp)
+   188	    new_td = torch.where(m_plant, day, new_td)
+   189	    new_ty = torch.where(m_plant, (~ongoing).to(torch.int64), new_ty)
+   190	    new_tw = new_tw & ~m_plant
+   191	    new_tc = torch.where(m_plant, one, new_tc)
+   192	    new_tm = torch.where(m_plant,
+   193	                         torch.where(ongoing, -one,
+   194	                                     (day + tab.crop_max_yield_day[crop] + 1) * TURNS_PER_DAY),
+   195	                         new_tm)
+   196	    new_tf = torch.where(m_plant, -one, new_tf)
+   197	    new_tcr = new_tcr & ~m_plant
+   198	    new_tfa = new_tfa & ~m_plant
+   199	    new_tcb = torch.where(m_plant, 0, new_tcb)
+   200	
+   201	    # ---------------- WATER (373-386) ----------------------------------------
+   202	    m_water = act & (op == O.OP_WATER) & is_plant & ~tw
+   203	    spc = sp.clamp(0, O.N_CROPS - 1)
+   204	    age = day - td
+   205	    in_window = ((~tab.crop_ongoing[spc]) & (age >= tab.crop_window_start[spc])
+   206	                 & (age <= tab.crop_max_yield_day[spc]))
+   207	    bonus = 1 + (tf >= day).to(torch.int64)
+   208	    new_ty = torch.where(m_water & in_window,
+   209	                         torch.minimum(tab.crop_max_yield[spc], ty + bonus), new_ty)
+   210	    new_tw = new_tw | m_water
+   211	
+   212	    # ---------------- HARVEST (388-415) --------------------------------------
+   213	    m_h = act & (op == O.OP_HARVEST) & (is_plant | is_animal) & (ty > 0)
+   214	    c_ongoing = tab.crop_ongoing[spc]
+   215	    m_hp = m_h & is_plant & (age >= tab.crop_first_yield[spc])
+   216	    m_ha = m_h & is_animal
+   217	    prod = torch.where(is_plant, spc, tab.animal_product[sp.clamp(0, O.N_ANIMALS - 1)])
+   218	    m_harv = m_hp | m_ha
+   219	    _inv_add(inv, order, prod.unsqueeze(-1), ty, m_harv, step)
+   220	    new_ty = torch.where(m_harv, 0, new_ty)
+   221	    new_k = torch.where(m_hp & ~c_ongoing, O.TILE_EMPTY, new_k)
+   222	
+   223	    # ---------------- FERTILIZE (417-424) ------------------------------------
+   224	    m_fert = (act & (op == O.OP_FERTILIZE) & is_plant
+   225	              & (inv.gather(-1, fert_i).squeeze(-1) > 0))
+   226	    _inv_take(inv, order, fert_i, one, m_fert)
+   227	    new_tf = torch.where(m_fert, torch.maximum(tf, (day + 2) * one), new_tf)
+   228	
+   229	    # ---------------- DIG (426-433) ------------------------------------------
+   230	    new_k = torch.where(act & (op == O.OP_DIG) & ~is_empty & ~is_animal,
+   231	                        O.TILE_EMPTY, new_k)
+   232	
+   233	    # ---------------- BUILD_COOP / BUILD_PASTURE (435-445) --------------------
+   234	    new_k = torch.where(act & (op == O.OP_BUILD_COOP) & is_empty, O.TILE_COOP, new_k)
+   235	    new_k = torch.where(act & (op == O.OP_BUILD_PASTURE) & is_empty, O.TILE_PASTURE, new_k)
+   236	
+   237	    # ---------------- PLACE (447-478) ----------------------------------------
+   238	    aidx = (a1 - O.ITEM_GOOSE).clamp(0, O.N_ANIMALS - 1)
+   239	    m_place = act & (op == O.OP_PLACE)
+   240	    m_pab = (m_place & (a1 >= O.ITEM_GOOSE) & (a1 < O.ITEM_GOOSE + O.N_ANIMALS)
+   241	             & (k == tab.animal_structure[aidx]))
+   242	    held = inv.gather(-1, item_i).squeeze(-1)
+   243	    m_pa = m_pab & (held > 0)
+   244	    _inv_take(inv, order, item_i, one, m_pa)
+   245	    new_k = torch.where(m_pa, O.TILE_ANIMAL, new_k)
+   246	    new_sp = torch.where(m_pa, aidx, new_sp)
+   247	    new_td = torch.where(m_pa, day, new_td)
+   248	    new_ty = torch.where(m_pa, 0, new_ty)
+   249	    new_tw = new_tw & ~m_pa
+   250	    new_tc = torch.where(m_pa, 0, new_tc)
+   251	    new_tm = torch.where(m_pa, 0, new_tm)
+   252	    new_tf = torch.where(m_pa, 0, new_tf)
+   253	    new_tcr = new_tcr & ~m_pa
+   254	    new_tfa = new_tfa & ~m_pa
+   255	    new_tcb = torch.where(m_pa, 0, new_tcb)
+   256	
+   257	    # shed-drop branch: only when the animal branch did not fire at all
+   258	    nplace = torch.minimum(torch.minimum(a2, inv.gather(-1, item_i).squeeze(-1)), room)
+   259	    m_ps = m_place & ~m_pab & shed_adj & (a2 > 0) & item_ok & (nplace > 0)
+   260	    _inv_take(inv, order, item_i, nplace, m_ps)
+   261	    shed.scatter_add_(-1, item_i, torch.where(m_ps, nplace, 0).unsqueeze(-1))
+   262	
+   263	    # ---------------- FEED (480-488) -----------------------------------------
+   264	    m_feed = (act & (op == O.OP_FEED) & is_animal & ~tw
+   265	              & (inv.gather(-1, wheat_i).squeeze(-1) > 0))
+   266	    _inv_take(inv, order, wheat_i, one, m_feed)
+   267	    new_tw = new_tw | m_feed
+   268	
+   269	    # ---------------- COLLECT_FERTILIZER (490-497) ---------------------------
+   270	    m_cf = act & (op == O.OP_COLLECT_FERTILIZER) & is_animal & tfa
+   271	    new_tfa = new_tfa & ~m_cf
+   272	    _inv_add(inv, order, fert_i, one, m_cf, step)
+   273	
+   274	    # ---------------- CARE (499-505) -----------------------------------------
+   275	    new_tcr = new_tcr | (act & (op == O.OP_CARE) & is_animal & ~tcr)
+   276	
+   277	    # ---------------- clear payload whenever the tile became bare ------------
+   278	    bare = (new_k != k) & (new_k != O.TILE_ANIMAL) & (new_k != O.TILE_PLANT)
+   279	    new_sp = torch.where(bare, 0, new_sp)
+   280	    new_td = torch.where(bare, 0, new_td)
+   281	    new_ty = torch.where(bare, 0, new_ty)
+   282	    new_tw = new_tw & ~bare
+   283	    new_tc = torch.where(bare, 0, new_tc)
+   284	    new_tm = torch.where(bare, 0, new_tm)
+   285	    new_tf = torch.where(bare, 0, new_tf)
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..b5faf6fdfa9af30f5afc49230e6943f9f590ecda
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -84,6 +84,7 @@
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..05ee411e453ea3a8bcc173ccbe758194423fe478
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,7 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: in progress. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
+
+codex
+Профиль P40 подтвердил диагноз количественно: при B=16 и шести policy-forward на шаг (learner + 5 двойников) policy занимает 433.1 ms из 609.2 ms/step, то есть 71%; среда — 176.1 ms. Это не измерение абсолютной H100-скорости, но надёжно указывает на масштабируемую структуру затрат.
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/research/bcppo_v3_design_codex.md
+/workspace/shared/tasks/T027-bcppo-v3-audit.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..c7ec03574b82819bdfa558e4ce308a055215d02c
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -13,6 +13,7 @@
+ 
+ ## Key findings (newest first; one line each, link the task)
+ - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
++- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+ - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+ - 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
+ - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+@@ -81,9 +82,11 @@
+ | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+ | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+ | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
++| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/research/bcppo_v3_design_codex.md b//workspace/shared/research/bcppo_v3_design_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..41a9fb96ae79d7017ac4bf277dbe0b7a8e59c242
+--- /dev/null
++++ b//workspace/shared/research/bcppo_v3_design_codex.md
+@@ -0,0 +1,94 @@
++# BC→PPO v3 — red-team audit Codex (2026-09-25)
++
++Scope: static trace of `/workspace/solution_kaggri/lab/{bcppo/policy.py,bcppo/ppo.py,bcppo/gpufeat.py,bc/export.py,bc/train.py,bc/feat.py}`, plus one bounded P40 rollout micro-profile.  No code was changed and nothing was submitted to Kaggle.
++
++## Q1. Concrete correctness defects / risks
++
++### P0 — PPO likelihood is wrong for a partially truncated repeated market order
++
++**`bcppo/policy.py:197-216`, consumed at `:170-182`.**  `build_market` emits only the first ten order slots, but records the *unclipped* categorical bucket in `mb`.  If, for example, a `BUY_ANIMAL` head sampled 15 when only ten slots remain, the executed action is exactly the same as bucket 10, while `logprob` assigns it probability `P(q=15)`, not `P(q>=10)`.  `minc` excludes a head only when it emitted zero orders; it does not fix this partial-tail case.  Thus the rollout likelihood, PPO ratio and BC KL no longer describe the action that the engine saw.  This is most acute for early ordered keys which consume slots and systematically biases market learning.
++
++**Fix:** make the market decoder sequential/autoregressive with the remaining-slot count in each head's mask; cap each repeated bucket to the remaining capacity before sampling.  If retaining parallel heads, canonicalise an overflowing recorded bucket and use `logsumexp(logits[cap:])` as the likelihood of the final capped bucket (and use the identical aggregation for entropy/KL).  Add an exhaustive unit test over remaining capacity 0…10 and buckets 0…40 that checks equality of both engine action and reported log-probability class.
++
++### P1 — entropy optimises market heads whose sampled choices are guaranteed invisible
++
++**`bcppo/policy.py:177-182`.**  The policy loss correctly gates market log-prob by `rec["minc"]`, but `ent_m` is an ungated sum over every market key.  Fully truncated heads therefore receive entropy gradients despite having no transition effect or likelihood term.  It wastes update budget and makes the reported entropy misleading; together with P0 it may encourage arbitrary high buckets behind the ten-order cap.
++
++**Fix:** multiply per-key market entropy by `minc`, and, after the P0 change, calculate entropy of the same capped/aggregated distribution.  Log `market_visible_keys` and saturation rate.
++
++### P1 — engine has no 16-hand rule; the training/export policy imposes one
++
++**`bcppo/policy.py:146`, `bc/export.py:65,165`, `bc/feat.py:109-120`; engine contract documents this at `gpuenv/spec.md:812,941`.**  `O.MAX_HANDS=16` is a tensor-contract cap, not a Kaggriculture constraint.  The learner masks HIRE at 16 and the export silently does the same.  This is not a current crash, but it is a hard capability ceiling and can become a silent mismatch if the intended teacher/target goes beyond 16 hands.
++
++**Fix:** for v3, at least instrument `n_hands==16` / proposed hires / `State.overflow` and fail evaluation if it fires.  For a real fix, raise the fixed action width and retrain (or implement a separate variable-length hire controller); never claim the current BC can imitate a >16-hand teacher.
++
++### P2 — target-KL is only a post-hoc, noisy statistic, not a guard
++
++**`bcppo/ppo.py:405-434`.**  There is no PPO target-KL early-stop at all.  Further, `mean(old_logp-new_logp)` at `:430` is a Monte-Carlo KL estimate that can be negative and is logged only after applying the update.  This leaves the observed early peak / later collapse unprotected.  `kl_bc` is a different constraint (BC||current), not a trust-region check against rollout policy.
++
++**Fix:** before `opt.step`, compute `log_ratio=new_logp-old_logp`, `approx_kl=((exp(log_ratio)-1)-log_ratio).mean()` (non-negative estimator of KL(old||new)); stop remaining minibatches/epochs when it exceeds 1.5× `--target-kl`.  Save the actual number of updates and max KL.  Start target KL around 0.01–0.02 per rollout, then tune from the 16-world exam rather than money-in-league.
++
++### P2 — the test suite has a blind spot for the stochastic/PPO path
++
++**`bcppo/e2e_test.py:1-4,20-23`; `bc/export.py:179,185`.**  End-to-end parity forces greedy actions, while PPO gathers sampled actions and the exported agent's sampler is a separate NumPy Gumbel implementation.  It therefore cannot catch a sampling/logprob/mask regression such as P0.  Existing greedy e2e parity is still valuable, but insufficient for a PPO release.
++
++**Fix:** add deterministic-uniform/Gumbel injection to both decoders and compare sampled action tensors, recorded masks, `minc`, and log-probs on fixed states.  Also property-test decoder equivalence at cap boundaries (market slots, inventory, seeds, hires).
++
++### Checked items that are *not* a defect in this revision
++
++- `ppo.py:171-191,217-246` correctly presents the learner as player 0, maps actions back, and scores reward/final cash from the learner seat.  Exact half-seat assignment is correct for even batch sizes.
++- `ppo.py:239-242` telescopes conservative-equity shaping and restores terminal **cash margin**; it changes only a start-state potential, not the terminal objective.
++- `ppo.py:53-64` correctly freezes the shared trunk during value warm-up (the earlier value-only logit drift is addressed).
++- `policy.py:80-105` permits movement into LOCKED tiles and masks tile operations there; this agrees with the stated 1.32.7 engine contract.
++
++## Q2. What dominates step time
++
++The draft H1 is correct.  The primary avoidable cost is exactly visible at **`ppo.py:218-222`**: every named league opponent executes `policy.act` on **the full batch** every one of 719 steps, despite each environment drawing only one label.  With five league entries that means six full policy calls (learner + five opponents), then `_merge_actions` discards about five-sixths of the opponent outputs.
++
++There is a second kernel-launch-heavy path in **`policy.py:127-144`**: Python loop over up to 17 units, with nested 5-crop and 12-item loops, clone/mask/scatter/Categorical calls per unit.  This is especially unfriendly to `torch.compile` because `U_eff=int(...)` creates a dynamic host scalar.
++
++Bounded P40 micro-profile (P40 otherwise idle; B=16, 4 timed steps, six calls to the same policy per step, no CPU workers): **policy 433.1 ms/step; gpuenv 176.1 ms/step; policy 71.1%; 26.3 env-steps/s**.  It is not a H100 throughput prediction, but it falsifies any theory that the engine alone is the bottleneck.  The six full forwards dominate before any PPO backward pass.
++
++Priority fixes:
++
++1. Bucket environments by league label and run each opponent only on its selected rows.  Preserve a per-subset `ShopOrder`/state view and scatter actions back; validate byte-identical actions against the current full-batch implementation for a frozen seed.  This is the largest immediate win (near `#league` reduction in opponent work).
++2. Make the allocator fixed-width (`for u in range(17)`) and tensorise plant/pickup availability across `U`; then try `torch.compile(mode="max-autotune")`.  Do not compile before removing dynamic `U_eff` and Python-side graph breaks.
++3. Use CUDA graphs only after fixed batch/shape and only for stable paths.  A graph cannot repair the redundant 5× opponent forwards.
++4. Increase environment count only after (1).  At B=4096, the fp16 board alone is about **17.7 GB** (`719×4096×30×10×10×2`), before `uv`, masks, G, activations and optimizer; it fits 80 GB with care but is not “free”.  B=2048 is the safer first scale point.
++
++## Q3. Is Horizon-double BC sound?
++
++**As data augmentation / a candidate initialisation: yes, conditionally.  As an assumed strong GPU league opponent: no, not until rollout-gated.**  `es3_g5` is a structured tape/replay controller plus repair layers.  On expert trajectories BC can learn its local actions, but a single unit/board action error changes positions and inventory; then the clone visits states absent from the teacher distribution.  The present BC state is also not a full controller state: `gpufeat.py:23-34` retains only whether YARN was among the first two shops, not the full route/tape history.  If es3 decisions distinguish histories collapsed by these features, supervised labels are irreducibly multimodal and high teacher-forced accuracy will overstate closed-loop competence.
++
++Do it, but put hard gates in front of both proposed uses:
++
++1. Generate teacher rollouts over diverse seeds/opponents/both seats, split validation **by whole seed/episode**, and report teacher-forced action accuracy *and* closed-loop cash versus the teacher.
++2. Run DAgger: roll out the clone, query es3_g5 on the clone's visited state, append labels.  This directly attacks covariate shift and is much higher value than merely generating more on-policy teacher games.
++3. Treat the clone as a league member only after it clears a fixed official-engine competency gate versus es3_g5/g9/v5/panel.  A weak clone teaches PPO to beat an artifact, not Horizon.
++4. For initialisation, mix original 13-team BC data with teacher/DAgger data and retain an explicit BC KL floor to the selected mixture.  Do not replace the generalist init wholesale unless its 16-world exam improves.
++
++## Q4. PPO settings for 2048–4096 envs/GPU
++
++The current iteration is already enormous: 512×719 = 368,128 transitions; 4096 is 2.95M.  Keep the number of optimiser updates per rollout roughly stable rather than multiplying it eightfold merely because the batch got bigger.
++
++Suggested first **B=2048** trial (after P0/P1 and subset league work):
++
++- `epochs=1` initially (only move to 2 if target-KL never trips); `mb=65536` (or 32768 if memory requires it), not 8192.
++- `lr=5e-6` for first 20–40 iterations; if realised target KL is consistently <0.005, try `1e-5`.  Do not use linear LR scaling with B here.
++- `clip=0.10–0.15`, `target_kl=0.01–0.02`, early-stop at 1.5× target, grad norm 0.5–1.0.
++- Keep `gamma=1.0`, begin `lambda=.99` (compare `.995` only with fixed exams); preserve exact terminal correction.
++- Retain a nonzero BC floor, e.g. `kl_floor=.01–.02` after calibrating the three-head KL scale.  The observed `kl_bc=.28–.44` says the existing `.05` coefficient does not translate to a small policy displacement, so tune from measured action KL rather than coefficient intuition.
++
++For **B=4096**, first increase `mb` to 131072 and/or train in 64–128-step rollout fragments if memory/replay time becomes the bottleneck.  Use B=4096 only if per-GPU throughput keeps improving; otherwise 2048 has better iteration latency and quicker diagnostic feedback.  Four independent single-GPU PPOs are useful for ablations, but they do not create a 4-GPU learner; for one policy, use DDP/all-reduced gradients with fixed per-rank batches and prove resume determinism.
++
++## Q5. Additional ways to squeeze useful signal
++
++1. Promote evaluation quality above raw PPO iterations: fixed 16-world official-engine checkpoint exam, both seats, versus es3_g5/g9/v5 + panel; use paired cash margin and whole-world CI.  Eight games is selection noise, not a checkpoint ranking signal.
++2. Record **executed/rejected** unit and market actions from gpuenv, not only requested actions (`ppo.py:455-457` currently logs `None`).  A policy that raises learner money while silently producing invalid actions is not improving control.
++3. Make training opponents meaningful before scaling: horizon-double must pass Q3's rollout gate.  Keep snapshots to prevent forgetting, but allocate nontrivial probability to the strongest validated clone rather than a collection of near-identical 95–105k policies.
++4. The current 96-channel/6-block ResNet (`bc/train.py:37-43`) is tiny relative to H100.  After throughput is fixed, run one controlled 192/8 or 256/8 BC scaling test, gated on *closed-loop* performance and export latency.  More capacity without DAgger/masks will simply fit teacher-forced data harder.
++5. Add state/action coverage reports: market-slot saturation, hand-cap pressure, selected target distance, per-head KL, and teacher disagreement conditional on shop route.  These will distinguish an algorithmic plateau from representational aliasing.
++
++## Bottom line
++
++Do not spend a four-GPU long run before fixing the market likelihood/entropy path and adding PPO target-KL early-stop.  Then implement league subset evaluation, test B=2048 with fewer/larger minibatches and low LR, and gate Horizon-double BC by closed-loop competence—not validation accuracy or its in-league money alone.
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..323a0d0966bbd216a52bc3fcd37f05abb9bbc5dc
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,9 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: closed ✓. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
++
++Result: P0 likelihood mismatch for partially truncated repeated market buckets (`policy.py:197-216` vs `:170-182`); ungated entropy for invisible market heads; no actual target-KL stop.  P40 B=16 micro-profile with learner+5 full policy calls: 433.1 ms policy vs 176.1 ms environment per step (71.1% policy).  Full findings and safe fixes: `research/bcppo_v3_design_codex.md`.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..c7ec03574b82819bdfa558e4ce308a055215d02c
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -13,6 +13,7 @@
+ 
+ ## Key findings (newest first; one line each, link the task)
+ - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
++- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+ - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+ - 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
+ - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+@@ -81,9 +82,11 @@
+ | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+ | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+ | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
++| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/research/bcppo_v3_design_codex.md b//workspace/shared/research/bcppo_v3_design_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..41a9fb96ae79d7017ac4bf277dbe0b7a8e59c242
+--- /dev/null
++++ b//workspace/shared/research/bcppo_v3_design_codex.md
+@@ -0,0 +1,94 @@
++# BC→PPO v3 — red-team audit Codex (2026-09-25)
++
++Scope: static trace of `/workspace/solution_kaggri/lab/{bcppo/policy.py,bcppo/ppo.py,bcppo/gpufeat.py,bc/export.py,bc/train.py,bc/feat.py}`, plus one bounded P40 rollout micro-profile.  No code was changed and nothing was submitted to Kaggle.
++
++## Q1. Concrete correctness defects / risks
++
++### P0 — PPO likelihood is wrong for a partially truncated repeated market order
++
++**`bcppo/policy.py:197-216`, consumed at `:170-182`.**  `build_market` emits only the first ten order slots, but records the *unclipped* categorical bucket in `mb`.  If, for example, a `BUY_ANIMAL` head sampled 15 when only ten slots remain, the executed action is exactly the same as bucket 10, while `logprob` assigns it probability `P(q=15)`, not `P(q>=10)`.  `minc` excludes a head only when it emitted zero orders; it does not fix this partial-tail case.  Thus the rollout likelihood, PPO ratio and BC KL no longer describe the action that the engine saw.  This is most acute for early ordered keys which consume slots and systematically biases market learning.
++
++**Fix:** make the market decoder sequential/autoregressive with the remaining-slot count in each head's mask; cap each repeated bucket to the remaining capacity before sampling.  If retaining parallel heads, canonicalise an overflowing recorded bucket and use `logsumexp(logits[cap:])` as the likelihood of the final capped bucket (and use the identical aggregation for entropy/KL).  Add an exhaustive unit test over remaining capacity 0…10 and buckets 0…40 that checks equality of both engine action and reported log-probability class.
++
++### P1 — entropy optimises market heads whose sampled choices are guaranteed invisible
++
++**`bcppo/policy.py:177-182`.**  The policy loss correctly gates market log-prob by `rec["minc"]`, but `ent_m` is an ungated sum over every market key.  Fully truncated heads therefore receive entropy gradients despite having no transition effect or likelihood term.  It wastes update budget and makes the reported entropy misleading; together with P0 it may encourage arbitrary high buckets behind the ten-order cap.
++
++**Fix:** multiply per-key market entropy by `minc`, and, after the P0 change, calculate entropy of the same capped/aggregated distribution.  Log `market_visible_keys` and saturation rate.
++
++### P1 — engine has no 16-hand rule; the training/export policy imposes one
++
++**`bcppo/policy.py:146`, `bc/export.py:65,165`, `bc/feat.py:109-120`; engine contract documents this at `gpuenv/spec.md:812,941`.**  `O.MAX_HANDS=16` is a tensor-contract cap, not a Kaggriculture constraint.  The learner masks HIRE at 16 and the export silently does the same.  This is not a current crash, but it is a hard capability ceiling and can become a silent mismatch if the intended teacher/target goes beyond 16 hands.
++
++**Fix:** for v3, at least instrument `n_hands==16` / proposed hires / `State.overflow` and fail evaluation if it fires.  For a real fix, raise the fixed action width and retrain (or implement a separate variable-length hire controller); never claim the current BC can imitate a >16-hand teacher.
++
++### P2 — target-KL is only a post-hoc, noisy statistic, not a guard
++
++**`bcppo/ppo.py:405-434`.**  There is no PPO target-KL early-stop at all.  Further, `mean(old_logp-new_logp)` at `:430` is a Monte-Carlo KL estimate that can be negative and is logged only after applying the update.  This leaves the observed early peak / later collapse unprotected.  `kl_bc` is a different constraint (BC||current), not a trust-region check against rollout policy.
++
++**Fix:** before `opt.step`, compute `log_ratio=new_logp-old_logp`, `approx_kl=((exp(log_ratio)-1)-log_ratio).mean()` (non-negative estimator of KL(old||new)); stop remaining minibatches/epochs when it exceeds 1.5× `--target-kl`.  Save the actual number of updates and max KL.  Start target KL around 0.01–0.02 per rollout, then tune from the 16-world exam rather than money-in-league.
++
++### P2 — the test suite has a blind spot for the stochastic/PPO path
++
++**`bcppo/e2e_test.py:1-4,20-23`; `bc/export.py:179,185`.**  End-to-end parity forces greedy actions, while PPO gathers sampled actions and the exported agent's sampler is a separate NumPy Gumbel implementation.  It therefore cannot catch a sampling/logprob/mask regression such as P0.  Existing greedy e2e parity is still valuable, but insufficient for a PPO release.
++
++**Fix:** add deterministic-uniform/Gumbel injection to both decoders and compare sampled action tensors, recorded masks, `minc`, and log-probs on fixed states.  Also property-test decoder equivalence at cap boundaries (market slots, inventory, seeds, hires).
++
++### Checked items that are *not* a defect in this revision
++
++- `ppo.py:171-191,217-246` correctly presents the learner as player 0, maps actions back, and scores reward/final cash from the learner seat.  Exact half-seat assignment is correct for even batch sizes.
++- `ppo.py:239-242` telescopes conservative-equity shaping and restores terminal **cash margin**; it changes only a start-state potential, not the terminal objective.
++- `ppo.py:53-64` correctly freezes the shared trunk during value warm-up (the earlier value-only logit drift is addressed).
++- `policy.py:80-105` permits movement into LOCKED tiles and masks tile operations there; this agrees with the stated 1.32.7 engine contract.
++
++## Q2. What dominates step time
++
++The draft H1 is correct.  The primary avoidable cost is exactly visible at **`ppo.py:218-222`**: every named league opponent executes `policy.act` on **the full batch** every one of 719 steps, despite each environment drawing only one label.  With five league entries that means six full policy calls (learner + five opponents), then `_merge_actions` discards about five-sixths of the opponent outputs.
++
++There is a second kernel-launch-heavy path in **`policy.py:127-144`**: Python loop over up to 17 units, with nested 5-crop and 12-item loops, clone/mask/scatter/Categorical calls per unit.  This is especially unfriendly to `torch.compile` because `U_eff=int(...)` creates a dynamic host scalar.
++
++Bounded P40 micro-profile (P40 otherwise idle; B=16, 4 timed steps, six calls to the same policy per step, no CPU workers): **policy 433.1 ms/step; gpuenv 176.1 ms/step; policy 71.1%; 26.3 env-steps/s**.  It is not a H100 throughput prediction, but it falsifies any theory that the engine alone is the bottleneck.  The six full forwards dominate before any PPO backward pass.
++
++Priority fixes:
++
++1. Bucket environments by league label and run each opponent only on its selected rows.  Preserve a per-subset `ShopOrder`/state view and scatter actions back; validate byte-identical actions against the current full-batch implementation for a frozen seed.  This is the largest immediate win (near `#league` reduction in opponent work).
++2. Make the allocator fixed-width (`for u in range(17)`) and tensorise plant/pickup availability across `U`; then try `torch.compile(mode="max-autotune")`.  Do not compile before removing dynamic `U_eff` and Python-side graph breaks.
++3. Use CUDA graphs only after fixed batch/shape and only for stable paths.  A graph cannot repair the redundant 5× opponent forwards.
++4. Increase environment count only after (1).  At B=4096, the fp16 board alone is about **17.7 GB** (`719×4096×30×10×10×2`), before `uv`, masks, G, activations and optimizer; it fits 80 GB with care but is not “free”.  B=2048 is the safer first scale point.
++
++## Q3. Is Horizon-double BC sound?
++
++**As data augmentation / a candidate initialisation: yes, conditionally.  As an assumed strong GPU league opponent: no, not until rollout-gated.**  `es3_g5` is a structured tape/replay controller plus repair layers.  On expert trajectories BC can learn its local actions, but a single unit/board action error changes positions and inventory; then the clone visits states absent from the teacher distribution.  The present BC state is also not a full controller state: `gpufeat.py:23-34` retains only whether YARN was among the first two shops, not the full route/tape history.  If es3 decisions distinguish histories collapsed by these features, supervised labels are irreducibly multimodal and high teacher-forced accuracy will overstate closed-loop competence.
++
++Do it, but put hard gates in front of both proposed uses:
++
++1. Generate teacher rollouts over diverse seeds/opponents/both seats, split validation **by whole seed/episode**, and report teacher-forced action accuracy *and* closed-loop cash versus the teacher.
++2. Run DAgger: roll out the clone, query es3_g5 on the clone's visited state, append labels.  This directly attacks covariate shift and is much higher value than merely generating more on-policy teacher games.
++3. Treat the clone as a league member only after it clears a fixed official-engine competency gate versus es3_g5/g9/v5/panel.  A weak clone teaches PPO to beat an artifact, not Horizon.
++4. For initialisation, mix original 13-team BC data with teacher/DAgger data and retain an explicit BC KL floor to the selected mixture.  Do not replace the generalist init wholesale unless its 16-world exam improves.
++
++## Q4. PPO settings for 2048–4096 envs/GPU
++
++The current iteration is already enormous: 512×719 = 368,128 transitions; 4096 is 2.95M.  Keep the number of optimiser updates per rollout roughly stable rather than multiplying it eightfold merely because the batch got bigger.
++
++Suggested first **B=2048** trial (after P0/P1 and subset league work):
++
++- `epochs=1` initially (only move to 2 if target-KL never trips); `mb=65536` (or 32768 if memory requires it), not 8192.
++- `lr=5e-6` for first 20–40 iterations; if realised target KL is consistently <0.005, try `1e-5`.  Do not use linear LR scaling with B here.
++- `clip=0.10–0.15`, `target_kl=0.01–0.02`, early-stop at 1.5× target, grad norm 0.5–1.0.
++- Keep `gamma=1.0`, begin `lambda=.99` (compare `.995` only with fixed exams); preserve exact terminal correction.
++- Retain a nonzero BC floor, e.g. `kl_floor=.01–.02` after calibrating the three-head KL scale.  The observed `kl_bc=.28–.44` says the existing `.05` coefficient does not translate to a small policy displacement, so tune from measured action KL rather than coefficient intuition.
++
++For **B=4096**, first increase `mb` to 131072 and/or train in 64–128-step rollout fragments if memory/replay time becomes the bottleneck.  Use B=4096 only if per-GPU throughput keeps improving; otherwise 2048 has better iteration latency and quicker diagnostic feedback.  Four independent single-GPU PPOs are useful for ablations, but they do not create a 4-GPU learner; for one policy, use DDP/all-reduced gradients with fixed per-rank batches and prove resume determinism.
++
++## Q5. Additional ways to squeeze useful signal
++
++1. Promote evaluation quality above raw PPO iterations: fixed 16-world official-engine checkpoint exam, both seats, versus es3_g5/g9/v5 + panel; use paired cash margin and whole-world CI.  Eight games is selection noise, not a checkpoint ranking signal.
++2. Record **executed/rejected** unit and market actions from gpuenv, not only requested actions (`ppo.py:455-457` currently logs `None`).  A policy that raises learner money while silently producing invalid actions is not improving control.
++3. Make training opponents meaningful before scaling: horizon-double must pass Q3's rollout gate.  Keep snapshots to prevent forgetting, but allocate nontrivial probability to the strongest validated clone rather than a collection of near-identical 95–105k policies.
++4. The current 96-channel/6-block ResNet (`bc/train.py:37-43`) is tiny relative to H100.  After throughput is fixed, run one controlled 192/8 or 256/8 BC scaling test, gated on *closed-loop* performance and export latency.  More capacity without DAgger/masks will simply fit teacher-forced data harder.
++5. Add state/action coverage reports: market-slot saturation, hand-cap pressure, selected target distance, per-head KL, and teacher disagreement conditional on shop route.  These will distinguish an algorithmic plateau from representational aliasing.
++
++## Bottom line
++
++Do not spend a four-GPU long run before fixing the market likelihood/entropy path and adding PPO target-KL early-stop.  Then implement league subset evaluation, test B=2048 with fewer/larger minibatches and low LR, and gate Horizon-double BC by closed-loop competence—not validation accuracy or its in-league money alone.
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..323a0d0966bbd216a52bc3fcd37f05abb9bbc5dc
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,9 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: closed ✓. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
++
++Result: P0 likelihood mismatch for partially truncated repeated market buckets (`policy.py:197-216` vs `:170-182`); ungated entropy for invisible market heads; no actual target-KL stop.  P40 B=16 micro-profile with learner+5 full policy calls: 433.1 ms policy vs 176.1 ms environment per step (71.1% policy).  Full findings and safe fixes: `research/bcppo_v3_design_codex.md`.
+
+exec
+/bin/bash -lc "/workspace/shared/bin/say claude 'T027 audit complete: research/bcppo_v3_design_codex.md (board updated); no Kaggle submission.'
+/workspace/shared/bin/say claude 'P0: policy.py:197-216 truncates repeated market bucket at 10 orders but logprob keeps raw q (170-182); canonical tail / autoregressive remaining-slot mask needed.'
+/workspace/shared/bin/say claude 'P1: market entropy is ungated for fully invisible truncated heads; gate it by minc and use same capped distribution.'
+/workspace/shared/bin/say claude 'P2: no actual PPO target-KL stop; add nonnegative approx-KL + stop at 1.5× target before a long H100 run.'
+/workspace/shared/bin/say claude 'P40 B16 profile (learner+5 full calls): policy 433ms vs env 176ms/step (71%); subset league eval first. Horizon-double only after closed-loop+DAgger gate.'
+sed -n '1,260p' /workspace/shared/research/bcppo_v3_design_codex.md | tail -12
+git -C /workspace/wt/codex status --short" in /workspace/wt/codex
+ succeeded in 49ms:
+sent to claude
+
+## Q5. Additional ways to squeeze useful signal
+
+1. Promote evaluation quality above raw PPO iterations: fixed 16-world official-engine checkpoint exam, both seats, versus es3_g5/g9/v5 + panel; use paired cash margin and whole-world CI.  Eight games is selection noise, not a checkpoint ranking signal.
+2. Record **executed/rejected** unit and market actions from gpuenv, not only requested actions (`ppo.py:455-457` currently logs `None`).  A policy that raises learner money while silently producing invalid actions is not improving control.
+3. Make training opponents meaningful before scaling: horizon-double must pass Q3's rollout gate.  Keep snapshots to prevent forgetting, but allocate nontrivial probability to the strongest validated clone rather than a collection of near-identical 95–105k policies.
+4. The current 96-channel/6-block ResNet (`bc/train.py:37-43`) is tiny relative to H100.  After throughput is fixed, run one controlled 192/8 or 256/8 BC scaling test, gated on *closed-loop* performance and export latency.  More capacity without DAgger/masks will simply fit teacher-forced data harder.
+5. Add state/action coverage reports: market-slot saturation, hand-cap pressure, selected target distance, per-head KL, and teacher disagreement conditional on shop route.  These will distinguish an algorithmic plateau from representational aliasing.
+
+## Bottom line
+
+Do not spend a four-GPU long run before fixing the market likelihood/entropy path and adding PPO target-KL early-stop.  Then implement league subset evaluation, test B=2048 with fewer/larger minibatches and low LR, and gate Horizon-double BC by closed-loop competence—not validation accuracy or its in-league money alone.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..c7ec03574b82819bdfa558e4ce308a055215d02c
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -13,6 +13,7 @@
+ 
+ ## Key findings (newest first; one line each, link the task)
+ - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
++- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+ - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+ - 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
+ - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+@@ -81,9 +82,11 @@
+ | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+ | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+ | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
++| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/research/bcppo_v3_design_codex.md b//workspace/shared/research/bcppo_v3_design_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..41a9fb96ae79d7017ac4bf277dbe0b7a8e59c242
+--- /dev/null
++++ b//workspace/shared/research/bcppo_v3_design_codex.md
+@@ -0,0 +1,94 @@
++# BC→PPO v3 — red-team audit Codex (2026-09-25)
++
++Scope: static trace of `/workspace/solution_kaggri/lab/{bcppo/policy.py,bcppo/ppo.py,bcppo/gpufeat.py,bc/export.py,bc/train.py,bc/feat.py}`, plus one bounded P40 rollout micro-profile.  No code was changed and nothing was submitted to Kaggle.
++
++## Q1. Concrete correctness defects / risks
++
++### P0 — PPO likelihood is wrong for a partially truncated repeated market order
++
++**`bcppo/policy.py:197-216`, consumed at `:170-182`.**  `build_market` emits only the first ten order slots, but records the *unclipped* categorical bucket in `mb`.  If, for example, a `BUY_ANIMAL` head sampled 15 when only ten slots remain, the executed action is exactly the same as bucket 10, while `logprob` assigns it probability `P(q=15)`, not `P(q>=10)`.  `minc` excludes a head only when it emitted zero orders; it does not fix this partial-tail case.  Thus the rollout likelihood, PPO ratio and BC KL no longer describe the action that the engine saw.  This is most acute for early ordered keys which consume slots and systematically biases market learning.
++
++**Fix:** make the market decoder sequential/autoregressive with the remaining-slot count in each head's mask; cap each repeated bucket to the remaining capacity before sampling.  If retaining parallel heads, canonicalise an overflowing recorded bucket and use `logsumexp(logits[cap:])` as the likelihood of the final capped bucket (and use the identical aggregation for entropy/KL).  Add an exhaustive unit test over remaining capacity 0…10 and buckets 0…40 that checks equality of both engine action and reported log-probability class.
++
++### P1 — entropy optimises market heads whose sampled choices are guaranteed invisible
++
++**`bcppo/policy.py:177-182`.**  The policy loss correctly gates market log-prob by `rec["minc"]`, but `ent_m` is an ungated sum over every market key.  Fully truncated heads therefore receive entropy gradients despite having no transition effect or likelihood term.  It wastes update budget and makes the reported entropy misleading; together with P0 it may encourage arbitrary high buckets behind the ten-order cap.
++
++**Fix:** multiply per-key market entropy by `minc`, and, after the P0 change, calculate entropy of the same capped/aggregated distribution.  Log `market_visible_keys` and saturation rate.
++
++### P1 — engine has no 16-hand rule; the training/export policy imposes one
++
++**`bcppo/policy.py:146`, `bc/export.py:65,165`, `bc/feat.py:109-120`; engine contract documents this at `gpuenv/spec.md:812,941`.**  `O.MAX_HANDS=16` is a tensor-contract cap, not a Kaggriculture constraint.  The learner masks HIRE at 16 and the export silently does the same.  This is not a current crash, but it is a hard capability ceiling and can become a silent mismatch if the intended teacher/target goes beyond 16 hands.
++
++**Fix:** for v3, at least instrument `n_hands==16` / proposed hires / `State.overflow` and fail evaluation if it fires.  For a real fix, raise the fixed action width and retrain (or implement a separate variable-length hire controller); never claim the current BC can imitate a >16-hand teacher.
++
++### P2 — target-KL is only a post-hoc, noisy statistic, not a guard
++
++**`bcppo/ppo.py:405-434`.**  There is no PPO target-KL early-stop at all.  Further, `mean(old_logp-new_logp)` at `:430` is a Monte-Carlo KL estimate that can be negative and is logged only after applying the update.  This leaves the observed early peak / later collapse unprotected.  `kl_bc` is a different constraint (BC||current), not a trust-region check against rollout policy.
++
++**Fix:** before `opt.step`, compute `log_ratio=new_logp-old_logp`, `approx_kl=((exp(log_ratio)-1)-log_ratio).mean()` (non-negative estimator of KL(old||new)); stop remaining minibatches/epochs when it exceeds 1.5× `--target-kl`.  Save the actual number of updates and max KL.  Start target KL around 0.01–0.02 per rollout, then tune from the 16-world exam rather than money-in-league.
++
++### P2 — the test suite has a blind spot for the stochastic/PPO path
++
++**`bcppo/e2e_test.py:1-4,20-23`; `bc/export.py:179,185`.**  End-to-end parity forces greedy actions, while PPO gathers sampled actions and the exported agent's sampler is a separate NumPy Gumbel implementation.  It therefore cannot catch a sampling/logprob/mask regression such as P0.  Existing greedy e2e parity is still valuable, but insufficient for a PPO release.
++
++**Fix:** add deterministic-uniform/Gumbel injection to both decoders and compare sampled action tensors, recorded masks, `minc`, and log-probs on fixed states.  Also property-test decoder equivalence at cap boundaries (market slots, inventory, seeds, hires).
++
++### Checked items that are *not* a defect in this revision
++
++- `ppo.py:171-191,217-246` correctly presents the learner as player 0, maps actions back, and scores reward/final cash from the learner seat.  Exact half-seat assignment is correct for even batch sizes.
++- `ppo.py:239-242` telescopes conservative-equity shaping and restores terminal **cash margin**; it changes only a start-state potential, not the terminal objective.
++- `ppo.py:53-64` correctly freezes the shared trunk during value warm-up (the earlier value-only logit drift is addressed).
++- `policy.py:80-105` permits movement into LOCKED tiles and masks tile operations there; this agrees with the stated 1.32.7 engine contract.
++
++## Q2. What dominates step time
++
++The draft H1 is correct.  The primary avoidable cost is exactly visible at **`ppo.py:218-222`**: every named league opponent executes `policy.act` on **the full batch** every one of 719 steps, despite each environment drawing only one label.  With five league entries that means six full policy calls (learner + five opponents), then `_merge_actions` discards about five-sixths of the opponent outputs.
++
++There is a second kernel-launch-heavy path in **`policy.py:127-144`**: Python loop over up to 17 units, with nested 5-crop and 12-item loops, clone/mask/scatter/Categorical calls per unit.  This is especially unfriendly to `torch.compile` because `U_eff=int(...)` creates a dynamic host scalar.
++
++Bounded P40 micro-profile (P40 otherwise idle; B=16, 4 timed steps, six calls to the same policy per step, no CPU workers): **policy 433.1 ms/step; gpuenv 176.1 ms/step; policy 71.1%; 26.3 env-steps/s**.  It is not a H100 throughput prediction, but it falsifies any theory that the engine alone is the bottleneck.  The six full forwards dominate before any PPO backward pass.
++
++Priority fixes:
++
++1. Bucket environments by league label and run each opponent only on its selected rows.  Preserve a per-subset `ShopOrder`/state view and scatter actions back; validate byte-identical actions against the current full-batch implementation for a frozen seed.  This is the largest immediate win (near `#league` reduction in opponent work).
++2. Make the allocator fixed-width (`for u in range(17)`) and tensorise plant/pickup availability across `U`; then try `torch.compile(mode="max-autotune")`.  Do not compile before removing dynamic `U_eff` and Python-side graph breaks.
++3. Use CUDA graphs only after fixed batch/shape and only for stable paths.  A graph cannot repair the redundant 5× opponent forwards.
++4. Increase environment count only after (1).  At B=4096, the fp16 board alone is about **17.7 GB** (`719×4096×30×10×10×2`), before `uv`, masks, G, activations and optimizer; it fits 80 GB with care but is not “free”.  B=2048 is the safer first scale point.
++
++## Q3. Is Horizon-double BC sound?
++
++**As data augmentation / a candidate initialisation: yes, conditionally.  As an assumed strong GPU league opponent: no, not until rollout-gated.**  `es3_g5` is a structured tape/replay controller plus repair layers.  On expert trajectories BC can learn its local actions, but a single unit/board action error changes positions and inventory; then the clone visits states absent from the teacher distribution.  The present BC state is also not a full controller state: `gpufeat.py:23-34` retains only whether YARN was among the first two shops, not the full route/tape history.  If es3 decisions distinguish histories collapsed by these features, supervised labels are irreducibly multimodal and high teacher-forced accuracy will overstate closed-loop competence.
++
++Do it, but put hard gates in front of both proposed uses:
++
++1. Generate teacher rollouts over diverse seeds/opponents/both seats, split validation **by whole seed/episode**, and report teacher-forced action accuracy *and* closed-loop cash versus the teacher.
++2. Run DAgger: roll out the clone, query es3_g5 on the clone's visited state, append labels.  This directly attacks covariate shift and is much higher value than merely generating more on-policy teacher games.
++3. Treat the clone as a league member only after it clears a fixed official-engine competency gate versus es3_g5/g9/v5/panel.  A weak clone teaches PPO to beat an artifact, not Horizon.
++4. For initialisation, mix original 13-team BC data with teacher/DAgger data and retain an explicit BC KL floor to the selected mixture.  Do not replace the generalist init wholesale unless its 16-world exam improves.
++
++## Q4. PPO settings for 2048–4096 envs/GPU
++
++The current iteration is already enormous: 512×719 = 368,128 transitions; 4096 is 2.95M.  Keep the number of optimiser updates per rollout roughly stable rather than multiplying it eightfold merely because the batch got bigger.
++
++Suggested first **B=2048** trial (after P0/P1 and subset league work):
++
++- `epochs=1` initially (only move to 2 if target-KL never trips); `mb=65536` (or 32768 if memory requires it), not 8192.
++- `lr=5e-6` for first 20–40 iterations; if realised target KL is consistently <0.005, try `1e-5`.  Do not use linear LR scaling with B here.
++- `clip=0.10–0.15`, `target_kl=0.01–0.02`, early-stop at 1.5× target, grad norm 0.5–1.0.
++- Keep `gamma=1.0`, begin `lambda=.99` (compare `.995` only with fixed exams); preserve exact terminal correction.
++- Retain a nonzero BC floor, e.g. `kl_floor=.01–.02` after calibrating the three-head KL scale.  The observed `kl_bc=.28–.44` says the existing `.05` coefficient does not translate to a small policy displacement, so tune from measured action KL rather than coefficient intuition.
++
++For **B=4096**, first increase `mb` to 131072 and/or train in 64–128-step rollout fragments if memory/replay time becomes the bottleneck.  Use B=4096 only if per-GPU throughput keeps improving; otherwise 2048 has better iteration latency and quicker diagnostic feedback.  Four independent single-GPU PPOs are useful for ablations, but they do not create a 4-GPU learner; for one policy, use DDP/all-reduced gradients with fixed per-rank batches and prove resume determinism.
++
++## Q5. Additional ways to squeeze useful signal
++
++1. Promote evaluation quality above raw PPO iterations: fixed 16-world official-engine checkpoint exam, both seats, versus es3_g5/g9/v5 + panel; use paired cash margin and whole-world CI.  Eight games is selection noise, not a checkpoint ranking signal.
++2. Record **executed/rejected** unit and market actions from gpuenv, not only requested actions (`ppo.py:455-457` currently logs `None`).  A policy that raises learner money while silently producing invalid actions is not improving control.
++3. Make training opponents meaningful before scaling: horizon-double must pass Q3's rollout gate.  Keep snapshots to prevent forgetting, but allocate nontrivial probability to the strongest validated clone rather than a collection of near-identical 95–105k policies.
++4. The current 96-channel/6-block ResNet (`bc/train.py:37-43`) is tiny relative to H100.  After throughput is fixed, run one controlled 192/8 or 256/8 BC scaling test, gated on *closed-loop* performance and export latency.  More capacity without DAgger/masks will simply fit teacher-forced data harder.
++5. Add state/action coverage reports: market-slot saturation, hand-cap pressure, selected target distance, per-head KL, and teacher disagreement conditional on shop route.  These will distinguish an algorithmic plateau from representational aliasing.
++
++## Bottom line
++
++Do not spend a four-GPU long run before fixing the market likelihood/entropy path and adding PPO target-KL early-stop.  Then implement league subset evaluation, test B=2048 with fewer/larger minibatches and low LR, and gate Horizon-double BC by closed-loop competence—not validation accuracy or its in-league money alone.
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..323a0d0966bbd216a52bc3fcd37f05abb9bbc5dc
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,9 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: closed ✓. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
++
++Result: P0 likelihood mismatch for partially truncated repeated market buckets (`policy.py:197-216` vs `:170-182`); ungated entropy for invisible market heads; no actual target-KL stop.  P40 B=16 micro-profile with learner+5 full policy calls: 433.1 ms policy vs 176.1 ms environment per step (71.1% policy).  Full findings and safe fixes: `research/bcppo_v3_design_codex.md`.
+
+codex
+Аудит завершён; findings внесены в [bcppo_v3_design_codex.md](/workspace/shared/research/bcppo_v3_design_codex.md) и BOARD, Claude получил 5 строк.
+
+Главное: исправить P0 market truncated-bucket likelihood/entropy и добавить настоящий target-KL early-stop до долгого H100 прогона. P40 профиль подтвердил: full-batch league forwards занимают 71% шага; первым perf-фиксoм должен быть subset evaluation соперников. Kaggle не трогал.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 1f6ca21041ab7998b0b1495f8867268f9d869d05..c7ec03574b82819bdfa558e4ce308a055215d02c
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -13,6 +13,7 @@
+ 
+ ## Key findings (newest first; one line each, link the task)
+ - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
++- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+ - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+ - 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
+ - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+@@ -81,9 +82,11 @@
+ | T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+ | T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+ | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
++| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
++| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+ | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+ | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+diff --git a//workspace/shared/research/bcppo_v3_design_codex.md b//workspace/shared/research/bcppo_v3_design_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..41a9fb96ae79d7017ac4bf277dbe0b7a8e59c242
+--- /dev/null
++++ b//workspace/shared/research/bcppo_v3_design_codex.md
+@@ -0,0 +1,94 @@
++# BC→PPO v3 — red-team audit Codex (2026-09-25)
++
++Scope: static trace of `/workspace/solution_kaggri/lab/{bcppo/policy.py,bcppo/ppo.py,bcppo/gpufeat.py,bc/export.py,bc/train.py,bc/feat.py}`, plus one bounded P40 rollout micro-profile.  No code was changed and nothing was submitted to Kaggle.
++
++## Q1. Concrete correctness defects / risks
++
++### P0 — PPO likelihood is wrong for a partially truncated repeated market order
++
++**`bcppo/policy.py:197-216`, consumed at `:170-182`.**  `build_market` emits only the first ten order slots, but records the *unclipped* categorical bucket in `mb`.  If, for example, a `BUY_ANIMAL` head sampled 15 when only ten slots remain, the executed action is exactly the same as bucket 10, while `logprob` assigns it probability `P(q=15)`, not `P(q>=10)`.  `minc` excludes a head only when it emitted zero orders; it does not fix this partial-tail case.  Thus the rollout likelihood, PPO ratio and BC KL no longer describe the action that the engine saw.  This is most acute for early ordered keys which consume slots and systematically biases market learning.
++
++**Fix:** make the market decoder sequential/autoregressive with the remaining-slot count in each head's mask; cap each repeated bucket to the remaining capacity before sampling.  If retaining parallel heads, canonicalise an overflowing recorded bucket and use `logsumexp(logits[cap:])` as the likelihood of the final capped bucket (and use the identical aggregation for entropy/KL).  Add an exhaustive unit test over remaining capacity 0…10 and buckets 0…40 that checks equality of both engine action and reported log-probability class.
++
++### P1 — entropy optimises market heads whose sampled choices are guaranteed invisible
++
++**`bcppo/policy.py:177-182`.**  The policy loss correctly gates market log-prob by `rec["minc"]`, but `ent_m` is an ungated sum over every market key.  Fully truncated heads therefore receive entropy gradients despite having no transition effect or likelihood term.  It wastes update budget and makes the reported entropy misleading; together with P0 it may encourage arbitrary high buckets behind the ten-order cap.
++
++**Fix:** multiply per-key market entropy by `minc`, and, after the P0 change, calculate entropy of the same capped/aggregated distribution.  Log `market_visible_keys` and saturation rate.
++
++### P1 — engine has no 16-hand rule; the training/export policy imposes one
++
++**`bcppo/policy.py:146`, `bc/export.py:65,165`, `bc/feat.py:109-120`; engine contract documents this at `gpuenv/spec.md:812,941`.**  `O.MAX_HANDS=16` is a tensor-contract cap, not a Kaggriculture constraint.  The learner masks HIRE at 16 and the export silently does the same.  This is not a current crash, but it is a hard capability ceiling and can become a silent mismatch if the intended teacher/target goes beyond 16 hands.
++
++**Fix:** for v3, at least instrument `n_hands==16` / proposed hires / `State.overflow` and fail evaluation if it fires.  For a real fix, raise the fixed action width and retrain (or implement a separate variable-length hire controller); never claim the current BC can imitate a >16-hand teacher.
++
++### P2 — target-KL is only a post-hoc, noisy statistic, not a guard
++
++**`bcppo/ppo.py:405-434`.**  There is no PPO target-KL early-stop at all.  Further, `mean(old_logp-new_logp)` at `:430` is a Monte-Carlo KL estimate that can be negative and is logged only after applying the update.  This leaves the observed early peak / later collapse unprotected.  `kl_bc` is a different constraint (BC||current), not a trust-region check against rollout policy.
++
++**Fix:** before `opt.step`, compute `log_ratio=new_logp-old_logp`, `approx_kl=((exp(log_ratio)-1)-log_ratio).mean()` (non-negative estimator of KL(old||new)); stop remaining minibatches/epochs when it exceeds 1.5× `--target-kl`.  Save the actual number of updates and max KL.  Start target KL around 0.01–0.02 per rollout, then tune from the 16-world exam rather than money-in-league.
++
++### P2 — the test suite has a blind spot for the stochastic/PPO path
++
++**`bcppo/e2e_test.py:1-4,20-23`; `bc/export.py:179,185`.**  End-to-end parity forces greedy actions, while PPO gathers sampled actions and the exported agent's sampler is a separate NumPy Gumbel implementation.  It therefore cannot catch a sampling/logprob/mask regression such as P0.  Existing greedy e2e parity is still valuable, but insufficient for a PPO release.
++
++**Fix:** add deterministic-uniform/Gumbel injection to both decoders and compare sampled action tensors, recorded masks, `minc`, and log-probs on fixed states.  Also property-test decoder equivalence at cap boundaries (market slots, inventory, seeds, hires).
++
++### Checked items that are *not* a defect in this revision
++
++- `ppo.py:171-191,217-246` correctly presents the learner as player 0, maps actions back, and scores reward/final cash from the learner seat.  Exact half-seat assignment is correct for even batch sizes.
++- `ppo.py:239-242` telescopes conservative-equity shaping and restores terminal **cash margin**; it changes only a start-state potential, not the terminal objective.
++- `ppo.py:53-64` correctly freezes the shared trunk during value warm-up (the earlier value-only logit drift is addressed).
++- `policy.py:80-105` permits movement into LOCKED tiles and masks tile operations there; this agrees with the stated 1.32.7 engine contract.
++
++## Q2. What dominates step time
++
++The draft H1 is correct.  The primary avoidable cost is exactly visible at **`ppo.py:218-222`**: every named league opponent executes `policy.act` on **the full batch** every one of 719 steps, despite each environment drawing only one label.  With five league entries that means six full policy calls (learner + five opponents), then `_merge_actions` discards about five-sixths of the opponent outputs.
++
++There is a second kernel-launch-heavy path in **`policy.py:127-144`**: Python loop over up to 17 units, with nested 5-crop and 12-item loops, clone/mask/scatter/Categorical calls per unit.  This is especially unfriendly to `torch.compile` because `U_eff=int(...)` creates a dynamic host scalar.
++
++Bounded P40 micro-profile (P40 otherwise idle; B=16, 4 timed steps, six calls to the same policy per step, no CPU workers): **policy 433.1 ms/step; gpuenv 176.1 ms/step; policy 71.1%; 26.3 env-steps/s**.  It is not a H100 throughput prediction, but it falsifies any theory that the engine alone is the bottleneck.  The six full forwards dominate before any PPO backward pass.
++
++Priority fixes:
++
++1. Bucket environments by league label and run each opponent only on its selected rows.  Preserve a per-subset `ShopOrder`/state view and scatter actions back; validate byte-identical actions against the current full-batch implementation for a frozen seed.  This is the largest immediate win (near `#league` reduction in opponent work).
++2. Make the allocator fixed-width (`for u in range(17)`) and tensorise plant/pickup availability across `U`; then try `torch.compile(mode="max-autotune")`.  Do not compile before removing dynamic `U_eff` and Python-side graph breaks.
++3. Use CUDA graphs only after fixed batch/shape and only for stable paths.  A graph cannot repair the redundant 5× opponent forwards.
++4. Increase environment count only after (1).  At B=4096, the fp16 board alone is about **17.7 GB** (`719×4096×30×10×10×2`), before `uv`, masks, G, activations and optimizer; it fits 80 GB with care but is not “free”.  B=2048 is the safer first scale point.
++
++## Q3. Is Horizon-double BC sound?
++
++**As data augmentation / a candidate initialisation: yes, conditionally.  As an assumed strong GPU league opponent: no, not until rollout-gated.**  `es3_g5` is a structured tape/replay controller plus repair layers.  On expert trajectories BC can learn its local actions, but a single unit/board action error changes positions and inventory; then the clone visits states absent from the teacher distribution.  The present BC state is also not a full controller state: `gpufeat.py:23-34` retains only whether YARN was among the first two shops, not the full route/tape history.  If es3 decisions distinguish histories collapsed by these features, supervised labels are irreducibly multimodal and high teacher-forced accuracy will overstate closed-loop competence.
++
++Do it, but put hard gates in front of both proposed uses:
++
++1. Generate teacher rollouts over diverse seeds/opponents/both seats, split validation **by whole seed/episode**, and report teacher-forced action accuracy *and* closed-loop cash versus the teacher.
++2. Run DAgger: roll out the clone, query es3_g5 on the clone's visited state, append labels.  This directly attacks covariate shift and is much higher value than merely generating more on-policy teacher games.
++3. Treat the clone as a league member only after it clears a fixed official-engine competency gate versus es3_g5/g9/v5/panel.  A weak clone teaches PPO to beat an artifact, not Horizon.
++4. For initialisation, mix original 13-team BC data with teacher/DAgger data and retain an explicit BC KL floor to the selected mixture.  Do not replace the generalist init wholesale unless its 16-world exam improves.
++
++## Q4. PPO settings for 2048–4096 envs/GPU
++
++The current iteration is already enormous: 512×719 = 368,128 transitions; 4096 is 2.95M.  Keep the number of optimiser updates per rollout roughly stable rather than multiplying it eightfold merely because the batch got bigger.
++
++Suggested first **B=2048** trial (after P0/P1 and subset league work):
++
++- `epochs=1` initially (only move to 2 if target-KL never trips); `mb=65536` (or 32768 if memory requires it), not 8192.
++- `lr=5e-6` for first 20–40 iterations; if realised target KL is consistently <0.005, try `1e-5`.  Do not use linear LR scaling with B here.
++- `clip=0.10–0.15`, `target_kl=0.01–0.02`, early-stop at 1.5× target, grad norm 0.5–1.0.
++- Keep `gamma=1.0`, begin `lambda=.99` (compare `.995` only with fixed exams); preserve exact terminal correction.
++- Retain a nonzero BC floor, e.g. `kl_floor=.01–.02` after calibrating the three-head KL scale.  The observed `kl_bc=.28–.44` says the existing `.05` coefficient does not translate to a small policy displacement, so tune from measured action KL rather than coefficient intuition.
++
++For **B=4096**, first increase `mb` to 131072 and/or train in 64–128-step rollout fragments if memory/replay time becomes the bottleneck.  Use B=4096 only if per-GPU throughput keeps improving; otherwise 2048 has better iteration latency and quicker diagnostic feedback.  Four independent single-GPU PPOs are useful for ablations, but they do not create a 4-GPU learner; for one policy, use DDP/all-reduced gradients with fixed per-rank batches and prove resume determinism.
++
++## Q5. Additional ways to squeeze useful signal
++
++1. Promote evaluation quality above raw PPO iterations: fixed 16-world official-engine checkpoint exam, both seats, versus es3_g5/g9/v5 + panel; use paired cash margin and whole-world CI.  Eight games is selection noise, not a checkpoint ranking signal.
++2. Record **executed/rejected** unit and market actions from gpuenv, not only requested actions (`ppo.py:455-457` currently logs `None`).  A policy that raises learner money while silently producing invalid actions is not improving control.
++3. Make training opponents meaningful before scaling: horizon-double must pass Q3's rollout gate.  Keep snapshots to prevent forgetting, but allocate nontrivial probability to the strongest validated clone rather than a collection of near-identical 95–105k policies.
++4. The current 96-channel/6-block ResNet (`bc/train.py:37-43`) is tiny relative to H100.  After throughput is fixed, run one controlled 192/8 or 256/8 BC scaling test, gated on *closed-loop* performance and export latency.  More capacity without DAgger/masks will simply fit teacher-forced data harder.
++5. Add state/action coverage reports: market-slot saturation, hand-cap pressure, selected target distance, per-head KL, and teacher disagreement conditional on shop route.  These will distinguish an algorithmic plateau from representational aliasing.
++
++## Bottom line
++
++Do not spend a four-GPU long run before fixing the market likelihood/entropy path and adding PPO target-KL early-stop.  Then implement league subset evaluation, test B=2048 with fewer/larger minibatches and low LR, and gate Horizon-double BC by closed-loop competence—not validation accuracy or its in-league money alone.
+diff --git a//workspace/shared/tasks/T027-bcppo-v3-audit.md b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..323a0d0966bbd216a52bc3fcd37f05abb9bbc5dc
+--- /dev/null
++++ b//workspace/shared/tasks/T027-bcppo-v3-audit.md
+@@ -0,0 +1,9 @@
++# T027 — BC→PPO v3 red-team audit
++
++Owner: codex. Status: closed ✓. 2026-09-25.
++
++Goal: audit the v3 proposal and policy/PPO/feature/BC-export code for correctness and performance bottlenecks; optionally profile a tiny P40 workload, at no more than four CPU workers.  Report exact file:line, failure and safe fix in `research/bcppo_v3_design_codex.md`; do not change training code or submit to Kaggle.
++
++Method: static trace of feature/action/mask/logprob and rollout/PPO/league paths, then a bounded local profile if the package is runnable.
++
++Result: P0 likelihood mismatch for partially truncated repeated market buckets (`policy.py:197-216` vs `:170-182`); ungated entropy for invisible market heads; no actual target-KL stop.  P40 B=16 micro-profile with learner+5 full policy calls: 433.1 ms policy vs 176.1 ms environment per step (71.1% policy).  Full findings and safe fixes: `research/bcppo_v3_design_codex.md`.
+
+tokens used
+108,165
+Аудит завершён; findings внесены в [bcppo_v3_design_codex.md](/workspace/shared/research/bcppo_v3_design_codex.md) и BOARD, Claude получил 5 строк.
+
+Главное: исправить P0 market truncated-bucket likelihood/entropy и добавить настоящий target-KL early-stop до долгого H100 прогона. P40 профиль подтвердил: full-batch league forwards занимают 71% шага; первым perf-фиксoм должен быть subset evaluation соперников. Kaggle не трогал.

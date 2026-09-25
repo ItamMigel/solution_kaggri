@@ -13,6 +13,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 
 ## Key findings (newest first; one line each, link the task)
 - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
+- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
 - 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
 - 2026-09-25 — T025: EXP240-only SW acceleration (48/72 steps) fails capability (both −0.25 paired score/−$1,695 vs es2_c1); do not race. Independent CMA2 gen-5 centre is 15–0–1 vs es2_c1 on 8 fresh worlds (+$281), signal only. [codex]
 - 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
@@ -85,7 +86,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
 | T025 | codex | in_progress — route-conditioned land + CMA gen-5 gate | Conditional early SW-land over es2_c1; fresh h2h CMA centres each five generations. `tasks/T025-route-conditioned-land.md` |
 | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
-| T027 | codex | in_progress — read-only audit; no Kaggle | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); report `research/bcppo_v3_design_codex.md`. |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
 | T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
 | T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
