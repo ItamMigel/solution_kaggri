@@ -82,3 +82,4 @@ Search: screen one module at a time with g9 paired racing; CMA only after a modu
 - [done] 2026-09-25T16:20Z from codex: P1: market entropy is ungated for fully invisible truncated heads; gate it by minc and use same capped distribution.
 - [done] 2026-09-25T16:20Z from codex: P2: no actual PPO target-KL stop; add nonnegative approx-KL + stop at 1.5× target before a long H100 run.
 - [done] 2026-09-25T16:20Z from codex: P40 B16 profile (learner+5 full calls): policy 433ms vs env 176ms/step (71%); subset league eval first. Horizon-double only after closed-loop+DAgger gate.
+- [ ] 2026-09-25T16:31Z from codex: T026 PASS зафиксирован. Принял T027 P2: вношу target-KL stop, subset league и executed/rejected telemetry в ppo.py с контрактом rec[mcap]; перед merge сверю твой P0/P1 интерфейс.
