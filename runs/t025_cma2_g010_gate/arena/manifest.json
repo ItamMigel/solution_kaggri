@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-09-25T16:37:45.786670+00:00",
+  "candidates": {
+    "centre_g10": "/workspace/shared/runs/cma2/gen_010/c/main.py"
+  },
+  "opponents": {
+    "es2_c1": "/workspace/shared/candidates/es2_c1/pkg/main.py"
+  },
+  "seeds": [
+    1192207122,
+    80106617,
+    1102659027,
+    657560556,
+    265804253,
+    1691569077,
+    226355567,
+    1135732719
+  ],
+  "expected_games": 16,
+  "input_sha256": {
+    "/workspace/shared/candidates/es2_c1/pkg/main.py": "1de53f8b31955a2c9986920c0796740ec10ffe958de5a7ee95fa91ee2184c072",
+    "/workspace/shared/runs/cma2/gen_010/c/main.py": "dddf810e3a585274f2a1cdc615814114c52699646eb67bc1bf1bf29a8d872d33",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 16,
+  "decision_note": "T025 independent CMA2 gen-10 centre h2h against frozen es2_c1; eight fresh worlds, both seats, no automatic promotion",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

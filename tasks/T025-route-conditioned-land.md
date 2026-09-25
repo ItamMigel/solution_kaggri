@@ -20,3 +20,6 @@ Every five completed CMA2 generations, independently gate the stored centre agai
 
 ## CMA2 centre gate — gen 5
 - Centre `runs/cma2/gen_005/c/main.py` vs frozen es2_c1 on 8 fresh excluded worlds, both seats: **15–0–1**, +$281.4 mean margin, world CI +$157…+$395, zero errors. This validates the requested periodic h2h signal only; it does not promote a CMA centre. Next independent gate is due when CMA2 completes gen 10.
+
+## CMA2 centre gate — gen 10
+- Centre `runs/cma2/gen_010/c/main.py` (sha256 `dddf810e…`) vs frozen es2_c1 on eight new worlds, both seats: **14–0–2** (87.5%; world-score CI **62.5…100%**), mean **+$418.0** (world-margin CI −$53.8…+$1,015.6), zero errors. Run: `runs/t025_cma2_g010_gate/arena/`; seeds are stored alongside it. This is the required periodic signal, not an automatic promotion. The two losses are the same BRUNCH_SPOT world in opposite seats (−$667 each). Next independent gate is due after CMA2 gen 15.
