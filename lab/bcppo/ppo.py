@@ -514,9 +514,11 @@ def main():
             "secs": round(time.time() - t0),
             "samples": samples,
             "ppo_updates": n_updates,
+            "updates": n_updates,
             "approx_kl_max": max_approx_kl,
             "target_kl": a.target_kl,
             "target_kl_early_stop": early_stop,
+            "early_stopped": early_stop,
             "league_envs": league_counts,
             "unit_op_distribution": [x / active_units for x in unit_hist],
             "market_op_distribution": [x / market_slots for x in market_hist],
@@ -525,9 +527,11 @@ def main():
             "unit_requested": int(action_metric["unit_requested"]),
             "plant_requested": int(action_metric["plant_requested"]),
             "plant_rejected_engine": int(action_metric["plant_rejected"]),
+            "blocked_plant": int(action_metric["plant_rejected"]),
             "plant_rejected_fraction": int(action_metric["plant_rejected"]) / max(1, int(action_metric["plant_requested"])),
             "market_orders_emitted": int(action_metric["market_orders_emitted"]),
             "hire_overflow_engine": int(action_metric["hire_overflow"]),
+            "hire_overflow": int(action_metric["hire_overflow"]),
         }
         record.update({key: value / max(1, n_updates) for key, value in stats.items()})
         print(json.dumps(record), flush=True)
