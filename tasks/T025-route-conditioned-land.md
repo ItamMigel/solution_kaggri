@@ -41,3 +41,39 @@ Every five completed CMA2 generations, independently gate the stored centre agai
 
 ## T025 follow-up claimed — c3g5 targeted red-team + CMA3 gen-10 gate (2026-09-25, Codex)
 - Before running, Codex will freeze two disjoint fresh seed files and exclude every seed recoverable from `runs/panel_c3g5` and prior `runs/*gate*` / T025 output. Current CMA3 training consumes 18 workers, so these two jobs use four workers total (≤22). No Kaggle submission is involved.
+
+## Targeted c3g5 red-team — 24 fresh worlds, parthenos + metav4 (2026-09-26, Codex)
+- Frozen inputs: `candidates_wip/es4_c3g5/main.py` (`9c93abe2…`) and `candidates/es3_g5/pkg/main.py` (`fb194f51…`), versus `parthenos_robust` and `tschinkel_metav4_v13`; seeds `runs/t025_c3g5_targeted_parthenos/seeds.json` were checked disjoint from all prior seed-bearing `runs/` artifacts, including `panel_c3g5` and earlier gates. Command used local `/workspace/wt/codex/compare.py`, both seats, four workers while CMA3 used 18. **192/192 valid, zero errors, input hashes unchanged.**
+- c3g5: parthenos **37–0–11**, +$818.5; metav4 **45–0–3**, +$1,293.5. es3_g5: parthenos **39–0–9**, +$896.8; metav4 **47–0–1**, +$1,353.7. Thus c3g5−es3_g5 is **−4.17pp** paired score (whole-world bootstrap [−10.42, 0]pp) and **−$69.25** margin (CI [−$176.65, +$33.30]) across the fixed suite — no superiority and a directionally adverse parthenos replication. **Do not promote es4_c3g5.**
+- Per-world paired margin differences c3g5−es3_g5 (average of both seats; `$`; score delta is zero except P:553563789 and M:944686768, each −1):
+
+| seed | parthenos | metav4 |
+|---:|---:|---:|
+| 114026231 | −165 | −133 |
+| 173784933 | −26 | +148 |
+| 371944795 | +272 | +390 |
+| 389532716 | −114 | +640 |
+| 553563789 | −543 | −192 |
+| 558688507 | −118 | +380 |
+| 572774699 | −672 | −991 |
+| 623936053 | −7 | −159 |
+| 696981031 | +56 | +347 |
+| 944686768 | −6 | −206 |
+| 966644471 | −9 | +12 |
+| 1021258629 | −102 | −100 |
+| 1114820177 | +290 | +289 |
+| 1161890718 | −171 | +60 |
+| 1174810681 | −278 | −391 |
+| 1218191577 | +129 | −699 |
+| 1234632958 | −469 | −423 |
+| 1346881843 | −39 | −30 |
+| 1551672846 | −8 | +1 |
+| 1636040957 | +333 | +202 |
+| 1663903600 | +125 | −392 |
+| 1763925789 | −92 | +82 |
+| 2096534423 | −230 | −291 |
+| 2128588532 | −37 | +12 |
+
+## CMA3 centre gate — gen 10 (2026-09-26, Codex)
+- On eight other fresh worlds (`runs/t025_cma3_g010_gate/seeds.json`), both seats, frozen `runs/cma3/gen_010/c/main.py` (`bd43a6ca…`) and c3g5 were each measured against frozen es3_g5 in the same `compare.py` invocation: **32/32 valid, zero errors, inputs unchanged**.
+- CMA3 gen-10 vs es3_g5: **15–0–1**, 93.75%, +$437.4 mean margin (world score CI 81.25…100%; margin CI +$136.4…+$955.3). c3g5 on exactly that panel: **15–0–1**, +$386.9. Direct CMA3−c3g5 paired result: **0.00pp** (CI [0,0]) and **+$50.5** margin (CI [−$39.25,+$132.0]); seed averages: 142428386 +235, 500621362 +145, 737697958 +60, 764089769 +1, 1234645335 0, 1329740717 0, 1820563819 +151, 1938237547 −188. So gen-10 does **not** establish a beat over c3g5; it is only a positive signal over es3_g5, pending independent confirmation before any promotion.

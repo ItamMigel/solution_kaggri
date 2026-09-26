@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T025 c3g5 red-team **rejects promotion**: on 24 new worlds × parthenos/metav4 × both seats (192/192 valid), c3g5−es3_g5 is −4.17pp score (CI −10.4…0) / −$69.3 (CI −$176.6…+$33.3); parthenos repeats in the adverse direction. CMA3 gen-10 is 15–0–1 (+$437) vs es3, but directly ties c3g5 on score (+$50.5, CI crosses 0): positive signal only. `tasks/T025-route-conditioned-land.md` [codex]
 - 2026-09-25 — PBT red-team/fix: published monotonic `roundNNN` snapshots eliminate stale `it` races after exploit; atomic exploit, all-4 common rotating official exams, invalid-exam rejection, 24 single-thread CPU workers, finite horizon stop. KL anchor remains immutable `ref.pt`; HoF is development-only and needs disjoint confirmation. `research/pbt_codex.md` [codex]
 - 2026-09-25 19:00 — BC→PPO **pkg v3** ready (`h100_pkg/kaggri_bcppo_v3.zip`): codex audit fixes (capped market P0/P1, target-KL P2, subset league, telemetry), vectorised allocator, 2048 envs defaults, es3 + 2000 DART games of es3_g5. Clean-teacher BC es3 failed closed loop (0/96, deterministic teacher → no coverage) → DART. [claude+codex]
 - 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
@@ -86,7 +87,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
 | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
-| T025 | codex | in_progress — c3g5 red-team + CMA3 gen-10 gate claimed | Conditional early SW-land closed; CMA3 centre h2h vs es3_g5 every five generations (first after gen-5). `tasks/T025-route-conditioned-land.md` |
+| T025 | codex | in_progress — c3g5 rejected; CMA3 gen-10 positive signal only | Conditional early SW-land closed; c3g5 does not beat es3 on 24 new targeted worlds; CMA3 centre h2h vs es3_g5 remains periodic/non-promotional pending independent confirmation. `tasks/T025-route-conditioned-land.md` |
 | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
 | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
