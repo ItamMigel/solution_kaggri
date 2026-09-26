@@ -1,12 +1,17 @@
 """Flow-matching plan layer: each day sample tomorrow's macro target from a conditional flow-matching model learned on top teams'
 day transitions (research/re/fm_top_model.json), then lay the target counts onto tiles. Same interface as plan.py."""
 import json, math, random
+try:
+    import numpy as _np
+except Exception:
+    _np = None
 FM = None  # filled by bundle (FM_MODEL json)
 CROPS = ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON"]; AN = ["COW", "SHEEP", "GOOSE"]
 SHOPS = ["BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "YARN_STORE", "ICE_CREAM_SHOP", "PET_CAFE", "SMOOTHIE_SHOP", "FARMERS_MARKET"]
 ACCESS = [(4, 4), (5, 4), (4, 5), (5, 5)]
 _CACHE = {}
 HORIZON = 1
+USE_MPC = False
 def _silu(v): return [a / (1.0 + math.exp(-a)) if a > -60 else 0.0 for a in v]
 def _lin(W, b, v): return [sum(w * x for w, x in zip(row, v)) + bb for row, bb in zip(W, b)]
 def _net(inp):
@@ -15,6 +20,43 @@ def _net(inp):
         h = _lin(W, b, h)
         if k < len(L) - 1: h = _silu(h)
     return h
+MPC_K, MPC_M, MPC_STEPS, MPC_LAM = 4, 8, 6, 1.0
+_NPW = None
+def _np_weights():
+    global _NPW
+    if _NPW is None:
+        _NPW = [(_np.array(W, dtype=_np.float32), _np.array(b, dtype=_np.float32)) for W, b in FM["W"]]
+    return _NPW
+def _np_net(inp):
+    h = inp; L = _np_weights()
+    for k, (W, b) in enumerate(L):
+        h = h @ W.T + b
+        if k < len(L) - 1: h = h / (1.0 + _np.exp(-_np.clip(h, -60, 60)))
+    return h
+def _np_step(cur, day, shops, op, rng, steps):
+    """One FM day-transition for a batch of macro states cur (N x D)."""
+    mu_x = _np.array(FM["mu_x"], _np.float32); sd_x = _np.array(FM["sd_x"], _np.float32)
+    mu_d = _np.array(FM["mu_d"], _np.float32); sd_d = _np.array(FM["sd_d"], _np.float32)
+    n = cur.shape[0]; xn = (cur - mu_x) / sd_x
+    cond = _np.concatenate([xn, _np.full((n, 1), min(29, day) / 29.0, _np.float32), _np.tile(_np.array(shops + op, _np.float32), (n, 1))], 1)
+    z = rng.standard_normal((n, len(FM["mu_d"]))).astype(_np.float32)
+    for k in range(steps):
+        z = z + _np_net(_np.concatenate([z, _np.full((n, 1), k / steps, _np.float32), cond], 1)) / steps
+    return cur + z * sd_d + mu_d
+def _mpc_target(me, day, shops, op, seed):
+    rng = _np.random.default_rng(seed)
+    cur = _np.tile(_np.array(me, _np.float32), (MPC_K, 1))
+    cand = _np_step(cur, day, shops, op, rng, MPC_STEPS)                      # K candidate tomorrows
+    roll = _np.repeat(cand, MPC_M, 0)
+    for dd in range(day + 1, 29):                                           # Monte-Carlo futures to the end of the season
+        roll = _np_step(roll, dd, shops, op, rng, MPC_STEPS)
+    final_money = _np.expm1(_np.clip(roll[:, 12], 0, 20)).reshape(MPC_K, MPC_M)  # index 12 = log_money
+    score = final_money.mean(1) - MPC_LAM * final_money.std(1)
+    # trust region: penalise candidates far from the typical (mean) candidate in normalised units
+    sd = _np.array(FM["sd_d"], _np.float32); dev = _np.abs((cand - cand.mean(0)) / sd).mean(1)
+    score = score - 20000.0 * dev
+    return list(map(float, cand[int(_np.argmax(score))]))
+
 def _farm_macro(farm):
     t = {}; an = {}; st = {"PASTURE": 0, "COOP": 0}; fert = 0; empty = 0
     for row in farm["tiles"]:
@@ -33,6 +75,8 @@ def _target(obs, player):
     if key in _CACHE: return _CACHE[key]
     me = _farm_macro(obs["farms"][player]); op = _farm_macro(obs["farms"][1 - player])
     shops = [sum(1 for s in (obs.get("town") or {}).get("unlocked_shops", []) if s == k) for k in SHOPS]
+    if USE_MPC and _np is not None and day < 28:
+        tgt = _mpc_target(me, day, shops, op, 1000 * day + player); _CACHE[key] = tgt; return tgt
     rnd = random.Random(1000 * day + player); D = len(FM["mu_d"]); S = 3; steps = 10; cur = list(me)
     for h in range(HORIZON):     # roll the day-transition flow forward HORIZON days from our current state
         xn = [(a - m) / s for a, m, s in zip(cur, FM["mu_x"], FM["sd_x"])]; cond = xn + [min(29, day + h) / 29.0] + shops + op
