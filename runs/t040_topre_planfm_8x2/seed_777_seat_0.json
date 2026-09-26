@@ -1,0 +1,424 @@
+{
+  "empty_band": {
+    "mean_plant_cmds": 0.41732283464566927,
+    "mean_plant_targets": 8.614173228346457,
+    "mean_want_empty": 8.724409448818898,
+    "sample": [
+      {
+        "crop_want_empty": {
+          "MELON": 1,
+          "STRAWBERRY": 3,
+          "WHEAT": 1
+        },
+        "day": 7,
+        "empty": 27,
+        "land": 2,
+        "market": [
+          [
+            "BUY_SEED",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_SEED",
+            "STRAWBERRY",
+            2
+          ]
+        ],
+        "moves": 3,
+        "ops": {
+          "FEED": 1,
+          "NORTH": 3
+        },
+        "plant_cmds": 0,
+        "plant_targets": {
+          "MELON": 1,
+          "STRAWBERRY": 3
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 1,
+          "STRAWBERRY": 1,
+          "TOMATO": 0,
+          "WHEAT": 0
+        },
+        "step": 169,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "MELON": 1,
+          "STRAWBERRY": 3,
+          "WHEAT": 1
+        },
+        "day": 7,
+        "empty": 27,
+        "land": 2,
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ],
+        "moves": 1,
+        "ops": {
+          "BUILD_COOP": 1,
+          "COLLECT_FERTILIZER": 1,
+          "NORTH": 1,
+          "PLANT": 1
+        },
+        "plant_cmds": 1,
+        "plant_targets": {
+          "MELON": 1,
+          "STRAWBERRY": 3,
+          "WHEAT": 1
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 1,
+          "STRAWBERRY": 3,
+          "TOMATO": 0,
+          "WHEAT": 1
+        },
+        "step": 170,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "WHEAT": 1
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [],
+        "moves": 1,
+        "ops": {
+          "CARE": 1,
+          "EAST": 1,
+          "FEED": 1,
+          "WATER": 1
+        },
+        "plant_cmds": 0,
+        "plant_targets": {
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "WHEAT": 1
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "TOMATO": 0,
+          "WHEAT": 1
+        },
+        "step": 171,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "WHEAT": 1
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ],
+        "moves": 1,
+        "ops": {
+          "COLLECT_FERTILIZER": 1,
+          "NORTH": 1,
+          "PICKUP": 1,
+          "PLANT": 1
+        },
+        "plant_cmds": 1,
+        "plant_targets": {
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "WHEAT": 1
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 1,
+          "STRAWBERRY": 2,
+          "TOMATO": 0,
+          "WHEAT": 1
+        },
+        "step": 172,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "MELON": 1,
+          "WHEAT": 3
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [
+          [
+            "BUY_SEED",
+            "WHEAT",
+            2
+          ]
+        ],
+        "moves": 2,
+        "ops": {
+          "EAST": 1,
+          "NORTH": 1,
+          "PLANT": 1,
+          "WATER": 1
+        },
+        "plant_cmds": 1,
+        "plant_targets": {
+          "MELON": 1,
+          "WHEAT": 3
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 1,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 1
+        },
+        "step": 185,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "WHEAT": 4
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [
+          [
+            "BUY_SEED",
+            "WHEAT",
+            1
+          ]
+        ],
+        "moves": 2,
+        "ops": {
+          "HARVEST": 1,
+          "NORTH": 2,
+          "PLANT": 1
+        },
+        "plant_cmds": 1,
+        "plant_targets": {
+          "WHEAT": 4
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 3
+        },
+        "step": 187,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "WHEAT": 4
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [
+          [
+            "BUY_SEED",
+            "WHEAT",
+            1
+          ]
+        ],
+        "moves": 1,
+        "ops": {
+          "WATER": 3,
+          "WEST": 1
+        },
+        "plant_cmds": 0,
+        "plant_targets": {
+          "WHEAT": 4
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 3
+        },
+        "step": 188,
+        "units": 4
+      },
+      {
+        "crop_want_empty": {
+          "WHEAT": 4
+        },
+        "day": 7,
+        "empty": 25,
+        "land": 2,
+        "market": [],
+        "moves": 3,
+        "ops": {
+          "HARVEST": 1,
+          "NORTH": 1,
+          "WEST": 2
+        },
+        "plant_cmds": 0,
+        "plant_targets": {
+          "WHEAT": 4
+        },
+        "seed": {
+          "CARROT": 0,
+          "MELON": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 4
+        },
+        "step": 189,
+        "units": 4
+      }
+    ],
+    "turns": 254
+  },
+  "land_events": [
+    {
+      "crop_want_empty": {
+        "MELON": 1,
+        "STRAWBERRY": 3,
+        "WHEAT": 1
+      },
+      "day": 7,
+      "empty": 27,
+      "land": 2,
+      "market": [
+        [
+          "BUY_SEED",
+          "WHEAT",
+          1
+        ],
+        [
+          "BUY_SEED",
+          "STRAWBERRY",
+          2
+        ]
+      ],
+      "moves": 3,
+      "ops": {
+        "FEED": 1,
+        "NORTH": 3
+      },
+      "plant_cmds": 0,
+      "plant_targets": {
+        "MELON": 1,
+        "STRAWBERRY": 3
+      },
+      "seed": {
+        "CARROT": 0,
+        "MELON": 1,
+        "STRAWBERRY": 1,
+        "TOMATO": 0,
+        "WHEAT": 0
+      },
+      "step": 169,
+      "units": 4
+    },
+    {
+      "crop_want_empty": {
+        "CARROT": 2,
+        "MELON": 2,
+        "STRAWBERRY": 2,
+        "WHEAT": 8
+      },
+      "day": 9,
+      "empty": 46,
+      "land": 3,
+      "market": [
+        [
+          "BUY_SEED",
+          "MELON",
+          1
+        ],
+        [
+          "BUY_SEED",
+          "CARROT",
+          1
+        ],
+        [
+          "BUY_ANIMAL",
+          "GOOSE",
+          1
+        ]
+      ],
+      "moves": 4,
+      "ops": {
+        "COLLECT_FERTILIZER": 1,
+        "EAST": 1,
+        "FEED": 1,
+        "NORTH": 1,
+        "WEST": 2
+      },
+      "plant_cmds": 0,
+      "plant_targets": {
+        "CARROT": 2,
+        "MELON": 2,
+        "STRAWBERRY": 2,
+        "WHEAT": 8
+      },
+      "seed": {
+        "CARROT": 1,
+        "MELON": 1,
+        "STRAWBERRY": 3,
+        "TOMATO": 0,
+        "WHEAT": 10
+      },
+      "step": 217,
+      "units": 6
+    }
+  ],
+  "margin": -104688.0,
+  "mine": 54580.0,
+  "move_share": 0.43389830508474575,
+  "moves": 1792,
+  "opp": 159268.0,
+  "ops": {
+    "BUILD_COOP": 3,
+    "BUILD_PASTURE": 7,
+    "CARE": 174,
+    "COLLECT_FERTILIZER": 184,
+    "DIG": 54,
+    "DROP": 33,
+    "EAST": 334,
+    "FEED": 183,
+    "HARVEST": 331,
+    "NORTH": 569,
+    "PASS": 128,
+    "PICKUP": 80,
+    "PLACE": 10,
+    "PLANT": 278,
+    "SOUTH": 306,
+    "WATER": 873,
+    "WEST": 583
+  },
+  "rewards": [
+    54580.0,
+    159268.0
+  ],
+  "seat": 0,
+  "seed": 777,
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "units": 4130
+}

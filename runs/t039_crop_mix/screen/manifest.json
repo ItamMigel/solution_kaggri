@@ -1,0 +1,31 @@
+{
+  "created_utc": "2026-09-26T21:38:50.905795+00:00",
+  "candidates": {
+    "es7_wm": "/workspace/shared/candidates/es7_wm/pkg/main.py",
+    "crop_mix": "/workspace/wt/codex/experiments/t039_crop_mix/main_on.py"
+  },
+  "opponents": {
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py"
+  },
+  "seeds": [
+    181902731,
+    181902732
+  ],
+  "expected_games": 8,
+  "input_sha256": {
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9",
+    "/workspace/wt/codex/experiments/t039_crop_mix/main_on.py": "92cb5cfa434733dab595243a291b8326a8ecd38e74634a5ccae2f621387a2f79"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 4,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
