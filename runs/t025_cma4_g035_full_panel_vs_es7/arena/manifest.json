@@ -1,0 +1,67 @@
+{
+  "created_utc": "2026-09-26T19:18:35.749189+00:00",
+  "candidates": {
+    "cma4_g035_wm": "/workspace/shared/runs/t025_cma4_g035_full_panel_vs_es7/candidate_with_wheat/main.py",
+    "es7_wm": "/workspace/shared/candidates/es7_wm/pkg/main.py"
+  },
+  "opponents": {
+    "mirror": "/workspace/shared/candidates/es7_wm/pkg/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "t2945": "/workspace/shared/opponents/pool/tschinkel2945/main.py",
+    "ozer_v45": "/workspace/shared/opponents/pool/ozer_v45/main.py",
+    "yaxon": "/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py",
+    "pilkwang": "/workspace/shared/opponents/pool/pilkwang_struct/main.py",
+    "es1_g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "v5_market": "/workspace/wt/codex/agents/horizon_v5_market.py"
+  },
+  "seeds": [
+    783246406,
+    1235700356,
+    1034558080,
+    1702571391,
+    904728040,
+    991818596,
+    1455377940,
+    37193108,
+    1438713440,
+    1186682282,
+    515736637,
+    1519223531,
+    1584002743,
+    1925283471,
+    1792293872,
+    590687737
+  ],
+  "expected_games": 640,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/opponents/pool/ozer_v45/main.py": "2536d41ed5a00c75204b6350f1c76c54259c774cb065ba2a3a0072eedf210d94",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/pilkwang_struct/main.py": "21e4b79bbc7bca97ad1af6337322303987d73d95b963b08ebe80a67900bd5360",
+    "/workspace/shared/opponents/pool/tschinkel2945/main.py": "4f3ca95dd12d9a94b03339999d8803c155f450a8d3956636f050643301fcc5dd",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py": "ea4c28e64d77ddcdd5f08cb150b408de3c10f4bc9a18c6e681758b7da2e8f022",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/t025_cma4_g035_full_panel_vs_es7/candidate_with_wheat/main.py": "99745e461e45d3ca3af2f4065187d6d565ff9fa3a2859876796fdeb681e1139e",
+    "/workspace/wt/codex/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 4,
+  "decision_note": "T025 periodic fresh full-panel gate: CMA centre plus frozen es7 WHEAT layer against promoted es7_wm; no Kaggle submission.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "es7_wm",
+      "mirror"
+    ]
+  ]
+}
