@@ -28,3 +28,12 @@ Identical up to d6; they then buy land#3 2.8 days earlier and start geese 3.6 da
 while we spend on strawberries (33 vs 21–24 tiles) and early cows. => port their d6–d10 priorities, not their whole agent.
 Decision-tree rules (lab/re/rules.py → research/re/rules_dsm_mmpq.md): land purchase keyed on shed MELON>17 / clock proxies — trees mostly learn the clock.
 Openings: DSM/MMPQ diverge by step ~96 (reactive, no shared tape); Boey: 50% of games share an identical 199-step tape (one tape sub + one reactive).
+## Wheat feed economy (exact trades)
+| per game | ours | DSM | MMPQ |
+|---|---|---|---|
+| sell own wheat | 562 u @40.8 | 484 @34.9 | 525 @33.0 |
+| buy feed wheat | **347 u @40.4** (≈283 of them d10–29 @39–44) | **122 @34.1**, ~0 after d15 | 118 @34.9 |
+| net own wheat | 215 u | **362 u** | 407 u |
+| animals (≈) | 17.4 (cow 7.8 / sheep 7.6 / goose 2) | 21 (7.4 / 6.5 / 7) | 21.6 |
+DSM grows ~2× our wheat and feeds more animals with almost no purchases after d15. Lever: expand own wheat area via Horizon's existing
+reactive planting layers (EXP182 finite-harvest wheat/carrot input planner, CARROT2 d6–28), not the fixed route tape.
