@@ -8,3 +8,41 @@
 {"gen": 5, "centre_fit": 0.9374931249999999, "best": "x1", "best_fit": 1.013435625, "sigma": 0.01407811287978446, "errors": 0, "secs": 887}
 {"gen": 6, "centre_fit": 1.0354818749999999, "best": "x8", "best_fit": 1.0360946875, "sigma": 0.014197729288564456, "errors": 0, "secs": 1245}
 {"gen": 7, "centre_fit": 0.9831818749999999, "best": "x4", "best_fit": 0.9849006250000001, "sigma": 0.014009267434923452, "errors": 0, "secs": 995}
+{"gen": 8, "centre_fit": 1.004991875, "best": "x3", "best_fit": 1.029779375, "sigma": 0.014001236003758612, "errors": 0, "secs": 897}
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 70, in <module>
+    start, mode = text.split(":", 1)
+^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 60, in main
+    if missing or extra or any(not rows[name][opp] for opp in weights):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_es.py", line 23, in evaluate
+    subprocess.run(args, cwd=ROOT, env=env, stdout=open(f"{gdir}/compare.log", "w"), stderr=subprocess.STDOUT)
+  File "/venv/main/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 1201, in communicate
+    self.wait()
+  File "/venv/main/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 2053, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 2011, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 178, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 165, in main
+    fit, breakdown = _fitness_from_games(gdir, cands, mode)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 61, in _fitness_from_games
+    raise RuntimeError(f"incomplete opponent fitness for {name}: missing={sorted(missing)}, extra={sorted(extra)}")
+RuntimeError: incomplete opponent fitness for c: missing=['best', 'metav4', 'parthenos', 'v5_market', 'yhay0913'], extra=[]
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'

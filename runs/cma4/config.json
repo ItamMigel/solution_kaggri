@@ -5,5 +5,15 @@
  "collect": true,
  "pop": 10,
  "sigma0": 0.015,
- "worlds": 8
+ "worlds": 8,
+ "fitness_schedule": [
+  {
+   "start_gen": 0,
+   "mode": "uniform"
+  },
+  {
+   "start_gen": 9,
+   "mode": "parthenos_x2"
+  }
+ ]
 }
