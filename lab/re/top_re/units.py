@@ -487,6 +487,16 @@ def _task_utility(world: _World, actor: int, task: Task) -> float:
         features["HARVEST_P"] = 0.10
     utility = sum(TASK_WEIGHTS[name] * value for name, value in features.items()
                   if name not in {"dist", "log1p_dist"})
+    # Conditional-logit recovers relative preferences from successful trips;
+    # it cannot encode the hard engine constraint that a second missed feed
+    # loses the animal.  Preserve that constraint as a small survival floor.
+    # The paired FETCH bonus makes the floor actionable before a worker owns
+    # wheat, rather than merely preferring a feed task it cannot execute.
+    if task.op == "FEED":
+        missed = float(tile.get("consecutive_unfed", 0) or 0) if isinstance(tile, Mapping) else 0.0
+        utility += 1.20 + 1.50 * missed
+    elif task.op == "FETCH" and task.item == "WHEAT":
+        utility += 1.20
     # A plan-provided priority is only a deterministic tie-breaker, never a
     # substitute for the replay-estimated valuation.
     return _UTILITY_SCALE * utility + task.priority * 1e-4
