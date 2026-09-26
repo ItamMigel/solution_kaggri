@@ -22,7 +22,7 @@ def point(row):
     return 1.0 if margin > 0 else 0.5 if margin == 0 else 0.0
 
 
-def load(path, agents):
+def load(path, agents, keep_agents):
     rows = {}
     for line in Path(path).read_text().splitlines():
         row = json.loads(line)
@@ -31,6 +31,11 @@ def load(path, agents):
             raise RuntimeError(f"invalid game row: {row}")
         if row["candidate"] not in agents or row["opponent"] not in ALL:
             raise RuntimeError(f"unexpected candidate/opponent: {row}")
+        # A shared fresh-world run may contain a second predeclared candidate.
+        # Validate every one of its rows above, but pair only the requested
+        # candidate with the common frozen control below.
+        if row["candidate"] not in keep_agents:
+            continue
         key = (row["candidate"], row["opponent"], row["seed"], row["seat"])
         if key in rows:
             raise RuntimeError(f"duplicate paired row: {key}")
@@ -43,11 +48,14 @@ def main():
     ap.add_argument("--games", required=True)
     ap.add_argument("--candidate", required=True)
     ap.add_argument("--control", default="es5_c3g15")
+    ap.add_argument("--allowed-agent", action="append", default=[],
+                    help="additional candidate label whose rows are validated but excluded from this pair")
     ap.add_argument("--out", required=True)
     ap.add_argument("--resamples", type=int, default=200000)
     ap.add_argument("--rng-seed", type=int, default=230923)
     a = ap.parse_args()
-    rows = load(a.games, {a.candidate, a.control})
+    allowed = {a.candidate, a.control, *a.allowed_agent}
+    rows = load(a.games, allowed, {a.candidate, a.control})
     seeds = sorted({key[2] for key in rows})
     per_world, by_opponent = [], {op: [] for op in ALL}
     for seed in seeds:

@@ -16,6 +16,7 @@ CHOICES = {
     "cma4_g005": RUNS / "cma4/gen_005/c/main.py",
     "cma4_g010": RUNS / "cma4/gen_010/c/main.py",
 }
+ADDITIONAL = {"cma4_g015": RUNS / "cma4/gen_015/c/main.py"}
 OPPONENTS = {
     "mirror": CONTROL,
     "parthenos": SHARED / "opponents/pool/parthenos_robust/main.py",
@@ -73,9 +74,11 @@ def select():
 def main():
     tag, retro = select()
     source = CHOICES[tag]
-    if not source.is_file() or not CONTROL.is_file() or any(not p.is_file() for p in OPPONENTS.values()):
+    tested = {tag: source, **ADDITIONAL}
+    if (not CONTROL.is_file() or any(not p.is_file() for p in tested.values())
+            or any(not p.is_file() for p in OPPONENTS.values())):
         raise RuntimeError("a frozen input is missing")
-    out = RUNS / f"t025_cma4_{tag[-4:]}_fresh_full_gate"
+    out = RUNS / f"t025_cma4_{tag[-4:]}_and_g015_fresh_full_gate"
     if out.exists():
         raise RuntimeError(f"refusing to overwrite {out}")
     excluded, artifacts = prior_seeds()
@@ -88,45 +91,59 @@ def main():
     (out / "seeds.json").write_text(json.dumps({"seeds": seeds, "excluded_seed_count": len(excluded),
         "seed_artifacts": artifacts}, indent=2) + "\n")
     frozen = {"selected": tag, "selection_rule": "larger retro lower; then point; then gen10",
-              "retro": retro, "candidate": str(source), "control": str(CONTROL),
-              "candidate_sha256": sha(source), "control_sha256": sha(CONTROL),
+              "retro": retro, "candidates": {name: {"path": str(path), "sha256": sha(path)}
+                                                for name, path in tested.items()},
+              "control": str(CONTROL), "control_sha256": sha(CONTROL),
               "opponents": {name: {"path": str(path), "sha256": sha(path)} for name, path in OPPONENTS.items()},
-              "workers": 4, "expected_games": 640}
+              "workers": 4, "expected_total_games": 960,
+              "expected_pair_games_per_candidate": 640,
+              "multiplicity": {"predeclared_candidates": list(tested), "tests": 2,
+                               "note": "The selected g5/g10 centre and g15 are separately judged by the identical PASS rule on shared fresh worlds; no single-test interpretation."}}
     (out / "selection.json").write_text(json.dumps(frozen, indent=2) + "\n")
-    command = ["/workspace/solution_kaggri/.venv/bin/python", str(ROOT / "compare.py"),
-               "--agent", f"{tag}={source}", "--agent", f"es5_c3g15={CONTROL}", "--baselines"]
+    command = ["/workspace/solution_kaggri/.venv/bin/python", str(ROOT / "compare.py")]
+    for name, path in tested.items():
+        command += ["--agent", f"{name}={path}"]
+    command += ["--agent", f"es5_c3g15={CONTROL}", "--baselines"]
     for name, path in OPPONENTS.items():
         command += ["--opponent", f"{name}={path}"]
     command += ["--seeds", *(str(seed) for seed in seeds), "--workers", "4", "--out", str(out / "arena"),
-                "--decision-note", "T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate; PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp."]
+                "--decision-note", "T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp."]
     subprocess.run(command, cwd=ROOT, check=True)
-    subprocess.run(["/workspace/solution_kaggri/.venv/bin/python", str(ROOT / "lab/tools/t025_fresh_full_panel_report.py"),
-                    "--games", str(out / "arena/games.jsonl"), "--candidate", tag,
-                    "--control", "es5_c3g15", "--out", str(out / "gate_report.json")], cwd=ROOT, check=True)
-    result = json.loads((out / "gate_report.json").read_text())
     summary = json.loads((out / "arena/summary.json").read_text())
-    result["compare_evaluation_valid"] = summary.get("evaluation_valid")
-    result["source_hash_unchanged"] = sha(source) == frozen["candidate_sha256"]
-    result["control_hash_unchanged"] = sha(CONTROL) == frozen["control_sha256"]
-    result["passes_gate"] = bool(result["passes_gate"] and result["compare_evaluation_valid"]
-                                 and result["source_hash_unchanged"] and result["control_hash_unchanged"])
-    (out / "gate_report.json").write_text(json.dumps(result, indent=2) + "\n")
-    if result["passes_gate"]:
-        target = SHARED / f"candidates_wip/es6_{tag}_fullpanel"
-        if target.exists():
-            raise RuntimeError(f"refusing to overwrite candidate {target}")
-        target.mkdir()
-        shutil.copy2(source, target / "main.py")
-        for name in ("selection.json", "seeds.json", "gate_report.json"):
-            shutil.copy2(out / name, target / name)
-        shutil.copy2(out / "arena/manifest.json", target / "arena_manifest.json")
-        (target / "sha256.txt").write_text(f"{sha(source)}  main.py\n")
-    verdict = "PASS" if result["passes_gate"] else "FAIL"
-    message = (f"T025 fresh full-panel {verdict}: selected {tag}; paired={result['point_score_gain']*100:+.3f}pp, "
-               f"one-sided lower={result['score_one_sided_lower_95']*100:+.3f}pp; "
-               f"no-opponent-floor={result['passes_no_opponent_below_minus_10pp']}; evidence {out}")
-    if result["passes_gate"]:
-        message += f"; frozen {target} sha={sha(source)}"
+    reports, messages = {}, []
+    for name, path in tested.items():
+        report_path = out / f"{name}_gate_report.json"
+        report_command = ["/workspace/solution_kaggri/.venv/bin/python", str(ROOT / "lab/tools/t025_fresh_full_panel_report.py"),
+                          "--games", str(out / "arena/games.jsonl"), "--candidate", name,
+                          "--control", "es5_c3g15", "--out", str(report_path)]
+        for allowed in tested:
+            if allowed != name:
+                report_command += ["--allowed-agent", allowed]
+        subprocess.run(report_command, cwd=ROOT, check=True)
+        result = json.loads(report_path.read_text())
+        result["compare_evaluation_valid"] = summary.get("evaluation_valid")
+        result["source_hash_unchanged"] = sha(path) == frozen["candidates"][name]["sha256"]
+        result["control_hash_unchanged"] = sha(CONTROL) == frozen["control_sha256"]
+        result["multiplicity"] = frozen["multiplicity"]
+        result["passes_gate"] = bool(result["passes_gate"] and result["compare_evaluation_valid"]
+                                     and result["source_hash_unchanged"] and result["control_hash_unchanged"])
+        report_path.write_text(json.dumps(result, indent=2) + "\n")
+        reports[name] = result
+        if result["passes_gate"]:
+            target = SHARED / f"candidates_wip/es6_{name}_fullpanel"
+            if target.exists():
+                raise RuntimeError(f"refusing to overwrite candidate {target}")
+            target.mkdir()
+            shutil.copy2(path, target / "main.py")
+            for evidence in ("selection.json", "seeds.json", report_path.name):
+                shutil.copy2(out / evidence, target / evidence)
+            shutil.copy2(out / "arena/manifest.json", target / "arena_manifest.json")
+            (target / "sha256.txt").write_text(f"{sha(path)}  main.py\n")
+            messages.append(f"{name}=PASS paired={result['point_score_gain']*100:+.3f}pp lower={result['score_one_sided_lower_95']*100:+.3f}pp floor={result['passes_no_opponent_below_minus_10pp']}; wip={target}")
+        else:
+            messages.append(f"{name}=FAIL paired={result['point_score_gain']*100:+.3f}pp lower={result['score_one_sided_lower_95']*100:+.3f}pp floor={result['passes_no_opponent_below_minus_10pp']}")
+    (out / "gate_reports.json").write_text(json.dumps({"multiplicity": frozen["multiplicity"], "reports": reports}, indent=2) + "\n")
+    message = f"T025 fresh full-panel (two predeclared tests, shared worlds): {'; '.join(messages)}; evidence {out}"
     subprocess.run([str(SHARED / "bin/say"), "claude", message], check=True)
     print(message)
 
