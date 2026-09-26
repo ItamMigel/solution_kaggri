@@ -1,0 +1,1083 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /workspace/wt/codex
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0df09-13ad-7e53-82f9-012b4f2297e2
+--------
+user
+You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.
+
+FULL-FOCUS task T036 (human: 'go all-in until we understand the top agents' decision logic and can beat or reconstruct them'; never submit; ≤8 workers; deadline 2026-09-30). Read research/re_plan.md. I built lab/re/declog.py (in /workspace/wt/claude, branch lab-claude) and am generating research/re/<team>.jsonl.gz decision logs for boey, mmpq, dsm, fourthq, decem, mgoose, fuxi, joseph, istinetz, ours_es67. YOUR part = PRODUCTION logic of the top teams (start with Boey #1, M&M&P&Q, DSM, then fuxi): (1) planting schedule/crop mix as a function of unlocked shops & day (what they plant where and when, re-plant after harvest?, fertilize policy), (2) unit allocation per turn (how many units water/harvest/care/feed/collect/move; priority order), (3) herd build-up timeline and structures. Express as explicit rules; measure agreement on held-out episodes (teacher-forced: given state, does the rule predict their action?). Write research/re_production.md incrementally; bin/say claude at each finding. My part = market+macro rules; we'll then assemble a reconstructed 'top-RE' agent as a local strong opponent and mine counters.
+codex
+Сначала сверю протокол и доску, затем разберу логи и буду фиксировать проверяемые правила производства по командам. Kaggle не трогаю.
+exec
+/bin/bash -lc "sed -n '1,240p' /workspace/shared/AGENTS.md && sed -n '1,260p' /workspace/shared/BOARD.md" in /workspace/wt/codex
+ succeeded in 0ms:
+# Kaggriculture war room — shared protocol for Claude + Codex
+
+Two agents (Claude Code and Codex) work as a pair on the Kaggle **kaggriculture** simulation
+competition. This directory (`/workspace/shared`) is the **shared board**: the only place where the
+two of us exchange state. Read this file, then `BOARD.md`, then your inbox, at the start of every
+session and before picking up work. Talk to the human in **Russian**.
+
+## ☠ HARD RULE — NEVER SUBMIT ☠
+**No agent ever submits anything to Kaggle.** Not `kaggle competitions submit`, not the Python API,
+not a notebook "Submit", not via a script another agent wrote. The human submits, personally.
+Kaggle is **read-only** for us: leaderboard, our submissions, episodes, replays, agent logs,
+discussion topics, public notebooks, datasets. The CLI (`/workspace/shared/bin/kaggle`) and the
+Python API are patched to refuse submissions — do not work around the guard, do not reinstall
+`kaggle` elsewhere to bypass it. When a candidate is ready: put the frozen archive in
+`/workspace/shared/candidates/<name>/` with its evidence and tell the human.
+
+## Competition facts (as of 2026-09-23)
+- Deadline **2026-09-30 23:59 UTC**. After it, active submissions keep playing ~2 weeks, then a
+  single **Bradley-Terry tournament** decides the final ranking → true strength vs the field matters,
+  not a lucky rating streak.
+- Only the **2 most recent submissions** of a team are active on the ladder. Team "misis
+  biznessmenlb" (id 16739419). Team submissions/day are limited (see `kaggle competitions submission-limits kaggriculture`).
+- Medal cutoffs on public LB snapshot 2026-09-23: #1 ≈3063, #50 ≈2781, #100 ≈2719, #300 ≈2593, #500 ≈2502.
+  Our horizon_v4 reached 2590 before being displaced by the two v5 uploads (ratings still settling).
+
+## Where things are
+| Path | What |
+|---|---|
+| `/workspace/solution_kaggri` | **Primary repo** (teammates' Horizon agents + `compare.py` harness). Branch `lab` = merged workspace. |
+| `/workspace/wt/claude`, `/workspace/wt/codex` | Per-agent git worktrees (branches `lab-claude`, `lab-codex`). **Edit code only in your own worktree.** Merge into `lab` via small commits; tell the other agent in its inbox. |
+| `lab/gpuenv/` | Batched torch copy of the engine (bit-exact vs the OLD engine; must be re-difftested vs kaggle-environments 1.32.7 before trusting). |
+| `lab/tools/replay_mine.py`, `replay_report.py` | Re-simulate a Kaggle replay with hooks → per-episode P&L. Currently broken on engine 1.32.7 (task T001). |
+| `lab/census_legacy/` | Old ladder census pipeline (download → fingerprint → taxonomy → imitation fit). |
+| `lab/knowledge/` | Official rules, engine spec with undocumented mechanics, economics notes, lessons from the user's old attempt. |
+| `/workspace/kaggriculture` | User's old repo (read-only reference; RL/CEM/scripted engine, opponent pool). |
+| `/workspace/shared/replays/` | Downloaded Kaggle replays (large, ~30 MB each; not in git). |
+
+Python: `/workspace/solution_kaggri/.venv/bin/python` (py3.12, kaggle-environments==1.32.7, numpy).
+Torch/GPU work: `/workspace/kaggriculture/.venv/bin/python` (torch cu126, Tesla P40 24 GB).
+Local game: ~14 s per game per core; box has 48 cores.
+
+## Board layout
+- `BOARD.md` — **single source of truth**: current champion, top findings, task table. Keep it short. Edit only your own rows; add rows freely.
+- `tasks/T###-slug.md` — one file per task: goal, owner, hypothesis, method, **result**, next step.
+- `ledger.jsonl` — append-only, one JSON per completed evaluation run (schema below). Never rewrite lines.
+- `research/` — digests: Kaggle discussion threads, top-team replay analyses, engine facts. One topic per file, cite sources (topic id / episode id).
+- `inbox/claude.md`, `inbox/codex.md` — messages **to** that agent. Append with `bin/say <to> "<msg>"`. The recipient marks items `[done]` when handled.
+- `candidates/<name>/` — frozen agent archives ready for the human to consider submitting.
+- `runs/` — logs of cross-agent headless calls.
+
+### Ledger schema
+`{"ts": "...", "by": "claude|codex", "task": "T003", "candidate": "name", "path": "...", "sha256": "...", "opponents": [...], "seeds_file": "...", "games": N, "wins": W, "draws": D, "losses": L, "mean_margin": x, "worst10_margin": x, "errors": 0, "run_dir": "...", "verdict": "better|worse|noise|n/a", "note": "..."}`
+
+## Working rules
+1. **Claim before you start**: set yourself as owner in `BOARD.md` + create the task file. Never work on a task owned by the other agent; send a message instead.
+2. **CPU budget**: each agent uses **≤ 22 worker processes** at a time (48 cores; leave headroom). GPU: announce in BOARD before using it.
+3. **Evidence standard** (inherited from both repos): paired seeds, both seats, diverse opponents
+   (not only Horizon ancestors), whole-world CI. A claim of "better" needs a CI that excludes no-effect.
+   Don't tune on `seeds/*confirmation*`. Zero crashes/timeouts is mandatory.
+4. **Cross-check**: every result that would change the champion must be **independently reproduced or reviewed by the other agent** before it goes to `candidates/`. That's the point of pairing.
+5. **Divide by nature of work**: prefer giving each agent different hypotheses rather than the same one. When both attack the same question on purpose (red-team), say so in the task file.
+6. Write findings for the other agent to reuse: exact commands, file:line, numbers. Negative results are results — log them.
+7. `/workspace` is **not persistent** (no volume). Push with `bin/sync "msg"` → branches `board` and `lab` of github.com/AdilHAA/kaggriculture (remote `mine`). Merge your worktree branch into `lab` first. Human-approved 2026-09-24: sync also mirrors to the teammates repo ItamMigel/solution_kaggri as branches `adil-board` / `adil-lab` ONLY — never push to its main or any other branch.
+
+## Talking to each other directly (headless)
+- `bin/ask_codex "<prompt>"` — runs `codex exec` in `/workspace/wt/codex`, logs to `runs/`, prints Codex's final message. Add `--bg` to run in background.
+- `bin/ask_claude "<prompt>"` — runs `claude -p` in `/workspace/wt/claude`, same logging.
+- `bin/say <claude|codex> "<msg>"` — async note into the other's inbox (cheap; preferred for FYIs).
+Use headless calls for: independent review of a diff/result, a bounded research question, or a second opinion. Don't use them for open-ended loops.
+# BOARD — kaggriculture war room
+_Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)._
+
+## ☠ Agents never submit. Kaggle = read-only. (see AGENTS.md)
+
+## Current state
+- **Ratings 2026-09-24 05:27 UTC**: v5_guarded **2640.6**, v5_market 2185.6 (ladder W-L 73-12 / 72-4).
+- **Active on ladder**: `horizon_v5_market` (56504560), `horizon_v5_guarded` (56504572) — uploaded 2026-09-23 22:0x, ratings still climbing from 600 (1495 / 1737 after ~15 episodes).
+- **Previous best on ladder**: `horizon_v4` (56488922) = **2590.4** (~rank 300). Now inactive (only 2 latest subs play).
+- Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).
+- Local evidence: v5_market 767/768 vs 6 public controllers, 126/128 vs v4 — but all opponents share ancestry with Horizon; unknown vs real top (≈3000+).
+- Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+
+## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+- 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+- 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+- 2026-09-26 — T031 FERTILIZER audit over the same 39 losses+41 wins: opponents sell d17.2 @$44.70 then buy d20.9 @$26.70 to refill actual `FERTILIZE` use (118.4/game); FIFO buy→later-sale is −$5.92/game, so no market-only arbitrage/gate. Default-off pickup-qualified fertilizer wrapper is 8/8 identity-equivalent. Four fresh WHEAT threshold variants: 3 inert, late high-sale loses −$19.5; unchanged es7_wm is best, no full gate. `tasks/T031-wheat-market-arbitrage.md` [codex]
+- 2026-09-26 — T031 **market-only WHEAT layer passes fresh T025 full gate vs es6**: exact 39-loss audit finds opponent BUY d12.8 @$36.94 → SELL d20.3 @$38.58; FIFO cash-flow match +$571.8/game (fungible-source caveat) and conservative inter-turn own-buy price exposure +$624.8/game. Default-off wrapper has 0/1,442 action diffs; fresh 2w screen +25pp/+$15.25; 16w×10-opponent full gate 640/640 DONE, +4.167pp (one-sided lower +3.125pp), all named opponents ≥0pp. **Pending Claude independent review; no WIP/candidate/Kaggle action.** `tasks/T031-wheat-market-arbitrage.md` [codex]
+- 2026-09-26 — T030 wheat source: in all 39 es3 losses, opponent WHEAT sales are **+517/game but not extra farming** (ours is +8 harvested units/+7.6 plant tiles); opponent instead buys +529 product WHEAT ($20.66k) while FEED differs only +5 and land/seasonal hires are near equal. Default-off idle-seed `PASS→PLANT WHEAT` on es6 is identity-audited (0/1,442 diffs off) but fails fresh 2-world both-seat es6+Parthenos screen 0/8, paired −50pp/−$2,248, 16/16 valid. No full T025 gate/candidate/Kaggle action. `research/t030_wheat_sources.md` [codex]
+- 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+- 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+- 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+- 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028 first 2-goose cow-only leg is rejected: −0.750 paired score / −$2,581 (CI −$3,198…−$1,965), 16/16 DONE. It is not G1 target 4/5/6 and does not enter the current screen. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028: es3_g5 has **0/142** direct matches with current top-20, so no honest paired top-minus-ours cohort exists.  In an explicitly unpaired 19-top vs 80-es3 replay decomposition, the largest source hypothesis is **EGG +$4,952/game**: top reaches 5.9 geese on d11 vs ours 2.2 through a d6–11 build/place/feed/harvest route.  Recommend a new default-off route-owned early-goose microplan, not the previously-negative market-only/PASS/FD modules. `research/gap_vs_top.md` [codex]
+- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025: stopped stale-control CMA3 after completed gen16 (0.985 centre, σ=.0372); restarted local **CMA4** at exact gen15/es5_c3g15 centre with σ=.015, `CMA_BEST=es5_c3g15`, config/hash-checked resume and 18 workers. CMA3 is preserved/restartable; no candidate or Kaggle action changed. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA3 gen-15 boundary confirmation **passes predeclared replacement numbers**: fresh disjoint P+M 24-world panel is +6.25pp; combined 48-world paired one-sided 95% lower is 0.00pp (>−2pp), 384/384 valid, after H2H 16–0 +$836. **Pending Claude independent review before any candidate change; es3_g5 remains frozen meanwhile.** `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 standard CMA gate **rejects CMA3 gen-15**: fresh es3 H2H 16–0 (+$836; CI positive), but separate 24-world paired P+M panel is narrowly below predeclared NI (paired +4.17pp, one-sided lower −2.083pp vs required >−2.0; cash −$48.5); 208/208 valid. Keep es3_g5. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 failure localized: no early route/hire/land divergence; `_ADV_LOOK` 17→18 pulls premium milk/egg/wool sales one tick early against parthenos. Rollback to 17 improves the 7 adverse worlds (+$1,097→+$1,347; 4→2 losses) but fails fresh H2H, so this is an opponent-specific trade-off; Q/CH knobs inert/minor. Standard CMA gate is predeclared. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 red-team **rejects promotion**: on 24 new worlds × parthenos/metav4 × both seats (192/192 valid), c3g5−es3_g5 is −4.17pp score (CI −10.4…0) / −$69.3 (CI −$176.6…+$33.3); parthenos repeats in the adverse direction. CMA3 gen-10 is 15–0–1 (+$437) vs es3, but directly ties c3g5 on score (+$50.5, CI crosses 0): positive signal only. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-25 — PBT red-team/fix: published monotonic `roundNNN` snapshots eliminate stale `it` races after exploit; atomic exploit, all-4 common rotating official exams, invalid-exam rejection, 24 single-thread CPU workers, finite horizon stop. KL anchor remains immutable `ref.pt`; HoF is development-only and needs disjoint confirmation. `research/pbt_codex.md` [codex]
+- 2026-09-25 19:00 — BC→PPO **pkg v3** ready (`h100_pkg/kaggri_bcppo_v3.zip`): codex audit fixes (capped market P0/P1, target-KL P2, subset league, telemetry), vectorised allocator, 2048 envs defaults, es3 + 2000 DART games of es3_g5. Clean-teacher BC es3 failed closed loop (0/96, deterministic teacher → no coverage) → DART. [claude+codex]
+- 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
+- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+- 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+- 2026-09-25 — T025: EXP240-only SW acceleration fails capability; do not race. CMA2 gen-20 rejects 3–13 vs es3_g5 (−$350). Fresh CMA3 restart from es3_g5: gen-5 passes Claude 15–0–1 (+$979) and independent Codex 14–0–2 (+$558; score CI 62.5–100%), zero crashes; signal only, no automatic promotion. [claude+codex]
+- 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+- 2026-09-25 — T020 patched P40 K5: warm-up iterations 0–2 keep KL at numerical zero; PPO iterations 3–4 have KL .0173/.0094 and clipfrac .212/.127, with no crash. Training-health pass only, not a performance claim. [codex]
+- 2026-09-25 — T023 tape-safe mining screen: direct replay execution finds residual WATER/FEED/CARE opportunities, but fresh 32-game screen rejects FEED (−0.5/−$137) and finds WATER/CARE inert; no survivor. [codex]
+- 2026-09-25 — ✅ **es2_c1 promoted** (`candidates/es2_c1`) = es1_g9 + M1 COLLECT_FERTILIZER on idle units: vs g9 31-1 (claude) and 29-2-1 (codex, independent); vs v5 64-0; panel no regression. **Recommendation: es1_g9 + es2_c1** (submitting displaces es1_g1). Land-early macro closed (−0.42). M3-lite fertilizer hand closed (codex). [claude+codex]
+- 2026-09-25 — T022 independent review PASS: `es2_c1` is 29–2–1 vs g9 on 16 disjoint worlds (CI 84.4–100%, +$17; 0 errors), no panel regression; delayed t2945 add-on is 32–0. Recommend freezing it for the human. [codex]
+- 2026-09-24 — T021 M3lite appended fertilizer hand is closed: all four trace-derived high-surplus firing regimes lose a fresh 56-game paired screen (−$167…−$613); strict reserve variants are inert. No race/CMA. [codex]
+- 2026-09-24 — T021 M4 follow-up race rejects `room_guard_on`: fresh 4-world g9/v5/yhay paired score 0.000, CI [−.125,+.125], margin −$4.8; none of the M4 source flags advances. [codex]
+- 2026-09-24 — T020 old P40 control stopped after two diagnostic iterations: value-only drift repeats (`approx_kl .753→.312`, clipfrac `.697→.578`); it is not a valid PPO signal. Patched warm-up is under separate validation. [codex]
+- 2026-09-24 — T021 M4 capability screen (120 valid games) advances only `room_guard_on`: paired +.25 score vs byte-identical g9, CI [0,+.25], +$19.5. `hand_align_off` is catastrophic (−.75/−$44k); budget guard and opening12 lose. Fresh 4-world race running. [codex]
+- 2026-09-24 — T020 PPO diagnostic: value-only warm-up was changing action logits through the shared trunk (P40 iter0 `approx_kl=.753`, clipfrac `.697`). `7c2c1e2` freezes every non-value parameter during warm-up; regression proves policy tensors unchanged. Package control run remains active. [codex]
+- 2026-09-24 — T021 Codex M4/harness landed in `lab` (`71627f5`): source-level `_SETTINGS`, final opening, router and terminal-only FD anchors; genome-zero output is byte-identical to frozen g9. Paired staged runner locks disjoint folds and reports deltas vs genome0; 5 regression checks pass. [codex]
+- 2026-09-24 — T020 CMA gen-10 mean **fails g9 gate**: on 16 fresh worlds, both seats, 4–0–28 vs frozen g9 (12.5%, CI 0…31.2%; −$260.6, CI −$354…−$170; 0 errors); it still beats v5_market 28–0–4 (+$595). Do not promote. [codex]
+- 2026-09-24 — Horizon+ design review: **do not reuse the FD planner mid-season** (hard-codes day 29/step 719 and replaces all tape actions); start only PASS→CARE with exact legality/instrumentation. `_SETTINGS`/opening/router/FD switch points are build-time/literal, so current appended knob globals cannot evolve M4. Full Q1–Q4: `research/horizon_plus_design_codex.md`. [codex]
+- 2026-09-24 — T019 v2 H100 package final check PASS: unpacked `check.sh` (feature parity 1.2e-7, e2e 0 action diffs) plus two resumed PPO rounds all exit 0; 64-env bf16 smoke has $88.2k learner mean and exactly 32/32 learner seats. [codex review]
+- 2026-09-24 20:3x — BC→PPO v2 (joint plan F1–F11): engine-exact masks raised BC from $2k/$30k to **$62k greedy / $90k sampled** (HARVEST on animals + LOCKED walkable were blocked before). Codex F7–F10 (streaming buffer, zero-sum equity reward, metrics, league, seat randomisation). Data: 1077 games of 13 top teams. Package `h100_pkg/kaggri_bcppo_v2.zip` (168 MB) in final test. [claude+codex]
+- 2026-09-24 — T019 PPO seat symmetry (`2014d6b`): learner is assigned to each world seat for exactly half of every rollout batch; player axis/actions are mapped without extra policy forwards; equity reward, terminal cash correction and money metrics follow learner perspective. GPU smoke 2/2 seats pass. [codex]
+- 2026-09-24 — T019 integration: PPO policy-v2 entropy aggregation corrected (`c65ca5a`): PPO now uses `ent_parts["total"]` rather than summing components and total twice. Tensor/dict compatibility check and `py_compile` pass; fast-forwarded to `lab`. [codex]
+- 2026-09-24 — T019 F7–F10 merged (`1fd6259`): fp16 streaming rollout buffer; conservative zero-sum equity shaping with exact terminal-cash correction; PPO metrics/value warm-up/full optimizer+RNG resume; configurable current/snapshot/double league. GPU smoke and mixed-league smoke pass. F1–F6/F11 are with Claude. [codex]
+- 2026-09-24 — BC→PPO design review (Codex): **do not launch long H100 PPO before decoder fixes** — policy forbids LOCKED crossing although engine permits it; market decoder drops partial/sale-funded buys while PPO scores rejected buckets; v3 10×128/N-team cannot currently load into PPO. Full Q1–Q7: `research/bcppo_design_codex.md`. [codex]
+- 2026-09-24 — T017 PPO g3 re-centred on frozen g9: 96/96 target-panel games valid (288 total arena games); paired g3-minus-g9 score −.0104, CI [−.0625,+.0313], margin −$17.2, CI [−$59.4,+$41.3]. No promotion; g9 remains the anchor. [codex]
+- 2026-09-24 18:1x — Ladder: human submitted **es1_g1** (56522075, 13:12 UTC) → already **2655** after ~5 h; teammates' **horizon_v6_repair** (56521976, 13:08) 2374. v5_guarded/market now inactive. Submitting es1_g9 would displace v6_repair (older). v6_repair file not in any repo → cannot test g9 vs v6 yet (asked human). [claude]
+- 2026-09-24 — ✅ **es1_g9 promoted** (`candidates/es1_g9`): h2h vs es1_g1 32-0 (claude) & 31-1 CI +366…+948 (codex); vs v5 64-0 (codex). Panel tied. **Recommendation: v5_guarded + es1_g9.** es1_g13 < g9 (12-18). [claude+codex]
+- 2026-09-24 — BC→PPO H100 package ready: `/workspace/shared/h100_pkg/kaggri_bcppo.zip` (code+data+BC ckpt+scripts+requirements; checks pass from the unzipped zip: feature parity 1e-7, e2e numpy-vs-GPU 0 action diffs, bf16 PPO smoke). P40 run r1: money_mean 29.4k → 31.3k after 10 iters. [claude]
+- 2026-09-24 — T018 Codex decisive g9 confirmation: direct g9→g1 on 16 independent worlds is 31–1, mean +$635, whole-world bootstrap CI [$366,$948]; on 16 further fresh worlds g9 is 64–0 vs v5_market/guarded while g1 is 60–4. Reactive panel was statistically tied, so g9 meets the predeclared replacement gate; recommend freezing **es1_g9** as the ES candidate. [codex]
+- 2026-09-24 — T018: simple ES stopped after 14 gens (gen-13 centre fit 1.215 = best; saved es1_g13, h2h check vs g9/g1 running). Switched to **CMA-ES** (pycma, pop 12 + centre, σ0=0.06, 8 fresh worlds/gen, panel v5_market/yhay0913/parthenos/metav4) as the team suggested. [claude]
+- 2026-09-24 — T019 BC v1: 80% val action accuracy but plays at $0–4.5k (compounding error; moves only 72.5% accurate). v2 with target-cell head + pathing training now. [claude]
+- 2026-09-24 — T018 g9 independent review: 512/512 valid on 16 Codex-only worlds; g9 248–8 vs g1 250–6. Paired g9-minus-g1 score −.0078, CI crosses zero; do not replace frozen g1. [codex]
+- 2026-09-24 — ✅ **Candidate `candidates/es1_g1`** (v5 + ES-tuned knobs): vs v5 30-2 (claude, fresh worlds) and 31-1 (codex, independent worlds); 244-0-12 vs reactive panel; parthenos slightly worse than v5 (23-9 vs 25-7, n.s.). Archive loads in official runner. Recommendation to human: active pair **v5_guarded + es1_g1**. [claude+codex]
+- 2026-09-24 — T016: v5 > v4 on reactive opponents (score .90 vs .77/.70; head-to-head 126/128); market ≈ guarded (118/128 draws). [codex run, claude review]
+- 2026-09-24 — T018 cross-check PASS: Codex's independent 16 new-world review of es1_g1 is 244–12 (+$7,266; 256/256 valid), including 31–1 vs v5_market; only parthenos is 23–9. T016 recommends guarded + frozen es1_g1 after Claude's final review. [codex]
+- 2026-09-24 — T018 ES: after one update the knob centre beats **v5_market 16/16 (+536)** and the whole reactive panel on gen-1 worlds. Independent validation on fresh worlds running (`runs/val_es1_g1`). Not a candidate yet. [claude]
+- 2026-09-24 — T017 PPO g2 held-out: 192/192 valid, same 91–0–5 score as ES; +$34.8 paired margin but CI [−$1.8,+$76.0] crosses zero, so no promotion. [codex]
+- 2026-09-24 — Human: keep building/improving, don't write things off as unrealistic. New plan: optimise Horizon itself. `lab/tools/knobs.py` exposes 24 Horizon knobs (base == v5 exactly, verified). Claude: ES (T018). Codex: PPO per-day knob policy (T017). [claude]
+- 2026-09-24 — T015 ✗ closed: all 12 alternatives to route 9 for the entire Yarn-shop family fail the predeclared 32-world screen (2,496/2,496, no errors); best r0/r2 are −30.2pp on factual Yarn games. Keep route 9. [codex]
+- 2026-09-24 — T015 ✗: on four fresh factual Smoothie→Yarn worlds, legacy route 2 loses to current route 9 (24–8 vs 30–2; paired score −0.188, margin −$392; 64/64 error-free). Keep route 9; first 48-game route-8 screen had zero factual target games and is discarded. [codex]
+- 2026-09-24 — Timing is safe on Kaggle: across 221 real episodes (v4, v5×2) our overage pool ends at ≥59.8 s of 60; all DONE. [claude]
+- 2026-09-24 — T012 ✗: market-only overlay never fired (Horizon buys all 33 strawberry seeds by d3; condition started d5). Any strawberry/fertilizer change needs unit scheduling. [codex]
+- 2026-09-24 — T007 ablation: the v4>v5 panel gap is entirely v5's step-0 opening (v5 minus opening == v4; sale-reorder inert). **However** frozen tapes are broken on foreign seeds (buy 1 quadrant instead of 2; ~38% unit ops rejected), so this is likely a tape/market artifact → panel verdict downgraded to inconclusive; rely on ladder. Tape panel = stress test only, applies to T012 gate too. [claude]
+- 2026-09-24 — T007 ⚠: on a top-like panel (M&M&P&Q/Mother-Goose tapes + best public), **v4 beats v5**: 199/216 vs 170/216 wins, worst-10% −6k vs −16k; on opponents not selected against v5 the gap is +5pp [0, +10]. Ablation (v5 opening vs sale-reorder) running. Matters for the final 2 submissions. `runs/t007_panel` [claude]
+- 2026-09-24 — T007: v5 on ladder so far: market **51-4**, guarded **50-7** (≈55 games each; ratings 2069 / 2518, climbing). Losses are mostly mirror clones (<1.5k); one real loss vs Densike (#22): our 3rd quadrant ($4k d11) + strawberry glut (avg $72 vs their $110). Real season hires: top-5 293 vs ours 271 (+8%, days 2–15 only). [claude]
+- 2026-09-24 — T013 ✗: Horizon chassis driven by a whole M&M&P&Q tape loses **0/192** per variant (−71k…−126k); Horizon's layers are coupled to yhay tapes. Raw mmpq tape: 10-22 vs v5, 0-32 vs v4_8turn. Top tapes = opponents only, not candidates. [claude]
+- 2026-09-24 — ⚠ CORRECTION [claude]: census "hands" = hands at the day-boundary snapshot, which is ~always 0 (hands are fired nightly) except the final step 718. So "opponents run 11–13 hands vs our 8–10" was **final-day hands only**, not season labour. Seasonal hires will be re-derived from replay_mine `hires` per day. Herd (cows/sheep/geese) and seed findings stand. Thanks codex.
+- 2026-09-24 — T010 gate: legacy residual anchor is unusable as a Horizon candidate: **0/32** vs v4_8turn and v5_market on 8 paired worlds, mean **−144.8k** (no errors; 95% world CI [−166.6k, −123.4k]). Stop long legacy PPO; retain exact gpuenv only to search transferable production controls for T012, then gate in Horizon vs M&M&P&Q tape. `runs/t010_legacy_vs_horizon_8x2_20260924T0055Z/` [codex]
+- 2026-09-24 — T011: a frozen action tape from a winning game of **M&M&P&Q (#1 LB)** beats v5_market **8/12** on foreign seeds (mean −1.4k for us) — first local opponent that beats v5. Their edge: land d5/d8 (ours d6/d11), 42 vs 33 straw seeds, fertilizer used on strawberries instead of sold. Other top teams' tapes don't transfer (reactive agents). `opponents/tapes/`, `runs/tapes_dev`. [claude]
+- 2026-09-24 — T011/T007: real ladder records (last ≤60 games): **v4_8turn 48-12 (+1.0k)** vs **v4 12-turn 32-28 (−3.1k)**; v5 market/guarded 25-2 each so far (vs low-rated opps while climbing). Big losses always vs opponents with 11–13 hands vs our 8–10. Daily control dataset for RL: `research/bc_daily/`. [claude]
+- 2026-09-24 — T010 research: a 7-day raw-action PPO is not credible (Orbit top solution used 15B steps/2,400 B200h; Kaggriculture PPO plateaued around 10k steps/s). Transferable plan: bounded daily residual over Horizon, fixed paired external-opponent gate, terminal margin only; prioritize hands and animal-count knobs. First 32-env residual PPO smoke completed (103 s/update; checkpoint/log under `runs/t010_rl_smoke_20260924T0010Z/`), exposing a CPU Horizon-controller bottleneck to remove before a long GPU run. `research/rl_orbit_wars.md` [codex]
+- 2026-09-24 — T011 ladder: v4 went only **32-28 (−3.1k mean)** in its last 60 ladder games; losses of −22..−26k are to same-family agents running MORE hands (11 vs 8) and bigger herds incl. 3–6 geese. Top-5 teams all run ~10 hands, 9–10 cows, 5–8 sheep, 4–6 geese. Horizon's gap = production volume, not sale timing. [claude]
+- 2026-09-24 — T010: gpuenv PASS vs kaggle-environments 1.32.7: **12/12** fresh episodes, **8,628** full-state comparisons, zero divergences on CUDA fast path and literal market loop. Ported hinge prices, locked shed-access, town intervals/replacement shops, shedCapacity market purchases. Logs: `runs/t010_gpuenv_20260923T2350Z/`. [codex]
+- 2026-09-24 — T011: replay_mine fixed for 1.32.7 (final cash matches replay exactly, 5 s/episode). `lab/tools/fetch_top.py` + `census.py` (mine/report). First 36 top episodes: top teams (M&M&P&Q 12-1, Mother-Goose 21-3) buy **5–7 geese**, ~9 cows, 5–6 sheep, 30–33 strawberry, 44–59 carrot seeds, ~10 hands; our v5 game: 12 cows, 5 sheep, **0 geese**. Early sample, being extended. `research/census/report.md` [claude]
+- 2026-09-23 — Codex: по указанию пользователя T001/T003 не начинать; ждём новую общую задачу для декомпозиции с Claude. Cron раз в **30 минут** отправляет проверку в текущий чат (доска/inbox/процессы; без дублирования очереди). [Настройка](research/codex-watchdog.md).
+- 2026-09-23 — Codex handshake: protocol/board/inbox read; read-only leaderboard command responds (pipeline exit 0), but `head -3` causes CLI `[Errno 32] Broken pipe` (exit 1 with `pipefail`); use a consumer that drains stdout for robust checks. T001/T003 remain unstarted. [codex]
+- 2026-09-23 — Final ranking = single Bradley-Terry tournament over ~2 weeks of post-deadline episodes (topic 731587). [claude]
+- 2026-09-23 — Kaggle CLI exposes `team-submissions <teamId>` → any team's active subs → `episodes` → `replay`: we can pull top teams' games directly. `topics list/show` reads discussions. [claude]
+- 2026-09-23 — `lab/tools/replay_mine.py` crashes on engine 1.32.7 (`_commit_unit` gained a `shed_capacity` arg). [claude]
+
+## Tasks
+_2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 into T010._
+| id | owner | status | title |
+|---|---|---|---|
+| T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T022 | codex | closed ✓ | Independent `es2_c1` review passes g9 CI and full available reactive panel, incl. t2945 add-on. `tasks/T022-es2-c1-review.md` |
+| T023 | codex | closed ✗ | Residual PASS mining: FEED loses; WATER/CARE inert in valid capability screen. `tasks/T023-tape-safe-opportunities.md` |
+| T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
+| T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+| T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+| T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+| T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+| T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+| T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+| T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+| T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
+| T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
+| T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+| T031 | codex | follow-up closed — never submit | FERTILIZER has real native pickup/use but no market round trip; default-off wrapper identity-only. Four wheat variants have no improvement over es7_wm, so no full gate. `tasks/T031-wheat-market-arbitrage.md` |
+| T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+| T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+| T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+
+exec
+/bin/bash -lc "sed -n '1,260p' research/re_plan.md; printf '\\n--- repo status ---\\n'; git status --short; printf '\\n--- relevant files ---\\n'; rg --files research lab bin | rg 're_|declog|say' | head -80" in /workspace/wt/codex
+ succeeded in 0ms:
+sed: can't read research/re_plan.md: No such file or directory
+
+--- repo status ---
+?? experiments/t030_demand_timing/
+?? experiments/t030_wheat_idle/
+?? experiments/t031_wheat_market/main_off.py
+?? experiments/t031_wheat_market/main_off.py.wheat_market.json
+?? experiments/t031_wheat_market/main_on.py
+?? experiments/t031_wheat_market/main_on.py.wheat_market.json
+?? experiments/t031_wheat_market/screen_seeds_20260926.json
+?? experiments/t031_wheat_market/variants/
+?? experiments/t032_opponent_harvest/
+?? experiments/t035_reactive_lane/
+?? tmp_t025/
+
+--- relevant files ---
+rg: research: No such file or directory (os error 2)
+rg: bin: No such file or directory (os error 2)
+
+exec
+/bin/bash -lc "wc -l /workspace/shared/AGENTS.md /workspace/shared/BOARD.md; sed -n '1,220p' /workspace/shared/AGENTS.md; sed -n '221,440p' /workspace/shared/AGENTS.md; sed -n '1,220p' /workspace/wt/claude/research/re_plan.md" in /workspace/wt/codex
+ exited 2 in 0ms:
+   69 /workspace/shared/AGENTS.md
+  133 /workspace/shared/BOARD.md
+  202 total
+# Kaggriculture war room — shared protocol for Claude + Codex
+
+Two agents (Claude Code and Codex) work as a pair on the Kaggle **kaggriculture** simulation
+competition. This directory (`/workspace/shared`) is the **shared board**: the only place where the
+two of us exchange state. Read this file, then `BOARD.md`, then your inbox, at the start of every
+session and before picking up work. Talk to the human in **Russian**.
+
+## ☠ HARD RULE — NEVER SUBMIT ☠
+**No agent ever submits anything to Kaggle.** Not `kaggle competitions submit`, not the Python API,
+not a notebook "Submit", not via a script another agent wrote. The human submits, personally.
+Kaggle is **read-only** for us: leaderboard, our submissions, episodes, replays, agent logs,
+discussion topics, public notebooks, datasets. The CLI (`/workspace/shared/bin/kaggle`) and the
+Python API are patched to refuse submissions — do not work around the guard, do not reinstall
+`kaggle` elsewhere to bypass it. When a candidate is ready: put the frozen archive in
+`/workspace/shared/candidates/<name>/` with its evidence and tell the human.
+
+## Competition facts (as of 2026-09-23)
+- Deadline **2026-09-30 23:59 UTC**. After it, active submissions keep playing ~2 weeks, then a
+  single **Bradley-Terry tournament** decides the final ranking → true strength vs the field matters,
+  not a lucky rating streak.
+- Only the **2 most recent submissions** of a team are active on the ladder. Team "misis
+  biznessmenlb" (id 16739419). Team submissions/day are limited (see `kaggle competitions submission-limits kaggriculture`).
+- Medal cutoffs on public LB snapshot 2026-09-23: #1 ≈3063, #50 ≈2781, #100 ≈2719, #300 ≈2593, #500 ≈2502.
+  Our horizon_v4 reached 2590 before being displaced by the two v5 uploads (ratings still settling).
+
+## Where things are
+| Path | What |
+|---|---|
+| `/workspace/solution_kaggri` | **Primary repo** (teammates' Horizon agents + `compare.py` harness). Branch `lab` = merged workspace. |
+| `/workspace/wt/claude`, `/workspace/wt/codex` | Per-agent git worktrees (branches `lab-claude`, `lab-codex`). **Edit code only in your own worktree.** Merge into `lab` via small commits; tell the other agent in its inbox. |
+| `lab/gpuenv/` | Batched torch copy of the engine (bit-exact vs the OLD engine; must be re-difftested vs kaggle-environments 1.32.7 before trusting). |
+| `lab/tools/replay_mine.py`, `replay_report.py` | Re-simulate a Kaggle replay with hooks → per-episode P&L. Currently broken on engine 1.32.7 (task T001). |
+| `lab/census_legacy/` | Old ladder census pipeline (download → fingerprint → taxonomy → imitation fit). |
+| `lab/knowledge/` | Official rules, engine spec with undocumented mechanics, economics notes, lessons from the user's old attempt. |
+| `/workspace/kaggriculture` | User's old repo (read-only reference; RL/CEM/scripted engine, opponent pool). |
+| `/workspace/shared/replays/` | Downloaded Kaggle replays (large, ~30 MB each; not in git). |
+
+Python: `/workspace/solution_kaggri/.venv/bin/python` (py3.12, kaggle-environments==1.32.7, numpy).
+Torch/GPU work: `/workspace/kaggriculture/.venv/bin/python` (torch cu126, Tesla P40 24 GB).
+Local game: ~14 s per game per core; box has 48 cores.
+
+## Board layout
+- `BOARD.md` — **single source of truth**: current champion, top findings, task table. Keep it short. Edit only your own rows; add rows freely.
+- `tasks/T###-slug.md` — one file per task: goal, owner, hypothesis, method, **result**, next step.
+- `ledger.jsonl` — append-only, one JSON per completed evaluation run (schema below). Never rewrite lines.
+- `research/` — digests: Kaggle discussion threads, top-team replay analyses, engine facts. One topic per file, cite sources (topic id / episode id).
+- `inbox/claude.md`, `inbox/codex.md` — messages **to** that agent. Append with `bin/say <to> "<msg>"`. The recipient marks items `[done]` when handled.
+- `candidates/<name>/` — frozen agent archives ready for the human to consider submitting.
+- `runs/` — logs of cross-agent headless calls.
+
+### Ledger schema
+`{"ts": "...", "by": "claude|codex", "task": "T003", "candidate": "name", "path": "...", "sha256": "...", "opponents": [...], "seeds_file": "...", "games": N, "wins": W, "draws": D, "losses": L, "mean_margin": x, "worst10_margin": x, "errors": 0, "run_dir": "...", "verdict": "better|worse|noise|n/a", "note": "..."}`
+
+## Working rules
+1. **Claim before you start**: set yourself as owner in `BOARD.md` + create the task file. Never work on a task owned by the other agent; send a message instead.
+2. **CPU budget**: each agent uses **≤ 22 worker processes** at a time (48 cores; leave headroom). GPU: announce in BOARD before using it.
+3. **Evidence standard** (inherited from both repos): paired seeds, both seats, diverse opponents
+   (not only Horizon ancestors), whole-world CI. A claim of "better" needs a CI that excludes no-effect.
+   Don't tune on `seeds/*confirmation*`. Zero crashes/timeouts is mandatory.
+4. **Cross-check**: every result that would change the champion must be **independently reproduced or reviewed by the other agent** before it goes to `candidates/`. That's the point of pairing.
+5. **Divide by nature of work**: prefer giving each agent different hypotheses rather than the same one. When both attack the same question on purpose (red-team), say so in the task file.
+6. Write findings for the other agent to reuse: exact commands, file:line, numbers. Negative results are results — log them.
+7. `/workspace` is **not persistent** (no volume). Push with `bin/sync "msg"` → branches `board` and `lab` of github.com/AdilHAA/kaggriculture (remote `mine`). Merge your worktree branch into `lab` first. Human-approved 2026-09-24: sync also mirrors to the teammates repo ItamMigel/solution_kaggri as branches `adil-board` / `adil-lab` ONLY — never push to its main or any other branch.
+
+## Talking to each other directly (headless)
+- `bin/ask_codex "<prompt>"` — runs `codex exec` in `/workspace/wt/codex`, logs to `runs/`, prints Codex's final message. Add `--bg` to run in background.
+- `bin/ask_claude "<prompt>"` — runs `claude -p` in `/workspace/wt/claude`, same logging.
+- `bin/say <claude|codex> "<msg>"` — async note into the other's inbox (cheap; preferred for FYIs).
+Use headless calls for: independent review of a diff/result, a bounded research question, or a second opinion. Don't use them for open-ended loops.
+sed: can't read /workspace/wt/claude/research/re_plan.md: No such file or directory
+
+exec
+/bin/bash -lc "pwd; rg --files /workspace/wt/claude/research /workspace/wt/claude/lab /workspace/wt/claude/bin | rg 're_|declog|say' | head -150; find /workspace/wt/claude/research/re -maxdepth 1 -type f -printf '%f %s\\n' 2>/dev/null | sort" in /workspace/wt/codex
+ succeeded in 0ms:
+/workspace/wt/codex
+rg: /workspace/wt/claude/research: No such file or directory (os error 2)
+rg: /workspace/wt/claude/bin: No such file or directory (os error 2)
+/workspace/wt/claude/lab/re/declog.py
+
+exec
+/bin/bash -lc "ls -la /workspace/wt/claude; ls -la /workspace/wt/codex; ls -la /workspace/shared | sed -n '1,160p'; tail -35 /workspace/shared/BOARD.md" in /workspace/wt/codex
+ succeeded in 0ms:
+total 4092
+drwxrwxr-x  9 root root    4096 Sep 24 22:35 .
+drwxrwxr-x  4 root root      45 Sep 23 23:04 ..
+-rw-rw-r--  1 root root      57 Sep 23 23:04 .git
+-rw-rw-r--  1 root root     100 Sep 23 23:04 .gitattributes
+-rw-rw-r--  1 root root      83 Sep 24 15:59 .gitignore
+-rw-rw-r--  1 root root     426 Sep 23 23:05 AGENTS.md
+lrwxrwxrwx  1 root root       9 Sep 23 23:05 CLAUDE.md -> AGENTS.md
+-rw-rw-r--  1 root root   11358 Sep 23 23:04 LICENSE
+-rw-rw-r--  1 root root    4778 Sep 24 22:35 MANIFEST.json
+-rw-rw-r--  1 root root    4303 Sep 23 23:04 NOTICE.md
+-rw-rw-r--  1 root root    9553 Sep 23 23:04 README.md
+-rw-rw-r--  1 root root    1999 Sep 23 23:04 VALIDATION.md
+drwxrwxr-x  2 root root      54 Sep 24 00:18 __pycache__
+drwxrwxr-x  2 root root    4096 Sep 24 15:59 agents
+-rw-rw-r--  1 root root   10678 Sep 24 22:35 compare.py
+drwxrwxr-x  2 root root     174 Sep 23 23:04 docs
+-rw-rw-r--  1 root root    3200 Sep 23 23:04 game_worker.py
+-rw-rw-r--  1 root root 4080423 Sep 23 23:04 kaggriculture_comparison_kit.zip
+drwxrwxr-x 13 root root    4096 Sep 26 18:44 lab
+-rw-rw-r--  1 root root     194 Sep 23 23:04 requirements.txt
+drwxrwxr-x  3 root root      93 Sep 23 23:04 results
+drwxrwxr-x  2 root root     177 Sep 23 23:04 seeds
+-rw-rw-r--  1 root root    5777 Sep 23 23:04 stability_report.py
+drwxrwxr-x  2 root root    4096 Sep 23 23:04 submissions
+total 4088
+drwxrwxr-x 12 root root    4096 Sep 26 16:34 .
+drwxrwxr-x  4 root root      45 Sep 23 23:04 ..
+-rw-rw-r--  1 root root      56 Sep 23 23:04 .git
+-rw-rw-r--  1 root root     100 Sep 23 23:04 .gitattributes
+-rw-rw-r--  1 root root      83 Sep 24 00:06 .gitignore
+-rw-rw-r--  1 root root     426 Sep 23 23:05 AGENTS.md
+lrwxrwxrwx  1 root root       9 Sep 23 23:05 CLAUDE.md -> AGENTS.md
+-rw-rw-r--  1 root root   11358 Sep 23 23:04 LICENSE
+-rw-rw-r--  1 root root    4778 Sep 24 22:08 MANIFEST.json
+-rw-rw-r--  1 root root    4303 Sep 23 23:04 NOTICE.md
+-rw-rw-r--  1 root root    9553 Sep 23 23:04 README.md
+-rw-rw-r--  1 root root    1999 Sep 23 23:04 VALIDATION.md
+drwxrwxr-x  2 root root      77 Sep 24 22:08 __pycache__
+drwxrwxr-x  2 root root    4096 Sep 24 13:02 agents
+-rw-rw-r--  1 root root   10678 Sep 24 22:07 compare.py
+drwxrwxr-x  2 root root     174 Sep 23 23:04 docs
+drwxrwxr-x  7 root root     159 Sep 26 16:32 experiments
+-rw-rw-r--  1 root root    3200 Sep 23 23:04 game_worker.py
+-rw-rw-r--  1 root root 4080423 Sep 23 23:04 kaggriculture_comparison_kit.zip
+drwxrwxr-x 10 root root     153 Sep 24 22:06 lab
+-rw-rw-r--  1 root root     194 Sep 23 23:04 requirements.txt
+drwxrwxr-x  3 root root      77 Sep 23 23:04 results
+drwxrwxr-x  3 root root      40 Sep 26 16:34 runs
+drwxrwxr-x  2 root root     177 Sep 23 23:04 seeds
+-rw-rw-r--  1 root root    5777 Sep 23 23:04 stability_report.py
+drwxrwxr-x  2 root root    4096 Sep 23 23:04 submissions
+drwxrwxr-x  7 root root      85 Sep 26 00:38 tmp_t025
+total 156
+drwxrwxr-x  20 root root  4096 Sep 26 16:27 .
+drwxrwxr-x  12 root root  4096 Sep 25 12:37 ..
+drwxrwxr-x   8 root root  4096 Sep 26 18:45 .git
+-rw-rw-r--   1 root root   269 Sep 24 17:57 .gitignore
+-rw-rw-r--   1 root root  6440 Sep 24 15:49 AGENTS.md
+-rw-rw-r--   1 root root 35214 Sep 26 18:32 BOARD.md
+lrwxrwxrwx   1 root root     9 Sep 23 23:05 CLAUDE.md -> AGENTS.md
+drwxrwxr-x  17 root root  4096 Sep 25 17:13 bc_data
+drwxrwxr-x   6 root root    81 Sep 26 16:27 bc_data_reactive
+drwxrwxr-x  12 root root   184 Sep 26 10:59 bc_data_v4
+drwxrwxr-x   6 root root    78 Sep 25 18:48 bc_runs
+drwxrwxr-x   5 root root    59 Sep 24 16:35 bcppo_runs
+drwxrwxr-x   2 root root   102 Sep 23 23:31 bin
+drwxrwxr-x   9 root root   142 Sep 26 15:07 candidates
+drwxrwxr-x  40 root root  4096 Sep 26 15:31 candidates_wip
+drwxrwxr-x   7 root root  4096 Sep 26 11:09 h100_pkg
+drwxrwxr-x   2 root root    51 Sep 26 18:12 inbox
+drwxrwxr-x   2 root root   106 Sep 24 19:01 kaggle_cache
+-rw-rw-r--   1 root root 51355 Sep 26 18:18 ledger.jsonl
+drwxrwxr-x   8 root root   120 Sep 26 16:35 opponents
+drwxrwxr-x  23 root root  4096 Sep 26 17:57 replays
+drwxrwxr-x   8 root root  4096 Sep 26 18:45 research
+drwxrwxr-x 161 root root 12288 Sep 26 18:45 runs
+drwxrwxr-x   2 root root  4096 Sep 25 01:05 seeds
+drwxrwxr-x   2 root root  4096 Sep 26 16:28 tasks
+## Tasks
+_2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 into T010._
+| id | owner | status | title |
+|---|---|---|---|
+| T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T022 | codex | closed ✓ | Independent `es2_c1` review passes g9 CI and full available reactive panel, incl. t2945 add-on. `tasks/T022-es2-c1-review.md` |
+| T023 | codex | closed ✗ | Residual PASS mining: FEED loses; WATER/CARE inert in valid capability screen. `tasks/T023-tape-safe-opportunities.md` |
+| T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
+| T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+| T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+| T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+| T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+| T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+| T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+| T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+| T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
+| T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
+| T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+| T031 | codex | follow-up closed — never submit | FERTILIZER has real native pickup/use but no market round trip; default-off wrapper identity-only. Four wheat variants have no improvement over es7_wm, so no full gate. `tasks/T031-wheat-market-arbitrage.md` |
+| T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+| T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+| T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+
+exec
+/bin/bash -lc "find /workspace/wt/claude -maxdepth 4 -type d \\( -name research -o -name re \\) -print; find /workspace/wt/claude -maxdepth 4 -type f -name '*plan*' -o -name 'declog.py' | sort" in /workspace/wt/codex
+ succeeded in 0ms:
+/workspace/wt/claude/lab/re
+/workspace/wt/claude/lab/hplus/goose_microplan.py
+/workspace/wt/claude/lab/hplus/test_goose_microplan.py
+/workspace/wt/claude/lab/re/declog.py
+
+exec
+/bin/bash -lc "find /workspace -path '*/research/re_plan.md' -o -path '*/re_plan.md' -o -path '*/re/*jsonl.gz' 2>/dev/null | head -120; find /workspace -path '*/bin/say' -type f -printf '%p\\n' 2>/dev/null" in /workspace/wt/codex
+ succeeded in 1461ms:
+/workspace/shared/research/re/boey.jsonl.gz
+/workspace/shared/research/re_plan.md
+/workspace/shared/bin/say
+
+codex
+Задачу T036 фиксирую на общей доске: моя часть — только production-логика (Boey → M&M&P&Q → DSM → fuxi), без изменений кандидатов или запусков.
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/tasks/T036-production-re.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "sed -n '1,280p' /workspace/shared/research/re_plan.md; printf '\\n--- log inventory ---\\n'; find /workspace/shared/research/re -maxdepth 1 -type f -name '*.jsonl.gz' -printf '%f %s bytes\\n' | sort; printf '\\n--- declog schema ---\\n'; sed -n '1,300p' /workspace/wt/claude/lab/re/declog.py" in /workspace/wt/codex
+ succeeded in 0ms:
+# Reverse-engineering top agents (human: full focus until we understand/beat them) — 2026-09-26 18:50Z
+Data: replays/top10v4 (~1000 eps of CURRENT top-10 subs, many top-vs-top), replays/reactive (160 eps fuxi/joseph/istinetz/varim), ours_final (es6/es7 ladder).
+Tool: lab/re/declog.py → research/re/<team>.jsonl.gz = per-step rows {state: day/hour, me/op farm feats (tiles by crop, ripe yield, animals,
+structs, fert tiles, hands, quads, money, hires_today), shed, seeds, carried, prices, market inventory, shops; decisions: market orders, unit-op counts}.
+Split: Claude = market + macro rules (SELL item/qty vs price/inventory/stock/day; BUY_LAND; HIRE per day; BUY_ANIMAL/structures; BUY_SEED/PRODUCT).
+Codex = production (planting schedule/crop mix per shop set, layout, unit allocation: water/harvest/care/feed/fertilize order).
+Method: interpretable rules (thresholds, decision trees) → teacher-forced agreement on held-out episodes → encode as (a) reconstructed agent
+"top-RE" for local testing (the missing strong opponent!) and (b) counter-modules / graft candidates on es7_wm. Gate as usual; human submits.
+
+--- log inventory ---
+boey.jsonl.gz 4980856 bytes
+
+--- declog schema ---
+"""Decision log: replay → per-step (state features, decisions) rows for one named team (reverse-engineering of top agents).
+usage: python declog.py --team "Boey" --glob '/workspace/shared/replays/top10v4/*/*.gz' --out /workspace/shared/research/re/boey.jsonl.gz --workers 6"""
+import argparse, glob, gzip, json, os
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
+
+def load(f):
+    return json.load(gzip.open(f, "rt")) if f.endswith(".gz") else json.load(open(f))
+
+def farm_feats(farm):
+    c = Counter(); ripe = Counter(); animals = Counter(); structs = Counter(); fert = 0
+    for row in farm["tiles"]:
+        for t in row:
+            if not t: c["empty"] += 1; continue
+            if isinstance(t, str): c[t.lower()] += 1; continue
+            k = t.get("kind")
+            if k == "PLANT":
+                c["plant_" + t["crop"]] += 1; ripe[t["crop"]] += t.get("yield_units", 0)
+                fert += t.get("fertilized_until_day", -1) >= 0
+            elif k in ("PASTURE", "COOP"):
+                structs[k] += 1
+                if t.get("animal"): animals[t["animal"]] += 1
+            else: c[k.lower()] += 1
+    return dict(tiles=dict(c), ripe=dict(ripe), animals=dict(animals), structs=dict(structs), fert_tiles=fert,
+                hands=len(farm["hands"]), quads=len(farm.get("unlocked_quadrants", [])), money=farm["money"], hires_today=farm.get("hires_today", 0))
+
+def one(args):
+    f, team = args
+    try:
+        d = load(f); names = d["info"].get("TeamNames", [])
+        if team not in names: return []
+        p = names.index(team); o = 1 - p; rows = []; T = len(d["steps"]) - 1
+        for t in range(T):
+            ob = d["steps"][t][p]["observation"]; sh = d["steps"][t][0]["observation"]
+            farms = ob.get("farms") or sh["farms"]; mk = ob.get("market") or sh["market"]
+            priv = ob.get("private") or {}
+            a = d["steps"][t + 1][p].get("action") or {}
+            units = [a.get("farmer")] + list(a.get("hands") or [])
+            ops = Counter((u[0] if isinstance(u, list) and u else "NONE") for u in units)
+            carried = Counter()
+            for inv in priv.get("inventories", []):
+                for k, v in inv.items(): carried[k] += v
+            rows.append(dict(ep=os.path.basename(f)[8:17], opp=names[o], step=t, day=sh.get("day"), hour=sh.get("hour"),
+                             me=farm_feats(farms[p]), op=farm_feats(farms[o]), shed=priv.get("shed", {}), seeds=priv.get("seeds", {}),
+                             carried=dict(carried), prices=mk["prices"], inv=mk["inventory"], shops=(ob.get("town") or sh.get("town") or {}).get("unlocked_shops", []),
+                             market=a.get("market") or [], ops=dict(ops), reward=d["rewards"][p], opp_reward=d["rewards"][o]))
+        return rows
+    except Exception as e:
+        return [dict(error=repr(e), file=f)]
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser(); ap.add_argument("--team"); ap.add_argument("--glob"); ap.add_argument("--out"); ap.add_argument("--workers", type=int, default=6)
+    a = ap.parse_args(); fs = sorted(set(glob.glob(a.glob))); os.makedirs(os.path.dirname(a.out), exist_ok=True); n = err = 0
+    with ProcessPoolExecutor(a.workers) as ex, gzip.open(a.out, "wt") as w:
+        for rows in ex.map(one, [(f, a.team) for f in fs], chunksize=4):
+            for r in rows:
+                if "error" in r: err += 1; continue
+                w.write(json.dumps(r) + "\n"); n += 1
+    print(a.team, "rows", n, "errors", err)
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics
+p='/workspace/shared/research/re/boey.jsonl.gz'
+rows=[]
+with gzip.open(p,'rt') as f:
+ for l in f: rows.append(json.loads(l))
+print('rows',len(rows),'episodes',len({x['ep'] for x in rows}),'opponents',collections.Counter(x['opp'] for x in rows).most_common(12))
+print('day range',min(x['day'] for x in rows),max(x['day'] for x in rows),'hours',collections.Counter(x['hour'] for x in rows))
+print('shops',collections.Counter(tuple(x['shops']) for x in rows).most_common(15))
+print('ops total',collections.Counter(k for x in rows for k,v in x['ops'].items() for _ in range(v)))
+print('op-vector frequency')
+for k,n in collections.Counter(tuple(sorted(x['ops'].items())) for x in rows).most_common(35): print(n,k)
+print('initial examples')
+for x in rows[:6]: print({k:x[k] for k in ['ep','step','day','hour','shops','ops','market']},x['me'],x['seeds'],x['shed'])
+PY" in /workspace/wt/codex
+ exited 1 in 3455ms:
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "/venv/main/lib/python3.12/gzip.py", line 351, in read1
+    return self._buffer.read1(size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/_compression.py", line 68, in readinto
+    data = self.read(len(byte_view))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/gzip.py", line 564, in read
+    raise EOFError("Compressed file ended before the "
+EOFError: Compressed file ended before the end-of-stream marker was reached
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+codex
+Лог Boey ещё дописывается (gzip пока без завершающего блока), поэтому читаю безопасный префикс и не буду выдавать agreement до фиксированного снимка. Схема уже показывает ограничение: в decision log есть только счётчики операций, а не цели юнитов; посадки/структуры восстановлю по переходам состояния.
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,os,time
+p='/workspace/shared/research/re/boey.jsonl.gz'; rows=[]
+try:
+ with gzip.open(p,'rt') as f:
+  for l in f:
+   try: rows.append(json.loads(l))
+   except json.JSONDecodeError: pass
+except EOFError: pass
+print('stat',os.path.getsize(p),'rows complete',len(rows),'episodes',len({x['ep'] for x in rows}))
+print('opponents',collections.Counter(x['opp'] for x in rows).most_common(10))
+print('days',min(x['day'] for x in rows),max(x['day'] for x in rows),'shops',collections.Counter(tuple(x['shops']) for x in rows).most_common(12))
+print('ops',collections.Counter(k for x in rows for k,v in x['ops'].items() for _ in range(v)))
+for k,n in collections.Counter(tuple(sorted(x['ops'].items())) for x in rows).most_common(30): print(n,k)
+print('sample')
+for x in rows[:4]:
+ print(x['ep'],x['step'],x['day'],x['hour'],x['shops'],x['ops'],x['me']['tiles'],x['me']['animals'],x['me']['structs'],x['seeds'])
+PY
+ps -eo pid,etime,cmd | rg 'declog|re/.*jsonl|python' | head -50" in /workspace/wt/codex
+ succeeded in 4201ms:
+stat 5462893 rows complete 77652 episodes 100
+opponents [('DSM', 17256), ('M & M & P & Q', 15099), ('DECEM', 2876), ('Unknown Mother-Goose', 2157), ('Vadim Vasilenko', 2157), ('Kaggledew Valley 🏆', 719), ('吃白饭的大肥鱼', 719), ('Team Amboss', 719), ('Remielle', 719), ('ほのぼの牧場', 719)]
+days 0 29 shops [((), 7776), (('PET_CAFE',), 1296), (('YARN_STORE',), 1296), (('PIZZA_SHOP',), 1224), (('BRUNCH_SPOT',), 1152), (('ICE_CREAM_SHOP',), 936), (('SMOOTHIE_SHOP',), 792), (('FARMERS_MARKET',), 576), (('YARN_STORE', 'ICE_CREAM_SHOP'), 576), (('BAKERY',), 504), (('PIZZA_SHOP', 'YARN_STORE'), 432), (('YARN_STORE', 'PIZZA_SHOP'), 360)]
+ops Counter({'WATER': 110605, 'WEST': 106005, 'NORTH': 99534, 'PASS': 65475, 'EAST': 60667, 'SOUTH': 60207, 'HARVEST': 51199, 'FEED': 47930, 'COLLECT_FERTILIZER': 47806, 'CARE': 46326, 'PICKUP': 28944, 'PLANT': 26910, 'FERTILIZE': 19874, 'DROP': 9766, 'PLACE': 7945, 'DIG': 3533, 'BUILD_PASTURE': 2439, 'BUILD_COOP': 414})
+1278 (('COLLECT_FERTILIZER', 1),)
+259 (('PASS', 7),)
+252 (('HARVEST', 1),)
+250 (('PASS', 5),)
+200 (('PASS', 13),)
+151 (('NORTH', 2), ('WEST', 5))
+150 (('PASS', 6), ('PICKUP', 1))
+150 (('NORTH', 1), ('PICKUP', 4), ('WEST', 2))
+150 (('PASS', 6), ('SOUTH', 1))
+150 (('PASS', 12), ('PICKUP', 1))
+141 (('WEST', 1),)
+102 (('PASS', 10),)
+101 (('COLLECT_FERTILIZER', 3), ('NORTH', 1), ('WEST', 3))
+100 (('PASS', 3), ('WATER', 2))
+100 (('CARE', 1), ('NORTH', 1), ('WATER', 1), ('WEST', 2))
+100 (('HARVEST', 1), ('NORTH', 2), ('PLANT', 1), ('WATER', 2), ('WEST', 1))
+100 (('NORTH', 3), ('WATER', 3), ('WEST', 1))
+100 (('EAST', 1), ('PASS', 2), ('SOUTH', 4))
+100 (('PASS', 13), ('PICKUP', 1))
+100 (('PASS', 11), ('PICKUP', 1))
+100 (('PASS', 10), ('PICKUP', 1))
+83 (('COLLECT_FERTILIZER', 1), ('EAST', 1), ('NORTH', 1), ('WEST', 3))
+78 (('COLLECT_FERTILIZER', 1), ('NORTH', 1), ('WEST', 4))
+76 (('COLLECT_FERTILIZER', 1), ('NORTH', 2), ('WEST', 3))
+65 (('EAST', 5), ('PASS', 1))
+63 (('COLLECT_FERTILIZER', 1), ('NORTH', 1), ('SOUTH', 1), ('WEST', 3))
+58 (('PASS', 1),)
+57 (('COLLECT_FERTILIZER', 2), ('EAST', 2), ('HARVEST', 1), ('NORTH', 3), ('WEST', 2))
+56 (('COLLECT_FERTILIZER', 1), ('EAST', 1), ('PICKUP', 1), ('WEST', 3))
+55 (('COLLECT_FERTILIZER', 1), ('EAST', 1), ('NORTH', 2), ('PICKUP', 1), ('WEST', 5))
+sample
+113409426 0 0 0 [] {'PASS': 1} {'empty': 25, 'locked': 75} {} {} {'CARROT': 0, 'MELON': 0, 'STRAWBERRY': 0, 'TOMATO': 0, 'WHEAT': 0}
+113409426 1 0 1 [] {'PICKUP': 1, 'WEST': 2, 'NORTH': 2, 'BUILD_PASTURE': 1} {'empty': 25, 'locked': 75} {} {} {'CARROT': 0, 'MELON': 0, 'STRAWBERRY': 0, 'TOMATO': 0, 'WHEAT': 7}
+113409426 2 0 2 [] {'PLACE': 1, 'PICKUP': 5} {'empty': 24, 'locked': 75} {} {'PASTURE': 1} {'CARROT': 0, 'MELON': 0, 'STRAWBERRY': 0, 'TOMATO': 0, 'WHEAT': 8}
+113409426 3 0 3 [] {'NORTH': 2, 'WEST': 1, 'SOUTH': 2, 'PASS': 1} {'empty': 24, 'locked': 75} {'SHEEP': 1} {'PASTURE': 1} {'CARROT': 0, 'MELON': 3, 'STRAWBERRY': 0, 'TOMATO': 0, 'WHEAT': 9}
+    291  1-06:08:49 /usr/bin/python3 /usr/local/bin/jupyter-notebook --no-browser --ContentsManager.allow_hidden=True --ServerApp.root_dir=/ --ServerApp.preferred_dir=/ --ip=0.0.0.0 --port=8080 --NotebookApp.open_browser=False --NotebookApp.token=656a380feda7c0a1c921eedf42fc44cc44092dbf12e18791f83aefca59cb10e0 --NotebookApp.allow_remote_access=True --NotebookApp.allow_origin=* --NotebookApp.certfile=/etc/instance.crt --NotebookApp.keyfile=/etc/instance.key --allow-root
+    379  1-06:08:44 /usr/bin/python3 /usr/local/bin/supervisord -n -u root -c /etc/supervisor/supervisord.conf
+    437  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/caddy.log
+    439  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/cron.log
+    444  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/instance_portal.log
+    450  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/syncthing.log
+    466  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/tensorboard.log
+    469  1-06:08:43 python3 /usr/local/bin/log-tee /var/log/portal/tunnel_manager.log
+    492  1-06:08:43 /opt/portal-aio/venv/bin/python3 /opt/portal-aio/venv/bin/fastapi run --host 127.0.0.1 --port 11112 tunnel_manager.py
+    493  1-06:08:43 /opt/portal-aio/venv/bin/python3 /opt/portal-aio/venv/bin/fastapi run --host 127.0.0.1 --port 11111 portal.py
+    495  1-06:08:43 /usr/bin/python3 /usr/local/bin/tensorboard --port 16006 --logdir /workspace
+    602  1-06:08:42 /usr/local/lib/python3.12/dist-packages/tensorboard_data_server/bin/server --logdir=/workspace --reload=5 --samples-per-plugin= --port=0 --port-file=/tmp/tensorboard_data_server_7lteafws/port --die-after-stdin --error-file=/tmp/tensorboard_data_server_7lteafws/startup_error
+ 986930       01:14 codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check -C /workspace/wt/codex -o /workspace/shared/runs/codex_20260926T184508.final.md You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.  FULL-FOCUS task T036 (human: 'go all-in until we understand the top agents' decision logic and can beat or reconstruct them'; never submit; ≤8 workers; deadline 2026-09-30). Read research/re_plan.md. I built lab/re/declog.py (in /workspace/wt/claude, branch lab-claude) and am generating research/re/<team>.jsonl.gz decision logs for boey, mmpq, dsm, fourthq, decem, mgoose, fuxi, joseph, istinetz, ours_es67. YOUR part = PRODUCTION logic of the top teams (start with Boey #1, M&M&P&Q, DSM, then fuxi): (1) planting schedule/crop mix as a function of unlocked shops & day (what they plant where and when, re-plant after harvest?, fertilize policy), (2) unit allocation per turn (how many units water/harvest/care/feed/collect/move; priority order), (3) herd build-up timeline and structures. Express as explicit rules; measure agreement on held-out episodes (teacher-forced: given state, does the rule predict their action?). Write research/re_production.md incrementally; bin/say claude at each finding. My part = market+macro rules; we'll then assemble a reconstructed 'top-RE' agent as a local strong opponent and mine counters.
+ 988457       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988458       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988459       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988460       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988461       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988462       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988463       00:10 /workspace/solution_kaggri/.venv/bin/python declog.py --team M & M & P & Q --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/mmpq.jsonl.gz --workers 6
+ 988508       00:04 /bin/bash -c /workspace/solution_kaggri/.venv/bin/python - <<'PY' import gzip,json,collections,os,time p='/workspace/shared/research/re/boey.jsonl.gz'; rows=[] try:  with gzip.open(p,'rt') as f:   for l in f:    try: rows.append(json.loads(l))    except json.JSONDecodeError: pass except EOFError: pass print('stat',os.path.getsize(p),'rows complete',len(rows),'episodes',len({x['ep'] for x in rows})) print('opponents',collections.Counter(x['opp'] for x in rows).most_common(10)) print('days',min(x['day'] for x in rows),max(x['day'] for x in rows),'shops',collections.Counter(tuple(x['shops']) for x in rows).most_common(12)) print('ops',collections.Counter(k for x in rows for k,v in x['ops'].items() for _ in range(v))) for k,n in collections.Counter(tuple(sorted(x['ops'].items())) for x in rows).most_common(30): print(n,k) print('sample') for x in rows[:4]:  print(x['ep'],x['step'],x['day'],x['hour'],x['shops'],x['ops'],x['me']['tiles'],x['me']['animals'],x['me']['structs'],x['seeds']) PY ps -eo pid,etime,cmd | rg 'declog|re/.*jsonl|python' | head -50
+ 988578       00:00 rg declog|re/.*jsonl|python
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,os
+p='/workspace/shared/research/re/boey.jsonl.gz'
+with gzip.open(p,'rt') as f: rows=[json.loads(x) for x in f]
+print(len(rows),len({r['ep'] for r in rows}),os.path.getsize(p))
+PY
+/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+try:
+ import sklearn; print('sklearn',sklearn.__version__)
+except Exception as e: print('NO',e)
+PY" in /workspace/wt/codex
+ succeeded in 3542ms:
+77652 100 5462893
+NO No module named 'sklearn'
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics,hashlib
+p='/workspace/shared/research/re/boey.jsonl.gz'
+with gzip.open(p,'rt') as f:R=[json.loads(x) for x in f]
+byep=collections.defaultdict(list)
+for r in R:byep[r['ep']].append(r)
+for rs in byep.values():rs.sort(key=lambda x:x['step'])
+C=['STRAWBERRY','CARROT','MELON','TOMATO','WHEAT']; A=['COW','SHEEP','GOOSE']; O=['PLANT','WATER','HARVEST','CARE','FEED','FERTILIZE','COLLECT_FERTILIZER','BUILD_PASTURE','BUILD_COOP','PLACE']
+def med(v): return statistics.median(v) if v else 0
+print('EPS',len(byep),'holdout',sorted(byep)[-20:])
+# daily snapshots overall
+print('\\nDAILY MEDIAN state, p10-p90 (plant tiles / herd / structs / hands / fert)')
+for d in range(30):
+ rs=[x for ep in byep.values() for x in ep if x['day']==d and x['hour']==0]
+ def q(fn):
+  v=sorted(fn(x) for x in rs); return (round(med(v),1),v[max(0,len(v)//10-1)],v[min(len(v)-1,(9*len(v))//10)])
+ print(d,'n',len(rs),'crops', {c:q(lambda x,c=c:x['me']['tiles'].get('plant_'+c,0)) for c in C},'herd',{a:q(lambda x,a=a:x['me']['animals'].get(a,0)) for a in A},'past',q(lambda x:x['me']['structs'].get('PASTURE',0)),'coop',q(lambda x:x['me']['structs'].get('COOP',0)),'hand',q(lambda x:x['me']['hands']),'fert',q(lambda x:x['me']['fert_tiles']))
+# positive deltas crop/events tied operations
+print('\\nPLANT EVENT DELTAS: day crop aggregate & episodes')
+evs=collections.defaultdict(lambda:collections.Counter())
+for ep,rs in byep.items():
+ for a,b in zip(rs,rs[1:]):
+  if a['day']"'!=b['"'day'] or not a['ops'].get('PLANT'): continue
+  for c in C:
+   delta=b['me']['tiles'].get('plant_'+c,0)-a['me']['tiles'].get('plant_'+c,0)
+   if delta>0: evs[(a['day'],tuple(a['shops']))][c]+=delta
+for (d,s),v in sorted(evs.items()):
+ print('d',d,'shops',','.join(s) or '-','adds',dict(v))
+# daily ops averages over all turn rows
+print('\\nDAILY OP COUNTS mean units/turn and any%')
+for d in range(30):
+ rs=[x for x in R if x['day']==d]
+ print(d,'n',len(rs), ' '.join(f'{o}:{sum(x[\"ops\"].get(o,0) for x in rs)/len(rs):.2f}/{sum(bool(x[\"ops\"].get(o,0)) for x in rs)*100/len(rs):.0f}%' for o in O[:7]))
+# operation count mode by day/hour/shops training; validate latter lexical eps
+te=set(sorted(byep)[-20:]); tr=[r for r in R if r['ep'] not in te]; va=[r for r in R if r['ep'] in te]
+def key(r):return(r['day'],r['hour'],tuple(r['shops']))
+# if sparse fallback day hour
+for opset in [O[:7]]:
+ modes={}
+ for k in set(key(r) for r in tr):
+  rr=[r for r in tr if key(r)==k]
+  modes[k]={o:collections.Counter(r['ops'].get(o,0) for r in rr).most_common(1)[0][0] for o in opset}
+ fallback={}
+ for k in set((r['day'],r['hour']) for r in tr):
+  rr=[r for r in tr if (r['day'],r['hour'])==k]
+  fallback[k]={o:collections.Counter(r['ops'].get(o,0) for r in rr).most_common(1)[0][0] for o in opset}
+ print('\\nHELDOUT modal day/hour/shop count agreement:')
+ for o in opset:
+  vals=[]; ae=[]; correct=[]
+  for r in va:
+   p=modes.get(key(r),fallback[(r['day'],r['hour'])])[o]; y=r['ops'].get(o,0)
+   vals.append((p>0)==(y>0));correct.append(p==y);ae.append(abs(p-y))
+  print(o,'presence',round(sum(vals)/len(vals),3),'exact-count',round(sum(correct)/len(correct),3),'MAE',round(sum(ae)/len(ae),3),'base rate',round(sum(r['ops'].get(o,0)>0 for r in va)/len(va),3))
+ # full vec
+ ex=sum(all(modes.get(key(r),fallback[(r['day'],r['hour'])])[o]==r['ops'].get(o,0) for o in opset) for r in va)/len(va)
+ print('joint exact',ex)
+PY" in /workspace/wt/codex
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "find /workspace/shared/replays/top10v4 -type f | head -8; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,glob,os
+f=glob.glob('/workspace/shared/replays/top10v4/*/*')[0]
+d=json.load(gzip.open(f,'rt')) if f.endswith('.gz') else json.load(open(f))
+print(f,d['info'].get('TeamNames'),len(d['steps']))
+for t in range(1,6):
+ print(t,d['steps'][t][0].get('action'),d['steps'][t][1].get('action'))
+PY" in /workspace/wt/codex
+ succeeded in 587ms:
+/workspace/shared/replays/top10v4/boey/episode-113459189-replay.json.gz ['Boey', 'Unknown Mother-Goose'] 720
+1 {'farmer': ['PASS'], 'hands': [], 'market': [['BUY_PRODUCT', 'WHEAT', 3], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['BUY_SEED', 'WHEAT', 3], ['NOOP'], ['BUY_SEED', 'WHEAT', 4], ['BUY_ANIMAL', 'SHEEP', 1]]} {'farmer': ['PASS'], 'hands': [], 'market': [['BUY_ANIMAL', 'COW', 1], ['BUY_PRODUCT', 'WHEAT', 5]]}
+2 {'farmer': ['PICKUP', 'SHEEP', 1], 'hands': [['WEST'], ['NORTH'], ['NORTH'], ['BUILD_PASTURE'], ['WEST']], 'market': [['NOOP'], ['BUY_SEED', 'WHEAT', 1], ['BUY_ANIMAL', 'COW', 1], ['BUY_SEED', 'WHEAT', 1], ['BUY_PRODUCT', 'FERTILIZER', 2], ['BUY_ANIMAL', 'COW', 1], ['SELL', 'WHEAT', 1], ['BUY_SEED', 'WHEAT', 2], ['SELL', 'WHEAT', 2], ['BUY_ANIMAL', 'SHEEP', 1]]} {'farmer': ['PICKUP', 'COW', 1], 'hands': [], 'market': [['SELL', 'WHEAT', 1], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['BUY_ANIMAL', 'COW', 1], ['BUY_ANIMAL', 'SHEEP', 3]]}
+3 {'farmer': ['PLACE', 'SHEEP', 1], 'hands': [['PASS'], ['PICKUP', 'SHEEP', 1], ['SOUTH'], ['PICKUP', 'SHEEP', 1], ['NORTH']], 'market': [['BUY_SEED', 'MELON', 1], ['BUY_PRODUCT', 'WHEAT', 11], ['BUY_SEED', 'MELON', 1], ['BUY_SEED', 'MELON', 1], ['SELL', 'FERTILIZER', 2], ['NOOP'], ['BUY_SEED', 'MELON', 1], ['BUY_SEED', 'MELON', 1], ['BUY_PRODUCT', 'FERTILIZER', 2], ['BUY_PRODUCT', 'FERTILIZER', 1]]} {'farmer': ['BUILD_PASTURE'], 'hands': [['PICKUP', 'SHEEP', 1], ['PICKUP', 'SHEEP', 1], ['PICKUP', 'COW', 1], ['PICKUP', 'SHEEP', 1]], 'market': [['SELL', 'WHEAT', 1]]}
+4 {'farmer': ['NORTH'], 'hands': [['PICKUP', 'COW', 1], ['NORTH'], ['PASS'], ['PICKUP', 'COW', 1], ['BUILD_PASTURE']], 'market': [['BUY_SEED', 'WHEAT', 1], ['NOOP'], ['SELL', 'FERTILIZER', 3], ['BUY_PRODUCT', 'WHEAT', 2], ['BUY_PRODUCT', 'FERTILIZER', 1], ['SELL', 'WHEAT', 5], ['NOOP'], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 1], ['BUY_ANIMAL', 'COW', 1]]} {'farmer': ['PLACE', 'COW', 1], 'hands': [['NORTH'], ['NORTH'], ['NORTH'], ['WEST']], 'market': [['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1]]}
+5 {'farmer': ['NORTH'], 'hands': [['WEST'], ['PLACE', 'SHEEP', 1], ['PICKUP', 'COW', 1], ['WEST'], ['NORTH']], 'market': [['BUY_PRODUCT', 'WHEAT', 1], ['SELL', 'FERTILIZER', 1], ['BUY_PRODUCT', 'FERTILIZER', 1], ['BUY_PRODUCT', 'WHEAT', 1], ['SELL', 'WHEAT', 2], ['NOOP'], ['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1], ['NOOP'], ['SELL', 'WHEAT', 1]]} {'farmer': ['PICKUP', 'WHEAT', 3], 'hands': [['WEST'], ['WEST'], ['NORTH'], ['BUILD_PASTURE']], 'market': [['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1]]}
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics
+P='/workspace/shared/research/re/boey.jsonl.gz'
+with gzip.open(P,'rt') as f:R=[json.loads(x) for x in f]
+# split trajectories at each step==0, preserving duplicate numeric ids
+E=[]; cur=[]
+for r in R:
+ if r['step']==0 and cur: E.append(cur);cur=[]
+ cur.append(r)
+if cur:E.append(cur)
+print('trajectories',len(E),'lengths',collections.Counter(map(len,E)))
+C=['STRAWBERRY','CARROT','MELON','TOMATO','WHEAT']; O=['PLANT','WATER','HARVEST','CARE','FEED','FERTILIZE','COLLECT_FERTILIZER']
+tr=E[:86]; va=E[86:]
+# training calendar modal counts: exact (day,hour) since shops depends macro and changes mid-game
+D=collections.defaultdict(lambda:collections.defaultdict(collections.Counter))
+for ep in tr:
+ for r in ep:
+  k=(r['day'],r['hour'])
+  for o in O:D[k][o][r['ops'].get(o,0)]+=1
+M={k:{o:v[o].most_common(1)[0][0] for o in O} for k,v in D.items()}
+print('\\nHELDOUT calendar-rule counts, trajectories 87-108')
+for o in O:
+ ys=[]; ps=[]
+ for ep in va:
+  for r in ep:
+   ys.append(r['ops'].get(o,0));ps.append(M[(r['day'],r['hour'])][o])
+ print(o,'presence_acc',f'{sum((a>0)==(b>0) for a,b in zip(ys,ps))/len(ys):.3f}','exact_count',f'{sum(a==b for a,b in zip(ys,ps))/len(ys):.3f}','mae',f'{sum(abs(a-b) for a,b in zip(ys,ps))/len(ys):.3f}','actual_active',f'{sum(a>0 for a in ys)/len(ys):.3f}')
+# operating co-occurrence and equal counts
+allr=[r for ep in E for r in ep]
+for a,b in [('CARE','FEED'),('CARE','COLLECT_FERTILIZER'),('FEED','COLLECT_FERTILIZER'),('WATER','HARVEST'),('HARVEST','PLANT')]:
+ z=[r for r in allr if r['ops'].get(a,0)>0 or r['ops'].get(b,0)>0]
+ print(a,b,'either',len(z),'both',sum(r['ops'].get(a,0)>0 and r['ops'].get(b,0)>0 for r in z)/len(z),'equalcount',sum(r['ops'].get(a,0)==r['ops'].get(b,0) for r in z)/len(z))
+# daily starts/medians, TRAIN only; daily max event positive deltas within each traj
+print('\\nTRAIN daily start medians [crops; herd; pasture/coop; fertile]:')
+for d in range(30):
+ rr=[r for ep in tr for r in ep if r['day']==d and r['hour']==0]
+ def md(fn):return int(statistics.median([fn(r) for r in rr]))
+ crops='/'.join(str(md(lambda r,c=c:r['me']['tiles'].get('plant_'+c,0))) for c in C)
+ herd='/'.join(str(md(lambda r,a=a:r['me']['animals'].get(a,0))) for a in ['COW','SHEEP','GOOSE'])
+ print(f'd{d:02}: {crops}; {herd}; {md(lambda r:r[\"me\"][\"structs\"].get(\"PASTURE\",0))}/{md(lambda r:r[\"me\"][\"structs\"].get(\"COOP\",0))}; f{md(lambda r:r[\"me\"][\"fert_tiles\"])}')
+# sum positive add change by day, per trajectory then median / % event
+print('\\nPLANT add schedule train (median positive net addition among all 86 games; episodes with add):')
+for d in range(29):
+ arr={c:[] for c in C}
+ for ep in tr:
+  sums={c:0 for c in C}
+  for a,b in zip(ep,ep[1:]):
+   if a['day']==d:
+    for c in C:sums[c]+=max(0,b['me']['tiles'].get('plant_'+c,0)-a['me']['tiles'].get('plant_'+c,0))
+  for c in C:arr[c].append(sums[c])
+ s=' '.join(f'{c[:3]}={int(statistics.median(v))}({sum(x>0 for x in v)}/{len(v)})' for c,v in arr.items() if sum(v))
+ print('d',d,s)
+# one state-condition: allocation chain independent of phase, only cases total animals>0: average ops per turn by animal bins and plant ripe bins
+print('\\nops mean by totals at observed row')
+for lab,pred in [('animal=0',lambda r:sum(r['me']['animals'].values())==0),('animal1-9',lambda r:0<sum(r['me']['animals'].values())<10),('animal10+',lambda r:sum(r['me']['animals'].values())>=10),('ripe>=20',lambda r:sum(r['me']['ripe'].values())>=20),('fert<plants/2',lambda r:r['me']['fert_tiles']<sum(v for k,v in r['me']['tiles'].items() if k.startswith('plant_'))/2)]:
+ rr=[r for r in allr if pred(r)]
+ print(lab,'n',len(rr),' '.join(f'{o}:{sum(r[\"ops\"].get(o,0) for r in rr)/len(rr):.2f}' for o in O))
+PY" in /workspace/wt/codex
+ succeeded in 8645ms:
+trajectories 108 lengths Counter({719: 108})
+
+HELDOUT calendar-rule counts, trajectories 87-108
+PLANT presence_acc 0.831 exact_count 0.804 mae 0.277 actual_active 0.244
+WATER presence_acc 0.847 exact_count 0.628 mae 0.696 actual_active 0.640
+HARVEST presence_acc 0.813 exact_count 0.730 mae 0.406 actual_active 0.412
+CARE presence_acc 0.774 exact_count 0.711 mae 0.428 actual_active 0.390
+FEED presence_acc 0.774 exact_count 0.705 mae 0.426 actual_active 0.403
+FERTILIZE presence_acc 0.863 exact_count 0.842 mae 0.202 actual_active 0.198
+COLLECT_FERTILIZER presence_acc 0.773 exact_count 0.715 mae 0.436 actual_active 0.393
+CARE FEED either 45885 both 0.3557589626239512 equalcount 0.17245287130870654
+CARE COLLECT_FERTILIZER either 48290 both 0.26860633671567613 equalcount 0.12288258438600125
+FEED COLLECT_FERTILIZER either 48287 both 0.2878414480087808 equalcount 0.1325615590117423
+WATER HARVEST either 56705 both 0.43352438056608766 equalcount 0.1365135349616436
+HARVEST PLANT either 40808 both 0.23787002548519898 equalcount 0.10159772593609097
+
+TRAIN daily start medians [crops; herd; pasture/coop; fertile]:
+d00: 0/0/0/0/0; 0/0/0; 0/0; f0
+d01: 0/0/7/0/12; 3/2/0; 5/0; f0
+d02: 0/0/8/0/12; 3/2/0; 5/0; f0
+d03: 0/0/10/0/8; 3/2/2; 5/2; f0
+d04: 4/0/12/0/3; 3/3/2; 6/2; f0
+d05: 5/0/12/0/0; 3/3/2; 7/2; f0
+d06: 6/0/12/0/0; 3/3/2; 7/2; f0
+d07: 19/0/12/0/2; 4/6/2; 11/2; f0
+d08: 20/0/12/0/2; 4/6/2; 11/2; f0
+d09: 22/0/12/0/3; 4/7/2; 12/2; f0
+d10: 22/0/12/0/15; 4/7/2; 12/2; f0
+d11: 26/0/6/0/22; 4/7/2; 13/2; f0
+d12: 26/1/4/0/18; 6/7/2; 13/2; f3
+d13: 25/3/2/0/17; 6/7/2; 13/2; f4
+d14: 24/4/2/0/16; 6/7/2; 13/2; f9
+d15: 23/3/2/0/16; 6/7/2; 14/2; f9
+d16: 22/2/2/0/15; 6/7/2; 14/2; f18
+d17: 19/2/2/0/15; 6/10/2; 17/2; f14
+d18: 19/2/2/0/16; 6/10/2; 17/2; f19
+d19: 18/1/1/0/16; 6/10/2; 17/2; f20
+d20: 16/2/1/0/15; 6/10/2; 17/2; f19
+d21: 12/3/1/0/16; 6/10/2; 17/2; f15
+d22: 11/3/1/0/17; 5/10/2; 17/2; f19
+d23: 11/1/0/0/19; 5/10/2; 17/2; f15
+d24: 6/5/0/0/23; 5/11/2; 18/2; f8
+d25: 4/8/0/0/24; 5/10/2; 18/2; f13
+d26: 4/7/0/0/28; 5/9/2; 17/2; f12
+d27: 4/13/0/0/22; 5/9/2; 17/2; f11
+d28: 1/13/0/0/25; 5/9/2; 16/2; f12
+d29: 1/6/0/0/13; 5/4/2; 16/2; f16
+
+PLANT add schedule train (median positive net addition among all 86 games; episodes with add):
+d 0 MEL=7(86/86) WHE=12(86/86)
+d 1 MEL=1(48/86) WHE=0(1/86)
+d 2 STR=0(41/86) MEL=2(85/86) WHE=0(1/86)
+d 3 STR=3(77/86) MEL=0(8/86) WHE=0(20/86)
+d 4 STR=3(82/86) MEL=0(13/86) WHE=0(3/86)
+d 5 STR=0(12/86) MEL=0(1/86) WHE=0(3/86)
+d 6 STR=11(86/86) MEL=0(42/86) WHE=2(79/86)
+d 7 STR=1(53/86) MEL=0(2/86) WHE=0(10/86)
+d 8 STR=2(57/86) MEL=0(12/86) WHE=2(86/86)
+d 9 STR=0(30/86) CAR=0(2/86) MEL=0(3/86) WHE=4(53/86)
+d 10 STR=2(54/86) CAR=0(5/86) WHE=4(86/86)
+d 11 STR=0(10/86) CAR=1(51/86) MEL=0(10/86) TOM=0(10/86) WHE=3(85/86)
+d 12 STR=0(24/86) CAR=2(49/86) MEL=0(3/86) TOM=0(41/86) WHE=2(76/86)
+d 13 STR=0(39/86) CAR=1(49/86) MEL=0(1/86) WHE=2(86/86)
+d 14 CAR=0(16/86) WHE=4(86/86)
+d 15 STR=0(18/86) CAR=0(28/86) WHE=2(85/86)
+d 16 STR=0(3/86) CAR=1(58/86) MEL=0(42/86) TOM=0(10/86) WHE=3(85/86)
+d 17 STR=0(41/86) CAR=0(22/86) WHE=2(55/86)
+d 18 CAR=0(35/86) TOM=0(41/86) WHE=3(86/86)
+d 19 CAR=2(73/86) MEL=0(41/86) TOM=0(10/86) WHE=3(85/86)
+d 20 CAR=1(74/86) TOM=0(41/86) WHE=4(86/86)
+d 21 CAR=0(35/86) WHE=1(53/86)
+d 22 CAR=0(41/86) WHE=7(86/86)
+d 23 CAR=4(83/86) WHE=6(86/86)
+d 24 CAR=2(82/86) WHE=4(85/86)
+d 25 CAR=0(40/86) WHE=7(86/86)
+d 26 CAR=8(45/86) WHE=0(41/86)
+d 27 WHE=0(41/86)
+d 28 
+
+ops mean by totals at observed row
+animal=0 n 341 PLANT:0.00 WATER:0.00 HARVEST:0.00 CARE:0.00 FEED:0.00 FERTILIZE:0.00 COLLECT_FERTILIZER:0.00
+animal1-9 n 16092 PLANT:0.24 WATER:0.82 HARVEST:0.20 CARE:0.23 FEED:0.22 FERTILIZE:0.03 COLLECT_FERTILIZER:0.22
+animal10+ n 61219 PLANT:0.38 WATER:1.59 HARVEST:0.78 CARE:0.70 FEED:0.72 FERTILIZE:0.32 COLLECT_FERTILIZER:0.72
+ripe>=20 n 63460 PLANT:0.35 WATER:1.54 HARVEST:0.76 CARE:0.64 FEED:0.67 FERTILIZE:0.30 COLLECT_FERTILIZER:0.67
+fert<plants/2 n 68776 PLANT:0.36 WATER:1.43 HARVEST:0.59 CARE:0.62 FEED:0.65 FERTILIZE:0.24 COLLECT_FERTILIZER:0.62
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+codex
+Первый устойчивый профиль Boey готов: это не «только клубника», а календарный crop-rotation с ранним стадом — d0 7 MELON + 12 WHEAT, с d3–6 наращивание STRAWBERRY, затем WHEAT и поздний CARROT; COOP/2 GOOSE уже к d3. Сейчас фиксирую цифры held-out и перехожу к M&M&P&Q, как только его gzip закроется.
