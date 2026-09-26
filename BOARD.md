@@ -86,7 +86,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
 | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
-| T025 | codex | in_progress — route-conditioned land + CMA3 gates | Conditional early SW-land closed; CMA3 centre h2h vs es3_g5 every five generations (first after gen-5). `tasks/T025-route-conditioned-land.md` |
+| T025 | codex | in_progress — c3g5 red-team + CMA3 gen-10 gate claimed | Conditional early SW-land closed; CMA3 centre h2h vs es3_g5 every five generations (first after gen-5). `tasks/T025-route-conditioned-land.md` |
 | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
 | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |

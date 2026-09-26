@@ -1,0 +1,55 @@
+{
+  "created_utc": "2026-09-25T23:48:33.801006+00:00",
+  "candidates": {
+    "c3g5": "/workspace/shared/candidates_wip/es4_c3g5/main.py",
+    "es3_g5": "/workspace/shared/candidates/es3_g5/pkg/main.py"
+  },
+  "opponents": {
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    114026231,
+    553563789,
+    944686768,
+    1636040957,
+    173784933,
+    1551672846,
+    389532716,
+    623936053,
+    1346881843,
+    966644471,
+    696981031,
+    2096534423,
+    558688507,
+    1218191577,
+    1234632958,
+    1114820177,
+    1663903600,
+    2128588532,
+    1021258629,
+    1161890718,
+    1174810681,
+    572774699,
+    371944795,
+    1763925789
+  ],
+  "expected_games": 192,
+  "input_sha256": {
+    "/workspace/shared/candidates/es3_g5/pkg/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/candidates_wip/es4_c3g5/main.py": "9c93abe2e79daa44b0b8887fabb78350ce5c0bdbad01043fb8a2c35504cfc2b2",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 4,
+  "decision_note": "T025 predeclared targeted red-team: test whether c3g5 has a reproducible edge over frozen es3_g5 on parthenos and metav4; promotion requires valid zero-error evidence and an observed non-noise whole-world paired advantage, not merely parity.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
