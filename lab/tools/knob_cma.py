@@ -52,7 +52,10 @@ def panel(mirror, mode, generation):
         "yaxon": f"{E.POOL}/yaxon_reactive_v5/main.py",
         "pilkwang": f"{E.POOL}/pilkwang_struct/main.py",
     }
-    args = []
+    # compare.py otherwise injects its default baselines.  Every fitness
+    # mode must evaluate exactly the named panel, so pass the empty form to
+    # suppress those implicit opponents before adding this generation's list.
+    args = ["--baselines"]
     for name in weights:
         if name == "v5_market":
             args += ["--baselines", "v5_market"]
