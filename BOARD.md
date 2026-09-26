@@ -109,3 +109,4 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
 | T028 | codex | in_progress | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
