@@ -7,13 +7,61 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import knobs, knob_es as E
 
 DEFAULT_MIRROR = "/workspace/shared/candidates/es2_c1/pkg/main.py"
-FITNESS_MODES = ("uniform", "parthenos_x2")
+FITNESS_MODES = ("uniform", "parthenos_x2", "panel_rotating_8")
 
-def panel(mirror):
-    return ["--baselines", "v5_market", "--opponent", f"best={mirror}",
-            "--opponent", f"yhay0913={E.POOL}/yhay_router0913/main.py",
-            "--opponent", f"parthenos={E.POOL}/parthenos_robust/main.py",
-            "--opponent", f"metav4={E.POOL}/tschinkel_metav4_v13/main.py"]
+# The primary safety opponents are deliberately permanent.  The remaining
+# reactive opponents are sampled as a deterministic rotating slice rather
+# than being allowed to disappear behind a single convenient mirror matchup.
+OTHER_POOL = (
+    ("yhay0913", "yhay_router0913/main.py"),
+    ("t2945", "tschinkel2945/main.py"),
+    ("ozer_v45", "ozer_v45/main.py"),
+    ("yaxon", "yaxon_reactive_v5/main.py"),
+    ("pilkwang", "pilkwang_struct/main.py"),
+)
+
+def _fitness_panel(mode, generation):
+    """Return the exact opponent weights and names for one generation.
+
+    ``panel_rotating_8`` is intentionally an eight-unit panel: control=1,
+    parthenos=2, metav4=2, and three distinct members of OTHER_POOL=1 each.
+    Three consecutive opponents in a five-opponent cycle give every member
+    three appearances in every five generations without adding duplicate
+    games merely to express a weight.
+    """
+    if mode == "uniform":
+        return {"best": 1, "yhay0913": 1, "parthenos": 1, "metav4": 1, "v5_market": 1}
+    if mode == "parthenos_x2":
+        return {"best": 1, "yhay0913": 1, "parthenos": 2, "metav4": 1, "v5_market": 1}
+    if mode == "panel_rotating_8":
+        start = generation % len(OTHER_POOL)
+        selected = [OTHER_POOL[(start + i) % len(OTHER_POOL)][0] for i in range(3)]
+        return {"best": 1, "parthenos": 2, "metav4": 2,
+                **{name: 1 for name in selected}}
+    raise ValueError(f"unknown fitness mode: {mode}")
+
+def panel(mirror, mode, generation):
+    weights = _fitness_panel(mode, generation)
+    paths = {
+        "best": mirror,
+        "parthenos": f"{E.POOL}/parthenos_robust/main.py",
+        "metav4": f"{E.POOL}/tschinkel_metav4_v13/main.py",
+        "yhay0913": f"{E.POOL}/yhay_router0913/main.py",
+        "t2945": f"{E.POOL}/tschinkel2945/main.py",
+        "ozer_v45": f"{E.POOL}/ozer_v45/main.py",
+        "yaxon": f"{E.POOL}/yaxon_reactive_v5/main.py",
+        "pilkwang": f"{E.POOL}/pilkwang_struct/main.py",
+    }
+    # compare.py otherwise injects its default baselines.  Every fitness
+    # mode must evaluate exactly the named panel, so pass the empty form to
+    # suppress those implicit opponents before adding this generation's list.
+    args = ["--baselines"]
+    for name in weights:
+        if name == "v5_market":
+            args += ["--baselines", "v5_market"]
+        else:
+            args += ["--opponent", f"{name}={paths[name]}"]
+    return args
 
 def _sha(path):
     return hashlib.sha256(open(path, "rb").read()).hexdigest()
@@ -25,16 +73,7 @@ def _atomic_json(path, value):
         f.write("\n")
     os.replace(tmp, path)
 
-def _fitness_weights(mode):
-    if mode == "uniform":
-        return {"best": 1, "yhay0913": 1, "parthenos": 1, "metav4": 1, "v5_market": 1}
-    if mode == "parthenos_x2":
-        # The independent gate has repeatedly found the adverse direction here.
-        # Keep every opponent in the objective, but make P 2/6 rather than 1/5.
-        return {"best": 1, "yhay0913": 1, "parthenos": 2, "metav4": 1, "v5_market": 1}
-    raise ValueError(f"unknown fitness mode: {mode}")
-
-def _fitness_from_games(gdir, candidates, mode):
+def _fitness_from_games(gdir, candidates, mode, generation):
     """Return weighted fitness and durable per-opponent means from compare output.
 
     This deliberately reuses the exact game score used by knob_es.  We weight
@@ -52,7 +91,7 @@ def _fitness_from_games(gdir, candidates, mode):
         seat = d["seat"]
         margin = d["rewards"][seat] - d["rewards"][1 - seat]
         rows[name].setdefault(opponent, []).append((1.0 if margin > 0 else .5 if margin == 0 else 0.0) + margin / 40000)
-    weights = _fitness_weights(mode)
+    weights = _fitness_panel(mode, generation)
     fit, breakdown = {}, {}
     for name in rows:
         missing = set(weights) - set(rows[name])
@@ -96,7 +135,6 @@ def main():
     a.mirror = os.path.abspath(a.mirror)
     if not os.path.isfile(a.mirror):
         ap.error(f"--mirror does not exist: {a.mirror}")
-    E.PANEL = panel(a.mirror)
     base_cfg = {"init": os.path.abspath(a.init), "mirror": a.mirror,
            "mirror_sha256": hashlib.sha256(open(a.mirror, "rb").read()).hexdigest(),
            "collect": a.collect, "pop": a.pop, "sigma0": a.sigma, "worlds": a.worlds}
@@ -127,8 +165,35 @@ def main():
             _atomic_json(transition_path, transition)
             old = {**old, "fitness_schedule": transition["schedule"]}
             _atomic_json(cp, old)
-        elif a.fitness_transition:
-            ap.error("run already has an immutable fitness schedule; refusing a second transition")
+        else:
+            schedule = old["fitness_schedule"]
+            if a.fitness_transition:
+                # Appending a phase is allowed only at a completed-generation
+                # boundary, and gets its own immutable audit record.  This keeps
+                # the CMA state/centre intact while making the objective change
+                # explicit and resume-safe.
+                try:
+                    start, mode = _parse_transition(a.fitness_transition)
+                except ValueError as e:
+                    ap.error(str(e))
+                hp0, sp0 = f"{a.out}/history.json", f"{a.out}/cma.pkl"
+                if not (os.path.exists(hp0) and os.path.exists(sp0)):
+                    ap.error("fitness transition requires existing history.json and cma.pkl")
+                hist0 = json.load(open(hp0))
+                if len(hist0) != start:
+                    ap.error(f"fitness transition start {start} must equal completed history length {len(hist0)}")
+                if start <= schedule[-1]["start_gen"]:
+                    ap.error("fitness transition must append after the current schedule")
+                transition_path = f"{a.out}/fitness_transition_{start:03d}.json"
+                if os.path.exists(transition_path):
+                    ap.error(f"fitness transition already recorded: {transition_path}")
+                prior_sha = _sha(cp)
+                transition = {"old_config_sha256": prior_sha, "history_sha256": _sha(hp0), "cma_state_sha256": _sha(sp0),
+                              "completed_generations": len(hist0), "schedule_before": schedule,
+                              "schedule_after": [*schedule, {"start_gen": start, "mode": mode}]}
+                _atomic_json(transition_path, transition)
+                old = {**old, "fitness_schedule": transition["schedule_after"]}
+                _atomic_json(cp, old)
         schedule = old["fitness_schedule"]
     else:
         if a.fitness_transition:
@@ -160,12 +225,14 @@ def main():
         X = es.ask(); centre = es.mean.copy()
         cands = [("c", centre)] + [(f"x{i}", np.asarray(x)) for i, x in enumerate(X)]
         gdir = f"{a.out}/gen_{g:03d}"; os.makedirs(gdir, exist_ok=True); t0 = time.time()
-        _uniform_fit, err = E.evaluate(cands, seeds, gdir, a.workers)
         mode = _mode_for_generation(schedule, g)
-        fit, breakdown = _fitness_from_games(gdir, cands, mode)
+        weights = _fitness_panel(mode, g)
+        E.PANEL = panel(a.mirror, mode, g)
+        _uniform_fit, err = E.evaluate(cands, seeds, gdir, a.workers)
+        fit, breakdown = _fitness_from_games(gdir, cands, mode, g)
         es.tell(X, [-fit[f"x{i}"] for i in range(len(X))])
         best = max(fit, key=fit.get)
-        rec = {"gen": g, "seeds": seeds, "fitness_mode": mode, "fit": fit, "fitness_breakdown": breakdown, "errors": err, "centre_fit": fit["c"], "best": best, "best_fit": fit[best],
+        rec = {"gen": g, "seeds": seeds, "fitness_mode": mode, "fitness_panel": {"weights": weights, "opponents": list(weights)}, "fit": fit, "fitness_breakdown": breakdown, "errors": err, "centre_fit": fit["c"], "best": best, "best_fit": fit[best],
                "sigma": float(es.sigma), "centre_params": E.to_params(centre), "best_params": E.to_params(dict(cands)[best]),
                "new_mean_params": E.to_params(es.mean), "secs": round(time.time() - t0)}
         hist.append(rec); _atomic_json(hp, hist)
