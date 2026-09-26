@@ -38,3 +38,11 @@ All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero m
 `demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
 
 Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+## Amendment — wheat source attribution / tape-safe repair 2026-09-26
+
+Claim: codex. User-directed continuation. Kaggle remains read-only; no submission.
+
+1. Re-execute the exact 39 T028 losses and all 41 available wins in official engine 1.32.7 with successful-action hooks. Per game/day record WHEAT plants, harvest tiles/units, EOD WHEAT tiles, quadrants, hands, WHEAT seed and product purchases/cost, and successful FEED. Do not infer these from final inventory.
+2. Explain the loss-vs-win contrast and whether opponents' WHEAT sales are production, land/labour, or avoided purchased feed.
+3. Implement only the smallest evidence-supported, tape-safe, **default-off** gene on the working es6 archive; prove genome-off action identity; run a fresh both-seat 2-world screen at <=8 workers. Only a positive valid screen may use T025's fresh full-panel gate against es6.
