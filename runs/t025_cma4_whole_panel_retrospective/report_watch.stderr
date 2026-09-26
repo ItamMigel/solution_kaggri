@@ -1,0 +1,4 @@
+  File "<stdin>", line 6
+    parts.append(f"{tag}: full 8-unit paired={d[\"point_score_gain\"]*100:+.3f}pp, one-sided lower={d[\"score_one_sided_lower_95\"]*100:+.3f}pp, pass={d[\"passes_whole_panel_ni\"]}")
+                                                 ^
+SyntaxError: unexpected character after line continuation character
