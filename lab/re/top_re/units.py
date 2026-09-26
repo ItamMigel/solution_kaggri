@@ -25,6 +25,9 @@ LOCKED tile is legal; only tile operations require an owned tile.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
+import math
+from pathlib import Path
 from typing import Any, Iterable, Mapping, Optional
 
 
@@ -58,6 +61,52 @@ DEFAULT_PRIORITY = {
     "FETCH": 240,
     "DROP": 80,
 }
+
+# These are the MMPQ conditional-logit coefficients fitted by
+# ``lab/re/task_logit.py``.  A bundled Kaggle agent has no adjacent JSON file,
+# so this literal is the authoritative fallback; locally we also accept the
+# fitted task_weights.json to make a refit immediately usable.
+_WEIGHT_NAMES = (
+    "WATER", "HARVEST_P", "HARVEST_A", "FEED", "CARE",
+    "COLLECT_FERTILIZER", "PLANT", "DIG", "BUILD", "PLACE",
+    "FERTILIZE", "dist", "log1p_dist", "unwatered", "unfed", "yield",
+    "hour", "feed_needs_fetch", "water_x_hour",
+)
+_WEIGHT_VALUES = (
+    0.29830579931433887, 0.0671040946792054, -0.17265410499451764,
+    0.10546262000740361, 0.11983580041589408, 0.3800343153566766,
+    0.2514896113763875, 0.013690389748303099, -0.1460021406695152,
+    -0.031605376482775754, -0.8856610087513993, -1.1461936814955174,
+    -0.43259014730261003, 0.19916721739468857, 0.04805598104353318,
+    0.07498254425595476, 1.7664124801432992e-18, 0.10546262000740361,
+    0.1345397106986807,
+)
+
+
+def _load_weights() -> dict[str, float]:
+    """Load a local refit when available, with bundle-safe fixed fallback."""
+    fallback = dict(zip(_WEIGHT_NAMES, _WEIGHT_VALUES))
+    try:
+        path = Path(__file__).with_name("task_weights.json")
+        data = json.loads(path.read_text())
+        names, values = data.get("names"), data.get("w")
+        if isinstance(names, list) and isinstance(values, list) and len(names) == len(values):
+            parsed = {str(name): float(value) for name, value in zip(names, values)}
+            if set(_WEIGHT_NAMES) <= set(parsed):
+                return parsed
+    except (OSError, TypeError, ValueError, json.JSONDecodeError, NameError):
+        # ``__file__`` is absent inside the one-file bundle.  The fallback is
+        # intentional and gives the bundle precisely the checked-in fit.
+        pass
+    return fallback
+
+
+TASK_WEIGHTS = _load_weights()
+# The learned distance coefficient becomes an explicit movement cost.  Scaling
+# both terms leaves the fitted trade-offs unchanged while avoiding tiny floats.
+_UTILITY_SCALE = 10.0
+_MOVE_COST = abs(TASK_WEIGHTS["dist"]) * _UTILITY_SCALE
+_DUMMY_COST = 200.0
 
 
 @dataclass(frozen=True)
@@ -366,9 +415,19 @@ def _logistics_tasks(world: _World, plan: Any, tasks: list[Task]) -> list[Task]:
         missing = max(0, _needs_item(tasks, item) - carried.get(item, 0))
         stock = int(world.shed.get(item, 0) or 0)
         if missing and stock:
-            amount = 1 if item in ANIMALS else min(load, missing, stock)
-            result.append(Task("FETCH", pickup_target, item, amount,
-                               _priority(plan, "FETCH", DEFAULT_PRIORITY["FETCH"]), "fetch"))
+            # Several runners may be sent to the shed in the same turn.  For
+            # WHEAT each load corresponds to the unfed animals on that
+            # runner's prospective route, rather than a single-token pickup.
+            remaining = min(missing, stock)
+            batch = 1 if item in ANIMALS else load
+            n = 0
+            while remaining:
+                amount = min(batch, remaining)
+                result.append(Task("FETCH", pickup_target, item, amount,
+                                   _priority(plan, "FETCH", DEFAULT_PRIORITY["FETCH"]),
+                                   f"fetch-{item}-{n}"))
+                remaining -= amount
+                n += 1
     # Cargo delivery is deliberately lower-priority than same-day service.
     for actor, inv in enumerate(world.inventories):
         if any(int(v) > 0 for v in inv.values()) and sum(int(v) for v in inv.values()) <= world.room():
@@ -384,12 +443,109 @@ def tasks(obs: Mapping[str, Any], plan: Any) -> list[Task]:
     return _manual_tasks(plan, obs) + _generated_tasks(world, plan)
 
 
-def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
-    """Greedily reserve a legal current task and return one command per unit.
+def _logit_op(task: Task, tile: Any) -> str:
+    if task.op == "HARVEST":
+        return "HARVEST_A" if isinstance(tile, Mapping) and tile.get("animal") else "HARVEST_P"
+    if task.op in {"BUILD_COOP", "BUILD_PASTURE"}:
+        return "BUILD"
+    return task.op
 
-    A unit may travel toward a task whose endpoint is legal *now*.  Once it
-    arrives, the endpoint is rechecked before emitting the operation; observation
-    drift consequently turns into PASS rather than an invalid action.
+
+def _task_utility(world: _World, actor: int, task: Task) -> float:
+    """Conditional-logit utility for a legal endpoint, excluding distance.
+
+    Distance belongs to the matching cost directly.  FETCH/DROP do not occur in
+    the replay fit, so FETCH borrows the fitted FEED/fetch signal and DROP is a
+    small delivery preference; both stay subordinate to real productive work.
+    """
+    tile = world.tile(task.target)
+    op = _logit_op(task, tile)
+    hour = int(world.obs.get("hour", int(world.obs.get("step", 0)) % 24) or 0) / 23.0
+    inv = world.inventories[actor]
+    features: dict[str, float] = {name: 0.0 for name in _WEIGHT_NAMES}
+    if op in features:
+        features[op] = 1.0
+    if isinstance(tile, Mapping):
+        if task.op == "WATER":
+            features["unwatered"] = float(tile.get("consecutive_unwatered", 0) or 0)
+        if task.op == "FEED":
+            features["unfed"] = float(tile.get("consecutive_unfed", 0) or 0)
+        if task.op == "HARVEST":
+            features["yield"] = float(tile.get("yield_units", 0) or 0)
+    features["hour"] = hour
+    features["water_x_hour"] = hour if task.op == "WATER" else 0.0
+    if task.op == "FETCH" and task.item == "WHEAT":
+        features["FEED"] = 1.0
+        features["feed_needs_fetch"] = 1.0
+    if task.op == "DROP":
+        features["HARVEST_P"] = 0.10
+    utility = sum(TASK_WEIGHTS[name] * value for name, value in features.items()
+                  if name not in {"dist", "log1p_dist"})
+    # A plan-provided priority is only a deterministic tie-breaker, never a
+    # substitute for the replay-estimated valuation.
+    return _UTILITY_SCALE * utility + task.priority * 1e-4
+
+
+def _hungarian(cost: list[list[float]]) -> list[int]:
+    """Minimum-cost assignment for rows <= columns, using stdlib only.
+
+    Returns one distinct column for every row.  The implementation is the
+    classic O(n^2*m) potentials algorithm and deliberately supports padded
+    dummy columns, so an idle worker is a valid outcome.
+    """
+    if not cost:
+        return []
+    n, m = len(cost), len(cost[0])
+    if not n <= m or any(len(row) != m for row in cost):
+        raise ValueError("Hungarian matrix must be rectangular with rows <= columns")
+    u, v = [0.0] * (n + 1), [0.0] * (m + 1)
+    p, way = [0] * (m + 1), [0] * (m + 1)
+    for i in range(1, n + 1):
+        p[0], j0 = i, 0
+        minv, used = [math.inf] * (m + 1), [False] * (m + 1)
+        while True:
+            used[j0] = True
+            i0, delta, j1 = p[j0], math.inf, 0
+            for j in range(1, m + 1):
+                if not used[j]:
+                    cur = cost[i0 - 1][j - 1] - u[i0] - v[j]
+                    if cur < minv[j]:
+                        minv[j], way[j] = cur, j0
+                    if minv[j] < delta:
+                        delta, j1 = minv[j], j
+            for j in range(m + 1):
+                if used[j]:
+                    u[p[j]] += delta
+                    v[j] -= delta
+                else:
+                    minv[j] -= delta
+            j0 = j1
+            if p[j0] == 0:
+                break
+        while True:
+            j1, p[j0] = way[j0], p[way[j0]]
+            j0 = j1
+            if j0 == 0:
+                break
+    assignment = [-1] * n
+    for j in range(1, m + 1):
+        if p[j]:
+            assignment[p[j] - 1] = j - 1
+    return assignment
+
+
+def _reachable(world: _World, actor: int, task: Task) -> bool:
+    """A move is allowed only toward an endpoint executable with current cargo."""
+    return world.in_bounds(task.target) and _operation_legal(world, actor, task)
+
+
+def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
+    """Assign legal work globally, then return one action for every unit.
+
+    The assignment minimizes Manhattan movement cost minus the fitted task
+    utility.  A unit therefore moves only toward a presently executable
+    endpoint; FETCH tasks make cargo prerequisites explicit and avoid promising
+    an illegal FEED/PLACE operation to an empty-handed worker.
     """
     try:
         world = _World(obs)
@@ -400,34 +556,52 @@ def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
 
     candidates = tasks(obs, plan)
     candidates.extend(_logistics_tasks(world, plan, candidates))
-    # One logical task / endpoint per tick.  CARE and FEED are intentionally
-    # distinct: the engine permits them both on the same animal in one tick.
-    claimed: set[tuple[str, tuple[int, int], Optional[str]]] = set()
+    # Equivalent logical requests should not compete for columns.  Separate
+    # FETCH batches intentionally remain distinct, as several hands can load
+    # wheat at different shed-access tiles in the same turn.
+    deduped: list[Task] = []
+    seen: set[tuple[Any, ...]] = set()
+    for task in candidates:
+        key = task.key if task.op == "FETCH" else (task.op, task.target, task.item)
+        if key not in seen:
+            seen.add(key)
+            deduped.append(task)
+    candidates = deduped
     commands: list[list[Any]] = [["PASS"] for _ in world.positions]
-    unused = set(range(len(world.positions)))
-
-    ranked = sorted(enumerate(candidates), key=lambda pair: (
-        -pair[1].priority, pair[1].target[1], pair[1].target[0], pair[1].op, pair[0]))
-    for _, task in ranked:
-        claim = (task.op, task.target, task.item)
-        if claim in claimed:
+    if not candidates:
+        return commands[0], commands[1:]
+    # Pad with one dummy job per worker.  Its finite cost is a fallback for an
+    # idle worker, but any reachable farm task inside the 10x10 board wins.
+    matrix: list[list[float]] = []
+    for actor in range(len(world.positions)):
+        row: list[float] = []
+        for task in candidates:
+            if _reachable(world, actor, task):
+                distance = _distance(_position(world, actor), task.target)
+                row.append(distance * _MOVE_COST - _task_utility(world, actor, task))
+            else:
+                row.append(1e9)
+        row.extend([_DUMMY_COST] * len(world.positions))
+        matrix.append(row)
+    assignment = _hungarian(matrix)
+    claimed: set[tuple[Any, ...]] = set()
+    for actor, column in enumerate(assignment):
+        if not (0 <= column < len(candidates)):
             continue
-        eligible = [actor for actor in unused if _operation_legal(world, actor, task)]
-        if not eligible:
+        task = candidates[column]
+        claim = task.key if task.op == "FETCH" else (task.op, task.target, task.item)
+        # Reservations are rechecked in deterministic worker order.  This is
+        # needed for a plan whose requested seed count exceeds current stock.
+        if claim in claimed or not _operation_legal(world, actor, task):
             continue
-        actor = min(eligible, key=lambda i: (_distance(_position(world, i), task.target), i))
         command = _command(world, actor, task)
         if command == ["PASS"]:
             continue
-        commands[actor] = command
-        unused.remove(actor)
-        claimed.add(claim)
+        commands[actor], claimed = command, claimed | {claim}
         if task.op == "PLANT" and task.item:
             world.reserved_seed[task.item] = world.reserved_seed.get(task.item, 0) + 1
         if task.op == "FETCH" and task.item:
             world.reserved_pickup[task.item] = world.reserved_pickup.get(task.item, 0) + task.quantity
-        if not unused:
-            break
 
     return commands[0], commands[1:]
 
@@ -436,4 +610,3 @@ def action(obs: Mapping[str, Any], plan: Any) -> dict[str, Any]:
     """Convenience adapter for the Kaggle action shape (without market orders)."""
     farmer, hands = act(obs, plan)
     return {"farmer": farmer, "hands": hands}
-
