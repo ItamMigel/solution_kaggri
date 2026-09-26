@@ -1081,3 +1081,1888 @@ index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c
 
 codex
 Первый устойчивый профиль Boey готов: это не «только клубника», а календарный crop-rotation с ранним стадом — d0 7 MELON + 12 WHEAT, с d3–6 наращивание STRAWBERRY, затем WHEAT и поздний CARROT; COOP/2 GOOSE уже к d3. Сейчас фиксирую цифры held-out и перехожу к M&M&P&Q, как только его gzip закроется.
+2026-09-26T18:49:51.396682Z ERROR codex_core::tools::router: error=apply_patch verification failed: invalid hunk at line 41, 'd19, 74/86 on d20, and 83/86 on d23.  Shop lists are not yet a reliable conditioning variable:' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+2026-09-26T18:50:31.862184Z ERROR codex_core::tools::router: error=apply_patch verification failed: invalid hunk at line 56, 'd0--3 and the late game is a sheep/pasture build, with geese capped at a small early 2.' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..b5e1643d9e114f71ba54605ad1b606a5af0b9fa4
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -131,3 +131,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/research/re_production.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..d85c223ccb22b9a035f5b48edf11e63a55aa62bf
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +132,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0db407a2598e3b1735748767c8ce9cffd388958e
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,60 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++Pending completed decision log.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc '/workspace/shared/bin/say claude "T036 finding #1 (Boey; 108 complete trajectories): production skeleton is d0 7 MELON+12 WHEAT; d3–6 STRAWBERRY expansion (all 86 dev re-add S on d6); WHEAT refill from d8; late CARROT rotation d19–27. Herd is 3 cow/2 sheep d1, 2 goose+2 coop d3, 10 sheep d17. Held-out teacher-forced calendar-mode exact op counts: PLANT 80.4%, WATER 62.8%, HARVEST 73.0%, CARE 71.1%, FEED 70.5%, FERTILIZE 84.2%. Full method/limits in shared research/re_production.md; exact target pathing remains next."' in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..d85c223ccb22b9a035f5b48edf11e63a55aa62bf
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +132,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0db407a2598e3b1735748767c8ce9cffd388958e
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,60 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++Pending completed decision log.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "find /workspace/shared/replays/top10v4 -maxdepth 2 -type d -printf '%f\\n' | sort; find /workspace/shared/replays/top10v4 -type f | rg -i 'mmpq|dsm|fuxi' | head -30; find /workspace/shared/research/re -maxdepth 1 -type f -printf '%f %s\\n' | sort; ps -eo pid,etime,cmd | rg 'declog.py'" in /workspace/wt/codex
+ succeeded in 0ms:
+azat
+boey
+decem
+dsm
+fish
+fourthq
+majkel
+mgoose
+mmpq
+seek
+top10v4
+/workspace/shared/replays/top10v4/mmpq/episode-113607941-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113647385-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113609135-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113647744-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113603470-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113646407-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113603096-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113645098-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113600733-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113643980-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113601925-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113642618-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113599554-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113641993-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113598392-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113641443-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113642006-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113640754-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113637101-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113640274-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113634828-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113639078-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113626620-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113637893-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113626747-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113636704-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113619312-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113635390-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113619322-replay.json.gz
+/workspace/shared/replays/top10v4/mmpq/episode-113634326-replay.json.gz
+boey.jsonl.gz 5462893
+decem.jsonl.gz 5704225
+dsm.jsonl.gz 4825292
+fourthq.jsonl.gz 7032859
+mmpq.jsonl.gz 6258308
+trades_boey.jsonl.gz 2692679
+trades_dsm.jsonl.gz 909520
+trades_mmpq.jsonl.gz 2050271
+trades_ours.jsonl.gz 350093
+ 986930       06:07 codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check -C /workspace/wt/codex -o /workspace/shared/runs/codex_20260926T184508.final.md You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.  FULL-FOCUS task T036 (human: 'go all-in until we understand the top agents' decision logic and can beat or reconstruct them'; never submit; ≤8 workers; deadline 2026-09-30). Read research/re_plan.md. I built lab/re/declog.py (in /workspace/wt/claude, branch lab-claude) and am generating research/re/<team>.jsonl.gz decision logs for boey, mmpq, dsm, fourthq, decem, mgoose, fuxi, joseph, istinetz, ours_es67. YOUR part = PRODUCTION logic of the top teams (start with Boey #1, M&M&P&Q, DSM, then fuxi): (1) planting schedule/crop mix as a function of unlocked shops & day (what they plant where and when, re-plant after harvest?, fertilize policy), (2) unit allocation per turn (how many units water/harvest/care/feed/collect/move; priority order), (3) herd build-up timeline and structures. Express as explicit rules; measure agreement on held-out episodes (teacher-forced: given state, does the rule predict their action?). Write research/re_production.md incrementally; bin/say claude at each finding. My part = market+macro rules; we'll then assemble a reconstructed 'top-RE' agent as a local strong opponent and mine counters.
+ 990735       01:21 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990736       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990737       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990738       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990739       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990740       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 990741       01:20 /workspace/solution_kaggri/.venv/bin/python declog.py --team DECEM --glob /workspace/shared/replays/top10v4/*/*.gz --out /workspace/shared/research/re/decem.jsonl.gz --workers 6
+ 991517       00:00 /bin/bash -c find /workspace/shared/replays/top10v4 -maxdepth 2 -type d -printf '%f\n' | sort; find /workspace/shared/replays/top10v4 -type f | rg -i 'mmpq|dsm|fuxi' | head -30; find /workspace/shared/research/re -maxdepth 1 -type f -printf '%f %s\n' | sort; ps -eo pid,etime,cmd | rg 'declog.py'
+ 991526       00:00 rg declog.py
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..d85c223ccb22b9a035f5b48edf11e63a55aa62bf
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +132,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0db407a2598e3b1735748767c8ce9cffd388958e
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,60 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++Pending completed decision log.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics,os
+team='mmpq'; P=f'/workspace/shared/research/re/{team}.jsonl.gz'
+with gzip.open(P,'rt') as f:R=[json.loads(x) for x in f]
+E=[];cur=[]
+for r in R:
+ if r['step']==0 and cur:E.append(cur);cur=[]
+ cur.append(r)
+if cur:E.append(cur)
+print(team,'rows',len(R),'trajectories',len(E),collections.Counter(map(len,E)))
+C=['STRAWBERRY','CARROT','MELON','TOMATO','WHEAT']; O=['PLANT','WATER','HARVEST','CARE','FEED','FERTILIZE','COLLECT_FERTILIZER']
+n=int(len(E)*.8); tr=E[:n];va=E[n:];D=collections.defaultdict(lambda:collections.defaultdict(collections.Counter))
+for ep in tr:
+ for r in ep:
+  for o in O:D[(r['day'],r['hour'])][o][r['ops'].get(o,0)]+=1
+M={k:{o:x[o].most_common(1)[0][0] for o in O} for k,x in D.items()}
+print('heldout n',len(va),'agreement exact/pres/mae')
+for o in O:
+ y=[r['ops'].get(o,0) for ep in va for r in ep];p=[M[(r['day'],r['hour'])][o] for ep in va for r in ep]
+ print(o,round(sum(a==b for a,b in zip(y,p))/len(y),3),round(sum((a>0)==(b>0) for a,b in zip(y,p))/len(y),3),round(sum(abs(a-b) for a,b in zip(y,p))/len(y),3))
+print('daily medians: d crop S/C/M/T/W herd C/S/G structs P/CO fert')
+for d in range(30):
+ rr=[r for ep in tr for r in ep if r['day']==d and r['hour']==0]
+ def md(fn):return int(statistics.median([fn(r) for r in rr]))
+ cs='/'.join(map(str,[md(lambda r,c=c:r['me']['tiles'].get('plant_'+c,0)) for c in C])); hs='/'.join(map(str,[md(lambda r,a=a:r['me']['animals'].get(a,0)) for a in ['COW','SHEEP','GOOSE']]))
+ print(d,cs,hs,f'{md(lambda r:r[\"me\"][\"structs\"].get(\"PASTURE\",0))}/{md(lambda r:r[\"me\"][\"structs\"].get(\"COOP\",0))}',md(lambda r:r['me']['fert_tiles']))
+print('plant addition event coverage, median positive among event eps')
+for d in range(29):
+ out=[]
+ for c in C:
+  vals=[]
+  for ep in tr:
+   z=sum(max(0,b['me']['tiles'].get('plant_'+c,0)-a['me']['tiles'].get('plant_'+c,0)) for a,b in zip(ep,ep[1:]) if a['day']==d)
+   if z:vals.append(z)
+  if vals:out.append(f'{c[:3]} {len(vals)}/{n} med{int(statistics.median(vals))}')
+ if out:print(d,'; '.join(out))
+allr=[r for ep in E for r in ep]
+for tag,pr in [('herd>=10',lambda r:sum(r['me']['animals'].values())>=10),('herd1-9',lambda r:0<sum(r['me']['animals'].values())<10)]:
+ x=[r for r in allr if pr(r)];print(tag,'n',len(x),' '.join(f'{o}={sum(r[\"ops\"].get(o,0) for r in x)/len(x):.2f}'for o in O))
+PY" in /workspace/wt/codex
+ succeeded in 13435ms:
+mmpq rows 96346 trajectories 134 Counter({719: 134})
+heldout n 27 agreement exact/pres/mae
+PLANT 0.746 0.782 0.314
+WATER 0.467 0.843 0.767
+HARVEST 0.61 0.758 0.514
+CARE 0.64 0.717 0.45
+FEED 0.655 0.731 0.425
+FERTILIZE 0.771 0.793 0.285
+COLLECT_FERTILIZER 0.628 0.739 0.48
+daily medians: d crop S/C/M/T/W herd C/S/G structs P/CO fert
+0 0/0/0/0/0 0/0/0 0/0 0
+1 0/0/6/0/10 2/3/0 5/0 0
+2 0/0/10/0/10 2/3/0 5/0 0
+3 0/0/10/0/9 3/3/0 6/0 0
+4 2/0/10/0/5 4/3/0 7/0 0
+5 6/0/10/0/1 5/3/0 8/0 0
+6 7/0/10/0/0 5/3/0 8/0 0
+7 22/0/12/0/1 6/3/2 10/2 0
+8 23/0/12/0/2 7/3/3 10/3 0
+9 23/0/12/0/16 7/3/5 11/5 0
+10 24/0/12/0/18 7/3/7 13/7 0
+11 25/0/6/0/23 7/3/7 13/7 6
+12 25/0/2/0/27 7/3/7 13/7 8
+13 25/0/2/0/24 7/3/7 13/7 10
+14 26/0/2/0/23 7/3/7 13/7 14
+15 26/0/2/0/23 7/3/7 13/7 16
+16 27/0/2/0/19 7/5/7 14/7 28
+17 27/0/0/0/20 7/5/7 14/7 31
+18 27/0/0/0/19 7/5/7 14/7 30
+19 26/0/0/0/20 7/5/7 14/7 31
+20 24/0/0/0/21 6/5/7 14/7 30
+21 20/0/0/0/25 6/5/7 13/7 27
+22 18/3/0/0/26 6/5/7 13/7 30
+23 7/5/0/0/34 6/5/7 13/7 22
+24 6/7/0/0/36 6/5/7 13/7 21
+25 4/10/0/0/33 6/5/7 12/7 24
+26 3/14/0/0/33 6/5/7 12/7 24
+27 3/17/0/0/30 6/4/7 11/7 24
+28 3/16/0/0/25 6/3/7 11/7 23
+29 3/4/0/0/13 5/0/6 11/7 16
+plant addition event coverage, median positive among event eps
+0 MEL 107/107 med6; WHE 107/107 med10
+1 MEL 107/107 med4
+2 STR 42/107 med1; MEL 25/107 med1; WHE 106/107 med2
+3 STR 100/107 med2; MEL 6/107 med1; WHE 34/107 med1
+4 STR 98/107 med3; MEL 9/107 med1; WHE 7/107 med1
+5 STR 81/107 med1; WHE 1/107 med1
+6 STR 107/107 med16; MEL 103/107 med2; WHE 73/107 med2
+7 STR 26/107 med1; MEL 8/107 med1; WHE 52/107 med2
+8 STR 37/107 med2; CAR 1/107 med12; MEL 19/107 med1; WHE 107/107 med14
+9 STR 51/107 med3; CAR 8/107 med5; MEL 1/107 med1; WHE 93/107 med5
+10 STR 15/107 med1; CAR 7/107 med6; WHE 107/107 med6
+11 STR 14/107 med1; CAR 18/107 med3; WHE 106/107 med7
+12 STR 44/107 med3; CAR 20/107 med3; TOM 11/107 med1; WHE 105/107 med4
+13 STR 36/107 med1; CAR 15/107 med4; TOM 16/107 med1; WHE 106/107 med5
+14 STR 12/107 med1; CAR 21/107 med3; TOM 14/107 med3; WHE 104/107 med5
+15 STR 46/107 med3; CAR 20/107 med3; TOM 20/107 med2; WHE 100/107 med4
+16 STR 19/107 med1; CAR 30/107 med3; TOM 24/107 med1; WHE 97/107 med4
+17 STR 5/107 med1; CAR 35/107 med5; TOM 6/107 med2; WHE 102/107 med5
+18 STR 1/107 med1; CAR 41/107 med3; TOM 7/107 med1; WHE 104/107 med4
+19 CAR 46/107 med5; TOM 1/107 med4; WHE 104/107 med6
+20 CAR 49/107 med5; TOM 1/107 med1; WHE 104/107 med7
+21 CAR 54/107 med4; WHE 103/107 med6
+22 CAR 57/107 med4; WHE 107/107 med12
+23 CAR 73/107 med5; WHE 107/107 med8
+24 CAR 85/107 med5; WHE 105/107 med6
+25 CAR 88/107 med5; WHE 104/107 med6
+26 CAR 88/107 med6; WHE 103/107 med6
+27 CAR 58/107 med3; WHE 101/107 med3
+28 WHE 1/107 med1
+herd>=10 n 75654 PLANT=0.41 WATER=1.80 HARVEST=0.89 CARE=0.62 FEED=0.62 FERTILIZE=0.39 COLLECT_FERTILIZER=0.76
+herd1-9 n 20156 PLANT=0.22 WATER=0.57 HARVEST=0.12 CARE=0.28 FEED=0.24 FERTILIZE=0.00 COLLECT_FERTILIZER=0.25
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..d85c223ccb22b9a035f5b48edf11e63a55aa62bf
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +132,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0db407a2598e3b1735748767c8ce9cffd388958e
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,60 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++Pending completed decision log.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+codex
+M&M&P&Q уже резко отличается от Boey по animal mix: к d7 медиана 6 COW/3 SHEEP/2 GOOSE, к d10 — 7/3/7, с 7 COOP; затем держит 7 гусей и переводит клубнику в морковь d22+. Добавляю это как второй измеренный профиль.
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/research/re_production.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..c7f24f0648db084e2b3f34fd078fc0c548a54c71
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,8 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +133,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..1b0c2a198f89d71b3fce87dd41c40c81378c1cb8
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,88 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc '/workspace/shared/bin/say claude "T036 finding #2 (M&M&P&Q; 134 trajectories): same crop calendar but huge animal divergence: d1=2 cow/3 sheep; d7=6/3/2; d10=7 COW/3 SHEEP/7 GOOSE with 13 pasture/7 coop, held to d19. Fert starts d11, 28–31 fertile tiles d16–20. Crops: d0 6 MELON+10 WHEAT; d6 STRAWBERRY fill (all 107 dev, median +16); d22–27 strawberry→carrot, WHEAT remains high. Held-out exact ops P/W/H/C/F/Fert = 74.6/46.7/61.0/64.0/65.5/77.1%. Details shared research/re_production.md."' in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..c7f24f0648db084e2b3f34fd078fc0c548a54c71
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,8 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +133,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..1b0c2a198f89d71b3fce87dd41c40c81378c1cb8
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,88 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics
+team='dsm'; P=f'/workspace/shared/research/re/{team}.jsonl.gz'
+with gzip.open(P,'rt') as f:R=[json.loads(x) for x in f]
+E=[];cur=[]
+for r in R:
+ if r['step']==0 and cur:E.append(cur);cur=[]
+ cur.append(r)
+if cur:E.append(cur)
+print(team,'rows',len(R),'trajectories',len(E),collections.Counter(map(len,E)))
+C=['STRAWBERRY','CARROT','MELON','TOMATO','WHEAT']; O=['PLANT','WATER','HARVEST','CARE','FEED','FERTILIZE','COLLECT_FERTILIZER']
+n=int(len(E)*.8);tr=E[:n];va=E[n:];D=collections.defaultdict(lambda:collections.defaultdict(collections.Counter))
+for ep in tr:
+ for r in ep:
+  for o in O:D[(r['day'],r['hour'])][o][r['ops'].get(o,0)]+=1
+M={k:{o:x[o].most_common(1)[0][0]for o in O}for k,x in D.items()}
+print('heldout',len(va),'exact/pres/mae')
+for o in O:
+ y=[r['ops'].get(o,0) for ep in va for r in ep];p=[M[(r['day'],r['hour'])][o]for ep in va for r in ep]
+ print(o,round(sum(a==b for a,b in zip(y,p))/len(y),3),round(sum((a>0)==(b>0)for a,b in zip(y,p))/len(y),3),round(sum(abs(a-b)for a,b in zip(y,p))/len(y),3))
+print('daily d crop(S/C/M/T/W) herd(C/S/G) P/CO fert')
+for d in range(30):
+ rr=[r for ep in tr for r in ep if r['day']==d and r['hour']==0]
+ def md(fn):return int(statistics.median([fn(r)for r in rr]))
+ cs='/'.join(map(str,[md(lambda r,c=c:r['me']['tiles'].get('plant_'+c,0))for c in C]));hs='/'.join(map(str,[md(lambda r,a=a:r['me']['animals'].get(a,0))for a in ['COW','SHEEP','GOOSE']]))
+ print(d,cs,hs,f'{md(lambda r:r[\"me\"][\"structs\"].get(\"PASTURE\",0))}/{md(lambda r:r[\"me\"][\"structs\"].get(\"COOP\",0))}',md(lambda r:r['me']['fert_tiles']))
+print('event coverage')
+for d in range(29):
+ out=[]
+ for c in C:
+  vals=[]
+  for ep in tr:
+   z=sum(max(0,b['me']['tiles'].get('plant_'+c,0)-a['me']['tiles'].get('plant_'+c,0)) for a,b in zip(ep,ep[1:])if a['day']==d)
+   if z:vals.append(z)
+  if vals:out.append(f'{c[:3]} {len(vals)}/{n} med{int(statistics.median(vals))}')
+ if out:print(d,'; '.join(out))
+allr=[r for ep in E for r in ep]
+for tag,pr in [('herd>=10',lambda r:sum(r['me']['animals'].values())>=10),('herd1-9',lambda r:0<sum(r['me']['animals'].values())<10)]:
+ x=[r for r in allr if pr(r)];print(tag,'n',len(x),' '.join(f'{o}={sum(r[\"ops\"].get(o,0) for r in x)/len(x):.2f}'for o in O))
+PY" in /workspace/wt/codex
+ succeeded in 7235ms:
+dsm rows 74057 trajectories 103 Counter({719: 103})
+heldout 21 exact/pres/mae
+PLANT 0.762 0.798 0.29
+WATER 0.523 0.887 0.692
+HARVEST 0.63 0.788 0.485
+CARE 0.687 0.773 0.371
+FEED 0.69 0.773 0.365
+FERTILIZE 0.776 0.797 0.282
+COLLECT_FERTILIZER 0.673 0.779 0.409
+daily d crop(S/C/M/T/W) herd(C/S/G) P/CO fert
+0 0/0/0/0/0 0/0/0 0/0 0
+1 0/0/6/0/12 2/3/0 5/0 0
+2 0/0/8/0/12 2/3/0 5/0 0
+3 2/0/8/0/9 3/3/0 6/0 0
+4 6/0/8/0/4 4/3/0 7/0 0
+5 8/0/8/0/1 5/3/0 8/0 0
+6 8/0/8/0/0 5/3/0 8/0 0
+7 20/0/12/0/3 6/3/0 12/0 0
+8 20/0/12/0/4 6/3/1 12/1 0
+9 20/0/12/0/20 6/3/4 12/4 0
+10 21/0/12/0/21 7/3/6 14/6 0
+11 21/0/6/0/26 7/3/6 14/6 5
+12 21/0/4/0/28 7/3/6 14/6 9
+13 23/0/4/0/24 7/7/6 14/6 11
+14 27/0/4/0/19 7/7/6 14/6 16
+15 27/0/4/0/19 7/7/6 14/6 15
+16 28/0/4/0/17 7/7/6 15/6 24
+17 28/1/0/0/21 7/7/6 15/6 28
+18 28/2/0/0/20 7/7/6 14/6 27
+19 26/4/0/0/20 7/7/6 15/6 28
+20 23/7/0/0/22 7/7/6 14/6 27
+21 21/9/0/0/23 7/7/6 14/6 24
+22 20/10/0/0/23 7/7/6 14/6 28
+23 11/13/0/0/29 7/5/6 13/6 23
+24 10/14/0/0/31 7/5/6 13/6 21
+25 9/15/0/0/32 6/5/6 13/6 27
+26 8/18/0/0/30 6/4/6 13/6 25
+27 7/20/0/0/27 6/4/6 11/6 24
+28 7/16/0/0/23 6/4/6 11/6 25
+29 7/3/0/0/13 5/0/6 11/6 16
+event coverage
+0 MEL 82/82 med6; WHE 82/82 med12
+1 MEL 82/82 med2; WHE 7/82 med1
+2 STR 82/82 med2; WHE 81/82 med2
+3 STR 82/82 med4; WHE 24/82 med1
+4 STR 61/82 med3; WHE 12/82 med1
+5 STR 32/82 med1
+6 STR 81/82 med12; CAR 3/82 med6; MEL 81/82 med4; WHE 65/82 med3
+7 STR 2/82 med1; CAR 1/82 med1; MEL 3/82 med1; WHE 53/82 med2
+8 STR 15/82 med2; CAR 4/82 med4; WHE 82/82 med15
+9 STR 42/82 med3; CAR 6/82 med4; TOM 1/82 med4; WHE 75/82 med4
+10 STR 1/82 med3; CAR 12/82 med3; TOM 1/82 med2; WHE 82/82 med6
+11 STR 7/82 med1; CAR 18/82 med5; TOM 1/82 med2; WHE 82/82 med6
+12 STR 61/82 med2; CAR 22/82 med3; WHE 79/82 med4
+13 STR 82/82 med3; CAR 29/82 med3; WHE 76/82 med3
+14 STR 13/82 med1; CAR 26/82 med3; WHE 82/82 med5
+15 STR 45/82 med3; CAR 32/82 med3; WHE 75/82 med4
+16 STR 2/82 med1; CAR 35/82 med2; TOM 3/82 med5; WHE 80/82 med6
+17 CAR 47/82 med3; TOM 3/82 med4; WHE 81/82 med5
+18 CAR 49/82 med4; TOM 1/82 med4; WHE 81/82 med4
+19 CAR 53/82 med4; TOM 1/82 med1; WHE 82/82 med6
+20 CAR 56/82 med4; WHE 81/82 med6
+21 CAR 64/82 med4; WHE 82/82 med5
+22 CAR 70/82 med4; WHE 82/82 med9
+23 CAR 71/82 med4; WHE 82/82 med7
+24 CAR 75/82 med4; WHE 81/82 med6
+25 CAR 75/82 med7; WHE 82/82 med5
+26 CAR 73/82 med6; WHE 82/82 med5
+27 CAR 46/82 med2; WHE 81/82 med3
+herd>=10 n 58553 PLANT=0.41 WATER=1.76 HARVEST=0.90 CARE=0.64 FEED=0.65 FERTILIZE=0.39 COLLECT_FERTILIZER=0.78
+herd1-9 n 15092 PLANT=0.22 WATER=0.58 HARVEST=0.12 CARE=0.26 FEED=0.23 FERTILIZE=0.00 COLLECT_FERTILIZER=0.24
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..c7f24f0648db084e2b3f34fd078fc0c548a54c71
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,8 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +133,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..1b0c2a198f89d71b3fce87dd41c40c81378c1cb8
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,88 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++Pending completed decision log.
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+codex
+DSM подтверждает общий «топовый» production family, но с иной фазой: d2 уже первая клубника, d7 — 6 коров, d8–10 — 1→6 гусей, d13 — скачок овец до 7. В late game он сохраняет больше клубники, медленнее переводя её в морковь, чем M&M&P&Q.
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/research/re_production.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..2e08cb7ef55628f46c7835a1608c97852b952a4a
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +134,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b537fcefd86a5c48731afa4c6a5bc2581a2a9593
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,114 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++103 full trajectories; development 1–82, held-out 83–103. DSM is a close production-family relative of M&M&P&Q, with an earlier first strawberry sowing, one fewer goose, and a d13 sheep jump.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 12 WHEAT**; finish MELON d1 and start STRAWBERRY d2 | d2 0/0/8/0/12 |
++| d3–6 | early STRAWBERRY build, d6 second S+MELON fill | d7 20/0/12/0/3 |
++| d8–16 | replant WHEAT every date; build STRAWBERRY to 28, with only small CARROT/TOMATO probes | d14 27/0/4/0/19; d16 28/0/4/0/17 |
++| d17–22 | steady STRAWBERRY→CARROT conversion while WHEAT stays about 20–23 | d22 20/10/0/0/23 |
++| d23–27 | finish CARROT rotation, leave a larger residual S than M&M&P&Q | d25 9/15/0/0/32; d27 7/20/0/0/27 |
++
++All 82 development trajectories add MELON/WHEAT d0, STRAWBERRY d2–3, and (81/82) a d6 STRAWBERRY fill (median +12). WHEAT refill is effectively universal d8, d10–11, d14, d17–19 and d21–25. CARROT starts as probes d10–16, becomes the terminal rule d17 onward (70/82 add d22; 71/82 d23; 75/82 d24–26). Thus DSM's notable crop distinction is keeping a much larger strawberry base through d28 (median 7), versus M&M&P&Q's 3.
++
++Herd/structure rule: d1 is 5 PASTURE and **2 COW/3 SHEEP**; d5 8 pasture and 5/3/0; d7 12 pasture and 6/3/0. COOP/geese begin d8 (12/1), reach 12/4 with 6/3/4 d9, then 14/6 and **7 COW/3 SHEEP/6 GOOSE** d10. Sheep jump to 7 on d13; the 7/7/6 herd holds through d22, then runs down to 6/4/6. It is high-herd as M&M&P&Q but has a stable 6, not 7, geese.
++
++Fertilizer starts d11 (median 5), rises to 9/11/16 d12–14 and 24–28 d16 onward: same `post-d10, fertilize most standing crop tiles` policy as M&M&P&Q.
++
++At herd≥10, mean units/turn are WATER 1.76, HARVEST .90, CARE .64, FEED .65, FERTILIZE .39, COLLECT_FERTILIZER .78 (58,553 turns); at herd 1–9 they are .58/.12/.26/.23/.00/.24. This again ties production allocation to early herd size.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 79.8% | 76.2% | .290 |
++| WATER | 88.7% | 52.3% | .692 |
++| HARVEST | 78.8% | 63.0% | .485 |
++| CARE | 77.3% | 68.7% | .371 |
++| FEED | 77.3% | 69.0% | .365 |
++| FERTILIZE | 79.7% | 77.6% | .282 |
++| COLLECT_FERTILIZER | 77.9% | 67.3% | .409 |
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc '/workspace/shared/bin/say claude "T036 finding #3 (DSM; 103 trajectories): top-family high-herd policy: d1 2 cow/3 sheep; d7 6/3/0; d10 7/3/6 (14 pasture/6 coop); sheep jumps to 7 d13 and holds d22. d2 strawberry-first, universal WHEAT replant d8+, late carrot but retains S=7 d27 vs MMPQ=3. Fert starts d11, 24–28 fertile tiles d16+. Held-out exact P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. Details in shared research/re_production.md."' in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..2e08cb7ef55628f46c7835a1608c97852b952a4a
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +134,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b537fcefd86a5c48731afa4c6a5bc2581a2a9593
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,114 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++103 full trajectories; development 1–82, held-out 83–103. DSM is a close production-family relative of M&M&P&Q, with an earlier first strawberry sowing, one fewer goose, and a d13 sheep jump.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 12 WHEAT**; finish MELON d1 and start STRAWBERRY d2 | d2 0/0/8/0/12 |
++| d3–6 | early STRAWBERRY build, d6 second S+MELON fill | d7 20/0/12/0/3 |
++| d8–16 | replant WHEAT every date; build STRAWBERRY to 28, with only small CARROT/TOMATO probes | d14 27/0/4/0/19; d16 28/0/4/0/17 |
++| d17–22 | steady STRAWBERRY→CARROT conversion while WHEAT stays about 20–23 | d22 20/10/0/0/23 |
++| d23–27 | finish CARROT rotation, leave a larger residual S than M&M&P&Q | d25 9/15/0/0/32; d27 7/20/0/0/27 |
++
++All 82 development trajectories add MELON/WHEAT d0, STRAWBERRY d2–3, and (81/82) a d6 STRAWBERRY fill (median +12). WHEAT refill is effectively universal d8, d10–11, d14, d17–19 and d21–25. CARROT starts as probes d10–16, becomes the terminal rule d17 onward (70/82 add d22; 71/82 d23; 75/82 d24–26). Thus DSM's notable crop distinction is keeping a much larger strawberry base through d28 (median 7), versus M&M&P&Q's 3.
++
++Herd/structure rule: d1 is 5 PASTURE and **2 COW/3 SHEEP**; d5 8 pasture and 5/3/0; d7 12 pasture and 6/3/0. COOP/geese begin d8 (12/1), reach 12/4 with 6/3/4 d9, then 14/6 and **7 COW/3 SHEEP/6 GOOSE** d10. Sheep jump to 7 on d13; the 7/7/6 herd holds through d22, then runs down to 6/4/6. It is high-herd as M&M&P&Q but has a stable 6, not 7, geese.
++
++Fertilizer starts d11 (median 5), rises to 9/11/16 d12–14 and 24–28 d16 onward: same `post-d10, fertilize most standing crop tiles` policy as M&M&P&Q.
++
++At herd≥10, mean units/turn are WATER 1.76, HARVEST .90, CARE .64, FEED .65, FERTILIZE .39, COLLECT_FERTILIZER .78 (58,553 turns); at herd 1–9 they are .58/.12/.26/.23/.00/.24. This again ties production allocation to early herd size.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 79.8% | 76.2% | .290 |
++| WATER | 88.7% | 52.3% | .692 |
++| HARVEST | 78.8% | 63.0% | .485 |
++| CARE | 77.3% | 68.7% | .371 |
++| FEED | 77.3% | 69.0% | .365 |
++| FERTILIZE | 79.7% | 77.6% | .282 |
++| COLLECT_FERTILIZER | 77.9% | 67.3% | .409 |
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "find /workspace/shared/research/re -maxdepth 1 -type f -printf '%f %s\\n' | sort; ps -eo pid,etime,cmd | rg 'declog.py'" in /workspace/wt/codex
+ succeeded in 0ms:
+boey.jsonl.gz 5462893
+decem.jsonl.gz 5715272
+dsm.jsonl.gz 4825292
+fourthq.jsonl.gz 7032859
+fuxi.jsonl.gz 1838950
+istinetz.jsonl.gz 1857546
+joseph.jsonl.gz 1855531
+mgoose.jsonl.gz 4828379
+mmpq.jsonl.gz 6258308
+ours_es67.jsonl.gz 2687982
+trades_boey.jsonl.gz 2692679
+trades_dsm.jsonl.gz 909520
+trades_fuxi.jsonl.gz 888006
+trades_mmpq.jsonl.gz 2050271
+trades_ours.jsonl.gz 1321118
+ 986930       08:15 codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check -C /workspace/wt/codex -o /workspace/shared/runs/codex_20260926T184508.final.md You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.  FULL-FOCUS task T036 (human: 'go all-in until we understand the top agents' decision logic and can beat or reconstruct them'; never submit; ≤8 workers; deadline 2026-09-30). Read research/re_plan.md. I built lab/re/declog.py (in /workspace/wt/claude, branch lab-claude) and am generating research/re/<team>.jsonl.gz decision logs for boey, mmpq, dsm, fourthq, decem, mgoose, fuxi, joseph, istinetz, ours_es67. YOUR part = PRODUCTION logic of the top teams (start with Boey #1, M&M&P&Q, DSM, then fuxi): (1) planting schedule/crop mix as a function of unlocked shops & day (what they plant where and when, re-plant after harvest?, fertilize policy), (2) unit allocation per turn (how many units water/harvest/care/feed/collect/move; priority order), (3) herd build-up timeline and structures. Express as explicit rules; measure agreement on held-out episodes (teacher-forced: given state, does the rule predict their action?). Write research/re_production.md incrementally; bin/say claude at each finding. My part = market+macro rules; we'll then assemble a reconstructed 'top-RE' agent as a local strong opponent and mine counters.
+ 992661       00:00 /bin/bash -c find /workspace/shared/research/re -maxdepth 1 -type f -printf '%f %s\n' | sort; ps -eo pid,etime,cmd | rg 'declog.py'
+ 992665       00:00 rg declog.py
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..2e08cb7ef55628f46c7835a1608c97852b952a4a
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +134,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b537fcefd86a5c48731afa4c6a5bc2581a2a9593
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,114 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++103 full trajectories; development 1–82, held-out 83–103. DSM is a close production-family relative of M&M&P&Q, with an earlier first strawberry sowing, one fewer goose, and a d13 sheep jump.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 12 WHEAT**; finish MELON d1 and start STRAWBERRY d2 | d2 0/0/8/0/12 |
++| d3–6 | early STRAWBERRY build, d6 second S+MELON fill | d7 20/0/12/0/3 |
++| d8–16 | replant WHEAT every date; build STRAWBERRY to 28, with only small CARROT/TOMATO probes | d14 27/0/4/0/19; d16 28/0/4/0/17 |
++| d17–22 | steady STRAWBERRY→CARROT conversion while WHEAT stays about 20–23 | d22 20/10/0/0/23 |
++| d23–27 | finish CARROT rotation, leave a larger residual S than M&M&P&Q | d25 9/15/0/0/32; d27 7/20/0/0/27 |
++
++All 82 development trajectories add MELON/WHEAT d0, STRAWBERRY d2–3, and (81/82) a d6 STRAWBERRY fill (median +12). WHEAT refill is effectively universal d8, d10–11, d14, d17–19 and d21–25. CARROT starts as probes d10–16, becomes the terminal rule d17 onward (70/82 add d22; 71/82 d23; 75/82 d24–26). Thus DSM's notable crop distinction is keeping a much larger strawberry base through d28 (median 7), versus M&M&P&Q's 3.
++
++Herd/structure rule: d1 is 5 PASTURE and **2 COW/3 SHEEP**; d5 8 pasture and 5/3/0; d7 12 pasture and 6/3/0. COOP/geese begin d8 (12/1), reach 12/4 with 6/3/4 d9, then 14/6 and **7 COW/3 SHEEP/6 GOOSE** d10. Sheep jump to 7 on d13; the 7/7/6 herd holds through d22, then runs down to 6/4/6. It is high-herd as M&M&P&Q but has a stable 6, not 7, geese.
++
++Fertilizer starts d11 (median 5), rises to 9/11/16 d12–14 and 24–28 d16 onward: same `post-d10, fertilize most standing crop tiles` policy as M&M&P&Q.
++
++At herd≥10, mean units/turn are WATER 1.76, HARVEST .90, CARE .64, FEED .65, FERTILIZE .39, COLLECT_FERTILIZER .78 (58,553 turns); at herd 1–9 they are .58/.12/.26/.23/.00/.24. This again ties production allocation to early herd size.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 79.8% | 76.2% | .290 |
++| WATER | 88.7% | 52.3% | .692 |
++| HARVEST | 78.8% | 63.0% | .485 |
++| CARE | 77.3% | 68.7% | .371 |
++| FEED | 77.3% | 69.0% | .365 |
++| FERTILIZE | 79.7% | 77.6% | .282 |
++| COLLECT_FERTILIZER | 77.9% | 67.3% | .409 |
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,collections,statistics
+team='fuxi';P=f'/workspace/shared/research/re/{team}.jsonl.gz'
+with gzip.open(P,'rt')as f:R=[json.loads(x)for x in f]
+E=[];cur=[]
+for r in R:
+ if r['step']==0 and cur:E.append(cur);cur=[]
+ cur.append(r)
+if cur:E.append(cur)
+print(team,len(R),'trajectories',len(E),collections.Counter(map(len,E)))
+C=['STRAWBERRY','CARROT','MELON','TOMATO','WHEAT'];O=['PLANT','WATER','HARVEST','CARE','FEED','FERTILIZE','COLLECT_FERTILIZER']
+n=int(len(E)*.8);tr=E[:n];va=E[n:];D=collections.defaultdict(lambda:collections.defaultdict(collections.Counter))
+for ep in tr:
+ for r in ep:
+  for o in O:D[(r['day'],r['hour'])][o][r['ops'].get(o,0)]+=1
+M={k:{o:x[o].most_common(1)[0][0]for o in O}for k,x in D.items()}
+print('heldout',len(va),'exact/pres/mae')
+for o in O:
+ y=[r['ops'].get(o,0)for ep in va for r in ep];p=[M[(r['day'],r['hour'])][o]for ep in va for r in ep]
+ print(o,round(sum(a==b for a,b in zip(y,p))/len(y),3),round(sum((a>0)==(b>0)for a,b in zip(y,p))/len(y),3),round(sum(abs(a-b)for a,b in zip(y,p))/len(y),3))
+print('daily d crop(S/C/M/T/W) herd(C/S/G) P/CO fert')
+for d in range(30):
+ rr=[r for ep in tr for r in ep if r['day']==d and r['hour']==0]
+ def md(fn):return int(statistics.median([fn(r)for r in rr]))
+ cs='/'.join(map(str,[md(lambda r,c=c:r['me']['tiles'].get('plant_'+c,0))for c in C]));hs='/'.join(map(str,[md(lambda r,a=a:r['me']['animals'].get(a,0))for a in ['COW','SHEEP','GOOSE']]))
+ print(d,cs,hs,f'{md(lambda r:r[\"me\"][\"structs\"].get(\"PASTURE\",0))}/{md(lambda r:r[\"me\"][\"structs\"].get(\"COOP\",0))}',md(lambda r:r['me']['fert_tiles']))
+print('event coverage')
+for d in range(29):
+ out=[]
+ for c in C:
+  vals=[]
+  for ep in tr:
+   z=sum(max(0,b['me']['tiles'].get('plant_'+c,0)-a['me']['tiles'].get('plant_'+c,0))for a,b in zip(ep,ep[1:])if a['day']==d)
+   if z:vals.append(z)
+  if vals:out.append(f'{c[:3]} {len(vals)}/{n} med{int(statistics.median(vals))}')
+ if out:print(d,'; '.join(out))
+allr=[r for ep in E for r in ep]
+for tag,pr in [('herd>=10',lambda r:sum(r['me']['animals'].values())>=10),('herd1-9',lambda r:0<sum(r['me']['animals'].values())<10)]:
+ x=[r for r in allr if pr(r)];print(tag,'n',len(x),' '.join(f'{o}={sum(r[\"ops\"].get(o,0)for r in x)/len(x):.2f}'for o in O))
+PY" in /workspace/wt/codex
+ succeeded in 1730ms:
+fuxi 28760 trajectories 40 Counter({719: 40})
+heldout 8 exact/pres/mae
+PLANT 0.761 0.766 0.325
+WATER 0.393 0.819 1.005
+HARVEST 0.586 0.726 0.581
+CARE 0.665 0.685 0.417
+FEED 0.644 0.669 0.445
+FERTILIZE 0.851 0.852 0.193
+COLLECT_FERTILIZER 0.618 0.658 0.477
+daily d crop(S/C/M/T/W) herd(C/S/G) P/CO fert
+0 0/0/0/0/0 0/0/0 0/0 0
+1 0/2/1/0/15 3/3/0 6/0 0
+2 0/2/1/0/15 3/3/0 6/0 0
+3 0/2/1/0/15 4/3/0 7/0 0
+4 0/0/1/0/15 4/3/0 7/0 0
+5 4/0/5/0/3 5/3/0 8/0 0
+6 6/0/5/0/4 6/3/0 10/0 0
+7 6/0/5/0/14 6/3/0 11/0 0
+8 13/0/7/0/17 7/4/1 11/1 0
+9 15/2/8/0/18 7/4/2 11/2 0
+10 18/3/9/0/17 8/4/3 12/3 0
+11 23/2/10/0/18 8/4/3 12/3 0
+12 24/2/12/1/21 8/4/3 13/3 0
+13 29/2/12/2/22 8/4/3 13/3 0
+14 31/2/11/2/22 8/4/3 13/3 6
+15 31/3/9/3/23 8/4/3 13/3 9
+16 34/2/9/6/20 8/4/3 13/3 10
+17 34/1/10/8/15 8/4/3 12/3 18
+18 33/1/8/13/13 8/4/3 12/3 18
+19 33/0/8/16/11 8/2/3 11/3 20
+20 33/1/7/16/15 7/2/3 10/3 25
+21 33/2/7/16/15 7/3/3 10/3 27
+22 30/3/7/16/18 7/3/3 9/3 31
+23 28/4/4/15/17 6/3/3 9/3 31
+24 27/3/3/15/15 6/3/3 9/3 31
+25 19/1/3/14/20 6/3/3 9/3 28
+26 16/6/3/14/25 6/3/3 9/3 30
+27 11/10/3/12/18 6/3/3 9/3 30
+28 10/3/2/12/6 6/2/3 9/3 22
+29 8/3/1/8/5 6/1/3 9/3 18
+event coverage
+0 STR 8/32 med1; CAR 30/32 med2; MEL 26/32 med1; WHE 32/32 med15
+1 CAR 2/32 med1; WHE 11/32 med1
+3 CAR 9/32 med1; MEL 14/32 med1; TOM 5/32 med1; WHE 2/32 med1
+4 STR 31/32 med4; CAR 3/32 med1; MEL 32/32 med3; TOM 8/32 med1; WHE 20/32 med2
+5 STR 21/32 med2; CAR 4/32 med2; MEL 8/32 med1; TOM 1/32 med1; WHE 18/32 med12
+6 STR 13/32 med2; CAR 7/32 med1; MEL 6/32 med1; TOM 2/32 med1; WHE 16/32 med7
+7 STR 26/32 med8; CAR 10/32 med3; MEL 25/32 med2; TOM 10/32 med2; WHE 21/32 med8
+8 STR 19/32 med3; CAR 14/32 med2; MEL 9/32 med1; TOM 1/32 med1; WHE 17/32 med7
+9 STR 21/32 med5; CAR 11/32 med2; MEL 14/32 med4; WHE 22/32 med4
+10 STR 20/32 med2; CAR 10/32 med2; MEL 19/32 med3; TOM 1/32 med1; WHE 21/32 med5
+11 STR 18/32 med3; CAR 14/32 med1; MEL 8/32 med1; TOM 3/32 med4; WHE 30/32 med7
+12 STR 25/32 med5; CAR 19/32 med3; MEL 3/32 med2; TOM 8/32 med2; WHE 23/32 med5
+13 STR 21/32 med1; CAR 11/32 med3; MEL 5/32 med1; TOM 9/32 med2; WHE 24/32 med4
+14 STR 9/32 med1; CAR 11/32 med4; MEL 13/32 med2; TOM 16/32 med3; WHE 28/32 med5
+15 STR 14/32 med5; CAR 8/32 med2; MEL 12/32 med2; TOM 21/32 med3; WHE 29/32 med2
+16 STR 3/32 med1; CAR 10/32 med2; MEL 5/32 med1; TOM 28/32 med2; WHE 23/32 med3
+17 STR 8/32 med2; CAR 13/32 med3; MEL 12/32 med1; TOM 29/32 med5; WHE 24/32 med2
+18 STR 2/32 med1; CAR 10/32 med3; MEL 16/32 med1; TOM 30/32 med3; WHE 20/32 med4
+19 CAR 15/32 med2; MEL 6/32 med1; TOM 10/32 med2; WHE 30/32 med4
+20 CAR 16/32 med2; TOM 1/32 med1; WHE 23/32 med5
+21 CAR 23/32 med3; WHE 25/32 med3
+22 CAR 13/32 med3; WHE 25/32 med2
+23 CAR 8/32 med2; WHE 28/32 med4
+24 CAR 9/32 med2; WHE 28/32 med9
+25 CAR 27/32 med6; WHE 28/32 med6
+26 CAR 19/32 med4; WHE 16/32 med3
+27 CAR 9/32 med4; WHE 17/32 med3
+herd>=10 n 20525 PLANT=0.34 WATER=2.03 HARVEST=0.86 CARE=0.49 FEED=0.53 FERTILIZE=0.23 COLLECT_FERTILIZER=0.60
+herd1-9 n 8043 PLANT=0.29 WATER=1.24 HARVEST=0.44 CARE=0.25 FEED=0.26 FERTILIZE=0.08 COLLECT_FERTILIZER=0.28
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index c5f03e59d497c8d03d955d997118ed692e84be8e..2e08cb7ef55628f46c7835a1608c97852b952a4a
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
++- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+ - 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+ - 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+ - 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+@@ -131,3 +134,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
++| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b537fcefd86a5c48731afa4c6a5bc2581a2a9593
+--- /dev/null
++++ b//workspace/shared/research/re_production.md
+@@ -0,0 +1,114 @@
++# Production RE — top teams
++
++Scope is planting/crop mix, unit production allocation, and herd/structures. Market, land and hiring belong to Claude's macro analysis. We never submit to Kaggle.
++
++## Method
++
++`lab/re/declog.py` gives a pre-action state and aggregate unit-operation counts, not target coordinates. Crop changes below use the next logged state. “Priority” therefore means observed scheduling/co-occurrence until raw actions are joined to target tiles.
++
++Boey has 108 complete 719-turn trajectories. Development is trajectories 1–86 in log order; held-out is 87–108. The baseline predicts each operation's development-mode count at `(day,hour)`, and is evaluated on every teacher-forced held-out turn. It is a calendar baseline, not a claim that Boey ignores state.
++
++## Boey (#1)
++
++### Explicit crop/planting rule
++
++| days | rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **7 MELON + 12 WHEAT**; finish melon d1–2 | d1 0/0/7/0/12 |
++| d3–6 | replace early wheat with STRAWBERRY; second strawberry fill d6 | d7 19/0/12/0/2 |
++| d8–11 | continuously replant WHEAT, complete strawberry build | d11 26/0/6/0/22 |
++| d12–22 | retain S while MELON exits; refill WHEAT; introduce small CARROT and occasional TOMATO | d16 22/2/2/0/15; d22 11/3/1/0/17 |
++| d23–27 | terminal STRAWBERRY→CARROT rotation while WHEAT remains high | d25 4/8/0/0/24; d27 4/13/0/0/22 |
++| d28–29 | no new planting | run down crops |
++
++This is genuine replanting, not only initial sowing: all 86 development trajectories add STRAWBERRY on d6 (median +11 net tiles); all add WHEAT on d8, d10, d13–16, d18, d20 and d22–24. CARROT is late: adds on d19/d20/d23 in 73/86, 74/86 and 83/86 respectively. Shop history currently repeats names, so it is not yet a valid conditioning feature; do not encode shop-specific crop branches before normalising it.
++
++### Herd, structures, fertilizer
++
++* d1: 5 PASTURE, 3 COW, 2 SHEEP; d3: 5 PASTURE, 2 COOP, 2 GOOSE.
++* d7: 11 PASTURE, 4 COW, 6 SHEEP, 2 GOOSE; d11: 13 PASTURE, 2 COOP, 4/7/2 herd.
++* d12: 6 COW; d17: 10 SHEEP and 17 PASTURE; d24: 18 PASTURE, 2 COOP, 5 COW, 11 SHEEP, 2 GOOSE.
++
++The production policy is thus animal-active from d0–3, later expands sheep/pasture, and holds geese near 2. Fertilized tiles have median zero through d11, then 3/4/9 on d12–14, 18 on d16 and about 12–20 thereafter: explicit current rule is **do not fertilize the bootstrap; begin after d11 and retain a nonzero fertilized crop base**. Target-tile choice remains unknown.
++
++### Unit allocation and held-out agreement
++
++At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .72, COLLECT_FERTILIZER .72 and FERTILIZE .32 (61,219 turns). With no animals all seven production operations are exactly zero (341 turns); at 1–9 animals, service counts are only about .22–.23. This supports scaling animal service with herd and WATER/HARVEST with the crop base. CARE+FEED occur together on only 35.6% of turns containing either; CARE+COLLECT on 26.9%, so a clone must route individual workers rather than bind a three-op triplet.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 83.1% | 80.4% | .277 |
++| WATER | 84.7% | 62.8% | .696 |
++| HARVEST | 81.3% | 73.0% | .406 |
++| CARE | 77.4% | 71.1% | .428 |
++| FEED | 77.4% | 70.5% | .426 |
++| FERTILIZE | 86.3% | 84.2% | .202 |
++| COLLECT_FERTILIZER | 77.3% | 71.5% | .436 |
++
++Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
++
++## M&M&P&Q
++
++134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 10 WHEAT**, finish MELON on d1 and small WHEAT refill d2 | d1 0/0/6/0/10; d2 0/0/10/0/10 |
++| d3–6 | grow STRAWBERRY; complete a larger d6 strawberry+melon fill | d7 22/0/12/0/1 |
++| d8–21 | replant WHEAT every day while holding STRAWBERRY 23–27; only sparse CARROT/TOMATO probes | d12 25/0/2/0/27; d19 26/0/0/0/20 |
++| d22–27 | decisive STRAWBERRY→CARROT terminal rotation and WHEAT fill | d23 7/5/0/0/34; d27 3/17/0/0/30 |
++| d28–29 | no material new plants | run down |
++
++All 107 development trajectories add MELON/WHEAT at d0, STRAWBERRY at d6 (median event +16), and WHEAT at d8, d10, d13–16, d18, d20 and d22–24. The CARROT conversion begins a day earlier in the state (d22) and becomes near-universal: additions d23/d24/d25/d26 occur in 73/85/88/88 of 107 trajectories. This is a robust production rule rather than a one-shop exception.
++
++Herd/structure rule: d1 starts 5 PASTURE, **2 COW/3 SHEEP**; by d5 it is 8 PASTURE and 5/3/0. It adds COOP/geese aggressively: d7 10 PASTURE/2 COOP and **6/3/2**, d8 10/3 and 7/3/3, d10 13/7 and **7 COW/3 SHEEP/7 GOOSE**. It holds 7 geese and 7 cows to d19, adds sheep to 5 from d16, and finishes around 6/5/7 with 11–14 pasture and 7 coop. This is the clearest production distinction from Boey's small, capped goose herd.
++
++Fertilizer starts d11 (median 6 tiles) rather than Boey's d12, rises 8/10/14 on d12–14 and reaches 28–31 d16–20: rule `after d10, fertilize most of the standing crop base`, then retain about 21–30 fertile tiles through d29.
++
++For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, FERTILIZE .39, COLLECT_FERTILIZER .76 (75,654 turns); at herd 1–9 they are .57/.12/.28/.24/.00/.25. Thus its high early herd converts directly to high WATER plus service allocation, not a delayed animal plan.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 78.2% | 74.6% | .314 |
++| WATER | 84.3% | 46.7% | .767 |
++| HARVEST | 75.8% | 61.0% | .514 |
++| CARE | 71.7% | 64.0% | .450 |
++| FEED | 73.1% | 65.5% | .425 |
++| FERTILIZE | 79.3% | 77.1% | .285 |
++| COLLECT_FERTILIZER | 73.9% | 62.8% | .480 |
++
++Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
++
++## DSM
++
++103 full trajectories; development 1–82, held-out 83–103. DSM is a close production-family relative of M&M&P&Q, with an earlier first strawberry sowing, one fewer goose, and a d13 sheep jump.
++
++| days | explicit crop rule | median day-start state (S/C/M/T/W) |
++|---|---|---|
++| d0–2 | bootstrap **6 MELON + 12 WHEAT**; finish MELON d1 and start STRAWBERRY d2 | d2 0/0/8/0/12 |
++| d3–6 | early STRAWBERRY build, d6 second S+MELON fill | d7 20/0/12/0/3 |
++| d8–16 | replant WHEAT every date; build STRAWBERRY to 28, with only small CARROT/TOMATO probes | d14 27/0/4/0/19; d16 28/0/4/0/17 |
++| d17–22 | steady STRAWBERRY→CARROT conversion while WHEAT stays about 20–23 | d22 20/10/0/0/23 |
++| d23–27 | finish CARROT rotation, leave a larger residual S than M&M&P&Q | d25 9/15/0/0/32; d27 7/20/0/0/27 |
++
++All 82 development trajectories add MELON/WHEAT d0, STRAWBERRY d2–3, and (81/82) a d6 STRAWBERRY fill (median +12). WHEAT refill is effectively universal d8, d10–11, d14, d17–19 and d21–25. CARROT starts as probes d10–16, becomes the terminal rule d17 onward (70/82 add d22; 71/82 d23; 75/82 d24–26). Thus DSM's notable crop distinction is keeping a much larger strawberry base through d28 (median 7), versus M&M&P&Q's 3.
++
++Herd/structure rule: d1 is 5 PASTURE and **2 COW/3 SHEEP**; d5 8 pasture and 5/3/0; d7 12 pasture and 6/3/0. COOP/geese begin d8 (12/1), reach 12/4 with 6/3/4 d9, then 14/6 and **7 COW/3 SHEEP/6 GOOSE** d10. Sheep jump to 7 on d13; the 7/7/6 herd holds through d22, then runs down to 6/4/6. It is high-herd as M&M&P&Q but has a stable 6, not 7, geese.
++
++Fertilizer starts d11 (median 5), rises to 9/11/16 d12–14 and 24–28 d16 onward: same `post-d10, fertilize most standing crop tiles` policy as M&M&P&Q.
++
++At herd≥10, mean units/turn are WATER 1.76, HARVEST .90, CARE .64, FEED .65, FERTILIZE .39, COLLECT_FERTILIZER .78 (58,553 turns); at herd 1–9 they are .58/.12/.26/.23/.00/.24. This again ties production allocation to early herd size.
++
++| operation | held-out presence | held-out exact count | MAE |
++|---|---:|---:|---:|
++| PLANT | 79.8% | 76.2% | .290 |
++| WATER | 88.7% | 52.3% | .692 |
++| HARVEST | 78.8% | 63.0% | .485 |
++| CARE | 77.3% | 68.7% | .371 |
++| FEED | 77.3% | 69.0% | .365 |
++| FERTILIZE | 79.7% | 77.6% | .282 |
++| COLLECT_FERTILIZER | 77.9% | 67.3% | .409 |
++
++## fuxi
++
++Pending completed decision log.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b841293317739e478e0bdadd6d3ac94c5607a4c4
+--- /dev/null
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -0,0 +1,7 @@
++# T036 — production reverse engineering
++
++Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
++
++Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
++
++Status: in progress. No candidate, gate, training, or Kaggle submission action.
+

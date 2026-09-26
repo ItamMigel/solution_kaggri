@@ -1,0 +1,16 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /workspace/wt/codex
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0df10-f991-79b2-ac3f-b15a0cb9fa3d
+--------
+user
+You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.
+
+T036 redirect (highest priority, never submit, ≤8 workers). Read research/re_findings.md: DSM and M&M&P&Q play a near-identical, very regular plan: 2nd land d8, 3rd land d10, 2 coops / 7 geese by d10, ~20 wheat tiles from d10 as OWN FEED (they buy only ~4k wheat vs our 14k), strawberries 21–29 (ours 33), carrots late; they beat us by ~+8k eggs and ~+10k feed savings. Please: (1) from research/re/dsm.jsonl.gz / mmpq.jsonl.gz and the replays (top10v4/dsm, mmpq) extract the exact layout/timing of that system: which quadrant/tiles become coops vs wheat vs strawberry, the goose purchase/placement steps, FEED routine (who feeds, from where), when strawberries stop being planted; (2) check whether their early game (d0–d8) is itself a fixed tape across episodes (compare unit actions across their 100 episodes; if a shared opening exists, it's a route we could adopt); (3) feasibility of a Horizon route/phase variant (from ~d8 on, tape-safe or route-owned) implementing 'land d8/d10 + 2 coops/7 geese + own wheat feed field, fewer strawberries' on es7_wm; implement if feasible, identity vs clones not required here — screen vs es7_wm on clone panel AND vs boatlee/fukami. Milestones via bin/say claude.
