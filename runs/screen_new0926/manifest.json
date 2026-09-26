@@ -1,0 +1,49 @@
+{
+  "created_utc": "2026-09-26T11:48:28.921138+00:00",
+  "candidates": {
+    "a-song-of-ice-and-": "/workspace/shared/opponents/new0926/a-song-of-ice-and-fire-fixed-flexible/main.py",
+    "demand-preserving-": "/workspace/shared/opponents/new0926/demand-preserving-turn-sale-timing/main.py",
+    "god-s-mode-hacked-": "/workspace/shared/opponents/new0926/god-s-mode-hacked-stores/main.py",
+    "kaggriculture-herd": "/workspace/shared/opponents/new0926/kaggriculture-herd-safe-sale-window-race-ca25/main.py",
+    "kaggriculture-top-": "/workspace/shared/opponents/new0926/kaggriculture-top-2-master-engine-v4/main.py",
+    "the-2965-master-hy": "/workspace/shared/opponents/new0926/the-2965-master-hybrid-engine/main.py",
+    "the-shepherds-ledg": "/workspace/shared/opponents/new0926/the-shepherds-ledger-herd-safe-sovereign/main.py",
+    "kaggriculture-vers": "/workspace/shared/opponents/new0926/kaggriculture-version-31-26-09-bronze-going-up/main.py",
+    "kaggriculture-hybu": "/workspace/shared/opponents/new0926/kaggriculture-hybu-submit/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "es6": "/workspace/shared/candidates/es6_c4g15/pkg/main.py"
+  },
+  "seeds": [
+    1316277072,
+    1091254057,
+    940811422,
+    1980977969
+  ],
+  "expected_games": 144,
+  "input_sha256": {
+    "/workspace/shared/candidates/es6_c4g15/pkg/main.py": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a",
+    "/workspace/shared/opponents/new0926/a-song-of-ice-and-fire-fixed-flexible/main.py": "12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693",
+    "/workspace/shared/opponents/new0926/demand-preserving-turn-sale-timing/main.py": "127ed3e62988c0474d386db6527ae8ca9de9bb1fe7004128557ddef67126c652",
+    "/workspace/shared/opponents/new0926/god-s-mode-hacked-stores/main.py": "f9588c469d2c1829e46593faeab7efe088a70f6c77d04a78800217350c812ae5",
+    "/workspace/shared/opponents/new0926/kaggriculture-herd-safe-sale-window-race-ca25/main.py": "c4b72e64acede4053c4b41d797afb562ce2aeadf5d9d0cf58e18aed9baa33c9e",
+    "/workspace/shared/opponents/new0926/kaggriculture-hybu-submit/main.py": "62bc190b9830a5d20a16c34d2832dc5b9aa55159485ede51f5f6970bd5a173a6",
+    "/workspace/shared/opponents/new0926/kaggriculture-top-2-master-engine-v4/main.py": "701c0157cb5f73fa9a4ce653847b9b5373dd3029b36db0f4fa5653996fb7e43e",
+    "/workspace/shared/opponents/new0926/kaggriculture-version-31-26-09-bronze-going-up/main.py": "dc5433c7996f3f18bc766083a3b6b0ef22ba290cf917fd680ee41c62b8de734d",
+    "/workspace/shared/opponents/new0926/the-2965-master-hybrid-engine/main.py": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
+    "/workspace/shared/opponents/new0926/the-shepherds-ledger-herd-safe-sovereign/main.py": "8378f73c82db7624ce5d0369cf896aa0761a662af147b119f67254f1f8634c56",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 1200.0,
+  "workers": 12,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
