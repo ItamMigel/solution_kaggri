@@ -25,19 +25,26 @@ def score(row):
     return 1.0 if margin > 0 else .5 if margin == 0 else 0.0
 
 def load(paths, agents):
-    out = {}
+    out, ignored = {}, {}
     for path in paths:
         for line in Path(path).read_text().splitlines():
             row = json.loads(line)
             if row.get("error") or "rewards" not in row:
                 raise RuntimeError(f"invalid game row in {path}: {row}")
-            if row["candidate"] not in agents or row["opponent"] not in WEIGHTS:
-                raise RuntimeError(f"unexpected candidate/opponent in {path}: {row['candidate']}/{row['opponent']}")
+            if row["candidate"] not in agents:
+                raise RuntimeError(f"unexpected candidate in {path}: {row['candidate']}")
+            # compare.py supplies legacy baselines unless an explicit empty
+            # --baselines terminator is present.  They are neither part of the
+            # predeclared eight-unit panel nor a source of paired evidence, so
+            # retain the planned games and make any extras auditable.
+            if row["opponent"] not in WEIGHTS:
+                ignored[row["opponent"]] = ignored.get(row["opponent"], 0) + 1
+                continue
             key = (row["candidate"], row["opponent"], row["seed"], row["seat"])
             if key in out:
                 raise RuntimeError(f"duplicate game: {key}")
             out[key] = (score(row), row["rewards"][row["seat"]] - row["rewards"][1 - row["seat"]])
-    return out
+    return out, ignored
 
 def main():
     ap = argparse.ArgumentParser()
@@ -49,7 +56,7 @@ def main():
     ap.add_argument("--resamples", type=int, default=200000)
     ap.add_argument("--rng-seed", type=int, default=230923)
     a = ap.parse_args()
-    rows = load([a.panel_games, a.extra_games], {a.candidate, a.control})
+    rows, ignored = load([a.panel_games, a.extra_games], {a.candidate, a.control})
     seeds = sorted({key[2] for key in rows})
     world = []
     by_opponent = {}
@@ -85,6 +92,7 @@ def main():
         "cash_two_sided_95": [float(np.quantile(bs_cash, .025)), float(np.quantile(bs_cash, .975))],
         "passes_whole_panel_ni": bool(np.quantile(bs_score, .05) > -.020),
         "rng_seed": a.rng_seed, "resamples": a.resamples, "per_world": world,
+        "ignored_unplanned_opponent_rows": ignored,
         "by_opponent": {o: {"score_gain": float(np.mean([v[0] for v in values])),
                               "cash_gain": float(np.mean([v[1] for v in values]))}
                         for o, values in by_opponent.items()},
