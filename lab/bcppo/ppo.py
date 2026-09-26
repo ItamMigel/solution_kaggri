@@ -369,7 +369,8 @@ def _save(path, net, opt, source_ck, teams, iteration):
     }
     if torch.cuda.is_available():
         payload["rng_cuda"] = torch.cuda.get_rng_state_all()
-    torch.save(payload, path)
+    torch.save(payload, path + ".tmp")
+    os.replace(path + ".tmp", path)  # atomic: other runs/PBT read these files while we train
 
 
 def main():
@@ -385,7 +386,7 @@ def main():
     ap.add_argument("--lam", type=float, default=.99)
     ap.add_argument("--clip", type=float, default=.12)
     ap.add_argument("--ent", type=float, default=.001)
-    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--target-kl", type=float, default=.015, help="stop PPO updates when rollout-policy KL exceeds 1.5x this value"); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
+    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--target-kl", type=float, default=.015, help="stop PPO updates when rollout-policy KL exceeds 1.5x this value"); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--run-iters", type=int, default=0, help="stop after this many iterations from the resume point (PBT rounds)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
     ap.add_argument("--team", default="dsm")
     ap.add_argument("--vf", type=float, default=.5)
     ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
@@ -418,13 +419,18 @@ def main():
     last = f"{a.out}/last.pt"
     if a.resume and os.path.exists(last):
         start = _restore_resume(last, net, opt, dev)
+        for group in opt.param_groups:
+            group["lr"] = a.lr  # optimizer state keeps the old lr; PBT mutates it between rounds
         print("resumed at iter", start, flush=True)
     league = _league_from_args(a, source_ck, net, bc, dev)
     ve = VecKaggriculture(a.envs, device=dev)
     with open(f"{a.out}/args.json", "w") as fh:
         json.dump({**vars(a), "league_effective": {k: v[1] for k, v in league.items()}}, fh, indent=1)
     log = open(f"{a.out}/log.jsonl", "a")
-    for it in range(start, min(a.iters, a.stop_at) if a.stop_at else a.iters):
+    end = min(a.iters, a.stop_at) if a.stop_at else a.iters
+    if a.run_iters:
+        end = min(end, start + a.run_iters)
+    for it in range(start, end):
         t0 = time.time()
         net.eval()
         buf, final, action_metric, league_counts = rollout(
@@ -538,7 +544,7 @@ def main():
         log.write(json.dumps(record) + "\n")
         log.flush()
         _save(last, net, opt, source_ck, teams, it)
-        if it % 5 == 4:
+        if it % 5 == 4 or (a.run_iters and it == end - 1):
             _save(f"{a.out}/it{it:03d}.pt", net, opt, source_ck, teams, it)
 
 
