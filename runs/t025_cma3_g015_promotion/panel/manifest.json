@@ -1,0 +1,55 @@
+{
+  "created_utc": "2026-09-26T01:02:23.907822+00:00",
+  "candidates": {
+    "centre": "/workspace/shared/runs/cma3/gen_015/c/main.py",
+    "es3_g5": "/workspace/shared/candidates/es3_g5/pkg/main.py"
+  },
+  "opponents": {
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    1440475093,
+    553267500,
+    1951725531,
+    615953906,
+    1107929980,
+    1936856368,
+    1744083206,
+    2064950598,
+    102162573,
+    1361021042,
+    1502570816,
+    1818123892,
+    1125805360,
+    1771031157,
+    1238043542,
+    74704660,
+    1710504781,
+    1957893493,
+    1076149756,
+    167310971,
+    680416781,
+    1174874441,
+    458483327,
+    1056640964
+  ],
+  "expected_games": 192,
+  "input_sha256": {
+    "/workspace/shared/candidates/es3_g5/pkg/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/runs/cma3/gen_015/c/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 6,
+  "decision_note": "T025 standard CMA promotion gate stage 2: frozen CMA3 gen15 centre and frozen es3_g5 paired on 24 new worlds, both seats, parthenos+metav4. Pass iff valid and one-sided whole-world bootstrap lower bound for paired centre-minus-es3 score > -0.020. No Kaggle submission.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
