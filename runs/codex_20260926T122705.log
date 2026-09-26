@@ -37487,3 +37487,1472 @@ index 0000000000000000000000000000000000000000..a23cbbe0276c4b0fe7db0d0ed2c872f3
 
 exec
 /bin/bash -lc "git -C /workspace/solution_kaggri merge --no-ff lab-codex -m 'Merge Codex T030 wheat audit' && git -C /workspace/solution_kaggri log -1 --oneline && /workspace/shared/bin/sync 'T030 wheat source audit: purchased turnover finding; safe idle wheat gene rejected'" in /workspace/wt/codex
+ succeeded in 15727ms:
+pushed board + lab (AdilHAA/kaggriculture: board, lab; ItamMigel/solution_kaggri: adil-board, adil-lab)
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 519a2b7edf42357bd13fad28b8b1d8a2c01d5465..02f82e4f17e5e3f9119598fa873b93e78c944599
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030 wheat source: in all 39 es3 losses, opponent WHEAT sales are **+517/game but not extra farming** (ours is +8 harvested units/+7.6 plant tiles); opponent instead buys +529 product WHEAT ($20.66k) while FEED differs only +5 and land/seasonal hires are near equal. Default-off idle-seed `PASS→PLANT WHEAT` on es6 is identity-audited (0/1,442 diffs off) but fails fresh 2-world both-seat es6+Parthenos screen 0/8, paired −50pp/−$2,248, 16/16 valid. No full T025 gate/candidate/Kaggle action. `research/t030_wheat_sources.md` [codex]
+ - 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+@@ -119,4 +120,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+-| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
++| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+diff --git a//workspace/shared/ledger.jsonl b//workspace/shared/ledger.jsonl
+index 966e27325c9edcd11caee8f063affe32556df257..193e5a83f3381f4c6a66d4428a8b9f918ae93bfa
+--- a//workspace/shared/ledger.jsonl
++++ b//workspace/shared/ledger.jsonl
+@@ -80,4 +80,5 @@
+ {"ts":"2026-09-26T11:50Z","who":"claude","what":"screen of 9 fresh public agents (opponents/new0926) vs es6_c4g15 + v5_market, 4 worlds both seats","result":"running (144 games); gods-mode is multi-file (import base_agent) -> errors, ignore"}
+ {"ts":"2026-09-26T12:10Z","who":"claude","what":"screen fresh public agents vs es6 (4 worlds)","result":"es6 beats 2965-master 8-0, top2-v4 8-0, herd-safe 8-0, shepherd 5-3; demand-preserving beats es6 6/8 (+411). All Horizon-family (Codex). es3_g5 ladder record (80 replays) 41-39 vs mostly mid-rated private teams -> panel unrepresentative; market/demand competition hypothesis. Launched demand vs es6 16-world 10-opp paired check.","artifacts":"runs/screen_new0926, runs/gate_demand_vs_es6"}
+ {"ts":"2026-09-26T12:30Z","who":"claude","what":"T030 Codex market analysis of 39 es3 ladder losses","result":"loss is volume, not price: WHEAT −517 units/−$20.4k revenue per lost game (same price), carrot/egg volume gaps; strawberry we sell more but −$6.4/unit. DMX (demand layer graft) invalid. Next: wheat-volume mechanism."}
++{"ts":"2026-09-26T12:47Z","by":"codex","task":"T030","candidate":"wheat_idle_on","path":"/workspace/wt/codex/experiments/t030_wheat_idle/main_on.py","sha256":"03b96bae097a2a6dde9644a447cfde39049385f76a9260ebbab01258fd5c777d","opponents":["es6_c4g15","parthenos_robust"],"seeds_file":"/workspace/shared/runs/t030_wheat_idle_screen/manifest.json","games":8,"wins":0,"draws":0,"losses":8,"mean_margin":-2085.5,"worst10_margin":-2941.0,"errors":0,"run_dir":"/workspace/shared/runs/t030_wheat_idle_screen","verdict":"worse","note":"Fresh 2-world both-seat capability screen, 16/16 total valid games including frozen es6 control. Paired wheat_idle_on minus es6 is −0.500 score, 95% [−0.75,−0.25], and −$2,248.25; no full T025 gate, candidate, or Kaggle submission."}
+ {"ts":"2026-09-26T12:48Z","who":"claude","what":"demand-preserving (public) vs es6_c4g15, 16 fresh worlds, 10 opps, 576 games 0 bad","result":"REJECT: panel −18.4pp (lower −28.5); h2h demand 12/32; loses to es1_g9 10/32 & v5 11/32 (es6 30/32). But demand margins vs parthenos/shepherd/t2945/metav4 are +$500–570 higher than es6 -> its sale layer extracts more vs non-Horizon opponents (4-world screen 6/8 was noise).","artifacts":"runs/gate_demand_vs_es6"}
+diff --git a//workspace/shared/research/t030_wheat_sources.md b//workspace/shared/research/t030_wheat_sources.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..cefbf583a1ca7cb42e2f0a9bd8f5a71e1aad863e
+--- /dev/null
++++ b//workspace/shared/research/t030_wheat_sources.md
+@@ -0,0 +1,7 @@
++# T030 — WHEAT source in es3 ladder losses
++
++Official-engine re-execution of all 39 T028 losses and all 41 wins, with eight workers and successful-action instrumentation: [full daily report](../runs/t030_wheat_sources_v2/wheat.md), [JSON](../runs/t030_wheat_sources_v2/wheat.json).
++
++In a loss the opponent sells 517 more WHEAT/game, but grows slightly less: −7.6 successful WHEAT plants and −8.0 harvested WHEAT units relative to us. Land is effectively equal after d11 (about 3.1--3.2 quadrants); opponent seasonal successful hires are only +4.0; FEED is only +5.0. The decisive observed flow is +528.7 `BUY_PRODUCT WHEAT` ($20.66k/game). This is consistent with purchased WHEAT market turnover/resale, not an own-feed advantage.
++
++The tiny tape-safe repair was therefore deliberately conservative: default-off `PASS -> PLANT WHEAT` only at an actor's existing empty tile, consuming only an already spare WHEAT seed. Off identity is 0/1,442 action diffs. On fails a fresh two-world, both-seat es6+Parthenos screen 0/8 (paired −50pp, −$2,248; 16/16 valid), so it does not advance to T025 full panel.
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+index 6c61a888d3217f916abaa9c37aa20037874723ae..4b1011916357a3f36d7fe42fd44a83e9e82f8bef
+--- a//workspace/shared/tasks/T030-new0926-public-bases.md
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -38,3 +38,20 @@
+ `demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
+ 
+ Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
++
++## Amendment — wheat source attribution / tape-safe repair 2026-09-26
++
++Claim: codex. User-directed continuation. Kaggle remains read-only; no submission.
++
++1. Re-execute the exact 39 T028 losses and all 41 available wins in official engine 1.32.7 with successful-action hooks. Per game/day record WHEAT plants, harvest tiles/units, EOD WHEAT tiles, quadrants, hands, WHEAT seed and product purchases/cost, and successful FEED. Do not infer these from final inventory.
++2. Explain the loss-vs-win contrast and whether opponents' WHEAT sales are production, land/labour, or avoided purchased feed.
++3. Implement only the smallest evidence-supported, tape-safe, **default-off** gene on the working es6 archive; prove genome-off action identity; run a fresh both-seat 2-world screen at <=8 workers. Only a positive valid screen may use T025's fresh full-panel gate against es6.
++
++## Result — wheat source attribution / idle-crop gene rejected 2026-09-26
++
++`lab/tools/t030_wheat_sources.py` re-executed all 80 available T028 worlds (exactly 39 losses and 41 wins) in official engine 1.32.7, with eight processes and zero miner failures. It records only successful actions. Full daily matrix: `runs/t030_wheat_sources_v2/wheat.json` / `.md`.
++
++- **Losses:** opponent WHEAT sold is +516.97 units/game, but it does *not* arise from more WHEAT crop production: opponent−us is **−7.62 planted tiles** and **−8.00 harvested units**. WHEAT seed buying is also lower by 5.95 units ($59.49). Instead the opponent executes **+528.67 BUY_PRODUCT WHEAT**, $20,660/game more cost; successful FEED is only +4.97.
++- **Daily mechanism:** quadrants converge at roughly 3.1--3.2 after d11; successful daily hires differ little (seasonal +3.97 for opponent). From d10--27 the opponent repeatedly spends much more on purchased WHEAT while WHEAT crop stock/harvest is comparable or lower. This supports purchased/re-sold market turnover rather than a own-feed/land/labour explanation. In the 41 wins the corresponding purchase-cost gap falls to $2,114/game and sales gap to 46.8 units.
++- Implemented `lab/hplus/wheat_idle.py`, a namespaced default-off gene over sealed es6. When on, it only turns an inherited exact `PASS` into `PLANT WHEAT` on an already empty unlocked tile, using only an already-present WHEAT seed after reserving the parent's planned WHEAT plants. It never changes market orders, money, movement, hire, hand count, or a non-PASS action. The off build has **0 action differences / 1,442 calls**, both games DONE: `runs/t030_wheat_idle_identity.json`.
++- Fresh screen (`runs/t030_wheat_idle_screen`, seeds `870722613,787550011`, both seats vs es6 mirror + Parthenos, <=8 workers): **16/16 valid**, on candidate **0/8**, paired vs es6 **−0.500 score** (95% −0.75..−0.25), **−$2,248.25** (95% −$3,092.50..−$1,404.00). It is rejected; no full T025 gate, candidate, or Kaggle action.
+diff --git a/lab/hplus/test_wheat_idle.py b/lab/hplus/test_wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..5acc51a9b229af879acb0cbfcdbaf6eb73529c5f
+--- /dev/null
++++ b/lab/hplus/test_wheat_idle.py
+@@ -0,0 +1,20 @@
++from pathlib import Path
++import unittest
++
++from wheat_idle import build
++
++
++class WheatIdleBuildTest(unittest.TestCase):
++    def test_default_off_and_on_compile(self):
++        base = Path(__file__).resolve().parents[2] / "agents/horizon_v5_market.py"
++        out = Path("/tmp/t030_wheat_idle_test.py")
++        try:
++            self.assertTrue(build(base, {}, out)["default_off"])
++            self.assertFalse(build(base, {"wi_on": True}, out)["default_off"])
++        finally:
++            out.unlink(missing_ok=True)
++            out.with_suffix(".py.wheat_idle.json").unlink(missing_ok=True)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/lab/hplus/wheat_idle.py b/lab/hplus/wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..d4f9bc112b533506c7a6132ecbf9b5dfc1eeefcf
+--- /dev/null
++++ b/lab/hplus/wheat_idle.py
+@@ -0,0 +1,82 @@
++"""T030 default-off, in-place WHEAT planting gene for a sealed Horizon agent.
++
++It has no pathing, hiring, market order or inventory-transfer authority.  When
++enabled it can only spend a seed already visible in private state on an empty,
++unlocked tile occupied by an actor whose inherited command is exactly PASS.
++"""
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++DEFAULT: dict[str, Any] = {"wi_on": False, "wi_day0": 0, "wi_day1": 29}
++
++MODULE_SRC = r'''
++# ================= T030 idle-WHEAT tape-safe gene (lab/hplus/wheat_idle.py) =================
++_WI = __WI_GENES__
++_WI_STATS = {"plants": 0, "abstain_shape": 0, "abstain_seed": 0, "errors": 0}
++_WI_PARENT = agent
++del agent
++
++def agent(obs, config=None):
++    action = _WI_PARENT(obs, config)
++    if not _WI.get("wi_on"):
++        return action
++    try:
++        step = int(obs["step"]); day = step // 24
++        if not (int(_WI["wi_day0"]) <= day <= int(_WI["wi_day1"])) or step >= 718:
++            return action
++        seat = int(obs["player"]); farm = obs["farms"][seat]
++        positions = [farm["farmer"], *(farm.get("hands") or [])]
++        commands = [list(action.get("farmer") or ["PASS"]), *(list(c) for c in (action.get("hands") or []))]
++        # Never add a hand command or mutate a non-PASS inherited command.
++        if len(commands) != len(positions):
++            _WI_STATS["abstain_shape"] += 1
++            return action
++        private = obs.get("private") or {}
++        seeds = int((private.get("seeds") or {}).get("WHEAT", 0))
++        committed = sum(1 for command in commands if command[:2] == ["PLANT", "WHEAT"])
++        spare = max(0, seeds - committed)
++        if not spare:
++            _WI_STATS["abstain_seed"] += 1
++            return action
++        for i, (pos, command) in enumerate(zip(positions, commands)):
++            if not spare or command != ["PASS"]:
++                continue
++            x, y = int(pos[0]), int(pos[1])
++            # `None` specifically excludes structures, crops, animals, weeds
++            # and LOCKED tiles. The engine will consume one existing seed.
++            if farm["tiles"][y][x] is None:
++                commands[i] = ["PLANT", "WHEAT"]
++                spare -= 1
++                _WI_STATS["plants"] += 1
++        return dict(action, farmer=commands[0], hands=commands[1:])
++    except Exception:
++        _WI_STATS["errors"] += 1
++        return action
++'''
++
++
++def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
++    value = dict(DEFAULT)
++    value.update(genes or {})
++    if set(value) != set(DEFAULT):
++        raise ValueError("unknown wheat-idle gene")
++    if type(value["wi_on"]) is not bool or any(type(value[x]) is not int for x in ("wi_day0", "wi_day1")):
++        raise ValueError("invalid wheat-idle gene types")
++    if not 0 <= value["wi_day0"] <= value["wi_day1"] <= 29:
++        raise ValueError("wheat-idle window must be 0..29")
++    return value
++
++
++def build(base_main_py: str | Path, genes: dict[str, Any] | None, out_main_py: str | Path) -> dict[str, Any]:
++    genes = normalise(genes)
++    base, out = Path(base_main_py), Path(out_main_py)
++    src = base.read_text().rstrip() + "\n" + MODULE_SRC.replace("__WI_GENES__", repr(genes))
++    compile(src, str(out), "exec")
++    out.parent.mkdir(parents=True, exist_ok=True)
++    out.write_text(src)
++    info = {"base": str(base.resolve()), "genes": genes, "default_off": not genes["wi_on"]}
++    out.with_suffix(out.suffix + ".wheat_idle.json").write_text(json.dumps(info, indent=2, sort_keys=True) + "\n")
++    return info
+diff --git a/lab/tools/replay_mine.py b/lab/tools/replay_mine.py
+index bd234a84b1b280a91911a941d8e87e3eeba5d14a..f87a71352d9b5d57a8f70e1db95a8ec02d1c9edf
+--- a/lab/tools/replay_mine.py
++++ b/lab/tools/replay_mine.py
+@@ -22,7 +22,7 @@
+     steps = d["steps"]
+ 
+     # ---- instrumentation state -------------------------------------------
+-    cur = {"step": 0}
++    cur = {"step": 0, "day": 0}
+     farms_ref = {}
+     sells = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]  # item -> [units, revenue]
+     buys = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]
+@@ -36,6 +36,11 @@
+     market_ops = [Counter(), Counter()]
+     order_lane = [Counter(), Counter()]  # (op, index) counts
+     first_sell_day = [{}, {}]
++    # Per-day wheat-flow instrumentation is deliberately action-success based.
++    # End-of-day tile snapshots alone cannot distinguish a crop that was grown
++    # and harvested from a crop never planted at all.
++    wheat_daily = [defaultdict(Counter), defaultdict(Counter)]
++    wheat_state = [[], []]
+ 
+     orig_commit = K._commit_unit
+     orig_hire = K._do_hire
+@@ -46,7 +51,7 @@
+         pid = farms_ref.get(id(farm), 0)
+         ok = orig_commit(op, item, price, farm, private, market, *extra)
+         if ok:
+-            day = cur["step"] // 24
++            day = cur["day"]
+             if op == "SELL":
+                 sells[pid][item][0] += 1
+                 sells[pid][item][1] += price
+@@ -57,6 +62,10 @@
+                 key = op + ":" + item
+                 buys[pid][key][0] += 1
+                 buys[pid][key][1] += price
++                if item == "WHEAT" and op in ("BUY_PRODUCT", "BUY_SEED"):
++                    prefix = "buy_product" if op == "BUY_PRODUCT" else "buy_seed"
++                    wheat_daily[pid][day][prefix + "_wheat_units"] += 1
++                    wheat_daily[pid][day][prefix + "_wheat_cost"] += price
+                 if op == "BUY_PRODUCT":
+                     sell_by_day[pid][day]["BUY_" + item] -= 1
+                     sell_price_by_day[pid][day].append(("BUY_" + item, price))
+@@ -83,6 +92,16 @@
+         pid = farms_ref.get(id(farm), 0)
+         op = action[0] if isinstance(action, list) and action else "?"
+         unit_ops[pid][op] += 1
++        pos = _farmer_pos(farm, idx)
++        tile_before = None
++        if pos is not None:
++            x, y = pos
++            tile = farm["tiles"][y][x]
++            if isinstance(tile, dict):
++                # Only scalar fields are used below; do not retain a mutable
++                # reference which _apply_unit_action changes in-place.
++                tile_before = dict(tile)
++        inv_before_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
+         snap = (farm["money"], json.dumps(private["shed"], sort_keys=True),
+                 str(_farmer_pos(farm, idx)), json.dumps(private["inventories"], sort_keys=True))
+         orig_unit(farm, private, idx, action, board_size, day, turns_per_day, shed_capacity)
+@@ -91,6 +110,25 @@
+         # crude but sufficient: tile mutations not caught -> handle separately
+         if snap != snap2:
+             unit_ops_ok[pid][op] += 1
++        if pos is not None:
++            x, y = pos
++            tile_after = farm["tiles"][y][x]
++            if op == "PLANT" and len(action) >= 2 and action[1] == "WHEAT":
++                if isinstance(tile_after, dict) and tile_after.get("kind") == "PLANT" and tile_after.get("crop") == "WHEAT":
++                    wheat_daily[pid][day]["wheat_tiles_planted"] += 1
++            elif op == "HARVEST" and tile_before and tile_before.get("kind") == "PLANT" and tile_before.get("crop") == "WHEAT":
++                # A successful harvest clears yield_units (and removes a
++                # finite crop); record both the tile action and yielded units.
++                yielded = tile_before.get("yield_units", 0)
++                after_yield = tile_after.get("yield_units", 0) if isinstance(tile_after, dict) else 0
++                if yielded > 0 and after_yield == 0:
++                    wheat_daily[pid][day]["wheat_tiles_harvested"] += 1
++                    wheat_daily[pid][day]["wheat_units_harvested"] += yielded
++            elif op == "FEED" and tile_before and "animal" in tile_before:
++                inv_after_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
++                if inv_after_wheat == inv_before_wheat - 1:
++                    wheat_daily[pid][day]["feed_actions"] += 1
++                    wheat_daily[pid][day]["wheat_units_fed"] += 1
+ 
+     def _farmer_pos(farm, idx):
+         return farm["farmer"] if idx == 0 else (farm["hands"][idx - 1] if idx - 1 < len(farm["hands"]) else None)
+@@ -120,7 +158,9 @@
+         tiles_hist = []
+         for t in range(1, len(steps)):
+             cur["step"] = t
+-            f0 = env.state[0]["observation"]["farms"]
++            before_obs = env.state[0]["observation"]
++            cur["day"] = before_obs["day"]
++            f0 = before_obs["farms"]
+             farms_ref.clear()
+             farms_ref[id(f0[0])] = 0
+             farms_ref[id(f0[1])] = 1
+@@ -144,6 +184,14 @@
+                                    [len(obs["farms"][p]["hands"]) for p in range(2)],
+                                    [list(obs["farms"][p]["unlocked_quadrants"]) for p in range(2)],
+                                    list(obs["town"]["unlocked_shops"])))
++                for p in range(2):
++                    census = _tile_census(obs["farms"][p])
++                    # step 24 is the end of playable day 0 (the observation
++                    # has already advanced to day 1), hence this label.
++                    wheat_state[p].append({"day": (t - 1) // 24,
++                                           "wheat_tiles_eod": census.get("P_WHEAT", 0),
++                                           "hands_eod": len(obs["farms"][p]["hands"]),
++                                           "quadrants_eod": len(obs["farms"][p]["unlocked_quadrants"])})
+     finally:
+         K._commit_unit = orig_commit
+         K._do_hire = orig_hire
+@@ -164,6 +212,8 @@
+         "tiles_hist": tiles_hist,
+         "sell_by_day": [{d_: dict(v) for d_, v in s.items()} for s in sell_by_day],
+         "sell_price_by_day": [{d_: v for d_, v in s.items()} for s in sell_price_by_day],
++        "wheat_daily": [{d_: dict(v) for d_, v in days.items()} for days in wheat_daily],
++        "wheat_state": wheat_state,
+     }
+     if verbose:
+         report(res)
+diff --git a/lab/tools/t030_wheat_sources.py b/lab/tools/t030_wheat_sources.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..a23cbbe0276c4b0fe7db0d0ed2c872f3dde6fdbd
+--- /dev/null
++++ b/lab/tools/t030_wheat_sources.py
+@@ -0,0 +1,169 @@
++#!/usr/bin/env python3
++"""T030: replay-exact wheat production/feed attribution, never a counterfactual.
++
++The 39 ladder losses and all 41 available wins are re-executed in the official
++engine.  Every reported plant, harvest, buy and feed is a successful engine
++action; daily hands/land/tile stock are end-of-day public state snapshots.
++"""
++from __future__ import annotations
++
++import argparse
++import glob
++import json
++import multiprocessing as mp
++from collections import defaultdict
++from pathlib import Path
++import sys
++
++sys.path.insert(0, str(Path(__file__).resolve().parent))
++from replay_mine import mine  # noqa: E402
++
++TEAM = "misis biznessmenlb"
++EVENTS = ("wheat_tiles_planted", "wheat_tiles_harvested", "wheat_units_harvested",
++          "buy_seed_wheat_units", "buy_seed_wheat_cost", "buy_product_wheat_units",
++          "buy_product_wheat_cost", "feed_actions", "wheat_units_fed", "hands_hired")
++STATE = ("wheat_tiles_eod", "quadrants_eod", "hands_eod")
++
++
++def games(replays: str):
++    rows = []
++    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
++        replay = json.loads(Path(raw).read_text())
++        teams, rewards = replay["info"]["TeamNames"], replay["rewards"]
++        if TEAM not in teams:
++            continue
++        us = teams.index(TEAM)
++        if rewards[us] == rewards[1 - us]:
++            continue
++        rows.append((raw, us, "loss" if rewards[us] < rewards[1 - us] else "win",
++                     replay["info"]["EpisodeId"], teams[1-us]))
++    return rows
++
++
++def replay(row):
++    raw, us, cohort, episode, opponent = row
++    return {"us": us, "cohort": cohort, "episode": episode, "opponent": opponent,
++            "result": mine(raw, verbose=False)}
++
++
++def add(dst, source, day, keys):
++    values = source.get(str(day), source.get(day, {}))
++    for key in keys:
++        dst[key] += values.get(key, 0)
++
++
++def mean_day(totals, n):
++    return {str(day): {key: totals[day][key] / n for key in (*EVENTS, *STATE)} for day in range(30)}
++
++
++def total(values, keys):
++    return {key: sum(values[str(day)][key] for day in range(30)) for key in keys}
++
++
++def fmt_pair(row, key, precision=1):
++    return f"{row['us'][key]:.{precision}f}/{row['opponent'][key]:.{precision}f}"
++
++
++def markdown(result):
++    lines = ["# T030 — откуда берётся лишняя пшеница соперника", "",
++             "Повторное исполнение тех же 80 ladder-replay в official engine 1.32.7: 39 поражений и все 41 доступные победы. "
++             "Посадки, harvest, покупки, FEED и HIRE — только успешные действия движка; земля и `P_WHEAT` — EOD-снимок. "
++             "Это наблюдательная атрибуция, не причинный counterfactual.", ""]
++    lines += ["| когорта | Δ opponent−us WHEAT sold | Δ planted tiles | Δ harvested units | Δ BUY_PRODUCT WHEAT $ | Δ FEED |",
++              "|---|---:|---:|---:|---:|---:|"]
++    for cohort in ("loss", "win"):
++        s = result["summary"][cohort]
++        lines.append("| %s (n=%d) | %+.1f | %+.1f | %+.1f | %s | %+.1f |" % (
++            cohort, s["games"], s["opp_minus_us_wheat_sold"], s["opp_minus_us"]["wheat_tiles_planted"],
++            s["opp_minus_us"]["wheat_units_harvested"],
++            f"${s['opp_minus_us']['buy_product_wheat_cost']:+,.1f}", s["opp_minus_us"]["feed_actions"]))
++    loss = result["summary"]["loss"]
++    lines += ["", "В losses дополнительный проданный WHEAT соперника не возникает из большего собственного crop-производства: "
++              f"у него {loss['opp_minus_us']['wheat_units_harvested']:+.1f} harvested units и "
++              f"{loss['opp_minus_us']['wheat_tiles_planted']:+.1f} посадок относительно нас, но "
++              f"{loss['opp_minus_us']['buy_product_wheat_units']:+.1f} купленных товарных WHEAT. "
++              f"При всего {loss['opp_minus_us']['feed_actions']:+.1f} FEED это наблюдаемо согласуется с перепродажей/market turnover, а не с замещением покупного корма собственным урожаем. "
++              f"Земля после d11 почти равна (~3.1–3.2 квадранта), seasonal HIRE лишь {loss['opp_minus_us']['hands_hired']:+.1f}; это не чистый land/labour дефицит."]
++    lines += ["", "## По дням — losses (среднее на игру, us/opponent)", "",
++              "| d | P_WHEAT EOD | plant tiles | harvest units | quadrants | hired hands | seed buy | product-WHEAT $ | FEED |",
++              "|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
++    rows = result["per_day"]["loss"]
++    for day in range(30):
++        r = rows[str(day)]
++        lines.append("| %d | %s | %s | %s | %s | %s | %s | %s | %s |" % (
++            day, fmt_pair(r, "wheat_tiles_eod"), fmt_pair(r, "wheat_tiles_planted"),
++            fmt_pair(r, "wheat_units_harvested"), fmt_pair(r, "quadrants_eod"), fmt_pair(r, "hands_hired"),
++            fmt_pair(r, "buy_seed_wheat_units"), fmt_pair(r, "buy_product_wheat_cost"), fmt_pair(r, "feed_actions")))
++    lines += ["", "## Контраст wins (агрегат на игру)", "",
++              "| метрика | us | opponent | Δ opponent−us |",
++              "|---|---:|---:|---:|"]
++    for key in ("wheat_tiles_planted", "wheat_units_harvested", "buy_seed_wheat_units", "buy_seed_wheat_cost",
++                "buy_product_wheat_units", "buy_product_wheat_cost", "feed_actions", "wheat_units_fed"):
++        s = result["summary"]["win"]
++        lines.append("| %s | %.1f | %.1f | %+.1f |" % (key, s["us"][key], s["opponent"][key], s["opp_minus_us"][key]))
++    lines += ["", "Полный машиночитаемый разрез, включая оба игрока каждого дня: `runs/t030_wheat_sources_v2/wheat.json`."]
++    return "\n".join(lines) + "\n"
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--replays", default="/workspace/shared/replays/t028")
++    ap.add_argument("--out", required=True)
++    ap.add_argument("--workers", type=int, default=8)
++    ap.add_argument("--render", action="store_true", help="render an existing JSON result without re-running replays")
++    args = ap.parse_args()
++    if not 1 <= args.workers <= 8:
++        ap.error("workers must be 1..8")
++    out = Path(args.out)
++    if args.render:
++        result = json.loads(out.read_text())
++        out.with_suffix(".md").write_text(markdown(result))
++        print(out.with_suffix(".md"))
++        return
++    rows = games(args.replays)
++    count = {kind: sum(row[2] == kind for row in rows) for kind in ("loss", "win")}
++    if count != {"loss": 39, "win": 41}:
++        raise RuntimeError(f"expected 39 losses and 41 wins, got {count}")
++    with mp.Pool(args.workers) as pool:
++        mined = list(pool.imap_unordered(replay, rows))
++    totals = {cohort: {role: [defaultdict(float) for _ in range(30)] for role in ("us", "opponent")}
++              for cohort in ("loss", "win")}
++    wheat_sold = {cohort: {role: 0.0 for role in ("us", "opponent")} for cohort in ("loss", "win")}
++    for game in mined:
++        cohort, us, result = game["cohort"], game["us"], game["result"]
++        for pid, role in ((us, "us"), (1-us, "opponent")):
++            for day in range(30):
++                add(totals[cohort][role][day], result["wheat_daily"][pid], day, EVENTS)
++                # Hands are deliberately fired at every day boundary; the
++                # public EOD `hands` snapshot is therefore almost always 0.
++                # Successful per-day HIRE calls are the meaningful labour
++                # measure (and are action-hooked by replay_mine).
++                totals[cohort][role][day]["hands_hired"] += result["hires"][pid].get(day, result["hires"][pid].get(str(day), 0))
++                state = next((x for x in result["wheat_state"][pid] if x["day"] == day), {})
++                for key in STATE:
++                    totals[cohort][role][day][key] += state.get(key, 0)
++            wheat_sold[cohort][role] += result["sells"][pid].get("WHEAT", [0, 0])[0]
++    per_day, summary = {}, {}
++    for cohort in ("loss", "win"):
++        by_role = {role: mean_day(totals[cohort][role], count[cohort]) for role in ("us", "opponent")}
++        per_day[cohort] = {str(day): {role: by_role[role][str(day)] for role in by_role} for day in range(30)}
++        sums = {role: total(by_role[role], EVENTS) for role in by_role}
++        summary[cohort] = {"games": count[cohort], "us": sums["us"], "opponent": sums["opponent"],
++                           "opp_minus_us": {key: sums["opponent"][key] - sums["us"][key] for key in EVENTS},
++                           "opp_minus_us_wheat_sold": (wheat_sold[cohort]["opponent"] - wheat_sold[cohort]["us"]) / count[cohort]}
++    output = {"method": "official engine replay, successful action hooks; state is EOD", "cohort_counts": count,
++              "summary": summary, "per_day": per_day,
++              "episodes": sorted({g["cohort"]: [] for g in mined}.items())}
++    # Preserve the episode identities without serialising the large raw miner output.
++    output["episodes"] = sorted(
++        ({"episode": g["episode"], "cohort": g["cohort"], "opponent": g["opponent"]} for g in mined),
++        key=lambda x: x["episode"])
++    out.parent.mkdir(parents=True, exist_ok=False)
++    out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
++    report = out.with_suffix(".md")
++    report.write_text(markdown(output))
++    print(report)
++
++
++if __name__ == "__main__":
++    main()
+
+exec
+/bin/bash -lc "git status --short && git -C /workspace/solution_kaggri status --short && /workspace/solution_kaggri/.venv/bin/python -m py_compile lab/tools/replay_mine.py lab/tools/t030_wheat_sources.py lab/hplus/wheat_idle.py && (cd lab/hplus && /workspace/solution_kaggri/.venv/bin/python test_wheat_idle.py) && /workspace/shared/bin/say claude 'T030 code merged into lab as c3a2c84 and synced (board+lab). The rejected on-agent is reproducible from lab/hplus/wheat_idle.py + frozen es6; no candidate archive created.'" in /workspace/wt/codex
+ succeeded in 467ms:
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.385s
+
+OK
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 519a2b7edf42357bd13fad28b8b1d8a2c01d5465..02f82e4f17e5e3f9119598fa873b93e78c944599
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030 wheat source: in all 39 es3 losses, opponent WHEAT sales are **+517/game but not extra farming** (ours is +8 harvested units/+7.6 plant tiles); opponent instead buys +529 product WHEAT ($20.66k) while FEED differs only +5 and land/seasonal hires are near equal. Default-off idle-seed `PASS→PLANT WHEAT` on es6 is identity-audited (0/1,442 diffs off) but fails fresh 2-world both-seat es6+Parthenos screen 0/8, paired −50pp/−$2,248, 16/16 valid. No full T025 gate/candidate/Kaggle action. `research/t030_wheat_sources.md` [codex]
+ - 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+@@ -119,4 +120,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+-| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
++| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+diff --git a//workspace/shared/ledger.jsonl b//workspace/shared/ledger.jsonl
+index 966e27325c9edcd11caee8f063affe32556df257..193e5a83f3381f4c6a66d4428a8b9f918ae93bfa
+--- a//workspace/shared/ledger.jsonl
++++ b//workspace/shared/ledger.jsonl
+@@ -80,4 +80,5 @@
+ {"ts":"2026-09-26T11:50Z","who":"claude","what":"screen of 9 fresh public agents (opponents/new0926) vs es6_c4g15 + v5_market, 4 worlds both seats","result":"running (144 games); gods-mode is multi-file (import base_agent) -> errors, ignore"}
+ {"ts":"2026-09-26T12:10Z","who":"claude","what":"screen fresh public agents vs es6 (4 worlds)","result":"es6 beats 2965-master 8-0, top2-v4 8-0, herd-safe 8-0, shepherd 5-3; demand-preserving beats es6 6/8 (+411). All Horizon-family (Codex). es3_g5 ladder record (80 replays) 41-39 vs mostly mid-rated private teams -> panel unrepresentative; market/demand competition hypothesis. Launched demand vs es6 16-world 10-opp paired check.","artifacts":"runs/screen_new0926, runs/gate_demand_vs_es6"}
+ {"ts":"2026-09-26T12:30Z","who":"claude","what":"T030 Codex market analysis of 39 es3 ladder losses","result":"loss is volume, not price: WHEAT −517 units/−$20.4k revenue per lost game (same price), carrot/egg volume gaps; strawberry we sell more but −$6.4/unit. DMX (demand layer graft) invalid. Next: wheat-volume mechanism."}
++{"ts":"2026-09-26T12:47Z","by":"codex","task":"T030","candidate":"wheat_idle_on","path":"/workspace/wt/codex/experiments/t030_wheat_idle/main_on.py","sha256":"03b96bae097a2a6dde9644a447cfde39049385f76a9260ebbab01258fd5c777d","opponents":["es6_c4g15","parthenos_robust"],"seeds_file":"/workspace/shared/runs/t030_wheat_idle_screen/manifest.json","games":8,"wins":0,"draws":0,"losses":8,"mean_margin":-2085.5,"worst10_margin":-2941.0,"errors":0,"run_dir":"/workspace/shared/runs/t030_wheat_idle_screen","verdict":"worse","note":"Fresh 2-world both-seat capability screen, 16/16 total valid games including frozen es6 control. Paired wheat_idle_on minus es6 is −0.500 score, 95% [−0.75,−0.25], and −$2,248.25; no full T025 gate, candidate, or Kaggle submission."}
+ {"ts":"2026-09-26T12:48Z","who":"claude","what":"demand-preserving (public) vs es6_c4g15, 16 fresh worlds, 10 opps, 576 games 0 bad","result":"REJECT: panel −18.4pp (lower −28.5); h2h demand 12/32; loses to es1_g9 10/32 & v5 11/32 (es6 30/32). But demand margins vs parthenos/shepherd/t2945/metav4 are +$500–570 higher than es6 -> its sale layer extracts more vs non-Horizon opponents (4-world screen 6/8 was noise).","artifacts":"runs/gate_demand_vs_es6"}
+diff --git a//workspace/shared/research/t030_wheat_sources.md b//workspace/shared/research/t030_wheat_sources.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..cefbf583a1ca7cb42e2f0a9bd8f5a71e1aad863e
+--- /dev/null
++++ b//workspace/shared/research/t030_wheat_sources.md
+@@ -0,0 +1,7 @@
++# T030 — WHEAT source in es3 ladder losses
++
++Official-engine re-execution of all 39 T028 losses and all 41 wins, with eight workers and successful-action instrumentation: [full daily report](../runs/t030_wheat_sources_v2/wheat.md), [JSON](../runs/t030_wheat_sources_v2/wheat.json).
++
++In a loss the opponent sells 517 more WHEAT/game, but grows slightly less: −7.6 successful WHEAT plants and −8.0 harvested WHEAT units relative to us. Land is effectively equal after d11 (about 3.1--3.2 quadrants); opponent seasonal successful hires are only +4.0; FEED is only +5.0. The decisive observed flow is +528.7 `BUY_PRODUCT WHEAT` ($20.66k/game). This is consistent with purchased WHEAT market turnover/resale, not an own-feed advantage.
++
++The tiny tape-safe repair was therefore deliberately conservative: default-off `PASS -> PLANT WHEAT` only at an actor's existing empty tile, consuming only an already spare WHEAT seed. Off identity is 0/1,442 action diffs. On fails a fresh two-world, both-seat es6+Parthenos screen 0/8 (paired −50pp, −$2,248; 16/16 valid), so it does not advance to T025 full panel.
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+index 6c61a888d3217f916abaa9c37aa20037874723ae..4b1011916357a3f36d7fe42fd44a83e9e82f8bef
+--- a//workspace/shared/tasks/T030-new0926-public-bases.md
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -38,3 +38,20 @@
+ `demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
+ 
+ Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
++
++## Amendment — wheat source attribution / tape-safe repair 2026-09-26
++
++Claim: codex. User-directed continuation. Kaggle remains read-only; no submission.
++
++1. Re-execute the exact 39 T028 losses and all 41 available wins in official engine 1.32.7 with successful-action hooks. Per game/day record WHEAT plants, harvest tiles/units, EOD WHEAT tiles, quadrants, hands, WHEAT seed and product purchases/cost, and successful FEED. Do not infer these from final inventory.
++2. Explain the loss-vs-win contrast and whether opponents' WHEAT sales are production, land/labour, or avoided purchased feed.
++3. Implement only the smallest evidence-supported, tape-safe, **default-off** gene on the working es6 archive; prove genome-off action identity; run a fresh both-seat 2-world screen at <=8 workers. Only a positive valid screen may use T025's fresh full-panel gate against es6.
++
++## Result — wheat source attribution / idle-crop gene rejected 2026-09-26
++
++`lab/tools/t030_wheat_sources.py` re-executed all 80 available T028 worlds (exactly 39 losses and 41 wins) in official engine 1.32.7, with eight processes and zero miner failures. It records only successful actions. Full daily matrix: `runs/t030_wheat_sources_v2/wheat.json` / `.md`.
++
++- **Losses:** opponent WHEAT sold is +516.97 units/game, but it does *not* arise from more WHEAT crop production: opponent−us is **−7.62 planted tiles** and **−8.00 harvested units**. WHEAT seed buying is also lower by 5.95 units ($59.49). Instead the opponent executes **+528.67 BUY_PRODUCT WHEAT**, $20,660/game more cost; successful FEED is only +4.97.
++- **Daily mechanism:** quadrants converge at roughly 3.1--3.2 after d11; successful daily hires differ little (seasonal +3.97 for opponent). From d10--27 the opponent repeatedly spends much more on purchased WHEAT while WHEAT crop stock/harvest is comparable or lower. This supports purchased/re-sold market turnover rather than a own-feed/land/labour explanation. In the 41 wins the corresponding purchase-cost gap falls to $2,114/game and sales gap to 46.8 units.
++- Implemented `lab/hplus/wheat_idle.py`, a namespaced default-off gene over sealed es6. When on, it only turns an inherited exact `PASS` into `PLANT WHEAT` on an already empty unlocked tile, using only an already-present WHEAT seed after reserving the parent's planned WHEAT plants. It never changes market orders, money, movement, hire, hand count, or a non-PASS action. The off build has **0 action differences / 1,442 calls**, both games DONE: `runs/t030_wheat_idle_identity.json`.
++- Fresh screen (`runs/t030_wheat_idle_screen`, seeds `870722613,787550011`, both seats vs es6 mirror + Parthenos, <=8 workers): **16/16 valid**, on candidate **0/8**, paired vs es6 **−0.500 score** (95% −0.75..−0.25), **−$2,248.25** (95% −$3,092.50..−$1,404.00). It is rejected; no full T025 gate, candidate, or Kaggle action.
+diff --git a/lab/hplus/test_wheat_idle.py b/lab/hplus/test_wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..5acc51a9b229af879acb0cbfcdbaf6eb73529c5f
+--- /dev/null
++++ b/lab/hplus/test_wheat_idle.py
+@@ -0,0 +1,20 @@
++from pathlib import Path
++import unittest
++
++from wheat_idle import build
++
++
++class WheatIdleBuildTest(unittest.TestCase):
++    def test_default_off_and_on_compile(self):
++        base = Path(__file__).resolve().parents[2] / "agents/horizon_v5_market.py"
++        out = Path("/tmp/t030_wheat_idle_test.py")
++        try:
++            self.assertTrue(build(base, {}, out)["default_off"])
++            self.assertFalse(build(base, {"wi_on": True}, out)["default_off"])
++        finally:
++            out.unlink(missing_ok=True)
++            out.with_suffix(".py.wheat_idle.json").unlink(missing_ok=True)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/lab/hplus/wheat_idle.py b/lab/hplus/wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..d4f9bc112b533506c7a6132ecbf9b5dfc1eeefcf
+--- /dev/null
++++ b/lab/hplus/wheat_idle.py
+@@ -0,0 +1,82 @@
++"""T030 default-off, in-place WHEAT planting gene for a sealed Horizon agent.
++
++It has no pathing, hiring, market order or inventory-transfer authority.  When
++enabled it can only spend a seed already visible in private state on an empty,
++unlocked tile occupied by an actor whose inherited command is exactly PASS.
++"""
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++DEFAULT: dict[str, Any] = {"wi_on": False, "wi_day0": 0, "wi_day1": 29}
++
++MODULE_SRC = r'''
++# ================= T030 idle-WHEAT tape-safe gene (lab/hplus/wheat_idle.py) =================
++_WI = __WI_GENES__
++_WI_STATS = {"plants": 0, "abstain_shape": 0, "abstain_seed": 0, "errors": 0}
++_WI_PARENT = agent
++del agent
++
++def agent(obs, config=None):
++    action = _WI_PARENT(obs, config)
++    if not _WI.get("wi_on"):
++        return action
++    try:
++        step = int(obs["step"]); day = step // 24
++        if not (int(_WI["wi_day0"]) <= day <= int(_WI["wi_day1"])) or step >= 718:
++            return action
++        seat = int(obs["player"]); farm = obs["farms"][seat]
++        positions = [farm["farmer"], *(farm.get("hands") or [])]
++        commands = [list(action.get("farmer") or ["PASS"]), *(list(c) for c in (action.get("hands") or []))]
++        # Never add a hand command or mutate a non-PASS inherited command.
++        if len(commands) != len(positions):
++            _WI_STATS["abstain_shape"] += 1
++            return action
++        private = obs.get("private") or {}
++        seeds = int((private.get("seeds") or {}).get("WHEAT", 0))
++        committed = sum(1 for command in commands if command[:2] == ["PLANT", "WHEAT"])
++        spare = max(0, seeds - committed)
++        if not spare:
++            _WI_STATS["abstain_seed"] += 1
++            return action
++        for i, (pos, command) in enumerate(zip(positions, commands)):
++            if not spare or command != ["PASS"]:
++                continue
++            x, y = int(pos[0]), int(pos[1])
++            # `None` specifically excludes structures, crops, animals, weeds
++            # and LOCKED tiles. The engine will consume one existing seed.
++            if farm["tiles"][y][x] is None:
++                commands[i] = ["PLANT", "WHEAT"]
++                spare -= 1
++                _WI_STATS["plants"] += 1
++        return dict(action, farmer=commands[0], hands=commands[1:])
++    except Exception:
++        _WI_STATS["errors"] += 1
++        return action
++'''
++
++
++def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
++    value = dict(DEFAULT)
++    value.update(genes or {})
++    if set(value) != set(DEFAULT):
++        raise ValueError("unknown wheat-idle gene")
++    if type(value["wi_on"]) is not bool or any(type(value[x]) is not int for x in ("wi_day0", "wi_day1")):
++        raise ValueError("invalid wheat-idle gene types")
++    if not 0 <= value["wi_day0"] <= value["wi_day1"] <= 29:
++        raise ValueError("wheat-idle window must be 0..29")
++    return value
++
++
++def build(base_main_py: str | Path, genes: dict[str, Any] | None, out_main_py: str | Path) -> dict[str, Any]:
++    genes = normalise(genes)
++    base, out = Path(base_main_py), Path(out_main_py)
++    src = base.read_text().rstrip() + "\n" + MODULE_SRC.replace("__WI_GENES__", repr(genes))
++    compile(src, str(out), "exec")
++    out.parent.mkdir(parents=True, exist_ok=True)
++    out.write_text(src)
++    info = {"base": str(base.resolve()), "genes": genes, "default_off": not genes["wi_on"]}
++    out.with_suffix(out.suffix + ".wheat_idle.json").write_text(json.dumps(info, indent=2, sort_keys=True) + "\n")
++    return info
+diff --git a/lab/tools/replay_mine.py b/lab/tools/replay_mine.py
+index bd234a84b1b280a91911a941d8e87e3eeba5d14a..f87a71352d9b5d57a8f70e1db95a8ec02d1c9edf
+--- a/lab/tools/replay_mine.py
++++ b/lab/tools/replay_mine.py
+@@ -22,7 +22,7 @@
+     steps = d["steps"]
+ 
+     # ---- instrumentation state -------------------------------------------
+-    cur = {"step": 0}
++    cur = {"step": 0, "day": 0}
+     farms_ref = {}
+     sells = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]  # item -> [units, revenue]
+     buys = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]
+@@ -36,6 +36,11 @@
+     market_ops = [Counter(), Counter()]
+     order_lane = [Counter(), Counter()]  # (op, index) counts
+     first_sell_day = [{}, {}]
++    # Per-day wheat-flow instrumentation is deliberately action-success based.
++    # End-of-day tile snapshots alone cannot distinguish a crop that was grown
++    # and harvested from a crop never planted at all.
++    wheat_daily = [defaultdict(Counter), defaultdict(Counter)]
++    wheat_state = [[], []]
+ 
+     orig_commit = K._commit_unit
+     orig_hire = K._do_hire
+@@ -46,7 +51,7 @@
+         pid = farms_ref.get(id(farm), 0)
+         ok = orig_commit(op, item, price, farm, private, market, *extra)
+         if ok:
+-            day = cur["step"] // 24
++            day = cur["day"]
+             if op == "SELL":
+                 sells[pid][item][0] += 1
+                 sells[pid][item][1] += price
+@@ -57,6 +62,10 @@
+                 key = op + ":" + item
+                 buys[pid][key][0] += 1
+                 buys[pid][key][1] += price
++                if item == "WHEAT" and op in ("BUY_PRODUCT", "BUY_SEED"):
++                    prefix = "buy_product" if op == "BUY_PRODUCT" else "buy_seed"
++                    wheat_daily[pid][day][prefix + "_wheat_units"] += 1
++                    wheat_daily[pid][day][prefix + "_wheat_cost"] += price
+                 if op == "BUY_PRODUCT":
+                     sell_by_day[pid][day]["BUY_" + item] -= 1
+                     sell_price_by_day[pid][day].append(("BUY_" + item, price))
+@@ -83,6 +92,16 @@
+         pid = farms_ref.get(id(farm), 0)
+         op = action[0] if isinstance(action, list) and action else "?"
+         unit_ops[pid][op] += 1
++        pos = _farmer_pos(farm, idx)
++        tile_before = None
++        if pos is not None:
++            x, y = pos
++            tile = farm["tiles"][y][x]
++            if isinstance(tile, dict):
++                # Only scalar fields are used below; do not retain a mutable
++                # reference which _apply_unit_action changes in-place.
++                tile_before = dict(tile)
++        inv_before_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
+         snap = (farm["money"], json.dumps(private["shed"], sort_keys=True),
+                 str(_farmer_pos(farm, idx)), json.dumps(private["inventories"], sort_keys=True))
+         orig_unit(farm, private, idx, action, board_size, day, turns_per_day, shed_capacity)
+@@ -91,6 +110,25 @@
+         # crude but sufficient: tile mutations not caught -> handle separately
+         if snap != snap2:
+             unit_ops_ok[pid][op] += 1
++        if pos is not None:
++            x, y = pos
++            tile_after = farm["tiles"][y][x]
++            if op == "PLANT" and len(action) >= 2 and action[1] == "WHEAT":
++                if isinstance(tile_after, dict) and tile_after.get("kind") == "PLANT" and tile_after.get("crop") == "WHEAT":
++                    wheat_daily[pid][day]["wheat_tiles_planted"] += 1
++            elif op == "HARVEST" and tile_before and tile_before.get("kind") == "PLANT" and tile_before.get("crop") == "WHEAT":
++                # A successful harvest clears yield_units (and removes a
++                # finite crop); record both the tile action and yielded units.
++                yielded = tile_before.get("yield_units", 0)
++                after_yield = tile_after.get("yield_units", 0) if isinstance(tile_after, dict) else 0
++                if yielded > 0 and after_yield == 0:
++                    wheat_daily[pid][day]["wheat_tiles_harvested"] += 1
++                    wheat_daily[pid][day]["wheat_units_harvested"] += yielded
++            elif op == "FEED" and tile_before and "animal" in tile_before:
++                inv_after_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
++                if inv_after_wheat == inv_before_wheat - 1:
++                    wheat_daily[pid][day]["feed_actions"] += 1
++                    wheat_daily[pid][day]["wheat_units_fed"] += 1
+ 
+     def _farmer_pos(farm, idx):
+         return farm["farmer"] if idx == 0 else (farm["hands"][idx - 1] if idx - 1 < len(farm["hands"]) else None)
+@@ -120,7 +158,9 @@
+         tiles_hist = []
+         for t in range(1, len(steps)):
+             cur["step"] = t
+-            f0 = env.state[0]["observation"]["farms"]
++            before_obs = env.state[0]["observation"]
++            cur["day"] = before_obs["day"]
++            f0 = before_obs["farms"]
+             farms_ref.clear()
+             farms_ref[id(f0[0])] = 0
+             farms_ref[id(f0[1])] = 1
+@@ -144,6 +184,14 @@
+                                    [len(obs["farms"][p]["hands"]) for p in range(2)],
+                                    [list(obs["farms"][p]["unlocked_quadrants"]) for p in range(2)],
+                                    list(obs["town"]["unlocked_shops"])))
++                for p in range(2):
++                    census = _tile_census(obs["farms"][p])
++                    # step 24 is the end of playable day 0 (the observation
++                    # has already advanced to day 1), hence this label.
++                    wheat_state[p].append({"day": (t - 1) // 24,
++                                           "wheat_tiles_eod": census.get("P_WHEAT", 0),
++                                           "hands_eod": len(obs["farms"][p]["hands"]),
++                                           "quadrants_eod": len(obs["farms"][p]["unlocked_quadrants"])})
+     finally:
+         K._commit_unit = orig_commit
+         K._do_hire = orig_hire
+@@ -164,6 +212,8 @@
+         "tiles_hist": tiles_hist,
+         "sell_by_day": [{d_: dict(v) for d_, v in s.items()} for s in sell_by_day],
+         "sell_price_by_day": [{d_: v for d_, v in s.items()} for s in sell_price_by_day],
++        "wheat_daily": [{d_: dict(v) for d_, v in days.items()} for days in wheat_daily],
++        "wheat_state": wheat_state,
+     }
+     if verbose:
+         report(res)
+diff --git a/lab/tools/t030_wheat_sources.py b/lab/tools/t030_wheat_sources.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..a23cbbe0276c4b0fe7db0d0ed2c872f3dde6fdbd
+--- /dev/null
++++ b/lab/tools/t030_wheat_sources.py
+@@ -0,0 +1,169 @@
++#!/usr/bin/env python3
++"""T030: replay-exact wheat production/feed attribution, never a counterfactual.
++
++The 39 ladder losses and all 41 available wins are re-executed in the official
++engine.  Every reported plant, harvest, buy and feed is a successful engine
++action; daily hands/land/tile stock are end-of-day public state snapshots.
++"""
++from __future__ import annotations
++
++import argparse
++import glob
++import json
++import multiprocessing as mp
++from collections import defaultdict
++from pathlib import Path
++import sys
++
++sys.path.insert(0, str(Path(__file__).resolve().parent))
++from replay_mine import mine  # noqa: E402
++
++TEAM = "misis biznessmenlb"
++EVENTS = ("wheat_tiles_planted", "wheat_tiles_harvested", "wheat_units_harvested",
++          "buy_seed_wheat_units", "buy_seed_wheat_cost", "buy_product_wheat_units",
++          "buy_product_wheat_cost", "feed_actions", "wheat_units_fed", "hands_hired")
++STATE = ("wheat_tiles_eod", "quadrants_eod", "hands_eod")
++
++
++def games(replays: str):
++    rows = []
++    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
++        replay = json.loads(Path(raw).read_text())
++        teams, rewards = replay["info"]["TeamNames"], replay["rewards"]
++        if TEAM not in teams:
++            continue
++        us = teams.index(TEAM)
++        if rewards[us] == rewards[1 - us]:
++            continue
++        rows.append((raw, us, "loss" if rewards[us] < rewards[1 - us] else "win",
++                     replay["info"]["EpisodeId"], teams[1-us]))
++    return rows
++
++
++def replay(row):
++    raw, us, cohort, episode, opponent = row
++    return {"us": us, "cohort": cohort, "episode": episode, "opponent": opponent,
++            "result": mine(raw, verbose=False)}
++
++
++def add(dst, source, day, keys):
++    values = source.get(str(day), source.get(day, {}))
++    for key in keys:
++        dst[key] += values.get(key, 0)
++
++
++def mean_day(totals, n):
++    return {str(day): {key: totals[day][key] / n for key in (*EVENTS, *STATE)} for day in range(30)}
++
++
++def total(values, keys):
++    return {key: sum(values[str(day)][key] for day in range(30)) for key in keys}
++
++
++def fmt_pair(row, key, precision=1):
++    return f"{row['us'][key]:.{precision}f}/{row['opponent'][key]:.{precision}f}"
++
++
++def markdown(result):
++    lines = ["# T030 — откуда берётся лишняя пшеница соперника", "",
++             "Повторное исполнение тех же 80 ladder-replay в official engine 1.32.7: 39 поражений и все 41 доступные победы. "
++             "Посадки, harvest, покупки, FEED и HIRE — только успешные действия движка; земля и `P_WHEAT` — EOD-снимок. "
++             "Это наблюдательная атрибуция, не причинный counterfactual.", ""]
++    lines += ["| когорта | Δ opponent−us WHEAT sold | Δ planted tiles | Δ harvested units | Δ BUY_PRODUCT WHEAT $ | Δ FEED |",
++              "|---|---:|---:|---:|---:|---:|"]
++    for cohort in ("loss", "win"):
++        s = result["summary"][cohort]
++        lines.append("| %s (n=%d) | %+.1f | %+.1f | %+.1f | %s | %+.1f |" % (
++            cohort, s["games"], s["opp_minus_us_wheat_sold"], s["opp_minus_us"]["wheat_tiles_planted"],
++            s["opp_minus_us"]["wheat_units_harvested"],
++            f"${s['opp_minus_us']['buy_product_wheat_cost']:+,.1f}", s["opp_minus_us"]["feed_actions"]))
++    loss = result["summary"]["loss"]
++    lines += ["", "В losses дополнительный проданный WHEAT соперника не возникает из большего собственного crop-производства: "
++              f"у него {loss['opp_minus_us']['wheat_units_harvested']:+.1f} harvested units и "
++              f"{loss['opp_minus_us']['wheat_tiles_planted']:+.1f} посадок относительно нас, но "
++              f"{loss['opp_minus_us']['buy_product_wheat_units']:+.1f} купленных товарных WHEAT. "
++              f"При всего {loss['opp_minus_us']['feed_actions']:+.1f} FEED это наблюдаемо согласуется с перепродажей/market turnover, а не с замещением покупного корма собственным урожаем. "
++              f"Земля после d11 почти равна (~3.1–3.2 квадранта), seasonal HIRE лишь {loss['opp_minus_us']['hands_hired']:+.1f}; это не чистый land/labour дефицит."]
++    lines += ["", "## По дням — losses (среднее на игру, us/opponent)", "",
++              "| d | P_WHEAT EOD | plant tiles | harvest units | quadrants | hired hands | seed buy | product-WHEAT $ | FEED |",
++              "|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
++    rows = result["per_day"]["loss"]
++    for day in range(30):
++        r = rows[str(day)]
++        lines.append("| %d | %s | %s | %s | %s | %s | %s | %s | %s |" % (
++            day, fmt_pair(r, "wheat_tiles_eod"), fmt_pair(r, "wheat_tiles_planted"),
++            fmt_pair(r, "wheat_units_harvested"), fmt_pair(r, "quadrants_eod"), fmt_pair(r, "hands_hired"),
++            fmt_pair(r, "buy_seed_wheat_units"), fmt_pair(r, "buy_product_wheat_cost"), fmt_pair(r, "feed_actions")))
++    lines += ["", "## Контраст wins (агрегат на игру)", "",
++              "| метрика | us | opponent | Δ opponent−us |",
++              "|---|---:|---:|---:|"]
++    for key in ("wheat_tiles_planted", "wheat_units_harvested", "buy_seed_wheat_units", "buy_seed_wheat_cost",
++                "buy_product_wheat_units", "buy_product_wheat_cost", "feed_actions", "wheat_units_fed"):
++        s = result["summary"]["win"]
++        lines.append("| %s | %.1f | %.1f | %+.1f |" % (key, s["us"][key], s["opponent"][key], s["opp_minus_us"][key]))
++    lines += ["", "Полный машиночитаемый разрез, включая оба игрока каждого дня: `runs/t030_wheat_sources_v2/wheat.json`."]
++    return "\n".join(lines) + "\n"
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--replays", default="/workspace/shared/replays/t028")
++    ap.add_argument("--out", required=True)
++    ap.add_argument("--workers", type=int, default=8)
++    ap.add_argument("--render", action="store_true", help="render an existing JSON result without re-running replays")
++    args = ap.parse_args()
++    if not 1 <= args.workers <= 8:
++        ap.error("workers must be 1..8")
++    out = Path(args.out)
++    if args.render:
++        result = json.loads(out.read_text())
++        out.with_suffix(".md").write_text(markdown(result))
++        print(out.with_suffix(".md"))
++        return
++    rows = games(args.replays)
++    count = {kind: sum(row[2] == kind for row in rows) for kind in ("loss", "win")}
++    if count != {"loss": 39, "win": 41}:
++        raise RuntimeError(f"expected 39 losses and 41 wins, got {count}")
++    with mp.Pool(args.workers) as pool:
++        mined = list(pool.imap_unordered(replay, rows))
++    totals = {cohort: {role: [defaultdict(float) for _ in range(30)] for role in ("us", "opponent")}
++              for cohort in ("loss", "win")}
++    wheat_sold = {cohort: {role: 0.0 for role in ("us", "opponent")} for cohort in ("loss", "win")}
++    for game in mined:
++        cohort, us, result = game["cohort"], game["us"], game["result"]
++        for pid, role in ((us, "us"), (1-us, "opponent")):
++            for day in range(30):
++                add(totals[cohort][role][day], result["wheat_daily"][pid], day, EVENTS)
++                # Hands are deliberately fired at every day boundary; the
++                # public EOD `hands` snapshot is therefore almost always 0.
++                # Successful per-day HIRE calls are the meaningful labour
++                # measure (and are action-hooked by replay_mine).
++                totals[cohort][role][day]["hands_hired"] += result["hires"][pid].get(day, result["hires"][pid].get(str(day), 0))
++                state = next((x for x in result["wheat_state"][pid] if x["day"] == day), {})
++                for key in STATE:
++                    totals[cohort][role][day][key] += state.get(key, 0)
++            wheat_sold[cohort][role] += result["sells"][pid].get("WHEAT", [0, 0])[0]
++    per_day, summary = {}, {}
++    for cohort in ("loss", "win"):
++        by_role = {role: mean_day(totals[cohort][role], count[cohort]) for role in ("us", "opponent")}
++        per_day[cohort] = {str(day): {role: by_role[role][str(day)] for role in by_role} for day in range(30)}
++        sums = {role: total(by_role[role], EVENTS) for role in by_role}
++        summary[cohort] = {"games": count[cohort], "us": sums["us"], "opponent": sums["opponent"],
++                           "opp_minus_us": {key: sums["opponent"][key] - sums["us"][key] for key in EVENTS},
++                           "opp_minus_us_wheat_sold": (wheat_sold[cohort]["opponent"] - wheat_sold[cohort]["us"]) / count[cohort]}
++    output = {"method": "official engine replay, successful action hooks; state is EOD", "cohort_counts": count,
++              "summary": summary, "per_day": per_day,
++              "episodes": sorted({g["cohort"]: [] for g in mined}.items())}
++    # Preserve the episode identities without serialising the large raw miner output.
++    output["episodes"] = sorted(
++        ({"episode": g["episode"], "cohort": g["cohort"], "opponent": g["opponent"]} for g in mined),
++        key=lambda x: x["episode"])
++    out.parent.mkdir(parents=True, exist_ok=False)
++    out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
++    report = out.with_suffix(".md")
++    report.write_text(markdown(output))
++    print(report)
++
++
++if __name__ == "__main__":
++    main()
+
+codex
+T030 закрыт отрицательно; Kaggle не использовался для отправок.
+
+- В 39 losses соперник продаёт +517 WHEAT, но не выращивает больше: у нас +8 harvested units. Их отличие — +529 купленных товарных WHEAT (+$20.66k), при лишь +5 FEED; это market turnover/перепродажа, не собственный корм.
+- Земля и найм почти равны после d11.
+- Default-off `PASS→PLANT WHEAT` ген для es6: off identity 0/1 442 action diffs.
+- Fresh 2-world screen: 16/16 DONE, 0/8, paired −50pp и −$2,248. T025 full-panel не запускался.
+
+Доказательства: [отчёт]( /workspace/shared/runs/t030_wheat_sources_v2/wheat.md ), [screen]( /workspace/shared/runs/t030_wheat_idle_screen/README.md ). Доска, task, ledger обновлены; код в `lab` и синхронизирован (`c3a2c84`).
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 519a2b7edf42357bd13fad28b8b1d8a2c01d5465..02f82e4f17e5e3f9119598fa873b93e78c944599
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030 wheat source: in all 39 es3 losses, opponent WHEAT sales are **+517/game but not extra farming** (ours is +8 harvested units/+7.6 plant tiles); opponent instead buys +529 product WHEAT ($20.66k) while FEED differs only +5 and land/seasonal hires are near equal. Default-off idle-seed `PASS→PLANT WHEAT` on es6 is identity-audited (0/1,442 diffs off) but fails fresh 2-world both-seat es6+Parthenos screen 0/8, paired −50pp/−$2,248, 16/16 valid. No full T025 gate/candidate/Kaggle action. `research/t030_wheat_sources.md` [codex]
+ - 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+@@ -119,4 +120,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+-| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
++| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+diff --git a//workspace/shared/ledger.jsonl b//workspace/shared/ledger.jsonl
+index 966e27325c9edcd11caee8f063affe32556df257..193e5a83f3381f4c6a66d4428a8b9f918ae93bfa
+--- a//workspace/shared/ledger.jsonl
++++ b//workspace/shared/ledger.jsonl
+@@ -80,4 +80,5 @@
+ {"ts":"2026-09-26T11:50Z","who":"claude","what":"screen of 9 fresh public agents (opponents/new0926) vs es6_c4g15 + v5_market, 4 worlds both seats","result":"running (144 games); gods-mode is multi-file (import base_agent) -> errors, ignore"}
+ {"ts":"2026-09-26T12:10Z","who":"claude","what":"screen fresh public agents vs es6 (4 worlds)","result":"es6 beats 2965-master 8-0, top2-v4 8-0, herd-safe 8-0, shepherd 5-3; demand-preserving beats es6 6/8 (+411). All Horizon-family (Codex). es3_g5 ladder record (80 replays) 41-39 vs mostly mid-rated private teams -> panel unrepresentative; market/demand competition hypothesis. Launched demand vs es6 16-world 10-opp paired check.","artifacts":"runs/screen_new0926, runs/gate_demand_vs_es6"}
+ {"ts":"2026-09-26T12:30Z","who":"claude","what":"T030 Codex market analysis of 39 es3 ladder losses","result":"loss is volume, not price: WHEAT −517 units/−$20.4k revenue per lost game (same price), carrot/egg volume gaps; strawberry we sell more but −$6.4/unit. DMX (demand layer graft) invalid. Next: wheat-volume mechanism."}
++{"ts":"2026-09-26T12:47Z","by":"codex","task":"T030","candidate":"wheat_idle_on","path":"/workspace/wt/codex/experiments/t030_wheat_idle/main_on.py","sha256":"03b96bae097a2a6dde9644a447cfde39049385f76a9260ebbab01258fd5c777d","opponents":["es6_c4g15","parthenos_robust"],"seeds_file":"/workspace/shared/runs/t030_wheat_idle_screen/manifest.json","games":8,"wins":0,"draws":0,"losses":8,"mean_margin":-2085.5,"worst10_margin":-2941.0,"errors":0,"run_dir":"/workspace/shared/runs/t030_wheat_idle_screen","verdict":"worse","note":"Fresh 2-world both-seat capability screen, 16/16 total valid games including frozen es6 control. Paired wheat_idle_on minus es6 is −0.500 score, 95% [−0.75,−0.25], and −$2,248.25; no full T025 gate, candidate, or Kaggle submission."}
+ {"ts":"2026-09-26T12:48Z","who":"claude","what":"demand-preserving (public) vs es6_c4g15, 16 fresh worlds, 10 opps, 576 games 0 bad","result":"REJECT: panel −18.4pp (lower −28.5); h2h demand 12/32; loses to es1_g9 10/32 & v5 11/32 (es6 30/32). But demand margins vs parthenos/shepherd/t2945/metav4 are +$500–570 higher than es6 -> its sale layer extracts more vs non-Horizon opponents (4-world screen 6/8 was noise).","artifacts":"runs/gate_demand_vs_es6"}
+diff --git a//workspace/shared/research/t030_wheat_sources.md b//workspace/shared/research/t030_wheat_sources.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..cefbf583a1ca7cb42e2f0a9bd8f5a71e1aad863e
+--- /dev/null
++++ b//workspace/shared/research/t030_wheat_sources.md
+@@ -0,0 +1,7 @@
++# T030 — WHEAT source in es3 ladder losses
++
++Official-engine re-execution of all 39 T028 losses and all 41 wins, with eight workers and successful-action instrumentation: [full daily report](../runs/t030_wheat_sources_v2/wheat.md), [JSON](../runs/t030_wheat_sources_v2/wheat.json).
++
++In a loss the opponent sells 517 more WHEAT/game, but grows slightly less: −7.6 successful WHEAT plants and −8.0 harvested WHEAT units relative to us. Land is effectively equal after d11 (about 3.1--3.2 quadrants); opponent seasonal successful hires are only +4.0; FEED is only +5.0. The decisive observed flow is +528.7 `BUY_PRODUCT WHEAT` ($20.66k/game). This is consistent with purchased WHEAT market turnover/resale, not an own-feed advantage.
++
++The tiny tape-safe repair was therefore deliberately conservative: default-off `PASS -> PLANT WHEAT` only at an actor's existing empty tile, consuming only an already spare WHEAT seed. Off identity is 0/1,442 action diffs. On fails a fresh two-world, both-seat es6+Parthenos screen 0/8 (paired −50pp, −$2,248; 16/16 valid), so it does not advance to T025 full panel.
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+index 6c61a888d3217f916abaa9c37aa20037874723ae..4b1011916357a3f36d7fe42fd44a83e9e82f8bef
+--- a//workspace/shared/tasks/T030-new0926-public-bases.md
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -38,3 +38,20 @@
+ `demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
+ 
+ Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
++
++## Amendment — wheat source attribution / tape-safe repair 2026-09-26
++
++Claim: codex. User-directed continuation. Kaggle remains read-only; no submission.
++
++1. Re-execute the exact 39 T028 losses and all 41 available wins in official engine 1.32.7 with successful-action hooks. Per game/day record WHEAT plants, harvest tiles/units, EOD WHEAT tiles, quadrants, hands, WHEAT seed and product purchases/cost, and successful FEED. Do not infer these from final inventory.
++2. Explain the loss-vs-win contrast and whether opponents' WHEAT sales are production, land/labour, or avoided purchased feed.
++3. Implement only the smallest evidence-supported, tape-safe, **default-off** gene on the working es6 archive; prove genome-off action identity; run a fresh both-seat 2-world screen at <=8 workers. Only a positive valid screen may use T025's fresh full-panel gate against es6.
++
++## Result — wheat source attribution / idle-crop gene rejected 2026-09-26
++
++`lab/tools/t030_wheat_sources.py` re-executed all 80 available T028 worlds (exactly 39 losses and 41 wins) in official engine 1.32.7, with eight processes and zero miner failures. It records only successful actions. Full daily matrix: `runs/t030_wheat_sources_v2/wheat.json` / `.md`.
++
++- **Losses:** opponent WHEAT sold is +516.97 units/game, but it does *not* arise from more WHEAT crop production: opponent−us is **−7.62 planted tiles** and **−8.00 harvested units**. WHEAT seed buying is also lower by 5.95 units ($59.49). Instead the opponent executes **+528.67 BUY_PRODUCT WHEAT**, $20,660/game more cost; successful FEED is only +4.97.
++- **Daily mechanism:** quadrants converge at roughly 3.1--3.2 after d11; successful daily hires differ little (seasonal +3.97 for opponent). From d10--27 the opponent repeatedly spends much more on purchased WHEAT while WHEAT crop stock/harvest is comparable or lower. This supports purchased/re-sold market turnover rather than a own-feed/land/labour explanation. In the 41 wins the corresponding purchase-cost gap falls to $2,114/game and sales gap to 46.8 units.
++- Implemented `lab/hplus/wheat_idle.py`, a namespaced default-off gene over sealed es6. When on, it only turns an inherited exact `PASS` into `PLANT WHEAT` on an already empty unlocked tile, using only an already-present WHEAT seed after reserving the parent's planned WHEAT plants. It never changes market orders, money, movement, hire, hand count, or a non-PASS action. The off build has **0 action differences / 1,442 calls**, both games DONE: `runs/t030_wheat_idle_identity.json`.
++- Fresh screen (`runs/t030_wheat_idle_screen`, seeds `870722613,787550011`, both seats vs es6 mirror + Parthenos, <=8 workers): **16/16 valid**, on candidate **0/8**, paired vs es6 **−0.500 score** (95% −0.75..−0.25), **−$2,248.25** (95% −$3,092.50..−$1,404.00). It is rejected; no full T025 gate, candidate, or Kaggle action.
+diff --git a/lab/hplus/test_wheat_idle.py b/lab/hplus/test_wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..5acc51a9b229af879acb0cbfcdbaf6eb73529c5f
+--- /dev/null
++++ b/lab/hplus/test_wheat_idle.py
+@@ -0,0 +1,20 @@
++from pathlib import Path
++import unittest
++
++from wheat_idle import build
++
++
++class WheatIdleBuildTest(unittest.TestCase):
++    def test_default_off_and_on_compile(self):
++        base = Path(__file__).resolve().parents[2] / "agents/horizon_v5_market.py"
++        out = Path("/tmp/t030_wheat_idle_test.py")
++        try:
++            self.assertTrue(build(base, {}, out)["default_off"])
++            self.assertFalse(build(base, {"wi_on": True}, out)["default_off"])
++        finally:
++            out.unlink(missing_ok=True)
++            out.with_suffix(".py.wheat_idle.json").unlink(missing_ok=True)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/lab/hplus/wheat_idle.py b/lab/hplus/wheat_idle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..d4f9bc112b533506c7a6132ecbf9b5dfc1eeefcf
+--- /dev/null
++++ b/lab/hplus/wheat_idle.py
+@@ -0,0 +1,82 @@
++"""T030 default-off, in-place WHEAT planting gene for a sealed Horizon agent.
++
++It has no pathing, hiring, market order or inventory-transfer authority.  When
++enabled it can only spend a seed already visible in private state on an empty,
++unlocked tile occupied by an actor whose inherited command is exactly PASS.
++"""
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++DEFAULT: dict[str, Any] = {"wi_on": False, "wi_day0": 0, "wi_day1": 29}
++
++MODULE_SRC = r'''
++# ================= T030 idle-WHEAT tape-safe gene (lab/hplus/wheat_idle.py) =================
++_WI = __WI_GENES__
++_WI_STATS = {"plants": 0, "abstain_shape": 0, "abstain_seed": 0, "errors": 0}
++_WI_PARENT = agent
++del agent
++
++def agent(obs, config=None):
++    action = _WI_PARENT(obs, config)
++    if not _WI.get("wi_on"):
++        return action
++    try:
++        step = int(obs["step"]); day = step // 24
++        if not (int(_WI["wi_day0"]) <= day <= int(_WI["wi_day1"])) or step >= 718:
++            return action
++        seat = int(obs["player"]); farm = obs["farms"][seat]
++        positions = [farm["farmer"], *(farm.get("hands") or [])]
++        commands = [list(action.get("farmer") or ["PASS"]), *(list(c) for c in (action.get("hands") or []))]
++        # Never add a hand command or mutate a non-PASS inherited command.
++        if len(commands) != len(positions):
++            _WI_STATS["abstain_shape"] += 1
++            return action
++        private = obs.get("private") or {}
++        seeds = int((private.get("seeds") or {}).get("WHEAT", 0))
++        committed = sum(1 for command in commands if command[:2] == ["PLANT", "WHEAT"])
++        spare = max(0, seeds - committed)
++        if not spare:
++            _WI_STATS["abstain_seed"] += 1
++            return action
++        for i, (pos, command) in enumerate(zip(positions, commands)):
++            if not spare or command != ["PASS"]:
++                continue
++            x, y = int(pos[0]), int(pos[1])
++            # `None` specifically excludes structures, crops, animals, weeds
++            # and LOCKED tiles. The engine will consume one existing seed.
++            if farm["tiles"][y][x] is None:
++                commands[i] = ["PLANT", "WHEAT"]
++                spare -= 1
++                _WI_STATS["plants"] += 1
++        return dict(action, farmer=commands[0], hands=commands[1:])
++    except Exception:
++        _WI_STATS["errors"] += 1
++        return action
++'''
++
++
++def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
++    value = dict(DEFAULT)
++    value.update(genes or {})
++    if set(value) != set(DEFAULT):
++        raise ValueError("unknown wheat-idle gene")
++    if type(value["wi_on"]) is not bool or any(type(value[x]) is not int for x in ("wi_day0", "wi_day1")):
++        raise ValueError("invalid wheat-idle gene types")
++    if not 0 <= value["wi_day0"] <= value["wi_day1"] <= 29:
++        raise ValueError("wheat-idle window must be 0..29")
++    return value
++
++
++def build(base_main_py: str | Path, genes: dict[str, Any] | None, out_main_py: str | Path) -> dict[str, Any]:
++    genes = normalise(genes)
++    base, out = Path(base_main_py), Path(out_main_py)
++    src = base.read_text().rstrip() + "\n" + MODULE_SRC.replace("__WI_GENES__", repr(genes))
++    compile(src, str(out), "exec")
++    out.parent.mkdir(parents=True, exist_ok=True)
++    out.write_text(src)
++    info = {"base": str(base.resolve()), "genes": genes, "default_off": not genes["wi_on"]}
++    out.with_suffix(out.suffix + ".wheat_idle.json").write_text(json.dumps(info, indent=2, sort_keys=True) + "\n")
++    return info
+diff --git a/lab/tools/replay_mine.py b/lab/tools/replay_mine.py
+index bd234a84b1b280a91911a941d8e87e3eeba5d14a..f87a71352d9b5d57a8f70e1db95a8ec02d1c9edf
+--- a/lab/tools/replay_mine.py
++++ b/lab/tools/replay_mine.py
+@@ -22,7 +22,7 @@
+     steps = d["steps"]
+ 
+     # ---- instrumentation state -------------------------------------------
+-    cur = {"step": 0}
++    cur = {"step": 0, "day": 0}
+     farms_ref = {}
+     sells = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]  # item -> [units, revenue]
+     buys = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]
+@@ -36,6 +36,11 @@
+     market_ops = [Counter(), Counter()]
+     order_lane = [Counter(), Counter()]  # (op, index) counts
+     first_sell_day = [{}, {}]
++    # Per-day wheat-flow instrumentation is deliberately action-success based.
++    # End-of-day tile snapshots alone cannot distinguish a crop that was grown
++    # and harvested from a crop never planted at all.
++    wheat_daily = [defaultdict(Counter), defaultdict(Counter)]
++    wheat_state = [[], []]
+ 
+     orig_commit = K._commit_unit
+     orig_hire = K._do_hire
+@@ -46,7 +51,7 @@
+         pid = farms_ref.get(id(farm), 0)
+         ok = orig_commit(op, item, price, farm, private, market, *extra)
+         if ok:
+-            day = cur["step"] // 24
++            day = cur["day"]
+             if op == "SELL":
+                 sells[pid][item][0] += 1
+                 sells[pid][item][1] += price
+@@ -57,6 +62,10 @@
+                 key = op + ":" + item
+                 buys[pid][key][0] += 1
+                 buys[pid][key][1] += price
++                if item == "WHEAT" and op in ("BUY_PRODUCT", "BUY_SEED"):
++                    prefix = "buy_product" if op == "BUY_PRODUCT" else "buy_seed"
++                    wheat_daily[pid][day][prefix + "_wheat_units"] += 1
++                    wheat_daily[pid][day][prefix + "_wheat_cost"] += price
+                 if op == "BUY_PRODUCT":
+                     sell_by_day[pid][day]["BUY_" + item] -= 1
+                     sell_price_by_day[pid][day].append(("BUY_" + item, price))
+@@ -83,6 +92,16 @@
+         pid = farms_ref.get(id(farm), 0)
+         op = action[0] if isinstance(action, list) and action else "?"
+         unit_ops[pid][op] += 1
++        pos = _farmer_pos(farm, idx)
++        tile_before = None
++        if pos is not None:
++            x, y = pos
++            tile = farm["tiles"][y][x]
++            if isinstance(tile, dict):
++                # Only scalar fields are used below; do not retain a mutable
++                # reference which _apply_unit_action changes in-place.
++                tile_before = dict(tile)
++        inv_before_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
+         snap = (farm["money"], json.dumps(private["shed"], sort_keys=True),
+                 str(_farmer_pos(farm, idx)), json.dumps(private["inventories"], sort_keys=True))
+         orig_unit(farm, private, idx, action, board_size, day, turns_per_day, shed_capacity)
+@@ -91,6 +110,25 @@
+         # crude but sufficient: tile mutations not caught -> handle separately
+         if snap != snap2:
+             unit_ops_ok[pid][op] += 1
++        if pos is not None:
++            x, y = pos
++            tile_after = farm["tiles"][y][x]
++            if op == "PLANT" and len(action) >= 2 and action[1] == "WHEAT":
++                if isinstance(tile_after, dict) and tile_after.get("kind") == "PLANT" and tile_after.get("crop") == "WHEAT":
++                    wheat_daily[pid][day]["wheat_tiles_planted"] += 1
++            elif op == "HARVEST" and tile_before and tile_before.get("kind") == "PLANT" and tile_before.get("crop") == "WHEAT":
++                # A successful harvest clears yield_units (and removes a
++                # finite crop); record both the tile action and yielded units.
++                yielded = tile_before.get("yield_units", 0)
++                after_yield = tile_after.get("yield_units", 0) if isinstance(tile_after, dict) else 0
++                if yielded > 0 and after_yield == 0:
++                    wheat_daily[pid][day]["wheat_tiles_harvested"] += 1
++                    wheat_daily[pid][day]["wheat_units_harvested"] += yielded
++            elif op == "FEED" and tile_before and "animal" in tile_before:
++                inv_after_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
++                if inv_after_wheat == inv_before_wheat - 1:
++                    wheat_daily[pid][day]["feed_actions"] += 1
++                    wheat_daily[pid][day]["wheat_units_fed"] += 1
+ 
+     def _farmer_pos(farm, idx):
+         return farm["farmer"] if idx == 0 else (farm["hands"][idx - 1] if idx - 1 < len(farm["hands"]) else None)
+@@ -120,7 +158,9 @@
+         tiles_hist = []
+         for t in range(1, len(steps)):
+             cur["step"] = t
+-            f0 = env.state[0]["observation"]["farms"]
++            before_obs = env.state[0]["observation"]
++            cur["day"] = before_obs["day"]
++            f0 = before_obs["farms"]
+             farms_ref.clear()
+             farms_ref[id(f0[0])] = 0
+             farms_ref[id(f0[1])] = 1
+@@ -144,6 +184,14 @@
+                                    [len(obs["farms"][p]["hands"]) for p in range(2)],
+                                    [list(obs["farms"][p]["unlocked_quadrants"]) for p in range(2)],
+                                    list(obs["town"]["unlocked_shops"])))
++                for p in range(2):
++                    census = _tile_census(obs["farms"][p])
++                    # step 24 is the end of playable day 0 (the observation
++                    # has already advanced to day 1), hence this label.
++                    wheat_state[p].append({"day": (t - 1) // 24,
++                                           "wheat_tiles_eod": census.get("P_WHEAT", 0),
++                                           "hands_eod": len(obs["farms"][p]["hands"]),
++                                           "quadrants_eod": len(obs["farms"][p]["unlocked_quadrants"])})
+     finally:
+         K._commit_unit = orig_commit
+         K._do_hire = orig_hire
+@@ -164,6 +212,8 @@
+         "tiles_hist": tiles_hist,
+         "sell_by_day": [{d_: dict(v) for d_, v in s.items()} for s in sell_by_day],
+         "sell_price_by_day": [{d_: v for d_, v in s.items()} for s in sell_price_by_day],
++        "wheat_daily": [{d_: dict(v) for d_, v in days.items()} for days in wheat_daily],
++        "wheat_state": wheat_state,
+     }
+     if verbose:
+         report(res)
+diff --git a/lab/tools/t030_wheat_sources.py b/lab/tools/t030_wheat_sources.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..a23cbbe0276c4b0fe7db0d0ed2c872f3dde6fdbd
+--- /dev/null
++++ b/lab/tools/t030_wheat_sources.py
+@@ -0,0 +1,169 @@
++#!/usr/bin/env python3
++"""T030: replay-exact wheat production/feed attribution, never a counterfactual.
++
++The 39 ladder losses and all 41 available wins are re-executed in the official
++engine.  Every reported plant, harvest, buy and feed is a successful engine
++action; daily hands/land/tile stock are end-of-day public state snapshots.
++"""
++from __future__ import annotations
++
++import argparse
++import glob
++import json
++import multiprocessing as mp
++from collections import defaultdict
++from pathlib import Path
++import sys
++
++sys.path.insert(0, str(Path(__file__).resolve().parent))
++from replay_mine import mine  # noqa: E402
++
++TEAM = "misis biznessmenlb"
++EVENTS = ("wheat_tiles_planted", "wheat_tiles_harvested", "wheat_units_harvested",
++          "buy_seed_wheat_units", "buy_seed_wheat_cost", "buy_product_wheat_units",
++          "buy_product_wheat_cost", "feed_actions", "wheat_units_fed", "hands_hired")
++STATE = ("wheat_tiles_eod", "quadrants_eod", "hands_eod")
++
++
++def games(replays: str):
++    rows = []
++    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
++        replay = json.loads(Path(raw).read_text())
++        teams, rewards = replay["info"]["TeamNames"], replay["rewards"]
++        if TEAM not in teams:
++            continue
++        us = teams.index(TEAM)
++        if rewards[us] == rewards[1 - us]:
++            continue
++        rows.append((raw, us, "loss" if rewards[us] < rewards[1 - us] else "win",
++                     replay["info"]["EpisodeId"], teams[1-us]))
++    return rows
++
++
++def replay(row):
++    raw, us, cohort, episode, opponent = row
++    return {"us": us, "cohort": cohort, "episode": episode, "opponent": opponent,
++            "result": mine(raw, verbose=False)}
++
++
++def add(dst, source, day, keys):
++    values = source.get(str(day), source.get(day, {}))
++    for key in keys:
++        dst[key] += values.get(key, 0)
++
++
++def mean_day(totals, n):
++    return {str(day): {key: totals[day][key] / n for key in (*EVENTS, *STATE)} for day in range(30)}
++
++
++def total(values, keys):
++    return {key: sum(values[str(day)][key] for day in range(30)) for key in keys}
++
++
++def fmt_pair(row, key, precision=1):
++    return f"{row['us'][key]:.{precision}f}/{row['opponent'][key]:.{precision}f}"
++
++
++def markdown(result):
++    lines = ["# T030 — откуда берётся лишняя пшеница соперника", "",
++             "Повторное исполнение тех же 80 ladder-replay в official engine 1.32.7: 39 поражений и все 41 доступные победы. "
++             "Посадки, harvest, покупки, FEED и HIRE — только успешные действия движка; земля и `P_WHEAT` — EOD-снимок. "
++             "Это наблюдательная атрибуция, не причинный counterfactual.", ""]
++    lines += ["| когорта | Δ opponent−us WHEAT sold | Δ planted tiles | Δ harvested units | Δ BUY_PRODUCT WHEAT $ | Δ FEED |",
++              "|---|---:|---:|---:|---:|---:|"]
++    for cohort in ("loss", "win"):
++        s = result["summary"][cohort]
++        lines.append("| %s (n=%d) | %+.1f | %+.1f | %+.1f | %s | %+.1f |" % (
++            cohort, s["games"], s["opp_minus_us_wheat_sold"], s["opp_minus_us"]["wheat_tiles_planted"],
++            s["opp_minus_us"]["wheat_units_harvested"],
++            f"${s['opp_minus_us']['buy_product_wheat_cost']:+,.1f}", s["opp_minus_us"]["feed_actions"]))
++    loss = result["summary"]["loss"]
++    lines += ["", "В losses дополнительный проданный WHEAT соперника не возникает из большего собственного crop-производства: "
++              f"у него {loss['opp_minus_us']['wheat_units_harvested']:+.1f} harvested units и "
++              f"{loss['opp_minus_us']['wheat_tiles_planted']:+.1f} посадок относительно нас, но "
++              f"{loss['opp_minus_us']['buy_product_wheat_units']:+.1f} купленных товарных WHEAT. "
++              f"При всего {loss['opp_minus_us']['feed_actions']:+.1f} FEED это наблюдаемо согласуется с перепродажей/market turnover, а не с замещением покупного корма собственным урожаем. "
++              f"Земля после d11 почти равна (~3.1–3.2 квадранта), seasonal HIRE лишь {loss['opp_minus_us']['hands_hired']:+.1f}; это не чистый land/labour дефицит."]
++    lines += ["", "## По дням — losses (среднее на игру, us/opponent)", "",
++              "| d | P_WHEAT EOD | plant tiles | harvest units | quadrants | hired hands | seed buy | product-WHEAT $ | FEED |",
++              "|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
++    rows = result["per_day"]["loss"]
++    for day in range(30):
++        r = rows[str(day)]
++        lines.append("| %d | %s | %s | %s | %s | %s | %s | %s | %s |" % (
++            day, fmt_pair(r, "wheat_tiles_eod"), fmt_pair(r, "wheat_tiles_planted"),
++            fmt_pair(r, "wheat_units_harvested"), fmt_pair(r, "quadrants_eod"), fmt_pair(r, "hands_hired"),
++            fmt_pair(r, "buy_seed_wheat_units"), fmt_pair(r, "buy_product_wheat_cost"), fmt_pair(r, "feed_actions")))
++    lines += ["", "## Контраст wins (агрегат на игру)", "",
++              "| метрика | us | opponent | Δ opponent−us |",
++              "|---|---:|---:|---:|"]
++    for key in ("wheat_tiles_planted", "wheat_units_harvested", "buy_seed_wheat_units", "buy_seed_wheat_cost",
++                "buy_product_wheat_units", "buy_product_wheat_cost", "feed_actions", "wheat_units_fed"):
++        s = result["summary"]["win"]
++        lines.append("| %s | %.1f | %.1f | %+.1f |" % (key, s["us"][key], s["opponent"][key], s["opp_minus_us"][key]))
++    lines += ["", "Полный машиночитаемый разрез, включая оба игрока каждого дня: `runs/t030_wheat_sources_v2/wheat.json`."]
++    return "\n".join(lines) + "\n"
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--replays", default="/workspace/shared/replays/t028")
++    ap.add_argument("--out", required=True)
++    ap.add_argument("--workers", type=int, default=8)
++    ap.add_argument("--render", action="store_true", help="render an existing JSON result without re-running replays")
++    args = ap.parse_args()
++    if not 1 <= args.workers <= 8:
++        ap.error("workers must be 1..8")
++    out = Path(args.out)
++    if args.render:
++        result = json.loads(out.read_text())
++        out.with_suffix(".md").write_text(markdown(result))
++        print(out.with_suffix(".md"))
++        return
++    rows = games(args.replays)
++    count = {kind: sum(row[2] == kind for row in rows) for kind in ("loss", "win")}
++    if count != {"loss": 39, "win": 41}:
++        raise RuntimeError(f"expected 39 losses and 41 wins, got {count}")
++    with mp.Pool(args.workers) as pool:
++        mined = list(pool.imap_unordered(replay, rows))
++    totals = {cohort: {role: [defaultdict(float) for _ in range(30)] for role in ("us", "opponent")}
++              for cohort in ("loss", "win")}
++    wheat_sold = {cohort: {role: 0.0 for role in ("us", "opponent")} for cohort in ("loss", "win")}
++    for game in mined:
++        cohort, us, result = game["cohort"], game["us"], game["result"]
++        for pid, role in ((us, "us"), (1-us, "opponent")):
++            for day in range(30):
++                add(totals[cohort][role][day], result["wheat_daily"][pid], day, EVENTS)
++                # Hands are deliberately fired at every day boundary; the
++                # public EOD `hands` snapshot is therefore almost always 0.
++                # Successful per-day HIRE calls are the meaningful labour
++                # measure (and are action-hooked by replay_mine).
++                totals[cohort][role][day]["hands_hired"] += result["hires"][pid].get(day, result["hires"][pid].get(str(day), 0))
++                state = next((x for x in result["wheat_state"][pid] if x["day"] == day), {})
++                for key in STATE:
++                    totals[cohort][role][day][key] += state.get(key, 0)
++            wheat_sold[cohort][role] += result["sells"][pid].get("WHEAT", [0, 0])[0]
++    per_day, summary = {}, {}
++    for cohort in ("loss", "win"):
++        by_role = {role: mean_day(totals[cohort][role], count[cohort]) for role in ("us", "opponent")}
++        per_day[cohort] = {str(day): {role: by_role[role][str(day)] for role in by_role} for day in range(30)}
++        sums = {role: total(by_role[role], EVENTS) for role in by_role}
++        summary[cohort] = {"games": count[cohort], "us": sums["us"], "opponent": sums["opponent"],
++                           "opp_minus_us": {key: sums["opponent"][key] - sums["us"][key] for key in EVENTS},
++                           "opp_minus_us_wheat_sold": (wheat_sold[cohort]["opponent"] - wheat_sold[cohort]["us"]) / count[cohort]}
++    output = {"method": "official engine replay, successful action hooks; state is EOD", "cohort_counts": count,
++              "summary": summary, "per_day": per_day,
++              "episodes": sorted({g["cohort"]: [] for g in mined}.items())}
++    # Preserve the episode identities without serialising the large raw miner output.
++    output["episodes"] = sorted(
++        ({"episode": g["episode"], "cohort": g["cohort"], "opponent": g["opponent"]} for g in mined),
++        key=lambda x: x["episode"])
++    out.parent.mkdir(parents=True, exist_ok=False)
++    out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
++    report = out.with_suffix(".md")
++    report.write_text(markdown(output))
++    print(report)
++
++
++if __name__ == "__main__":
++    main()
+
+tokens used
+263,291
+T030 закрыт отрицательно; Kaggle не использовался для отправок.
+
+- В 39 losses соперник продаёт +517 WHEAT, но не выращивает больше: у нас +8 harvested units. Их отличие — +529 купленных товарных WHEAT (+$20.66k), при лишь +5 FEED; это market turnover/перепродажа, не собственный корм.
+- Земля и найм почти равны после d11.
+- Default-off `PASS→PLANT WHEAT` ген для es6: off identity 0/1 442 action diffs.
+- Fresh 2-world screen: 16/16 DONE, 0/8, paired −50pp и −$2,248. T025 full-panel не запускался.
+
+Доказательства: [отчёт]( /workspace/shared/runs/t030_wheat_sources_v2/wheat.md ), [screen]( /workspace/shared/runs/t030_wheat_idle_screen/README.md ). Доска, task, ledger обновлены; код в `lab` и синхронизирован (`c3a2c84`).
