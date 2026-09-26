@@ -1,0 +1,30 @@
+{
+ "old_config_sha256": "49060d8561b78cbe313473f05023522829bcd0144d39f62250623bc9e1e37f52",
+ "history_sha256": "a2259ddcfd5d741656196313619d2d2ef66c47fa0e0cddfb93c62c354fddd1ce",
+ "cma_state_sha256": "c2da2d8ce0cde66797badcec4f63eb4e3f4948480f7423c93c21f59df7bdea10",
+ "completed_generations": 14,
+ "schedule_before": [
+  {
+   "start_gen": 0,
+   "mode": "uniform"
+  },
+  {
+   "start_gen": 9,
+   "mode": "parthenos_x2"
+  }
+ ],
+ "schedule_after": [
+  {
+   "start_gen": 0,
+   "mode": "uniform"
+  },
+  {
+   "start_gen": 9,
+   "mode": "parthenos_x2"
+  },
+  {
+   "start_gen": 14,
+   "mode": "panel_rotating_8"
+  }
+ ]
+}

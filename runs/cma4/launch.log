@@ -50,3 +50,41 @@ RuntimeError: incomplete opponent fitness for c: missing=['best', 'metav4', 'par
 {"gen": 10, "centre_fit": 1.0451716145833334, "best": "c", "best_fit": 1.0451716145833334, "sigma": 0.014806755599139021, "errors": 0, "secs": 921}
 {"gen": 11, "centre_fit": 1.0494541666666668, "best": "x2", "best_fit": 1.0499296875, "sigma": 0.01555528163455246, "errors": 0, "secs": 1090}
 {"gen": 12, "centre_fit": 0.9728609375, "best": "x1", "best_fit": 0.9729997395833333, "sigma": 0.015608247904407674, "errors": 0, "secs": 1117}
+{"gen": 13, "centre_fit": 1.0382328125, "best": "x4", "best_fit": 1.05928515625, "sigma": 0.015629044834147468, "errors": 0, "secs": 933}
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 178, in <module>
+    if len(hist0) != start:
+^^
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 163, in main
+    old = {**old, "fitness_schedule": transition["schedule"]}
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_es.py", line 23, in evaluate
+    subprocess.run(args, cwd=ROOT, env=env, stdout=open(f"{gdir}/compare.log", "w"), stderr=subprocess.STDOUT)
+  File "/venv/main/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 1201, in communicate
+    self.wait()
+  File "/venv/main/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 2053, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/subprocess.py", line 2011, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 242, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 229, in main
+    fit, breakdown = _fitness_from_games(gdir, cands, mode, g)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 97, in _fitness_from_games
+    raise RuntimeError(f"incomplete opponent fitness for {name}: missing={sorted(missing)}, extra={sorted(extra)}")
+RuntimeError: incomplete opponent fitness for c: missing=['best', 'metav4', 'parthenos', 'pilkwang', 't2945', 'yhay0913'], extra=[]
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
