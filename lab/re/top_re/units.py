@@ -264,7 +264,7 @@ def _mature_harvestable(world: _World, tile: Mapping[str, Any]) -> bool:
     if "animal" in tile:
         return True
     crop = str(tile.get("crop", "")).upper()
-    planted = int(tile.get("planted_day", world.day) or world.day)
+    planted = int(tile.get("planted_day") if tile.get("planted_day") is not None else world.day)
     return crop in FIRST_YIELD_DAY and world.day - planted >= FIRST_YIELD_DAY[crop]
 
 
@@ -457,6 +457,9 @@ def _logit_op(task: Task, tile: Any) -> str:
     return task.op
 
 
+MAX_YIELD_DAY_RE = {"WHEAT": 4, "CARROT": 3, "TOMATO": 8, "STRAWBERRY": 10, "MELON": 12}
+
+
 def _task_utility(world: _World, actor: int, task: Task) -> float:
     """Conditional-logit utility for a legal endpoint, excluding distance.
 
@@ -492,6 +495,17 @@ def _task_utility(world: _World, actor: int, task: Task) -> float:
     # loses the animal.  Preserve that constraint as a small survival floor.
     # The paired FETCH bonus makes the floor actionable before a worker owns
     # wheat, rather than merely preferring a feed task it cannot execute.
+    if task.op == "HARVEST" and isinstance(tile, Mapping):
+        # Economic value the replay logit cannot see: $ in the tile and the crop's death deadline.
+        prices = (world.obs.get("market") or {}).get("prices") or {}
+        item = tile.get("crop") or {"COW": "MILK", "SHEEP": "WOOL", "GOOSE": "EGG"}.get(tile.get("animal"), "")
+        units_ = float(tile.get("yield_units", 0) or 0)
+        utility += 0.0015 * units_ * float(prices.get(item, 0) or 0)
+        crop = tile.get("crop")
+        if crop and crop in MAX_YIELD_DAY_RE and not tile.get("animal"):
+            age = world.day - int(tile.get("planted_day") if tile.get("planted_day") is not None else world.day)
+            if crop in ("WHEAT", "CARROT", "MELON") and age >= MAX_YIELD_DAY_RE[crop]:
+                utility += 2.5          # past max-yield day: harvest before lifespan decay turns it into a weed
     if task.op == "FEED":
         missed = float(tile.get("consecutive_unfed", 0) or 0) if isinstance(tile, Mapping) else 0.0
         utility += 1.20 + 1.50 * missed
