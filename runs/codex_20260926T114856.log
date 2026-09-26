@@ -4327,3 +4327,26 @@ index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e925
 
 codex
 Извлечение и lineage уже доведены до проверяемых SHA/`py_compile`; единственная оставшаяся операция — безопасная остановка CMA на boundary. Монитор остаётся активен, `gen_023` пока вычисляется.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
