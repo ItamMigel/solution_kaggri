@@ -108,3 +108,4 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
 | T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T028 | codex | in_progress | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
