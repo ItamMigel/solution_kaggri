@@ -5535,3 +5535,1118 @@ index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63
 +
 +agent.telemetry = _T036_REPORT
 
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/research/re_production.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "sed -n '1,120p' /workspace/shared/tasks/T036-production-re.md; git status --short; git diff -- experiments/t036_land_phase/main.py" in /workspace/wt/codex
+ succeeded in 0ms:
+# T036 — production reverse engineering
+
+Owner: codex. Scope: infer explicit, teacher-forced production rules from `research/re/*.jsonl.gz` for Boey, M&M&P&Q, DSM, and fuxi: crop/planting/fertilizer policy; per-turn unit allocation and priority; herd/structure timeline. Excludes market and macro decision logic (Claude).
+
+Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+
+Result (2026-09-26): completed Boey (108), M&M&P&Q (134), DSM (103), and fuxi (40) trajectory production profiles with held-out teacher-forced aggregate-action agreement; `research/re_production.md`. Raw action audit gives quadrant-level layout rules. The requested M&M&P&Q/DSM d0–d9 fixed-opening test is negative: pooled held-out exact production-vector agreement is 30.6% (4,401/14,400), so it is not a shareable tape. No evidence-supported d8+ Horizon herd graft exists: the sole tape-safe G1 only owns d0–3 and its 2-goose leg already failed T028 (0/8, −$2,581). Therefore no duplicate implementation/screen was run. Feed the explicit crop/herd/service rules into a standalone top-RE opponent with its own state/path planner, not a claimed Horizon reconstruction. No candidate or Kaggle action.
+?? experiments/t030_demand_timing/
+?? experiments/t030_wheat_idle/
+?? experiments/t031_wheat_market/main_off.py
+?? experiments/t031_wheat_market/main_off.py.wheat_market.json
+?? experiments/t031_wheat_market/main_on.py
+?? experiments/t031_wheat_market/main_on.py.wheat_market.json
+?? experiments/t031_wheat_market/screen_seeds_20260926.json
+?? experiments/t031_wheat_market/variants/
+?? experiments/t032_opponent_harvest/
+?? experiments/t035_reactive_lane/
+?? experiments/t036_land_phase/
+?? tmp_t025/
+
+exec
+/bin/bash -lc '/workspace/shared/bin/say claude "T036 redirect complete. Raw correction: 6/7 COOP tiles (not 2) for DSM/MMPQ median geese; NE coop rack + SW wheat + central-shed distributed feeding. MMPQ 100 has no universal d0–d8 tape (only t0–1 unanimous). Valid 4w both-seat ≤8-worker third-land-only phase: vs es7_wm 0/4/4, −$4,044; boatlee/fukami 8-0 each absolute; no candidate. Durable details in research/re_production.md and BOARD."' in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+apply patch
+patch: completed
+/workspace/shared/tasks/T036-production-re.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..cd94281665a9838e9ecc154d5eb187377e785052
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Result (2026-09-26): completed Boey (108), M&M&P&Q (134), DSM (103), and fuxi (40) trajectory production profiles with held-out teacher-forced aggregate-action agreement; `research/re_production.md`. Raw audit establishes NE-inner COOP / SW-WHEAT / outer-strawberry geometry and corrects “2 coops”: DSM/MMPQ need 6/7 separate COOP tiles for their median goose herd. The requested 100-replay MMPQ fixed-opening test is negative: only d0h0–1 are unanimous and the dominant d0 detailed branch is 50/100. A local-only, legal third-land-only Horizon phase was implemented in `experiments/t036_land_phase/main.py` and screened at 8 workers: 24/24 valid, but direct es7_wm is 0/4/4, −$4,044 (`runs/t036_land_phase_screen_v2`). The full herd system needs an earlier owned COOP/pickup/place route, not a d8 tape patch. No candidate or Kaggle action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..cd94281665a9838e9ecc154d5eb187377e785052
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Result (2026-09-26): completed Boey (108), M&M&P&Q (134), DSM (103), and fuxi (40) trajectory production profiles with held-out teacher-forced aggregate-action agreement; `research/re_production.md`. Raw audit establishes NE-inner COOP / SW-WHEAT / outer-strawberry geometry and corrects “2 coops”: DSM/MMPQ need 6/7 separate COOP tiles for their median goose herd. The requested 100-replay MMPQ fixed-opening test is negative: only d0h0–1 are unanimous and the dominant d0 detailed branch is 50/100. A local-only, legal third-land-only Horizon phase was implemented in `experiments/t036_land_phase/main.py` and screened at 8 workers: 24/24 valid, but direct es7_wm is 0/4/4, −$4,044 (`runs/t036_land_phase_screen_v2`). The full herd system needs an earlier owned COOP/pickup/place route, not a d8 tape patch. No candidate or Kaggle action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "sed -n '10,24p' /workspace/shared/BOARD.md; tail -46 /workspace/shared/research/re_production.md; sed -n '1,140p' experiments/t036_land_phase/main.py" in /workspace/wt/codex
+ succeeded in 0ms:
+- Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).
+- Local evidence: v5_market 767/768 vs 6 public controllers, 126/128 vs v4 — but all opponents share ancestry with Horizon; unknown vs real top (≈3000+).
+- Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+
+## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
+- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
+- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+- 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+- 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+- 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+- 2026-09-26 — T036 production RE, Boey first held-out result: 108 full trajectories show d0 **7 MELON+12 WHEAT**, d3–6 STRAWBERRY build (all 86 dev trajectories re-add S on d6), then WHEAT and d19–27 CARROT rotation; herd is already 3 COW/2 SHEEP d1 and 2 GOOSE d3, reaching 10 sheep d17. Calendar-only held-out exact unit-count agreement is 80.4% PLANT, 62.8% WATER, 73.0% HARVEST, 71.1% CARE, 70.5% FEED, 84.2% FERTILIZE; targets/pathing still required for a clone. `research/re_production.md` [codex]
+- 2026-09-26 — T034 **reactive barrier traced (read-only; no candidate/gate)**: fetched 40 current episodes each for fuxi/istinetz/Joseph/«самогон» (160) and reclassified all 9 own-route es3 losses. In **6/9**, reactive third land is d9–10 vs Horizon d11 (fuxi/Breaking reach fourth); loss cohort has d20 TOMATO 9.8 vs 1.1 and GOOSE 3.1 vs 2.0, earns +$5.4k tomato/+2.0k egg, and realizes strawberry $150 vs our $129 despite lower volume. Proposed default-off modules: route-owned d9 land, third-land tomato+goose lane, then bounded observed supply/price sale response (causal timing unproven; T032 narrow version negative). Exact Kaggle code searches find no attributable public source/stand-in. `research/reactive_class.md` [codex]
+- 2026-09-26 — T035 **closed after clone-safe reactive-lane sanity**: early non-clone cash reserve preserves 0-diff identity vs mirror+3 tape clones, but fresh 4-world both-seat boatlee/fukami/mirror test has score 0pp everywhere; its only two active boatlee cases lose $493 each. No score gate/candidate/Kaggle action; ladder use is unsupported. `tasks/T035-reactive-lane.md` [codex]
+- 2026-09-26 — T032 **closed after screen, no gate**: default-off harvest forecaster is action-identical off (0/2,876), and 39-loss official audit finds 1,999 material MILK/WOOL/STRAWBERRY/MELON dumps; 1,603 (80.2%) touch our same-item sale within ±1 turn (1,458 same tick). Yet fresh 2w×P/M/shepherd/mirror screen is score **0pp** (CI −12.5…+12.5; 32/32 valid), despite cash +$436.75 (CI +$13.5…+$860): insufficient score evidence → no T025 gate/candidate/Kaggle action. `tasks/T032-opponent-harvest-forecaster.md` [codex]
+| HARVEST | 72.6% | 58.6% | .581 |
+| CARE | 68.5% | 66.5% | .417 |
+| FEED | 66.9% | 64.4% | .445 |
+| FERTILIZE | 85.2% | 85.1% | .193 |
+| COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+
+The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
+
+## T036 raw early-route reconstruction (2026-09-26)
+
+Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
+plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
+some strong replays make 9–14).  Therefore this is a build/pickup/place route,
+not an animal-count overlay.
+
+The reusable geometry is stable even where exact coordinates branch.  NE has
+the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
+unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
+are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
+In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
+`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
+`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
+d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
+calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
+in the 100 M&M&P&Q replays).
+
+FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
+or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
+normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
+goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
+planting stops in substance after the build: MMPQ (100) has 1,552 commands on
+d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
+
+There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
+only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
+dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
+d0h14 but then branches too.  Thus the common asset is a state/route template,
+not a Horizon-safe action tape.
+
+Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
+third land forward ≤24 turns when it has two quadrants, preserving all parent
+unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
+versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
+(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
+No candidate: the direct es7 loss rejects this narrow phase, and a full system
+requires owning the earlier coordinated COOP/pickup/place routing.
+"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
+
+The frozen controller already owns all worker routing.  This leaves its unit tape
+untouched and changes only the legal BUY_LAND timing when two quadrants exist.
+It is deliberately not a candidate and does not claim to reproduce the top
+goose system.
+"""
+
+_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
+exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
+
+_T036_PARENT_LAND = _hp_land
+_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
+
+
+def _hp_land(obs, action):
+    """The base helper looks ahead in its active route; limit it to land #3."""
+    try:
+        player = int(obs["player"])
+        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
+        if quads != 2:
+            return action
+        _T036_REPORT["attempts"] += 1
+        out = _T036_PARENT_LAND(obs, action)
+        if out is not action:
+            _T036_REPORT["changed"] += 1
+        return out
+    except Exception:
+        _T036_REPORT["errors"] += 1
+        return action
+
+
+_HP["land_on"] = True
+_HP["land_k"] = 24
+_T036_BASE_AGENT = agent
+
+
+def agent(obs, config=None):
+    return _T036_BASE_AGENT(obs, config)
+
+
+agent.telemetry = _T036_REPORT
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..cd94281665a9838e9ecc154d5eb187377e785052
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Result (2026-09-26): completed Boey (108), M&M&P&Q (134), DSM (103), and fuxi (40) trajectory production profiles with held-out teacher-forced aggregate-action agreement; `research/re_production.md`. Raw audit establishes NE-inner COOP / SW-WHEAT / outer-strawberry geometry and corrects “2 coops”: DSM/MMPQ need 6/7 separate COOP tiles for their median goose herd. The requested 100-replay MMPQ fixed-opening test is negative: only d0h0–1 are unanimous and the dominant d0 detailed branch is 50/100. A local-only, legal third-land-only Horizon phase was implemented in `experiments/t036_land_phase/main.py` and screened at 8 workers: 24/24 valid, but direct es7_wm is 0/4/4, −$4,044 (`runs/t036_land_phase_screen_v2`). The full herd system needs an earlier owned COOP/pickup/place route, not a d8 tape patch. No candidate or Kaggle action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+codex
+T036 завершён, Kaggle не трогал.
+
+- Исправление: у DSM/M&M&P&Q не 2 COOP на 7 гусей, а примерно по одной COOP-клетке на гуся: DSM 6, MMPQ 7 в медиане. Геометрия: NE — COOP-стойка, SW — поле WHEAT, внешний NW/NE — STRAWBERRY.
+- FEED распределён между рабочими: `PICKUP WHEAT` у центрального сарая → 1–4 WHEAT в инвентаре → COOP/PASTURE. Выделенного кормильца нет.
+- Универсального d0–d8 тейпа нет: у MMPQ из 100 повторов совпадают лишь первые две команды; главный d0-вариант покрывает 50/100.
+- STRAWBERRY почти прекращают сажать после d15–16: MMPQ имеет единичные посадки до d18, DSM — до d15.
+- Реализовал узкий вариант ранней третьей земли: [main.py](/workspace/wt/codex/experiments/t036_land_phase/main.py). Валидный 4-world × обе позиции × ≤8 workers screen: против `es7_wm` 0–4–4, −$4,044; кандидата нет. Абсолютно против boatlee/fukami: 8–0 в каждом, но это не компенсирует прямое поражение es7.
+
+Полная карта, шаги покупок/размещений и доказательства — [re_production.md](/workspace/shared/research/re_production.md) и [screen README](/workspace/shared/runs/t036_land_phase_screen_v2/README.md).
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..d25a8a942295a79b4dab737bbb7c5aab8df5afc5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
++- 2026-09-26 — T036 feasibility disposition: no honest d8+ Horizon herd graft follows from the RE. Existing tape-safe G1 only owns d0–3 COW/SHEEP actions (no d8 native chain) and its first 2-goose route already failed T028 0/8, −$2,581; combined with 30.6% pooled fixed-opening agreement, do not relabel a free-moving worker as a reconstruction. Preserve the rules for standalone top-RE instead. `research/re_production.md` [codex]
++- 2026-09-26 — T036 fixed-opening test rejects a direct tape graft: held-out d0–d9 exact full unit-vector agreement is only 9.3% M&M&P&Q and 35.6% DSM; production-vector 18.4%/44.4%, pooled template **30.6%** (4,401/14,400). They share state milestones but not action timing/pathing or exact goose pace, so any Horizon feasibility module must be state-gated d8+ and cannot honestly call itself the top opening. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 fuxi production RE: distinct five-crop family: d0 **15 WHEAT+2 CARROT+1 MELON**, d4 adds STRAWBERRY+MELON, d16–18 TOMATO adds in 28/29/30 of 32 dev trajectories and maintains **16 TOMATO** d19–24 alongside S≈33. Peak herd is only 8 COW/4 SHEEP/3 GOOSE (d13–18), but crop-heavy allocation has WATER=2.03 units/turn (herd≥10), vs .49 CARE/.53 FEED. Fert begins d14. Held-out exact P/W/H/C/F/Fert=76.1/39.3/58.6/66.5/64.4/85.1% (n=8, needs target pathing). `research/re_production.md` [codex]
+ - 2026-09-26 — T036 DSM production RE: another high-herd family member, d1 2 COW/3 SHEEP → d7 6/3/0 → d10 **7/3/6 with 14 PASTURE/6 COOP**, then sheep 7 on d13 through d22. It is d2 STRAWBERRY-first, universal WHEAT replant d8+ and late CARROT, but retains S=7 d27 (M&M&P&Q=3). Fertilizer begins d11, 24–28 fertile tiles d16+. Held-out exact unit counts P/W/H/C/F/Fert = 76.2/52.3/63.0/68.7/69.0/77.6%. `research/re_production.md` [codex]
+ - 2026-09-26 — T036 M&M&P&Q production RE: shared d0 MELON/WHEAT→d3–6 STRAWBERRY→late CARROT/WHEAT rotation, but its decisive edge is herd: 2 COW/3 SHEEP d1 → 6/3/2 d7 → **7 COW/3 SHEEP/7 GOOSE with 7 COOP d10**, held to d19; fertilizer begins d11 and reaches 28–31 fertile tiles d16–20. Held-out calendar exact counts: PLANT 74.6%, WATER 46.7%, HARVEST 61.0%, CARE 64.0%, FEED 65.5%, FERT 77.1%. `research/re_production.md` [codex]
+@@ -116,7 +119,7 @@
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex+claude | in_progress — CMA4 gen35 training, then new es7 control gate | Prior gen30 vs es6 rejected (+0.694pp, lower −1.389pp). New gate composes frozen CMA centre with exact es7 WHEAT layer and compares it to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+@@ -135,4 +138,5 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | redirect complete — raw map/feed/tape test + valid 8-worker third-land screen; full route needs a new early controller, no candidate. Never submit. | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/re_production.md b//workspace/shared/research/re_production.md
+index 295ccddfe198cdbf8d60ecebcece3952d61ec72a..c31ca23bff8397b25ef7145b77db0c7422449289
+--- a//workspace/shared/research/re_production.md
++++ b//workspace/shared/research/re_production.md
+@@ -168,3 +168,42 @@
+ | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+ 
+ The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
++
++## T036 raw early-route reconstruction (2026-09-26)
++
++Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
++plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
++some strong replays make 9–14).  Therefore this is a build/pickup/place route,
++not an animal-count overlay.
++
++The reusable geometry is stable even where exact coordinates branch.  NE has
++the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
++unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
++are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
++In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
++`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
++`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
++d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
++calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
++in the 100 M&M&P&Q replays).
++
++FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
++or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
++normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
++goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
++planting stops in substance after the build: MMPQ (100) has 1,552 commands on
++d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
++
++There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
++only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
++dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
++d0h14 but then branches too.  Thus the common asset is a state/route template,
++not a Horizon-safe action tape.
++
++Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
++third land forward ≤24 turns when it has two quadrants, preserving all parent
++unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
++versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
++(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
++No candidate: the direct es7 loss rejects this narrow phase, and a full system
++requires owning the earlier coordinated COOP/pickup/place routing.
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..cd94281665a9838e9ecc154d5eb187377e785052
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Result (2026-09-26): completed Boey (108), M&M&P&Q (134), DSM (103), and fuxi (40) trajectory production profiles with held-out teacher-forced aggregate-action agreement; `research/re_production.md`. Raw audit establishes NE-inner COOP / SW-WHEAT / outer-strawberry geometry and corrects “2 coops”: DSM/MMPQ need 6/7 separate COOP tiles for their median goose herd. The requested 100-replay MMPQ fixed-opening test is negative: only d0h0–1 are unanimous and the dominant d0 detailed branch is 50/100. A local-only, legal third-land-only Horizon phase was implemented in `experiments/t036_land_phase/main.py` and screened at 8 workers: 24/24 valid, but direct es7_wm is 0/4/4, −$4,044 (`runs/t036_land_phase_screen_v2`). The full herd system needs an earlier owned COOP/pickup/place route, not a d8 tape patch. No candidate or Kaggle action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+tokens used
+198,917
+T036 завершён, Kaggle не трогал.
+
+- Исправление: у DSM/M&M&P&Q не 2 COOP на 7 гусей, а примерно по одной COOP-клетке на гуся: DSM 6, MMPQ 7 в медиане. Геометрия: NE — COOP-стойка, SW — поле WHEAT, внешний NW/NE — STRAWBERRY.
+- FEED распределён между рабочими: `PICKUP WHEAT` у центрального сарая → 1–4 WHEAT в инвентаре → COOP/PASTURE. Выделенного кормильца нет.
+- Универсального d0–d8 тейпа нет: у MMPQ из 100 повторов совпадают лишь первые две команды; главный d0-вариант покрывает 50/100.
+- STRAWBERRY почти прекращают сажать после d15–16: MMPQ имеет единичные посадки до d18, DSM — до d15.
+- Реализовал узкий вариант ранней третьей земли: [main.py](/workspace/wt/codex/experiments/t036_land_phase/main.py). Валидный 4-world × обе позиции × ≤8 workers screen: против `es7_wm` 0–4–4, −$4,044; кандидата нет. Абсолютно против boatlee/fukami: 8–0 в каждом, но это не компенсирует прямое поражение es7.
+
+Полная карта, шаги покупок/размещений и доказательства — [re_production.md](/workspace/shared/research/re_production.md) и [screen README](/workspace/shared/runs/t036_land_phase_screen_v2/README.md).

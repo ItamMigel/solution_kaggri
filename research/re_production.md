@@ -168,3 +168,42 @@ At herd≥10, mean units/turn are WATER **2.03**, HARVEST .86, CARE .49, FEED .5
 | COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
 
 The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
+
+## T036 raw early-route reconstruction (2026-09-26)
+
+Raw `top10v4/{dsm,mmpq}` actions correct the phrase “2 COOP / 7 GOOSE”: the
+plan uses **one COOP tile per goose** (DSM median 6 and M&M&P&Q median 7;
+some strong replays make 9–14).  Therefore this is a build/pickup/place route,
+not an animal-count overlay.
+
+The reusable geometry is stable even where exact coordinates branch.  NE has
+the inner COOP rack (normally x=5–6) and outer STRAWBERRY (x=7–9); the newly
+unlocked SW is a WHEAT rectangle (x=0–4,y=5–9).  In DSM 113609015, raw lands
+are d6h2 and d8h4; its NE rack is `(6,0),(5,1),(6,1),(5,2),(6,2),(5,3),(5,4)`.
+In M&M&P&Q 113607941 they are d6h3 and d8h6, with NE builds/placements at
+`(5,0),(6,0),(5,1),(5,2),(6,2),(5,3),(6,3),(5,4),(6,4)` and SW builds from
+`(3,5),(2,5),(4,6)` onward.  This action-index convention yields q2 by start
+d7 and q3 by start d9; it is the raw counterpart of the coarse d8/d10 state
+calendar.  Full maps are nevertheless state-sensitive (99 distinct d11 maps
+in the 100 M&M&P&Q replays).
+
+FEED is distributed: ordinary workers `PICKUP WHEAT` at shed access `(4,4)`
+or `(5,4)`, carry 1–4 units to a COOP/PASTURE, FEED, then return to their
+normal work; there is no dedicated feeder.  In MMPQ 113518645 this feeds
+goose sites `(5,2),(5,3),(6,3),(5,4),(6,4)` during d7–10.  Raw strawberry
+planting stops in substance after the build: MMPQ (100) has 1,552 commands on
+d6 but only 27/7/1 on d16/d17/d18 and none later; DSM (48) last plants on d15.
+
+There is no transferable fixed d0–d8 unit tape.  Among all 100 MMPQ replays
+only d0h0 PASS and d0h1 PICKUP COW are unanimous; d0h2 is 62/100 and the
+dominant detailed d0 branch has only 50/100.  DSM has a 47/48 branch through
+d0h14 but then branches too.  Thus the common asset is a state/route template,
+not a Horizon-safe action tape.
+
+Feasibility probe `experiments/t036_land_phase/main.py` pulls only Horizon's
+third land forward ≤24 turns when it has two quadrants, preserving all parent
+unit commands.  Fresh 4-world both-seat screen, 8 workers, 24/24 valid:
+versus es7_wm **0/4/4, −$4,044**; absolute boatlee/fukami results are 8/0/0
+(+$28,853) and 8/0/0 (+$26,633).  `runs/t036_land_phase_screen_v2/README.md`.
+No candidate: the direct es7 loss rejects this narrow phase, and a full system
+requires owning the earlier coordinated COOP/pickup/place routing.

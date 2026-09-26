@@ -2874,3 +2874,1564 @@ index 0000000000000000000000000000000000000000..ab0b456ea7c381aab8ce74cca7f08153
 +
 +Acceptance: imports with only stdlib; handles the Kaggle observation/action schema; never emits an illegal walk/operation when sufficient state is supplied; assigns every controlled unit exactly one action; has a small local legality test/smoke. Findings go to `research/top_re_agent_plan_codex.md` and BOARD.
 
+apply patch
+patch: completed
+/workspace/wt/codex/lab/re/top_re/__init__.py
+/workspace/wt/codex/lab/re/top_re/units.py
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 171f8ada55d2c488711745dce9b1210b3df1228b..8f54796b3a0a9c06beb4c322e13b66fde22eb4b3
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -138,3 +138,4 @@
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+ | T036 | codex | production RE complete — standalone top-RE handoff; no Horizon graft | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. Fixed opening falsified (pooled exact production 30.6%); G1 d0–3 only and prior 0/8 failure means no honest d8+ graft/screen. Never submit. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/top_re_agent_plan_codex.md b//workspace/shared/research/top_re_agent_plan_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fd4cd5e790ece622e55617c49c9ad5c44f7212f
+--- /dev/null
++++ b//workspace/shared/research/top_re_agent_plan_codex.md
+@@ -0,0 +1,24 @@
++# T037 — критика плана top-RE (Codex, 2026-09-26)
++
++Вердикт: отдельный агент — правильная ставка как локальный противник и единственный честный способ проверить d6–d10 систему. Но заявленный M1 достижим только как узкий vertical slice; M2 `>95k` к 27-09 18:00 — не обоснованный срок, а оптимистичный smoke-критерий. Не следует превращать M2 в решение о кандидате: без обеих позиций, новых миров и панели он измеряет главным образом удачу общего рынка.
++
++## Сроки и правильный cut-line
++
++* **M1 06:00:** реалистичен, если означает 16+ полных локальных игр без exception/illegal no-op и с диагностикой выполненных операций. Он нереалистичен, если до этого нужны одновременно точные targets, все логистические циклы и эффективные 10–11 рук. Сначала поддержать `MOVE/PASS`, PLANT/WATER/HARVEST, CARE/FEED, COLLECT/FERTILIZE и `PICKUP/PLACE/DROP`, затем build/place; неизвестная задача должна быть PASS, не угадывание.
++* **M2 18:00:** 95k можно использовать лишь как smoke на фиксированных мирах. Между M1 и M2 остаются три неизвестные, которые определяют топовую систему: какой работник реально носит WHEAT/FERTILIZER, сколько часов съедают рейсы к сараю, и не вытесняют ли срочные сервисные операции посадку/сбор. Нужны сначала журналы `requested/executed/rejected` и ежедневные показатели готовых/обслуженных животных, воды, cargo-loss; иначе число 95k не диагностирует провал.
++* После M1 заморозить интерфейс `plan -> units`: план задаёт цели/приоритеты, units владеет только текущей легальностью и одним действием на актёра. Не дублировать календарь в greedy-слое.
++
++## Главные технические риски
++
++1. **Легальность движения сравнительно проста, операция — нет.** По engine 1.32.7 ходить через `LOCKED` можно, но tile-операции на нём молча no-op; сарай доступен только с `(4,4),(5,4),(4,5),(5,5)`. Одновременно два исполнителя не должны получить один WATER/FEED/HARVEST/PLANT target. Семена тратятся глобально в одном тике, поэтому назначение нельзя делать, только глядя на локальный inventory.
++2. **Перенос и сарай — основной риск результата.** `PLANT` потребляет `private.seeds` напрямую, но `FEED`/`FERTILIZE`/`PLACE` требуют фактически переносимый предмет. `DROP` при полном shed может уничтожить остаток инвентаря, поэтому нельзя просто отправлять всех домой; надо резервировать вместимость. Нужны явные pickup→travel→operate→return цепочки, иначе 7 гусей и удобрение существуют только в market state, а не на поле.
++3. **Ежедневная логистика рук.** Наём создаёт/обновляет индексы рук у сарая, а ночная жизнь рук и порядок market/unit действий делают сохранённые роли ненадёжными. Units должен брать позиции и inventories только из текущего obs, возвращать ровно `len(hands)` команд и не предполагать, что вчерашний actor существует сегодня.
++4. **Greedy может разрушить фазу d6–d10.** Value/distance без дедлайнов будет немедленно собирать/поливать, но проигнорирует build+place+feed путь, land#3 и пшеничный блок. Плану нужны большие явные бонусы/дедлайны для фазовых task targets; units не должен сам изобретать экономику.
++
++## Что можно взять из Horizon/es7_wm
++
++Не импортировать `es7_wm/pkg/main.py` как библиотеку: он монолитный агент (~7.8k строк), exact engine helper загружается через `exec`, а `FarmView`/V219 зависят от `_IMPL`, tape routes и фиксированных actor indices. Это создаст скрытый parent-agent state и не сокращает риск top-RE.
++
++Полезны только маленькие, проверенные идеи, перенесённые локально: Manhattan-шаг (`_v219_walk`, valid потому что движение через LOCKED разрешено), центральные четыре shed-access tiles, и таблицы/preconditions из embedded exact `_apply_unit_action` (`main.py:1032`). V219 worker не годится: он жёстко привязан к tomato d18, native tape и appended hires. При желании после M1 вынести проверенный `unit_semantics.py` из этого engine extract в отдельный модуль с тестом, но не блокировать на нём старт.
++
++Итог: M1 — да при safe subset; M2 — условная гипотеза, не дедлайн промоушена. Самый ранний полезный артефакт — legal planner с телеметрией доставок, а не ещё один calendar-only клон.
+diff --git a//workspace/shared/tasks/T037-top-re.md b//workspace/shared/tasks/T037-top-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..ab0b456ea7c381aab8ce74cca7f08153fe58168a
+--- /dev/null
++++ b//workspace/shared/tasks/T037-top-re.md
+@@ -0,0 +1,7 @@
++# T037 — standalone top-RE units layer
++
++Owner: codex. Status: in progress. Never submit to Kaggle.
++
++Scope: independently critique the M1/M2 schedule and implement `lab/re/top_re/units.py` only: state-aware task generation, greedy assignment, and legal movement returning `(farmer, hands)` from `units.act(obs, plan)`. Claude owns `plan.py`, `market.py`, and integration.
++
++Acceptance: imports with only stdlib; handles the Kaggle observation/action schema; never emits an illegal walk/operation when sufficient state is supplied; assigns every controlled unit exactly one action; has a small local legality test/smoke. Findings go to `research/top_re_agent_plan_codex.md` and BOARD.
+diff --git a/lab/re/top_re/__init__.py b/lab/re/top_re/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..c13e18977b10d804fab5157087d7883e557e9331
+--- /dev/null
++++ b/lab/re/top_re/__init__.py
+@@ -0,0 +1 @@
++"""Standalone, observation-driven reconstruction agent components."""
+diff --git a/lab/re/top_re/units.py b/lab/re/top_re/units.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..da82226d36f76bd0fb4b5f62c718e84b812dd211
+--- /dev/null
++++ b/lab/re/top_re/units.py
+@@ -0,0 +1,439 @@
++"""Legal, observation-driven unit dispatch for the standalone top-RE agent.
++
++``act(obs, plan)`` returns ``(farmer_command, hand_commands)``.  The caller adds
++the market action, so this module never emits one.  It intentionally relies only
++on the current observation: a hand may disappear overnight and a worker's index
++must therefore never be cached.
++
++Plan contract (all fields optional; mapping or attributes are accepted):
++
++* ``tasks(obs)`` -> task dictionaries, or ``tasks`` -> iterable.  A task has
++  ``op``, ``target=(x,y)``, optional ``item``, ``quantity``, ``priority``.
++* ``plant_targets``, ``build_targets``, ``place_targets``: ``{(x,y): item}``.
++  ``build_targets`` values are ``PASTURE``/``COOP`` (or full BUILD_* operation).
++* ``fertilize_targets`` / ``dig_targets``: iterable of coordinates.  Set
++  ``fertilize_all=True`` to service all unfertilized plants.
++* ``priority``: optional mapping overriding operation priorities;
++  ``load_size`` (default 4) controls one shed pickup.
++
++Unknown plan data is ignored.  This is deliberate: a bad target must become PASS,
++not an engine silent no-op.  The legality rules match kaggle-environments 1.32.7
++for the operations emitted here.  Movement is Manhattan because movement over a
++LOCKED tile is legal; only tile operations require an owned tile.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Iterable, Mapping, Optional
++
++
++MOVES = {
++    "NORTH": (0, -1),
++    "SOUTH": (0, 1),
++    "EAST": (1, 0),
++    "WEST": (-1, 0),
++}
++ANIMALS = {"COW": "PASTURE", "SHEEP": "PASTURE", "GOOSE": "COOP"}
++FIRST_YIELD_DAY = {
++    "WHEAT": 2,
++    "CARROT": 2,
++    "TOMATO": 8,
++    "STRAWBERRY": 10,
++    "MELON": 10,
++}
++PRODUCT_FOR_ANIMAL = {"COW": "MILK", "SHEEP": "WOOL", "GOOSE": "EGG"}
++DEFAULT_PRIORITY = {
++    "FEED": 260,
++    "CARE": 230,
++    "PLANT": 220,
++    "BUILD_PASTURE": 215,
++    "BUILD_COOP": 215,
++    "PLACE": 210,
++    "FERTILIZE": 185,
++    "WATER": 170,
++    "HARVEST": 160,
++    "COLLECT_FERTILIZER": 150,
++    "DIG": 145,
++    "FETCH": 240,
++    "DROP": 80,
++}
++
++
++@dataclass(frozen=True)
++class Task:
++    op: str
++    target: tuple[int, int]
++    item: Optional[str] = None
++    quantity: int = 1
++    priority: int = 0
++    source: str = "generated"
++
++    @property
++    def key(self) -> tuple[Any, ...]:
++        return (self.op, self.target, self.item, self.quantity, self.source)
++
++
++def _value(obj: Any, name: str, default: Any = None) -> Any:
++    if isinstance(obj, Mapping):
++        return obj.get(name, default)
++    return getattr(obj, name, default)
++
++
++def _call_or_value(plan: Any, name: str, obs: Mapping[str, Any], default: Any) -> Any:
++    value = _value(plan, name, default)
++    if callable(value):
++        try:
++            return value(obs)
++        except TypeError:
++            return value()
++    return value
++
++
++def _xy(value: Any) -> Optional[tuple[int, int]]:
++    if isinstance(value, str):
++        try:
++            x, y = value.split(",")
++            return (int(x), int(y))
++        except (TypeError, ValueError):
++            return None
++    if isinstance(value, (tuple, list)) and len(value) == 2:
++        try:
++            return (int(value[0]), int(value[1]))
++        except (TypeError, ValueError):
++            return None
++    return None
++
++
++def _targets(value: Any) -> Iterable[tuple[tuple[int, int], Any]]:
++    if isinstance(value, Mapping):
++        for target, item in value.items():
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, item
++    elif isinstance(value, (list, tuple, set)):
++        for target in value:
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, None
++
++
++def _task_from_raw(raw: Any) -> Optional[Task]:
++    if isinstance(raw, Task):
++        return raw
++    if not isinstance(raw, Mapping):
++        return None
++    op = str(raw.get("op", "")).upper()
++    target = _xy(raw.get("target"))
++    if not op or target is None:
++        return None
++    try:
++        quantity = max(1, int(raw.get("quantity", 1)))
++        priority = int(raw.get("priority", DEFAULT_PRIORITY.get(op, 0)))
++    except (TypeError, ValueError):
++        return None
++    item = raw.get("item")
++    return Task(op, target, str(item).upper() if item is not None else None,
++                quantity, priority, str(raw.get("source", "plan")))
++
++
++class _World:
++    def __init__(self, obs: Mapping[str, Any]):
++        self.obs = obs
++        self.player = int(obs.get("player", 0))
++        farms = obs.get("farms", [])
++        if not isinstance(farms, list) or not (0 <= self.player < len(farms)):
++            raise ValueError("observation has no own farm")
++        self.farm = farms[self.player]
++        self.private = obs.get("private", {}) or {}
++        self.tiles = self.farm.get("tiles", []) or []
++        self.height = len(self.tiles)
++        self.width = len(self.tiles[0]) if self.height else 0
++        self.day = int(obs.get("step", int(obs.get("day", 0)) * 24) or 0) // 24
++        self.positions = [self.farm.get("farmer", [0, 0]), *(self.farm.get("hands", []) or [])]
++        inventories = self.private.get("inventories", []) or []
++        self.inventories = [dict(inventories[i]) if i < len(inventories) else {}
++                            for i in range(len(self.positions))]
++        self.seeds = self.private.get("seeds", {}) or {}
++        self.shed = self.private.get("shed", {}) or {}
++        self.shed_capacity = int(obs.get("configuration", {}).get(
++            "shedCapacity", self.private.get("shed_capacity", 100)) or 100)
++        self.reserved_seed: dict[str, int] = {}
++        self.reserved_pickup: dict[str, int] = {}
++
++    def in_bounds(self, xy: tuple[int, int]) -> bool:
++        x, y = xy
++        return 0 <= x < self.width and 0 <= y < self.height
++
++    def tile(self, xy: tuple[int, int]) -> Any:
++        x, y = xy
++        return self.tiles[y][x] if self.in_bounds(xy) else "LOCKED"
++
++    def owned(self, xy: tuple[int, int]) -> bool:
++        return self.in_bounds(xy) and self.tile(xy) != "LOCKED"
++
++    def shed_tiles(self) -> tuple[tuple[int, int], ...]:
++        # The official board is 10x10; retain the same central four for tests.
++        half_x, half_y = self.width // 2, self.height // 2
++        return ((half_x - 1, half_y - 1), (half_x, half_y - 1),
++                (half_x - 1, half_y), (half_x, half_y))
++
++    def at_shed(self, xy: tuple[int, int]) -> bool:
++        return xy in self.shed_tiles()
++
++    def room(self) -> int:
++        return max(0, self.shed_capacity - sum(max(0, int(v)) for v in self.shed.values()))
++
++
++def _position(world: _World, actor: int) -> tuple[int, int]:
++    pos = world.positions[actor]
++    return (int(pos[0]), int(pos[1]))
++
++
++def _distance(left: tuple[int, int], right: tuple[int, int]) -> int:
++    return abs(left[0] - right[0]) + abs(left[1] - right[1])
++
++
++def _step_toward(start: tuple[int, int], target: tuple[int, int]) -> list[str]:
++    x, y = start
++    tx, ty = target
++    if x < tx:
++        return ["EAST"]
++    if x > tx:
++        return ["WEST"]
++    if y < ty:
++        return ["SOUTH"]
++    if y > ty:
++        return ["NORTH"]
++    return ["PASS"]
++
++
++def _mature_harvestable(world: _World, tile: Mapping[str, Any]) -> bool:
++    if int(tile.get("yield_units", 0) or 0) <= 0:
++        return False
++    if "animal" in tile:
++        return True
++    crop = str(tile.get("crop", "")).upper()
++    planted = int(tile.get("planted_day", world.day) or world.day)
++    return crop in FIRST_YIELD_DAY and world.day - planted >= FIRST_YIELD_DAY[crop]
++
++
++def _operation_legal(world: _World, actor: int, task: Task) -> bool:
++    """True only if task's non-movement command would execute now at target."""
++    xy, op, item = task.target, task.op, task.item
++    if not world.in_bounds(xy):
++        return False
++    inv = world.inventories[actor]
++    tile = world.tile(xy)
++    if op == "FETCH":
++        return (world.at_shed(xy) and bool(item) and
++                int(world.shed.get(item, 0) or 0) > world.reserved_pickup.get(item, 0))
++    if op == "DROP":
++        return world.at_shed(xy) and any(int(v) > 0 for v in inv.values()) and \
++            sum(max(0, int(v)) for v in inv.values()) <= world.room()
++    if op == "PLACE":
++        return (item in ANIMALS and isinstance(tile, Mapping) and
++                tile.get("kind") == ANIMALS[item] and "animal" not in tile and
++                int(inv.get(item, 0) or 0) > 0)
++    if not world.owned(xy):
++        return False
++    if op == "PLANT":
++        return (item in FIRST_YIELD_DAY and tile is None and
++                int(world.seeds.get(item, 0) or 0) > world.reserved_seed.get(item, 0))
++    if op == "WATER":
++        return isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and not tile.get("watered_today")
++    if op == "HARVEST":
++        return isinstance(tile, Mapping) and _mature_harvestable(world, tile)
++    if op == "FERTILIZE":
++        return (isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and
++                int(inv.get("FERTILIZER", 0) or 0) > 0)
++    if op == "DIG":
++        return tile is not None and not (isinstance(tile, Mapping) and "animal" in tile)
++    if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++        return tile is None
++    if op == "FEED":
++        return (isinstance(tile, Mapping) and "animal" in tile and not tile.get("fed_today") and
++                int(inv.get("WHEAT", 0) or 0) > 0)
++    if op == "CARE":
++        return isinstance(tile, Mapping) and "animal" in tile and not tile.get("cared_today")
++    if op == "COLLECT_FERTILIZER":
++        return isinstance(tile, Mapping) and "animal" in tile and bool(tile.get("fertilizer_available"))
++    return False
++
++
++def _command(world: _World, actor: int, task: Task) -> list[Any]:
++    pos = _position(world, actor)
++    if pos != task.target:
++        return _step_toward(pos, task.target)
++    if not _operation_legal(world, actor, task):
++        return ["PASS"]
++    if task.op == "FETCH":
++        available = int(world.shed.get(task.item, 0) or 0) - world.reserved_pickup.get(task.item, 0)
++        return ["PICKUP", task.item, min(task.quantity, available)]
++    if task.op == "DROP":
++        return ["DROP"]
++    if task.op == "PLACE":
++        return ["PLACE", task.item]
++    if task.op == "PLANT":
++        return ["PLANT", task.item]
++    return [task.op]
++
++
++def _priority(plan: Any, op: str, fallback: int) -> int:
++    table = _value(plan, "priority", {}) or {}
++    try:
++        return int(table.get(op, fallback)) if isinstance(table, Mapping) else fallback
++    except (TypeError, ValueError):
++        return fallback
++
++
++def _manual_tasks(plan: Any, obs: Mapping[str, Any]) -> list[Task]:
++    raw = _call_or_value(plan, "tasks", obs, []) or []
++    if isinstance(raw, Mapping):
++        raw = raw.values()
++    return [task for entry in raw if (task := _task_from_raw(entry)) is not None]
++
++
++def _generated_tasks(world: _World, plan: Any) -> list[Task]:
++    result: list[Task] = []
++    add = result.append
++    priority = lambda op: _priority(plan, op, DEFAULT_PRIORITY[op])
++
++    for xy, crop in _targets(_call_or_value(plan, "plant_targets", world.obs, {})):
++        crop = str(crop).upper() if crop is not None else ""
++        tile = world.tile(xy)
++        if isinstance(tile, Mapping) and tile.get("kind") == "WEED":
++            add(Task("DIG", xy, priority=priority("DIG"), source="plant-clear"))
++        else:
++            add(Task("PLANT", xy, crop, priority=priority("PLANT"), source="plant"))
++
++    for xy, structure in _targets(_call_or_value(plan, "build_targets", world.obs, {})):
++        op = str(structure).upper() if structure is not None else ""
++        if op in {"PASTURE", "COOP"}:
++            op = "BUILD_" + op
++        if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++            add(Task(op, xy, priority=priority(op), source="build"))
++
++    for xy, animal in _targets(_call_or_value(plan, "place_targets", world.obs, {})):
++        animal = str(animal).upper() if animal is not None else ""
++        add(Task("PLACE", xy, animal, priority=priority("PLACE"), source="place"))
++
++    dig = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "dig_targets", world.obs, ())) )
++    fert = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "fertilize_targets", world.obs, ())) )
++    if bool(_value(plan, "fertilize_all", False)):
++        fert.update((x, y) for y, row in enumerate(world.tiles) for x, tile in enumerate(row)
++                    if isinstance(tile, Mapping) and tile.get("kind") == "PLANT")
++
++    for y, row in enumerate(world.tiles):
++        for x, tile in enumerate(row):
++            xy = (x, y)
++            if xy in dig:
++                add(Task("DIG", xy, priority=priority("DIG"), source="dig"))
++            if not isinstance(tile, Mapping):
++                continue
++            if _mature_harvestable(world, tile):
++                add(Task("HARVEST", xy, priority=priority("HARVEST"), source="harvest"))
++            if tile.get("kind") == "PLANT":
++                if not tile.get("watered_today"):
++                    add(Task("WATER", xy, priority=priority("WATER"), source="water"))
++                if xy in fert and int(tile.get("fertilized_until_day", -1) or -1) < world.day + 2:
++                    add(Task("FERTILIZE", xy, priority=priority("FERTILIZE"), source="fertilize"))
++            elif "animal" in tile:
++                if not tile.get("fed_today"):
++                    add(Task("FEED", xy, priority=priority("FEED"), source="feed"))
++                if not tile.get("cared_today"):
++                    add(Task("CARE", xy, priority=priority("CARE"), source="care"))
++                if tile.get("fertilizer_available"):
++                    add(Task("COLLECT_FERTILIZER", xy, priority=priority("COLLECT_FERTILIZER"), source="collect"))
++    return result
++
++
++def _needs_item(tasks: Iterable[Task], item: str) -> int:
++    if item == "WHEAT":
++        return sum(task.op == "FEED" for task in tasks)
++    if item == "FERTILIZER":
++        return sum(task.op == "FERTILIZE" for task in tasks)
++    return sum(task.op == "PLACE" and task.item == item for task in tasks)
++
++
++def _logistics_tasks(world: _World, plan: Any, tasks: list[Task]) -> list[Task]:
++    result: list[Task] = []
++    load = max(1, int(_value(plan, "load_size", 4) or 4))
++    pickup_target = min(world.shed_tiles(), key=lambda xy: (xy[1], xy[0]))
++    carried = {item: sum(int(inv.get(item, 0) or 0) for inv in world.inventories)
++               for item in ("WHEAT", "FERTILIZER", *ANIMALS)}
++    for item in ("WHEAT", "FERTILIZER", *ANIMALS):
++        missing = max(0, _needs_item(tasks, item) - carried.get(item, 0))
++        stock = int(world.shed.get(item, 0) or 0)
++        if missing and stock:
++            amount = 1 if item in ANIMALS else min(load, missing, stock)
++            result.append(Task("FETCH", pickup_target, item, amount,
++                               _priority(plan, "FETCH", DEFAULT_PRIORITY["FETCH"]), "fetch"))
++    # Cargo delivery is deliberately lower-priority than same-day service.
++    for actor, inv in enumerate(world.inventories):
++        if any(int(v) > 0 for v in inv.values()) and sum(int(v) for v in inv.values()) <= world.room():
++            target = min(world.shed_tiles(), key=lambda xy: _distance(_position(world, actor), xy))
++            result.append(Task("DROP", target, priority=_priority(plan, "DROP", DEFAULT_PRIORITY["DROP"]),
++                               source=f"drop-{actor}"))
++    return result
++
++
++def tasks(obs: Mapping[str, Any], plan: Any) -> list[Task]:
++    """Expose generated tasks for diagnostics/tests; ``act`` also filters legality."""
++    world = _World(obs)
++    return _manual_tasks(plan, obs) + _generated_tasks(world, plan)
++
++
++def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
++    """Greedily reserve a legal current task and return one command per unit.
++
++    A unit may travel toward a task whose endpoint is legal *now*.  Once it
++    arrives, the endpoint is rechecked before emitting the operation; observation
++    drift consequently turns into PASS rather than an invalid action.
++    """
++    try:
++        world = _World(obs)
++    except (KeyError, TypeError, ValueError, IndexError):
++        return ["PASS"], []
++    if not world.positions or not world.width or not world.height:
++        return ["PASS"], [["PASS"] for _ in world.positions[1:]]
++
++    candidates = tasks(obs, plan)
++    candidates.extend(_logistics_tasks(world, plan, candidates))
++    # One logical task / endpoint per tick.  CARE and FEED are intentionally
++    # distinct: the engine permits them both on the same animal in one tick.
++    claimed: set[tuple[str, tuple[int, int], Optional[str]]] = set()
++    commands: list[list[Any]] = [["PASS"] for _ in world.positions]
++    unused = set(range(len(world.positions)))
++
++    ranked = sorted(enumerate(candidates), key=lambda pair: (
++        -pair[1].priority, pair[1].target[1], pair[1].target[0], pair[1].op, pair[0]))
++    for _, task in ranked:
++        claim = (task.op, task.target, task.item)
++        if claim in claimed:
++            continue
++        eligible = [actor for actor in unused if _operation_legal(world, actor, task)]
++        if not eligible:
++            continue
++        actor = min(eligible, key=lambda i: (_distance(_position(world, i), task.target), i))
++        command = _command(world, actor, task)
++        if command == ["PASS"]:
++            continue
++        commands[actor] = command
++        unused.remove(actor)
++        claimed.add(claim)
++        if task.op == "PLANT" and task.item:
++            world.reserved_seed[task.item] = world.reserved_seed.get(task.item, 0) + 1
++        if task.op == "FETCH" and task.item:
++            world.reserved_pickup[task.item] = world.reserved_pickup.get(task.item, 0) + task.quantity
++        if not unused:
++            break
++
++    return commands[0], commands[1:]
++
++
++def action(obs: Mapping[str, Any], plan: Any) -> dict[str, Any]:
++    """Convenience adapter for the Kaggle action shape (without market orders)."""
++    farmer, hands = act(obs, plan)
++    return {"farmer": farmer, "hands": hands}
++
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 171f8ada55d2c488711745dce9b1210b3df1228b..8f54796b3a0a9c06beb4c322e13b66fde22eb4b3
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -138,3 +138,4 @@
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+ | T036 | codex | production RE complete — standalone top-RE handoff; no Horizon graft | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. Fixed opening falsified (pooled exact production 30.6%); G1 d0–3 only and prior 0/8 failure means no honest d8+ graft/screen. Never submit. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/top_re_agent_plan_codex.md b//workspace/shared/research/top_re_agent_plan_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fd4cd5e790ece622e55617c49c9ad5c44f7212f
+--- /dev/null
++++ b//workspace/shared/research/top_re_agent_plan_codex.md
+@@ -0,0 +1,24 @@
++# T037 — критика плана top-RE (Codex, 2026-09-26)
++
++Вердикт: отдельный агент — правильная ставка как локальный противник и единственный честный способ проверить d6–d10 систему. Но заявленный M1 достижим только как узкий vertical slice; M2 `>95k` к 27-09 18:00 — не обоснованный срок, а оптимистичный smoke-критерий. Не следует превращать M2 в решение о кандидате: без обеих позиций, новых миров и панели он измеряет главным образом удачу общего рынка.
++
++## Сроки и правильный cut-line
++
++* **M1 06:00:** реалистичен, если означает 16+ полных локальных игр без exception/illegal no-op и с диагностикой выполненных операций. Он нереалистичен, если до этого нужны одновременно точные targets, все логистические циклы и эффективные 10–11 рук. Сначала поддержать `MOVE/PASS`, PLANT/WATER/HARVEST, CARE/FEED, COLLECT/FERTILIZE и `PICKUP/PLACE/DROP`, затем build/place; неизвестная задача должна быть PASS, не угадывание.
++* **M2 18:00:** 95k можно использовать лишь как smoke на фиксированных мирах. Между M1 и M2 остаются три неизвестные, которые определяют топовую систему: какой работник реально носит WHEAT/FERTILIZER, сколько часов съедают рейсы к сараю, и не вытесняют ли срочные сервисные операции посадку/сбор. Нужны сначала журналы `requested/executed/rejected` и ежедневные показатели готовых/обслуженных животных, воды, cargo-loss; иначе число 95k не диагностирует провал.
++* После M1 заморозить интерфейс `plan -> units`: план задаёт цели/приоритеты, units владеет только текущей легальностью и одним действием на актёра. Не дублировать календарь в greedy-слое.
++
++## Главные технические риски
++
++1. **Легальность движения сравнительно проста, операция — нет.** По engine 1.32.7 ходить через `LOCKED` можно, но tile-операции на нём молча no-op; сарай доступен только с `(4,4),(5,4),(4,5),(5,5)`. Одновременно два исполнителя не должны получить один WATER/FEED/HARVEST/PLANT target. Семена тратятся глобально в одном тике, поэтому назначение нельзя делать, только глядя на локальный inventory.
++2. **Перенос и сарай — основной риск результата.** `PLANT` потребляет `private.seeds` напрямую, но `FEED`/`FERTILIZE`/`PLACE` требуют фактически переносимый предмет. `DROP` при полном shed может уничтожить остаток инвентаря, поэтому нельзя просто отправлять всех домой; надо резервировать вместимость. Нужны явные pickup→travel→operate→return цепочки, иначе 7 гусей и удобрение существуют только в market state, а не на поле.
++3. **Ежедневная логистика рук.** Наём создаёт/обновляет индексы рук у сарая, а ночная жизнь рук и порядок market/unit действий делают сохранённые роли ненадёжными. Units должен брать позиции и inventories только из текущего obs, возвращать ровно `len(hands)` команд и не предполагать, что вчерашний actor существует сегодня.
++4. **Greedy может разрушить фазу d6–d10.** Value/distance без дедлайнов будет немедленно собирать/поливать, но проигнорирует build+place+feed путь, land#3 и пшеничный блок. Плану нужны большие явные бонусы/дедлайны для фазовых task targets; units не должен сам изобретать экономику.
++
++## Что можно взять из Horizon/es7_wm
++
++Не импортировать `es7_wm/pkg/main.py` как библиотеку: он монолитный агент (~7.8k строк), exact engine helper загружается через `exec`, а `FarmView`/V219 зависят от `_IMPL`, tape routes и фиксированных actor indices. Это создаст скрытый parent-agent state и не сокращает риск top-RE.
++
++Полезны только маленькие, проверенные идеи, перенесённые локально: Manhattan-шаг (`_v219_walk`, valid потому что движение через LOCKED разрешено), центральные четыре shed-access tiles, и таблицы/preconditions из embedded exact `_apply_unit_action` (`main.py:1032`). V219 worker не годится: он жёстко привязан к tomato d18, native tape и appended hires. При желании после M1 вынести проверенный `unit_semantics.py` из этого engine extract в отдельный модуль с тестом, но не блокировать на нём старт.
++
++Итог: M1 — да при safe subset; M2 — условная гипотеза, не дедлайн промоушена. Самый ранний полезный артефакт — legal planner с телеметрией доставок, а не ещё один calendar-only клон.
+diff --git a//workspace/shared/tasks/T037-top-re.md b//workspace/shared/tasks/T037-top-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..ab0b456ea7c381aab8ce74cca7f08153fe58168a
+--- /dev/null
++++ b//workspace/shared/tasks/T037-top-re.md
+@@ -0,0 +1,7 @@
++# T037 — standalone top-RE units layer
++
++Owner: codex. Status: in progress. Never submit to Kaggle.
++
++Scope: independently critique the M1/M2 schedule and implement `lab/re/top_re/units.py` only: state-aware task generation, greedy assignment, and legal movement returning `(farmer, hands)` from `units.act(obs, plan)`. Claude owns `plan.py`, `market.py`, and integration.
++
++Acceptance: imports with only stdlib; handles the Kaggle observation/action schema; never emits an illegal walk/operation when sufficient state is supplied; assigns every controlled unit exactly one action; has a small local legality test/smoke. Findings go to `research/top_re_agent_plan_codex.md` and BOARD.
+diff --git a/lab/re/top_re/__init__.py b/lab/re/top_re/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..c13e18977b10d804fab5157087d7883e557e9331
+--- /dev/null
++++ b/lab/re/top_re/__init__.py
+@@ -0,0 +1 @@
++"""Standalone, observation-driven reconstruction agent components."""
+diff --git a/lab/re/top_re/units.py b/lab/re/top_re/units.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..da82226d36f76bd0fb4b5f62c718e84b812dd211
+--- /dev/null
++++ b/lab/re/top_re/units.py
+@@ -0,0 +1,439 @@
++"""Legal, observation-driven unit dispatch for the standalone top-RE agent.
++
++``act(obs, plan)`` returns ``(farmer_command, hand_commands)``.  The caller adds
++the market action, so this module never emits one.  It intentionally relies only
++on the current observation: a hand may disappear overnight and a worker's index
++must therefore never be cached.
++
++Plan contract (all fields optional; mapping or attributes are accepted):
++
++* ``tasks(obs)`` -> task dictionaries, or ``tasks`` -> iterable.  A task has
++  ``op``, ``target=(x,y)``, optional ``item``, ``quantity``, ``priority``.
++* ``plant_targets``, ``build_targets``, ``place_targets``: ``{(x,y): item}``.
++  ``build_targets`` values are ``PASTURE``/``COOP`` (or full BUILD_* operation).
++* ``fertilize_targets`` / ``dig_targets``: iterable of coordinates.  Set
++  ``fertilize_all=True`` to service all unfertilized plants.
++* ``priority``: optional mapping overriding operation priorities;
++  ``load_size`` (default 4) controls one shed pickup.
++
++Unknown plan data is ignored.  This is deliberate: a bad target must become PASS,
++not an engine silent no-op.  The legality rules match kaggle-environments 1.32.7
++for the operations emitted here.  Movement is Manhattan because movement over a
++LOCKED tile is legal; only tile operations require an owned tile.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Iterable, Mapping, Optional
++
++
++MOVES = {
++    "NORTH": (0, -1),
++    "SOUTH": (0, 1),
++    "EAST": (1, 0),
++    "WEST": (-1, 0),
++}
++ANIMALS = {"COW": "PASTURE", "SHEEP": "PASTURE", "GOOSE": "COOP"}
++FIRST_YIELD_DAY = {
++    "WHEAT": 2,
++    "CARROT": 2,
++    "TOMATO": 8,
++    "STRAWBERRY": 10,
++    "MELON": 10,
++}
++PRODUCT_FOR_ANIMAL = {"COW": "MILK", "SHEEP": "WOOL", "GOOSE": "EGG"}
++DEFAULT_PRIORITY = {
++    "FEED": 260,
++    "CARE": 230,
++    "PLANT": 220,
++    "BUILD_PASTURE": 215,
++    "BUILD_COOP": 215,
++    "PLACE": 210,
++    "FERTILIZE": 185,
++    "WATER": 170,
++    "HARVEST": 160,
++    "COLLECT_FERTILIZER": 150,
++    "DIG": 145,
++    "FETCH": 240,
++    "DROP": 80,
++}
++
++
++@dataclass(frozen=True)
++class Task:
++    op: str
++    target: tuple[int, int]
++    item: Optional[str] = None
++    quantity: int = 1
++    priority: int = 0
++    source: str = "generated"
++
++    @property
++    def key(self) -> tuple[Any, ...]:
++        return (self.op, self.target, self.item, self.quantity, self.source)
++
++
++def _value(obj: Any, name: str, default: Any = None) -> Any:
++    if isinstance(obj, Mapping):
++        return obj.get(name, default)
++    return getattr(obj, name, default)
++
++
++def _call_or_value(plan: Any, name: str, obs: Mapping[str, Any], default: Any) -> Any:
++    value = _value(plan, name, default)
++    if callable(value):
++        try:
++            return value(obs)
++        except TypeError:
++            return value()
++    return value
++
++
++def _xy(value: Any) -> Optional[tuple[int, int]]:
++    if isinstance(value, str):
++        try:
++            x, y = value.split(",")
++            return (int(x), int(y))
++        except (TypeError, ValueError):
++            return None
++    if isinstance(value, (tuple, list)) and len(value) == 2:
++        try:
++            return (int(value[0]), int(value[1]))
++        except (TypeError, ValueError):
++            return None
++    return None
++
++
++def _targets(value: Any) -> Iterable[tuple[tuple[int, int], Any]]:
++    if isinstance(value, Mapping):
++        for target, item in value.items():
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, item
++    elif isinstance(value, (list, tuple, set)):
++        for target in value:
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, None
++
++
++def _task_from_raw(raw: Any) -> Optional[Task]:
++    if isinstance(raw, Task):
++        return raw
++    if not isinstance(raw, Mapping):
++        return None
++    op = str(raw.get("op", "")).upper()
++    target = _xy(raw.get("target"))
++    if not op or target is None:
++        return None
++    try:
++        quantity = max(1, int(raw.get("quantity", 1)))
++        priority = int(raw.get("priority", DEFAULT_PRIORITY.get(op, 0)))
++    except (TypeError, ValueError):
++        return None
++    item = raw.get("item")
++    return Task(op, target, str(item).upper() if item is not None else None,
++                quantity, priority, str(raw.get("source", "plan")))
++
++
++class _World:
++    def __init__(self, obs: Mapping[str, Any]):
++        self.obs = obs
++        self.player = int(obs.get("player", 0))
++        farms = obs.get("farms", [])
++        if not isinstance(farms, list) or not (0 <= self.player < len(farms)):
++            raise ValueError("observation has no own farm")
++        self.farm = farms[self.player]
++        self.private = obs.get("private", {}) or {}
++        self.tiles = self.farm.get("tiles", []) or []
++        self.height = len(self.tiles)
++        self.width = len(self.tiles[0]) if self.height else 0
++        self.day = int(obs.get("step", int(obs.get("day", 0)) * 24) or 0) // 24
++        self.positions = [self.farm.get("farmer", [0, 0]), *(self.farm.get("hands", []) or [])]
++        inventories = self.private.get("inventories", []) or []
++        self.inventories = [dict(inventories[i]) if i < len(inventories) else {}
++                            for i in range(len(self.positions))]
++        self.seeds = self.private.get("seeds", {}) or {}
++        self.shed = self.private.get("shed", {}) or {}
++        self.shed_capacity = int(obs.get("configuration", {}).get(
++            "shedCapacity", self.private.get("shed_capacity", 100)) or 100)
++        self.reserved_seed: dict[str, int] = {}
++        self.reserved_pickup: dict[str, int] = {}
++
++    def in_bounds(self, xy: tuple[int, int]) -> bool:
++        x, y = xy
++        return 0 <= x < self.width and 0 <= y < self.height
++
++    def tile(self, xy: tuple[int, int]) -> Any:
++        x, y = xy
++        return self.tiles[y][x] if self.in_bounds(xy) else "LOCKED"
++
++    def owned(self, xy: tuple[int, int]) -> bool:
++        return self.in_bounds(xy) and self.tile(xy) != "LOCKED"
++
++    def shed_tiles(self) -> tuple[tuple[int, int], ...]:
++        # The official board is 10x10; retain the same central four for tests.
++        half_x, half_y = self.width // 2, self.height // 2
++        return ((half_x - 1, half_y - 1), (half_x, half_y - 1),
++                (half_x - 1, half_y), (half_x, half_y))
++
++    def at_shed(self, xy: tuple[int, int]) -> bool:
++        return xy in self.shed_tiles()
++
++    def room(self) -> int:
++        return max(0, self.shed_capacity - sum(max(0, int(v)) for v in self.shed.values()))
++
++
++def _position(world: _World, actor: int) -> tuple[int, int]:
++    pos = world.positions[actor]
++    return (int(pos[0]), int(pos[1]))
++
++
++def _distance(left: tuple[int, int], right: tuple[int, int]) -> int:
++    return abs(left[0] - right[0]) + abs(left[1] - right[1])
++
++
++def _step_toward(start: tuple[int, int], target: tuple[int, int]) -> list[str]:
++    x, y = start
++    tx, ty = target
++    if x < tx:
++        return ["EAST"]
++    if x > tx:
++        return ["WEST"]
++    if y < ty:
++        return ["SOUTH"]
++    if y > ty:
++        return ["NORTH"]
++    return ["PASS"]
++
++
++def _mature_harvestable(world: _World, tile: Mapping[str, Any]) -> bool:
++    if int(tile.get("yield_units", 0) or 0) <= 0:
++        return False
++    if "animal" in tile:
++        return True
++    crop = str(tile.get("crop", "")).upper()
++    planted = int(tile.get("planted_day", world.day) or world.day)
++    return crop in FIRST_YIELD_DAY and world.day - planted >= FIRST_YIELD_DAY[crop]
++
++
++def _operation_legal(world: _World, actor: int, task: Task) -> bool:
++    """True only if task's non-movement command would execute now at target."""
++    xy, op, item = task.target, task.op, task.item
++    if not world.in_bounds(xy):
++        return False
++    inv = world.inventories[actor]
++    tile = world.tile(xy)
++    if op == "FETCH":
++        return (world.at_shed(xy) and bool(item) and
++                int(world.shed.get(item, 0) or 0) > world.reserved_pickup.get(item, 0))
++    if op == "DROP":
++        return world.at_shed(xy) and any(int(v) > 0 for v in inv.values()) and \
++            sum(max(0, int(v)) for v in inv.values()) <= world.room()
++    if op == "PLACE":
++        return (item in ANIMALS and isinstance(tile, Mapping) and
++                tile.get("kind") == ANIMALS[item] and "animal" not in tile and
++                int(inv.get(item, 0) or 0) > 0)
++    if not world.owned(xy):
++        return False
++    if op == "PLANT":
++        return (item in FIRST_YIELD_DAY and tile is None and
++                int(world.seeds.get(item, 0) or 0) > world.reserved_seed.get(item, 0))
++    if op == "WATER":
++        return isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and not tile.get("watered_today")
++    if op == "HARVEST":
++        return isinstance(tile, Mapping) and _mature_harvestable(world, tile)
++    if op == "FERTILIZE":
++        return (isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and
++                int(inv.get("FERTILIZER", 0) or 0) > 0)
++    if op == "DIG":
++        return tile is not None and not (isinstance(tile, Mapping) and "animal" in tile)
++    if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++        return tile is None
++    if op == "FEED":
++        return (isinstance(tile, Mapping) and "animal" in tile and not tile.get("fed_today") and
++                int(inv.get("WHEAT", 0) or 0) > 0)
++    if op == "CARE":
++        return isinstance(tile, Mapping) and "animal" in tile and not tile.get("cared_today")
++    if op == "COLLECT_FERTILIZER":
++        return isinstance(tile, Mapping) and "animal" in tile and bool(tile.get("fertilizer_available"))
++    return False
++
++
++def _command(world: _World, actor: int, task: Task) -> list[Any]:
++    pos = _position(world, actor)
++    if pos != task.target:
++        return _step_toward(pos, task.target)
++    if not _operation_legal(world, actor, task):
++        return ["PASS"]
++    if task.op == "FETCH":
++        available = int(world.shed.get(task.item, 0) or 0) - world.reserved_pickup.get(task.item, 0)
++        return ["PICKUP", task.item, min(task.quantity, available)]
++    if task.op == "DROP":
++        return ["DROP"]
++    if task.op == "PLACE":
++        return ["PLACE", task.item]
++    if task.op == "PLANT":
++        return ["PLANT", task.item]
++    return [task.op]
++
++
++def _priority(plan: Any, op: str, fallback: int) -> int:
++    table = _value(plan, "priority", {}) or {}
++    try:
++        return int(table.get(op, fallback)) if isinstance(table, Mapping) else fallback
++    except (TypeError, ValueError):
++        return fallback
++
++
++def _manual_tasks(plan: Any, obs: Mapping[str, Any]) -> list[Task]:
++    raw = _call_or_value(plan, "tasks", obs, []) or []
++    if isinstance(raw, Mapping):
++        raw = raw.values()
++    return [task for entry in raw if (task := _task_from_raw(entry)) is not None]
++
++
++def _generated_tasks(world: _World, plan: Any) -> list[Task]:
++    result: list[Task] = []
++    add = result.append
++    priority = lambda op: _priority(plan, op, DEFAULT_PRIORITY[op])
++
++    for xy, crop in _targets(_call_or_value(plan, "plant_targets", world.obs, {})):
++        crop = str(crop).upper() if crop is not None else ""
++        tile = world.tile(xy)
++        if isinstance(tile, Mapping) and tile.get("kind") == "WEED":
++            add(Task("DIG", xy, priority=priority("DIG"), source="plant-clear"))
++        else:
++            add(Task("PLANT", xy, crop, priority=priority("PLANT"), source="plant"))
++
++    for xy, structure in _targets(_call_or_value(plan, "build_targets", world.obs, {})):
++        op = str(structure).upper() if structure is not None else ""
++        if op in {"PASTURE", "COOP"}:
++            op = "BUILD_" + op
++        if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++            add(Task(op, xy, priority=priority(op), source="build"))
++
++    for xy, animal in _targets(_call_or_value(plan, "place_targets", world.obs, {})):
++        animal = str(animal).upper() if animal is not None else ""
++        add(Task("PLACE", xy, animal, priority=priority("PLACE"), source="place"))
++
++    dig = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "dig_targets", world.obs, ())) )
++    fert = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "fertilize_targets", world.obs, ())) )
++    if bool(_value(plan, "fertilize_all", False)):
++        fert.update((x, y) for y, row in enumerate(world.tiles) for x, tile in enumerate(row)
++                    if isinstance(tile, Mapping) and tile.get("kind") == "PLANT")
++
++    for y, row in enumerate(world.tiles):
++        for x, tile in enumerate(row):
++            xy = (x, y)
++            if xy in dig:
++                add(Task("DIG", xy, priority=priority("DIG"), source="dig"))
++            if not isinstance(tile, Mapping):
++                continue
++            if _mature_harvestable(world, tile):
++                add(Task("HARVEST", xy, priority=priority("HARVEST"), source="harvest"))
++            if tile.get("kind") == "PLANT":
++                if not tile.get("watered_today"):
++                    add(Task("WATER", xy, priority=priority("WATER"), source="water"))
++                if xy in fert and int(tile.get("fertilized_until_day", -1) or -1) < world.day + 2:
++                    add(Task("FERTILIZE", xy, priority=priority("FERTILIZE"), source="fertilize"))
++            elif "animal" in tile:
++                if not tile.get("fed_today"):
++                    add(Task("FEED", xy, priority=priority("FEED"), source="feed"))
++                if not tile.get("cared_today"):
++                    add(Task("CARE", xy, priority=priority("CARE"), source="care"))
++                if tile.get("fertilizer_available"):
++                    add(Task("COLLECT_FERTILIZER", xy, priority=priority("COLLECT_FERTILIZER"), source="collect"))
++    return result
++
++
++def _needs_item(tasks: Iterable[Task], item: str) -> int:
++    if item == "WHEAT":
++        return sum(task.op == "FEED" for task in tasks)
++    if item == "FERTILIZER":
++        return sum(task.op == "FERTILIZE" for task in tasks)
++    return sum(task.op == "PLACE" and task.item == item for task in tasks)
++
++
++def _logistics_tasks(world: _World, plan: Any, tasks: list[Task]) -> list[Task]:
++    result: list[Task] = []
++    load = max(1, int(_value(plan, "load_size", 4) or 4))
++    pickup_target = min(world.shed_tiles(), key=lambda xy: (xy[1], xy[0]))
++    carried = {item: sum(int(inv.get(item, 0) or 0) for inv in world.inventories)
++               for item in ("WHEAT", "FERTILIZER", *ANIMALS)}
++    for item in ("WHEAT", "FERTILIZER", *ANIMALS):
++        missing = max(0, _needs_item(tasks, item) - carried.get(item, 0))
++        stock = int(world.shed.get(item, 0) or 0)
++        if missing and stock:
++            amount = 1 if item in ANIMALS else min(load, missing, stock)
++            result.append(Task("FETCH", pickup_target, item, amount,
++                               _priority(plan, "FETCH", DEFAULT_PRIORITY["FETCH"]), "fetch"))
++    # Cargo delivery is deliberately lower-priority than same-day service.
++    for actor, inv in enumerate(world.inventories):
++        if any(int(v) > 0 for v in inv.values()) and sum(int(v) for v in inv.values()) <= world.room():
++            target = min(world.shed_tiles(), key=lambda xy: _distance(_position(world, actor), xy))
++            result.append(Task("DROP", target, priority=_priority(plan, "DROP", DEFAULT_PRIORITY["DROP"]),
++                               source=f"drop-{actor}"))
++    return result
++
++
++def tasks(obs: Mapping[str, Any], plan: Any) -> list[Task]:
++    """Expose generated tasks for diagnostics/tests; ``act`` also filters legality."""
++    world = _World(obs)
++    return _manual_tasks(plan, obs) + _generated_tasks(world, plan)
++
++
++def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
++    """Greedily reserve a legal current task and return one command per unit.
++
++    A unit may travel toward a task whose endpoint is legal *now*.  Once it
++    arrives, the endpoint is rechecked before emitting the operation; observation
++    drift consequently turns into PASS rather than an invalid action.
++    """
++    try:
++        world = _World(obs)
++    except (KeyError, TypeError, ValueError, IndexError):
++        return ["PASS"], []
++    if not world.positions or not world.width or not world.height:
++        return ["PASS"], [["PASS"] for _ in world.positions[1:]]
++
++    candidates = tasks(obs, plan)
++    candidates.extend(_logistics_tasks(world, plan, candidates))
++    # One logical task / endpoint per tick.  CARE and FEED are intentionally
++    # distinct: the engine permits them both on the same animal in one tick.
++    claimed: set[tuple[str, tuple[int, int], Optional[str]]] = set()
++    commands: list[list[Any]] = [["PASS"] for _ in world.positions]
++    unused = set(range(len(world.positions)))
++
++    ranked = sorted(enumerate(candidates), key=lambda pair: (
++        -pair[1].priority, pair[1].target[1], pair[1].target[0], pair[1].op, pair[0]))
++    for _, task in ranked:
++        claim = (task.op, task.target, task.item)
++        if claim in claimed:
++            continue
++        eligible = [actor for actor in unused if _operation_legal(world, actor, task)]
++        if not eligible:
++            continue
++        actor = min(eligible, key=lambda i: (_distance(_position(world, i), task.target), i))
++        command = _command(world, actor, task)
++        if command == ["PASS"]:
++            continue
++        commands[actor] = command
++        unused.remove(actor)
++        claimed.add(claim)
++        if task.op == "PLANT" and task.item:
++            world.reserved_seed[task.item] = world.reserved_seed.get(task.item, 0) + 1
++        if task.op == "FETCH" and task.item:
++            world.reserved_pickup[task.item] = world.reserved_pickup.get(task.item, 0) + task.quantity
++        if not unused:
++            break
++
++    return commands[0], commands[1:]
++
++
++def action(obs: Mapping[str, Any], plan: Any) -> dict[str, Any]:
++    """Convenience adapter for the Kaggle action shape (without market orders)."""
++    farmer, hands = act(obs, plan)
++    return {"farmer": farmer, "hands": hands}
++
+
+exec
+/bin/bash -lc "git status --short && git diff -- lab/re/top_re/units.py | sed -n '1,260p'" in /workspace/wt/codex
+ succeeded in 0ms:
+?? experiments/t030_demand_timing/
+?? experiments/t030_wheat_idle/
+?? experiments/t031_wheat_market/main_off.py
+?? experiments/t031_wheat_market/main_off.py.wheat_market.json
+?? experiments/t031_wheat_market/main_on.py
+?? experiments/t031_wheat_market/main_on.py.wheat_market.json
+?? experiments/t031_wheat_market/screen_seeds_20260926.json
+?? experiments/t031_wheat_market/variants/
+?? experiments/t032_opponent_harvest/
+?? experiments/t035_reactive_lane/
+?? experiments/t036_land_phase/
+?? lab/re/
+?? tmp_t025/
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python -m py_compile lab/re/top_re/units.py && /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+from lab.re.top_re import units
+obs = {
+ 'player': 0, 'step': 48,
+ 'farms': [{'farmer':[0,0], 'hands':[[4,4]], 'tiles': [[None]*10 for _ in range(10)]}],
+ 'private': {'shed': {'WHEAT': 8, 'FERTILIZER': 2}, 'seeds': {'WHEAT': 2}, 'inventories': [{}, {}]},
+}
+obs['farms'][0]['tiles'][0][0] = {'kind':'PLANT','crop':'WHEAT','planted_day':0,'watered_today':False,'yield_units':3,'fertilized_until_day':-1}
+obs['farms'][0]['tiles'][2][2] = {'kind':'PASTURE','animal':'COW','fed_today':False,'cared_today':False,'yield_units':0,'fertilizer_available':True}
+plan = {'plant_targets': {(1, 1): 'WHEAT'}, 'fertilize_targets': [(0,0)]}
+print(units.tasks(obs, plan))
+print(units.action(obs, plan))
+assert units.action(obs, plan)['farmer'][0] in units.MOVES | {'PASS'}
+assert len(units.action(obs, plan)['hands']) == 1
+PY" in /workspace/wt/codex
+ exited 1 in 29ms:
+[Task(op='PLANT', target=(1, 1), item='WHEAT', quantity=1, priority=220, source='plant'), Task(op='WATER', target=(0, 0), item=None, quantity=1, priority=170, source='water'), Task(op='FERTILIZE', target=(0, 0), item=None, quantity=1, priority=185, source='fertilize'), Task(op='FEED', target=(2, 2), item=None, quantity=1, priority=260, source='feed'), Task(op='CARE', target=(2, 2), item=None, quantity=1, priority=230, source='care'), Task(op='COLLECT_FERTILIZER', target=(2, 2), item=None, quantity=1, priority=150, source='collect')]
+{'farmer': ['EAST'], 'hands': [['PICKUP', 'WHEAT', 1]]}
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+TypeError: unsupported operand type(s) for |: 'dict' and 'set'
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 171f8ada55d2c488711745dce9b1210b3df1228b..8f54796b3a0a9c06beb4c322e13b66fde22eb4b3
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -138,3 +138,4 @@
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+ | T036 | codex | production RE complete — standalone top-RE handoff; no Horizon graft | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. Fixed opening falsified (pooled exact production 30.6%); G1 d0–3 only and prior 0/8 failure means no honest d8+ graft/screen. Never submit. |
++| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+diff --git a//workspace/shared/research/top_re_agent_plan_codex.md b//workspace/shared/research/top_re_agent_plan_codex.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fd4cd5e790ece622e55617c49c9ad5c44f7212f
+--- /dev/null
++++ b//workspace/shared/research/top_re_agent_plan_codex.md
+@@ -0,0 +1,24 @@
++# T037 — критика плана top-RE (Codex, 2026-09-26)
++
++Вердикт: отдельный агент — правильная ставка как локальный противник и единственный честный способ проверить d6–d10 систему. Но заявленный M1 достижим только как узкий vertical slice; M2 `>95k` к 27-09 18:00 — не обоснованный срок, а оптимистичный smoke-критерий. Не следует превращать M2 в решение о кандидате: без обеих позиций, новых миров и панели он измеряет главным образом удачу общего рынка.
++
++## Сроки и правильный cut-line
++
++* **M1 06:00:** реалистичен, если означает 16+ полных локальных игр без exception/illegal no-op и с диагностикой выполненных операций. Он нереалистичен, если до этого нужны одновременно точные targets, все логистические циклы и эффективные 10–11 рук. Сначала поддержать `MOVE/PASS`, PLANT/WATER/HARVEST, CARE/FEED, COLLECT/FERTILIZE и `PICKUP/PLACE/DROP`, затем build/place; неизвестная задача должна быть PASS, не угадывание.
++* **M2 18:00:** 95k можно использовать лишь как smoke на фиксированных мирах. Между M1 и M2 остаются три неизвестные, которые определяют топовую систему: какой работник реально носит WHEAT/FERTILIZER, сколько часов съедают рейсы к сараю, и не вытесняют ли срочные сервисные операции посадку/сбор. Нужны сначала журналы `requested/executed/rejected` и ежедневные показатели готовых/обслуженных животных, воды, cargo-loss; иначе число 95k не диагностирует провал.
++* После M1 заморозить интерфейс `plan -> units`: план задаёт цели/приоритеты, units владеет только текущей легальностью и одним действием на актёра. Не дублировать календарь в greedy-слое.
++
++## Главные технические риски
++
++1. **Легальность движения сравнительно проста, операция — нет.** По engine 1.32.7 ходить через `LOCKED` можно, но tile-операции на нём молча no-op; сарай доступен только с `(4,4),(5,4),(4,5),(5,5)`. Одновременно два исполнителя не должны получить один WATER/FEED/HARVEST/PLANT target. Семена тратятся глобально в одном тике, поэтому назначение нельзя делать, только глядя на локальный inventory.
++2. **Перенос и сарай — основной риск результата.** `PLANT` потребляет `private.seeds` напрямую, но `FEED`/`FERTILIZE`/`PLACE` требуют фактически переносимый предмет. `DROP` при полном shed может уничтожить остаток инвентаря, поэтому нельзя просто отправлять всех домой; надо резервировать вместимость. Нужны явные pickup→travel→operate→return цепочки, иначе 7 гусей и удобрение существуют только в market state, а не на поле.
++3. **Ежедневная логистика рук.** Наём создаёт/обновляет индексы рук у сарая, а ночная жизнь рук и порядок market/unit действий делают сохранённые роли ненадёжными. Units должен брать позиции и inventories только из текущего obs, возвращать ровно `len(hands)` команд и не предполагать, что вчерашний actor существует сегодня.
++4. **Greedy может разрушить фазу d6–d10.** Value/distance без дедлайнов будет немедленно собирать/поливать, но проигнорирует build+place+feed путь, land#3 и пшеничный блок. Плану нужны большие явные бонусы/дедлайны для фазовых task targets; units не должен сам изобретать экономику.
++
++## Что можно взять из Horizon/es7_wm
++
++Не импортировать `es7_wm/pkg/main.py` как библиотеку: он монолитный агент (~7.8k строк), exact engine helper загружается через `exec`, а `FarmView`/V219 зависят от `_IMPL`, tape routes и фиксированных actor indices. Это создаст скрытый parent-agent state и не сокращает риск top-RE.
++
++Полезны только маленькие, проверенные идеи, перенесённые локально: Manhattan-шаг (`_v219_walk`, valid потому что движение через LOCKED разрешено), центральные четыре shed-access tiles, и таблицы/preconditions из embedded exact `_apply_unit_action` (`main.py:1032`). V219 worker не годится: он жёстко привязан к tomato d18, native tape и appended hires. При желании после M1 вынести проверенный `unit_semantics.py` из этого engine extract в отдельный модуль с тестом, но не блокировать на нём старт.
++
++Итог: M1 — да при safe subset; M2 — условная гипотеза, не дедлайн промоушена. Самый ранний полезный артефакт — legal planner с телеметрией доставок, а не ещё один calendar-only клон.
+diff --git a//workspace/shared/tasks/T037-top-re.md b//workspace/shared/tasks/T037-top-re.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..ab0b456ea7c381aab8ce74cca7f08153fe58168a
+--- /dev/null
++++ b//workspace/shared/tasks/T037-top-re.md
+@@ -0,0 +1,7 @@
++# T037 — standalone top-RE units layer
++
++Owner: codex. Status: in progress. Never submit to Kaggle.
++
++Scope: independently critique the M1/M2 schedule and implement `lab/re/top_re/units.py` only: state-aware task generation, greedy assignment, and legal movement returning `(farmer, hands)` from `units.act(obs, plan)`. Claude owns `plan.py`, `market.py`, and integration.
++
++Acceptance: imports with only stdlib; handles the Kaggle observation/action schema; never emits an illegal walk/operation when sufficient state is supplied; assigns every controlled unit exactly one action; has a small local legality test/smoke. Findings go to `research/top_re_agent_plan_codex.md` and BOARD.
+diff --git a/lab/re/top_re/__init__.py b/lab/re/top_re/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..c13e18977b10d804fab5157087d7883e557e9331
+--- /dev/null
++++ b/lab/re/top_re/__init__.py
+@@ -0,0 +1 @@
++"""Standalone, observation-driven reconstruction agent components."""
+diff --git a/lab/re/top_re/units.py b/lab/re/top_re/units.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..da82226d36f76bd0fb4b5f62c718e84b812dd211
+--- /dev/null
++++ b/lab/re/top_re/units.py
+@@ -0,0 +1,439 @@
++"""Legal, observation-driven unit dispatch for the standalone top-RE agent.
++
++``act(obs, plan)`` returns ``(farmer_command, hand_commands)``.  The caller adds
++the market action, so this module never emits one.  It intentionally relies only
++on the current observation: a hand may disappear overnight and a worker's index
++must therefore never be cached.
++
++Plan contract (all fields optional; mapping or attributes are accepted):
++
++* ``tasks(obs)`` -> task dictionaries, or ``tasks`` -> iterable.  A task has
++  ``op``, ``target=(x,y)``, optional ``item``, ``quantity``, ``priority``.
++* ``plant_targets``, ``build_targets``, ``place_targets``: ``{(x,y): item}``.
++  ``build_targets`` values are ``PASTURE``/``COOP`` (or full BUILD_* operation).
++* ``fertilize_targets`` / ``dig_targets``: iterable of coordinates.  Set
++  ``fertilize_all=True`` to service all unfertilized plants.
++* ``priority``: optional mapping overriding operation priorities;
++  ``load_size`` (default 4) controls one shed pickup.
++
++Unknown plan data is ignored.  This is deliberate: a bad target must become PASS,
++not an engine silent no-op.  The legality rules match kaggle-environments 1.32.7
++for the operations emitted here.  Movement is Manhattan because movement over a
++LOCKED tile is legal; only tile operations require an owned tile.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Iterable, Mapping, Optional
++
++
++MOVES = {
++    "NORTH": (0, -1),
++    "SOUTH": (0, 1),
++    "EAST": (1, 0),
++    "WEST": (-1, 0),
++}
++ANIMALS = {"COW": "PASTURE", "SHEEP": "PASTURE", "GOOSE": "COOP"}
++FIRST_YIELD_DAY = {
++    "WHEAT": 2,
++    "CARROT": 2,
++    "TOMATO": 8,
++    "STRAWBERRY": 10,
++    "MELON": 10,
++}
++PRODUCT_FOR_ANIMAL = {"COW": "MILK", "SHEEP": "WOOL", "GOOSE": "EGG"}
++DEFAULT_PRIORITY = {
++    "FEED": 260,
++    "CARE": 230,
++    "PLANT": 220,
++    "BUILD_PASTURE": 215,
++    "BUILD_COOP": 215,
++    "PLACE": 210,
++    "FERTILIZE": 185,
++    "WATER": 170,
++    "HARVEST": 160,
++    "COLLECT_FERTILIZER": 150,
++    "DIG": 145,
++    "FETCH": 240,
++    "DROP": 80,
++}
++
++
++@dataclass(frozen=True)
++class Task:
++    op: str
++    target: tuple[int, int]
++    item: Optional[str] = None
++    quantity: int = 1
++    priority: int = 0
++    source: str = "generated"
++
++    @property
++    def key(self) -> tuple[Any, ...]:
++        return (self.op, self.target, self.item, self.quantity, self.source)
++
++
++def _value(obj: Any, name: str, default: Any = None) -> Any:
++    if isinstance(obj, Mapping):
++        return obj.get(name, default)
++    return getattr(obj, name, default)
++
++
++def _call_or_value(plan: Any, name: str, obs: Mapping[str, Any], default: Any) -> Any:
++    value = _value(plan, name, default)
++    if callable(value):
++        try:
++            return value(obs)
++        except TypeError:
++            return value()
++    return value
++
++
++def _xy(value: Any) -> Optional[tuple[int, int]]:
++    if isinstance(value, str):
++        try:
++            x, y = value.split(",")
++            return (int(x), int(y))
++        except (TypeError, ValueError):
++            return None
++    if isinstance(value, (tuple, list)) and len(value) == 2:
++        try:
++            return (int(value[0]), int(value[1]))
++        except (TypeError, ValueError):
++            return None
++    return None
++
++
++def _targets(value: Any) -> Iterable[tuple[tuple[int, int], Any]]:
++    if isinstance(value, Mapping):
++        for target, item in value.items():
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, item
++    elif isinstance(value, (list, tuple, set)):
++        for target in value:
++            xy = _xy(target)
++            if xy is not None:
++                yield xy, None
++
++
++def _task_from_raw(raw: Any) -> Optional[Task]:
++    if isinstance(raw, Task):
++        return raw
++    if not isinstance(raw, Mapping):
++        return None
++    op = str(raw.get("op", "")).upper()
++    target = _xy(raw.get("target"))
++    if not op or target is None:
++        return None
++    try:
++        quantity = max(1, int(raw.get("quantity", 1)))
++        priority = int(raw.get("priority", DEFAULT_PRIORITY.get(op, 0)))
++    except (TypeError, ValueError):
++        return None
++    item = raw.get("item")
++    return Task(op, target, str(item).upper() if item is not None else None,
++                quantity, priority, str(raw.get("source", "plan")))
++
++
++class _World:
++    def __init__(self, obs: Mapping[str, Any]):
++        self.obs = obs
++        self.player = int(obs.get("player", 0))
++        farms = obs.get("farms", [])
++        if not isinstance(farms, list) or not (0 <= self.player < len(farms)):
++            raise ValueError("observation has no own farm")
++        self.farm = farms[self.player]
++        self.private = obs.get("private", {}) or {}
++        self.tiles = self.farm.get("tiles", []) or []
++        self.height = len(self.tiles)
++        self.width = len(self.tiles[0]) if self.height else 0
++        self.day = int(obs.get("step", int(obs.get("day", 0)) * 24) or 0) // 24
++        self.positions = [self.farm.get("farmer", [0, 0]), *(self.farm.get("hands", []) or [])]
++        inventories = self.private.get("inventories", []) or []
++        self.inventories = [dict(inventories[i]) if i < len(inventories) else {}
++                            for i in range(len(self.positions))]
++        self.seeds = self.private.get("seeds", {}) or {}
++        self.shed = self.private.get("shed", {}) or {}
++        self.shed_capacity = int(obs.get("configuration", {}).get(
++            "shedCapacity", self.private.get("shed_capacity", 100)) or 100)
++        self.reserved_seed: dict[str, int] = {}
++        self.reserved_pickup: dict[str, int] = {}
++
++    def in_bounds(self, xy: tuple[int, int]) -> bool:
++        x, y = xy
++        return 0 <= x < self.width and 0 <= y < self.height
++
++    def tile(self, xy: tuple[int, int]) -> Any:
++        x, y = xy
++        return self.tiles[y][x] if self.in_bounds(xy) else "LOCKED"
++
++    def owned(self, xy: tuple[int, int]) -> bool:
++        return self.in_bounds(xy) and self.tile(xy) != "LOCKED"
++
++    def shed_tiles(self) -> tuple[tuple[int, int], ...]:
++        # The official board is 10x10; retain the same central four for tests.
++        half_x, half_y = self.width // 2, self.height // 2
++        return ((half_x - 1, half_y - 1), (half_x, half_y - 1),
++                (half_x - 1, half_y), (half_x, half_y))
++
++    def at_shed(self, xy: tuple[int, int]) -> bool:
++        return xy in self.shed_tiles()
++
++    def room(self) -> int:
++        return max(0, self.shed_capacity - sum(max(0, int(v)) for v in self.shed.values()))
++
++
++def _position(world: _World, actor: int) -> tuple[int, int]:
++    pos = world.positions[actor]
++    return (int(pos[0]), int(pos[1]))
++
++
++def _distance(left: tuple[int, int], right: tuple[int, int]) -> int:
++    return abs(left[0] - right[0]) + abs(left[1] - right[1])
++
++
++def _step_toward(start: tuple[int, int], target: tuple[int, int]) -> list[str]:
++    x, y = start
++    tx, ty = target
++    if x < tx:
++        return ["EAST"]
++    if x > tx:
++        return ["WEST"]
++    if y < ty:
++        return ["SOUTH"]
++    if y > ty:
++        return ["NORTH"]
++    return ["PASS"]
++
++
++def _mature_harvestable(world: _World, tile: Mapping[str, Any]) -> bool:
++    if int(tile.get("yield_units", 0) or 0) <= 0:
++        return False
++    if "animal" in tile:
++        return True
++    crop = str(tile.get("crop", "")).upper()
++    planted = int(tile.get("planted_day", world.day) or world.day)
++    return crop in FIRST_YIELD_DAY and world.day - planted >= FIRST_YIELD_DAY[crop]
++
++
++def _operation_legal(world: _World, actor: int, task: Task) -> bool:
++    """True only if task's non-movement command would execute now at target."""
++    xy, op, item = task.target, task.op, task.item
++    if not world.in_bounds(xy):
++        return False
++    inv = world.inventories[actor]
++    tile = world.tile(xy)
++    if op == "FETCH":
++        return (world.at_shed(xy) and bool(item) and
++                int(world.shed.get(item, 0) or 0) > world.reserved_pickup.get(item, 0))
++    if op == "DROP":
++        return world.at_shed(xy) and any(int(v) > 0 for v in inv.values()) and \
++            sum(max(0, int(v)) for v in inv.values()) <= world.room()
++    if op == "PLACE":
++        return (item in ANIMALS and isinstance(tile, Mapping) and
++                tile.get("kind") == ANIMALS[item] and "animal" not in tile and
++                int(inv.get(item, 0) or 0) > 0)
++    if not world.owned(xy):
++        return False
++    if op == "PLANT":
++        return (item in FIRST_YIELD_DAY and tile is None and
++                int(world.seeds.get(item, 0) or 0) > world.reserved_seed.get(item, 0))
++    if op == "WATER":
++        return isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and not tile.get("watered_today")
++    if op == "HARVEST":
++        return isinstance(tile, Mapping) and _mature_harvestable(world, tile)
++    if op == "FERTILIZE":
++        return (isinstance(tile, Mapping) and tile.get("kind") == "PLANT" and
++                int(inv.get("FERTILIZER", 0) or 0) > 0)
++    if op == "DIG":
++        return tile is not None and not (isinstance(tile, Mapping) and "animal" in tile)
++    if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++        return tile is None
++    if op == "FEED":
++        return (isinstance(tile, Mapping) and "animal" in tile and not tile.get("fed_today") and
++                int(inv.get("WHEAT", 0) or 0) > 0)
++    if op == "CARE":
++        return isinstance(tile, Mapping) and "animal" in tile and not tile.get("cared_today")
++    if op == "COLLECT_FERTILIZER":
++        return isinstance(tile, Mapping) and "animal" in tile and bool(tile.get("fertilizer_available"))
++    return False
++
++
++def _command(world: _World, actor: int, task: Task) -> list[Any]:
++    pos = _position(world, actor)
++    if pos != task.target:
++        return _step_toward(pos, task.target)
++    if not _operation_legal(world, actor, task):
++        return ["PASS"]
++    if task.op == "FETCH":
++        available = int(world.shed.get(task.item, 0) or 0) - world.reserved_pickup.get(task.item, 0)
++        return ["PICKUP", task.item, min(task.quantity, available)]
++    if task.op == "DROP":
++        return ["DROP"]
++    if task.op == "PLACE":
++        return ["PLACE", task.item]
++    if task.op == "PLANT":
++        return ["PLANT", task.item]
++    return [task.op]
++
++
++def _priority(plan: Any, op: str, fallback: int) -> int:
++    table = _value(plan, "priority", {}) or {}
++    try:
++        return int(table.get(op, fallback)) if isinstance(table, Mapping) else fallback
++    except (TypeError, ValueError):
++        return fallback
++
++
++def _manual_tasks(plan: Any, obs: Mapping[str, Any]) -> list[Task]:
++    raw = _call_or_value(plan, "tasks", obs, []) or []
++    if isinstance(raw, Mapping):
++        raw = raw.values()
++    return [task for entry in raw if (task := _task_from_raw(entry)) is not None]
++
++
++def _generated_tasks(world: _World, plan: Any) -> list[Task]:
++    result: list[Task] = []
++    add = result.append
++    priority = lambda op: _priority(plan, op, DEFAULT_PRIORITY[op])
++
++    for xy, crop in _targets(_call_or_value(plan, "plant_targets", world.obs, {})):
++        crop = str(crop).upper() if crop is not None else ""
++        tile = world.tile(xy)
++        if isinstance(tile, Mapping) and tile.get("kind") == "WEED":
++            add(Task("DIG", xy, priority=priority("DIG"), source="plant-clear"))
++        else:
++            add(Task("PLANT", xy, crop, priority=priority("PLANT"), source="plant"))
++
++    for xy, structure in _targets(_call_or_value(plan, "build_targets", world.obs, {})):
++        op = str(structure).upper() if structure is not None else ""
++        if op in {"PASTURE", "COOP"}:
++            op = "BUILD_" + op
++        if op in {"BUILD_PASTURE", "BUILD_COOP"}:
++            add(Task(op, xy, priority=priority(op), source="build"))
++
++    for xy, animal in _targets(_call_or_value(plan, "place_targets", world.obs, {})):
++        animal = str(animal).upper() if animal is not None else ""
++        add(Task("PLACE", xy, animal, priority=priority("PLACE"), source="place"))
++
++    dig = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "dig_targets", world.obs, ())) )
++    fert = set(_xy(xy) for xy, _ in _targets(_call_or_value(plan, "fertilize_targets", world.obs, ())) )
++    if bool(_value(plan, "fertilize_all", False)):
++        fert.update((x, y) for y, row in enumerate(world.tiles) for x, tile in enumerate(row)
++                    if isinstance(tile, Mapping) and tile.get("kind") == "PLANT")
++
++    for y, row in enumerate(world.tiles):
++        for x, tile in enumerate(row):
++            xy = (x, y)
++            if xy in dig:
++                add(Task("DIG", xy, priority=priority("DIG"), source="dig"))
++            if not isinstance(tile, Mapping):
++                continue
++            if _mature_harvestable(world, tile):
++                add(Task("HARVEST", xy, priority=priority("HARVEST"), source="harvest"))
++            if tile.get("kind") == "PLANT":
++                if not tile.get("watered_today"):
++                    add(Task("WATER", xy, priority=priority("WATER"), source="water"))
++                if xy in fert and int(tile.get("fertilized_until_day", -1) or -1) < world.day + 2:
++                    add(Task("FERTILIZE", xy, priority=priority("FERTILIZE"), source="fertilize"))
++            elif "animal" in tile:
++                if not tile.get("fed_today"):
++                    add(Task("FEED", xy, priority=priority("FEED"), source="feed"))
++                if not tile.get("cared_today"):
++                    add(Task("CARE", xy, priority=priority("CARE"), source="care"))
++                if tile.get("fertilizer_available"):
++                    add(Task("COLLECT_FERTILIZER", xy, priority=priority("COLLECT_FERTILIZER"), source="collect"))
++    return result
++
++
++def _needs_item(tasks: Iterable[Task], item: str) -> int:
++    if item == "WHEAT":
++        return sum(task.op == "FEED" for task in tasks)
++    if item == "FERTILIZER":
++        return sum(task.op == "FERTILIZE" for task in tasks)
++    return sum(task.op == "PLACE" and task.item == item for task in tasks)
++
++
++def _logistics_tasks(world: _World, plan: Any, tasks: list[Task]) -> list[Task]:
++    result: list[Task] = []
++    load = max(1, int(_value(plan, "load_size", 4) or 4))
++    pickup_target = min(world.shed_tiles(), key=lambda xy: (xy[1], xy[0]))
++    carried = {item: sum(int(inv.get(item, 0) or 0) for inv in world.inventories)
++               for item in ("WHEAT", "FERTILIZER", *ANIMALS)}
++    for item in ("WHEAT", "FERTILIZER", *ANIMALS):
++        missing = max(0, _needs_item(tasks, item) - carried.get(item, 0))
++        stock = int(world.shed.get(item, 0) or 0)
++        if missing and stock:
++            amount = 1 if item in ANIMALS else min(load, missing, stock)
++            result.append(Task("FETCH", pickup_target, item, amount,
++                               _priority(plan, "FETCH", DEFAULT_PRIORITY["FETCH"]), "fetch"))
++    # Cargo delivery is deliberately lower-priority than same-day service.
++    for actor, inv in enumerate(world.inventories):
++        if any(int(v) > 0 for v in inv.values()) and sum(int(v) for v in inv.values()) <= world.room():
++            target = min(world.shed_tiles(), key=lambda xy: _distance(_position(world, actor), xy))
++            result.append(Task("DROP", target, priority=_priority(plan, "DROP", DEFAULT_PRIORITY["DROP"]),
++                               source=f"drop-{actor}"))
++    return result
++
++
++def tasks(obs: Mapping[str, Any], plan: Any) -> list[Task]:
++    """Expose generated tasks for diagnostics/tests; ``act`` also filters legality."""
++    world = _World(obs)
++    return _manual_tasks(plan, obs) + _generated_tasks(world, plan)
++
++
++def act(obs: Mapping[str, Any], plan: Any) -> tuple[list[Any], list[list[Any]]]:
++    """Greedily reserve a legal current task and return one command per unit.
++
++    A unit may travel toward a task whose endpoint is legal *now*.  Once it
++    arrives, the endpoint is rechecked before emitting the operation; observation
++    drift consequently turns into PASS rather than an invalid action.
++    """
++    try:
++        world = _World(obs)
++    except (KeyError, TypeError, ValueError, IndexError):
++        return ["PASS"], []
++    if not world.positions or not world.width or not world.height:
++        return ["PASS"], [["PASS"] for _ in world.positions[1:]]
++
++    candidates = tasks(obs, plan)
++    candidates.extend(_logistics_tasks(world, plan, candidates))
++    # One logical task / endpoint per tick.  CARE and FEED are intentionally
++    # distinct: the engine permits them both on the same animal in one tick.
++    claimed: set[tuple[str, tuple[int, int], Optional[str]]] = set()
++    commands: list[list[Any]] = [["PASS"] for _ in world.positions]
++    unused = set(range(len(world.positions)))
++
++    ranked = sorted(enumerate(candidates), key=lambda pair: (
++        -pair[1].priority, pair[1].target[1], pair[1].target[0], pair[1].op, pair[0]))
++    for _, task in ranked:
++        claim = (task.op, task.target, task.item)
++        if claim in claimed:
++            continue
++        eligible = [actor for actor in unused if _operation_legal(world, actor, task)]
++        if not eligible:
++            continue
++        actor = min(eligible, key=lambda i: (_distance(_position(world, i), task.target), i))
++        command = _command(world, actor, task)
++        if command == ["PASS"]:
++            continue
++        commands[actor] = command
++        unused.remove(actor)
++        claimed.add(claim)
++        if task.op == "PLANT" and task.item:
++            world.reserved_seed[task.item] = world.reserved_seed.get(task.item, 0) + 1
++        if task.op == "FETCH" and task.item:
++            world.reserved_pickup[task.item] = world.reserved_pickup.get(task.item, 0) + task.quantity
++        if not unused:
++            break
++
++    return commands[0], commands[1:]
++
++
++def action(obs: Mapping[str, Any], plan: Any) -> dict[str, Any]:
++    """Convenience adapter for the Kaggle action shape (without market orders)."""
++    farmer, hands = act(obs, plan)
++    return {"farmer": farmer, "hands": hands}
++
+
+codex
+Базовый слой `units.py` уже собран: он читает текущие позиции/инвентари, резервирует задачи и выдаёт ровно одну команду каждому работнику. Теперь проверяю его на реальные правила движка и граничные состояния сарая, после чего передам Claude точный контракт.
