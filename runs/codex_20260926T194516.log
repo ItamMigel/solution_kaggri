@@ -13990,3 +13990,643 @@ index 0000000000000000000000000000000000000000..c509d1bfb8c9c645aea01e10dbfe2490
 
 exec
 /bin/bash -lc '/workspace/shared/bin/sync "T038 own-feed wheat screen closed; no full gate"' in /workspace/wt/codex
+ succeeded in 15510ms:
+pushed board + lab (AdilHAA/kaggriculture: board, lab; ItamMigel/solution_kaggri: adil-board, adil-lab)
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index dbfdbe4a6f74d129cbbff5671aa27d1d972fa79f..b64fe3d12e1db33762bf26df811f5f602cc4ff7b
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T038 own-feed WHEAT is closed at the mandatory screen: exhaustive map finds only V219 (10 fixed SE tomato cells), CARROT/CARROT2 (native tape WHEAT tiles only) and fixed early hybrid wheat; EXP182 is fertilizer-only. New default-off deficit/reserve wrapper is 0/1,438 action diffs, but on the fresh 2-world screen it plants 0 tiles (no PASS tile has native WATER→HARVEST path) and reserves sales; score 0pp, cash **−$215.50** (CI −$429…−$2). No full panel/candidate/Kaggle action. `tasks/T038-own-feed-wheat.md` [codex]
+ - 2026-09-26 — T025 **CMA4 paused resume-safely at completed gen-35** for Claude's server-centre + es7-WHEAT gate: `history=36`, last `gen=35`, `cma.pkl countiter=36`, no `gen_036`; the current local g035 full-panel gate and its 4 workers are also frozen with the wrapper in process group **998671**, releasing CPU. Resume exactly with `kill -CONT -- -998671`. No Kaggle action. [codex]
+ - 2026-09-26 — T037 top-RE review: M1 is viable only as a safe legal vertical slice; M2 `>95k` is a smoke metric, not a candidate decision, because cargo/shed routing and daily hand logistics are still the dominant unknowns. `es7_wm` is not reusable as a library (monolithic `exec`-embedded engine + tape state); copy only its Manhattan/shed semantics. Standalone `lab/re/top_re/units.py` now returns legal `(farmer,hands)` from current obs and passed official-engine action-contract smoke. [codex]
+ - 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
+@@ -119,6 +120,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
++| T038 | codex | closed ✗ — no viable native service route; screen cash −$215.50, score 0pp | Default-off own-feed-wheat planting/reserve layer over es7_wm: map all non-tape planting layers, prove off identity, then 2-world screen and only then full-panel gate. Never submit. `tasks/T038-own-feed-wheat.md` |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+ | T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+diff --git a//workspace/shared/ledger.jsonl b//workspace/shared/ledger.jsonl
+index c63945e375fa07f0a6acb56e79e99450ede58dc5..4604d5f75f8d1cb74c98f65e0aaf6df96cb7ac7f
+--- a//workspace/shared/ledger.jsonl
++++ b//workspace/shared/ledger.jsonl
+@@ -103,3 +103,4 @@
+ {"ts":"2026-09-26T22:10Z","who":"claude","what":"top-RE: inverse-estimated task weights (conditional logit on 32k MMPQ unit trips, test top-1 21.9% vs chance 0.8%; distance −1.15/tile dominant) in unit choice","result":"16 games vs es7: zone 39.6k -> logit 50.7k (es7 ~135k). Fertilizing from d10: 36k (worse; lost fert sales) -> reverted.","artifacts":"runs/topre_v1, runs/topre_v2, research/re/logit_mmpq.json"}
+ {"ts":"2026-09-26T19:30Z","who":"claude","what":"ledger timestamp correction","result":"my entries stamped 20:05Z/21:00Z/22:10Z today were written ~19:00–19:30Z (clock misread); content unchanged"}
+ {"ts":"2026-09-26T19:40Z","who":"claude","what":"server CMA (cma5 from es5) results from human: gates vs es5 PASS for g005 (+5.0), g015 (+3.75), g025 (+4.06), g035 (+6.56pp lower +4.69, no negative opp); built es7_wm + cma5 centre knobs (g025/035/038) -> gating vs es7_wm on 16 fresh worlds x 10 opps","artifacts":"candidates_wip/es8, runs/gate_es8"}
++{"ts":"2026-09-26T19:51Z","by":"codex","task":"T038","candidate":"own_feed_wheat_on","path":"/workspace/wt/codex/experiments/t038_own_feed/main_on.py","sha256":"44d844be21cb0e31a42ee44164382deb42da4578d14a500755deb8d81f49e604","opponents":["parthenos_robust"],"seeds_file":"/workspace/shared/runs/t038_own_feed/screen/manifest.json","games":4,"wins":2,"draws":0,"losses":2,"mean_margin":46.0,"worst10_margin":-1238.0,"errors":0,"run_dir":"/workspace/shared/runs/t038_own_feed/screen","verdict":"worse","note":"Fresh two-world both-seat paired screen vs frozen es7_wm control: score delta 0pp; paired cash delta -215.50, whole-world 95% CI [-429,-2]. Off identity 0/1438 actions; enabled had 0 viable PASS-tile WATER/HARVEST paths and only reserved sales. No full panel."}
+diff --git a//workspace/shared/tasks/T038-own-feed-wheat.md b//workspace/shared/tasks/T038-own-feed-wheat.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..29fdab41e112b2a96c572017ee4d59c096fcdef7
+--- /dev/null
++++ b//workspace/shared/tasks/T038-own-feed-wheat.md
+@@ -0,0 +1,69 @@
++# T038 — Horizon own-feed WHEAT
++
++Owner: codex. Started 2026-09-26. Human priority. Never submit to Kaggle.
++
++## Hypothesis
++
++Outside the fixed Horizon tape, existing finite-harvest planting planners can
++turn harvested/empty owned tiles into WHEAT when a short-horizon feed deficit
++is projected, reducing d10--29 `BUY_PRODUCT WHEAT`.  While that deficit
++exists, harvested WHEAT should be reserved from discretionary sales.  The
++layer must be default-off and action-identical to `es7_wm` when off.
++
++## Method and gate
++
++1. Map every non-tape `PLANT` and seed/replant decision in the frozen
++   `es7_wm` source (tiles, dates, caps and controls), including EXP182 and
++   CARROT2.
++2. Implement the bounded gene above the frozen agent without modifying the
++   fixed tape.  It may act only in addition to a parent `PASS`/eligible planner
++   slot and must preserve parent actions/order otherwise.
++3. Demonstrate genome-off action identity, run a fresh two-world, both-seat
++   screen versus `es7_wm` (at most 8 workers), then run a fresh full panel only
++   if that screen is positive and error-free.  Record every run in the ledger.
++
++## Result
++
++### Planting/seed map of frozen `es7_wm` (`pkg/main.py`)
++
++| Layer | Tiles it may use | When / cap | Actual authority |
++|---|---|---|---|
++| Native route tape | Route-selected precomputed tile positions only | All game; its `PLANT` and `BUY_SEED` quantities are fixed literals | Baseline WHEAT/CARROT planting; not a reactive layer. |
++| V219 finite tomato | The ten third-land SE cells `(5..9, 5..6)` only | Plant d18; exactly 10 TOMATO seeds, only after NW/NE/SW, `money>=12000`, tomato >=$70, >=3 pizza/farmers shops and no native TOMATO/land obligation | Adds land, seed buy and dedicated hires; no WHEAT/replant authority. `main.py:1277-1476`. |
++| EXP182/R51 input planner | Existing observed WHEAT/CARROT plant cells only; no empty cells | d12--28, hours 1--3; at most 2 new fertilizer workers, beam depth <=8 but a worker needs >=3 target cells | Forecasts gain from **FERTILIZE** only; it never emits PLANT or BUY_SEED. `:2160-2314`. |
++| V9 CARROT | Only the current native route's WHEAT-PLANT cells | d10--23; may swap each currently planned WHEAT PLANT if CARROT/WHEAT >=1.8 and physical WHEAT >=40 (boom >=3.5 lowers reserve to 10); redirects matching seed orders | No new coordinates; earlier layer, normally subsumed by CARROT2. `:3048-3155`. |
++| CARROT2 (final active swap) | Only current action's native WHEAT-PLANT cells, after confirming empty tile | d6--28; all qualifying same-turn tape WHEAT plants, bounded by spare CARROT seed; target float `_CA_BUFFER=9`; price `3*CARROT-20 > 4*WHEAT-10+_CA_MARGIN`; one-day feed reserve; money >= `_CA_CASH + 20q` | Replaces PLANT WHEAT with CARROT, trims WHEAT/CARROT buys and may add CARROT seeds; no new coordinates. `:4472-4726`, current knobs `:7649`. |
++| Hybrid productive opening | One fixed `(2,4)` WHEAT cell | d0 PLANT, d0 one WHEAT seed; fixed hand route then water/harvest/restore pasture by d3 | Mutates the opening tape, not a general replant planner. `:6474-6618`. |
++| E402 / seed-float trim | No tiles | E402 d26+; seed-float d27+ route 2 | Caps existing WHEAT/CARROT seed buys to remaining native tape PLANTs; it never creates a plant. `:6662-6714`, `:7126-7190`. |
++
++The only non-tape free-cell crop program is V219, and it is TOMATO-only.  The
++requested WHEAT lever therefore cannot be delegated to EXP182: that layer's
++`input_forecast_wheat` means marginal harvest yield after fertilizer, not new
++WHEAT planting.
++
++### Implemented and evaluated
++
++`lab/hplus/own_feed_wheat.py` builds `experiments/t038_own_feed/main_off.py`
++and `main_on.py` from frozen `es7_wm` SHA-256 `d1220b…`.  Off returns the
++parent action byte-for-byte.  On is d10--27 only and may use at most two
++already-present WHEAT seeds per turn, solely by turning an inherited exact
++`PASS` on an owned `None` tile into PLANT WHEAT after CARROT2's native
++visit/yield model proves a future WATER/HARVEST route.  It adds no market buy,
++hire, movement, hand or tape action.  A three-day visible-herd feed deficit is
++`unfed_today + 2*all_animals - physical_WHEAT - actual_this-turn_WHEAT_buys`.
++While positive, WHEAT SELL orders are replaced by empty slots, retaining slot
++indices.
++
++- Off identity: fresh seeds `295843440, 2062279317`, two complete official
++  worlds versus `es7_wm`: **0/1,438 action diffs**, 4/4 DONE;
++  `runs/t038_own_feed/identity.json`.
++- Activation audit on the same two worlds: 0 plants, because no inherited PASS
++  position had a native future WATER→HARVEST visit chain.  It did suppress 497
++  WHEAT sale units across 67 turns; `runs/t038_own_feed/activation_mirror.json`.
++- Fresh mandatory two-world both-seat screen versus Parthenos, with es7_wm
++  control in the same invocation and eight workers: **8/8 valid/DONE**.
++  Paired score is **0pp**, paired cash is **−$215.50** (whole-world 95% CI
++  **−$429…−$2**); `runs/t038_own_feed/screen/`.
++
++The screen is not positive, so the predeclared full panel was not run.  No
++candidate, promotion or Kaggle action follows.
+diff --git a/lab/hplus/own_feed_wheat.py b/lab/hplus/own_feed_wheat.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..224ab8d5e5c6d884e80383a79e73b191dca40ae9
+--- /dev/null
++++ b/lab/hplus/own_feed_wheat.py
+@@ -0,0 +1,137 @@
++"""T038 default-off own-feed WHEAT layer over a sealed Horizon build.
++
++The layer has deliberately narrow authority.  It only replaces an inherited
++``PASS`` on an already-empty owned tile with ``PLANT WHEAT``, using a seed that
++is already present.  A plant is accepted only if the native continuation has
++enough visits to harvest it.  When the visible herd has more three-day feed
++demand than physical WHEAT plus this turn's actual product buys, it also removes
++WHEAT sale orders, preserving their order slots as empty holes.
++"""
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++
++DEFAULT: dict[str, Any] = {
++    "ofw_on": False,
++    "ofw_day0": 10,
++    "ofw_day1": 27,
++    "ofw_horizon_days": 3,
++    "ofw_max_plants": 2,
++}
++
++
++MODULE_SRC = r'''
++# ================= T038 own-feed WHEAT (lab/hplus/own_feed_wheat.py) =================
++_OFW = __OFW_GENES__
++_OFW_PARENT = agent
++del agent
++_OFW_STATE = {}
++_OFW_STATS = {"plants": 0, "sale_units_reserved": 0, "sale_turns_reserved": 0,
++              "deficit_turns": 0, "path_abstains": 0, "shape_abstains": 0, "errors": 0}
++
++def _ofw_stock(private):
++    return max(0, int((private.get("shed") or {}).get("WHEAT", 0))) + sum(
++        max(0, int(inv.get("WHEAT", 0))) for inv in (private.get("inventories") or []))
++
++def _ofw_feed_need(farm, day, horizon):
++    animals = []
++    for row in farm.get("tiles") or []:
++        for tile in row:
++            if isinstance(tile, dict) and tile.get("animal") in ("COW", "SHEEP", "GOOSE"):
++                animals.append(tile)
++    # Today only animals not already fed need grain; every surviving animal needs
++    # one unit on each following dawn.  This intentionally never predicts a new
++    # animal purchase, so it cannot invent demand from an opponent/private state.
++    return sum(0 if tile.get("fed_today") else 1 for tile in animals) + max(0, horizon - 1) * len(animals)
++
++def _ofw_deficit(obs, action):
++    seat = int(obs["player"]); farm = obs["farms"][seat]; private = obs.get("private") or {}
++    incoming = sum(max(0, int(o[2])) for o in (action.get("market") or [])
++                   if isinstance(o, list) and len(o) >= 3 and o[:2] == ["BUY_PRODUCT", "WHEAT"])
++    return max(0, _ofw_feed_need(farm, int(obs["step"]) // 24, int(_OFW["ofw_horizon_days"])) - _ofw_stock(private) - incoming)
++
++def _ofw_has_harvest_path(obs, action, pos, day):
++    # CARROT2's exact tape-visit/yield model is already in the frozen parent.
++    # It rejects a speculative PASS tile without a native watering+harvest path.
++    visits = _ca_visits(obs, action, pos, min(719, (day + 6) * 24), start=int(obs["step"]) + 1)
++    harvested, rescue, _ = _ca_yield_path("WHEAT", day, visits)
++    return max(harvested, rescue) > 0
++
++def agent(obs, config=None):
++    action = _OFW_PARENT(obs, config)
++    if not _OFW.get("ofw_on"):
++        return action
++    try:
++        step = int(obs["step"]); day = step // 24
++        if step >= 718 or not int(_OFW["ofw_day0"]) <= day <= int(_OFW["ofw_day1"]):
++            return action
++        deficit = _ofw_deficit(obs, action)
++        if deficit <= 0:
++            return action
++        _OFW_STATS["deficit_turns"] += 1
++        seat = int(obs["player"]); farm = obs["farms"][seat]; private = obs.get("private") or {}
++        positions = [farm["farmer"], *(farm.get("hands") or [])]
++        commands = [list(action.get("farmer") or ["PASS"]), *(list(c) for c in (action.get("hands") or []))]
++        if len(positions) != len(commands):
++            _OFW_STATS["shape_abstains"] += 1
++            return action
++        # Protect all parent same-turn wheat PLANTs: only truly spare existing seed
++        # is available to this layer.  No buys, hires, movement, or route edits.
++        seed = max(0, int((private.get("seeds") or {}).get("WHEAT", 0)) - sum(c[:2] == ["PLANT", "WHEAT"] for c in commands))
++        planted = 0
++        for i, (pos, command) in enumerate(zip(positions, commands)):
++            if not seed or planted >= int(_OFW["ofw_max_plants"]) or command != ["PASS"]:
++                continue
++            x, y = int(pos[0]), int(pos[1])
++            if farm["tiles"][y][x] is not None:
++                continue
++            if not _ofw_has_harvest_path(obs, action, (x, y), day):
++                _OFW_STATS["path_abstains"] += 1
++                continue
++            commands[i] = ["PLANT", "WHEAT"]
++            seed -= 1; planted += 1; _OFW_STATS["plants"] += 1
++        market = [list(o) if isinstance(o, list) else o for o in (action.get("market") or [])]
++        reserved = 0
++        # A current three-day deficit means every physical WHEAT sale defeats the
++        # feed reserve.  Empty lists preserve market-slot indices for the rival.
++        for i, order in enumerate(market):
++            if isinstance(order, list) and len(order) >= 3 and order[:2] == ["SELL", "WHEAT"]:
++                reserved += max(0, int(order[2])); market[i] = []
++        if reserved:
++            _OFW_STATS["sale_units_reserved"] += reserved; _OFW_STATS["sale_turns_reserved"] += 1
++        if not planted and not reserved:
++            return action
++        return dict(action, farmer=commands[0], hands=commands[1:], market=market)
++    except Exception:
++        _OFW_STATS["errors"] += 1
++        return action
++
++agent.telemetry = _OFW_STATS
++'''
++
++
++def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
++    value = dict(DEFAULT)
++    value.update(genes or {})
++    if set(value) != set(DEFAULT):
++        raise ValueError("unknown own-feed-wheat gene")
++    if type(value["ofw_on"]) is not bool or any(type(value[key]) is not int for key in value if key != "ofw_on"):
++        raise ValueError("invalid own-feed-wheat gene types")
++    if not 0 <= value["ofw_day0"] <= value["ofw_day1"] <= 29 or not 1 <= value["ofw_horizon_days"] <= 4 or not 1 <= value["ofw_max_plants"] <= 4:
++        raise ValueError("own-feed-wheat bounds invalid")
++    return value
++
++
++def build(base_main_py: str | Path, genes: dict[str, Any] | None, out_main_py: str | Path) -> dict[str, Any]:
++    value = normalise(genes)
++    base, out = Path(base_main_py), Path(out_main_py)
++    src = base.read_text().rstrip() + "\n" + MODULE_SRC.replace("__OFW_GENES__", repr(value))
++    compile(src, str(out), "exec")
++    out.parent.mkdir(parents=True, exist_ok=True)
++    out.write_text(src)
++    info = {"base": str(base.resolve()), "genes": value, "default_off": not value["ofw_on"]}
++    out.with_suffix(out.suffix + ".own_feed_wheat.json").write_text(json.dumps(info, indent=2, sort_keys=True) + "\n")
++    return info
+diff --git a/lab/hplus/own_feed_wheat_audit.py b/lab/hplus/own_feed_wheat_audit.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..c509d1bfb8c9c645aea01e10dbfe2490930e34b4
+--- /dev/null
++++ b/lab/hplus/own_feed_wheat_audit.py
+@@ -0,0 +1,56 @@
++#!/usr/bin/env python3
++"""Official-engine T038 identity and activation audit; never submits."""
++from __future__ import annotations
++
++import argparse
++import json
++from pathlib import Path
++
++
++def load(path: Path) -> dict:
++    ns = {"__file__": str(path), "__name__": f"t038_{path.stem}"}
++    exec(compile(path.read_text(), str(path), "exec"), ns)
++    return ns
++
++
++def run(base_path: Path, candidate_path: Path, opponent: Path, seeds: list[int], *, identity: bool) -> list[dict]:
++    from kaggle_environments import make
++
++    rows = []
++    for seed in seeds:
++        base, candidate = load(base_path), load(candidate_path)
++        diffs: list[int] = []
++
++        def audited(obs, cfg=None):
++            left, right = base["agent"](obs, cfg), candidate["agent"](obs, cfg)
++            if json.dumps(left, sort_keys=True, separators=(",", ":")) != json.dumps(right, sort_keys=True, separators=(",", ":")):
++                diffs.append(int(obs["step"]))
++            return left if identity else right
++
++        env = make("kaggriculture", configuration={"seed": seed}, debug=False)
++        env.run([audited, str(opponent)])
++        rows.append({"seed": seed, "status": [state.status for state in env.state], "diffs": diffs,
++                     "candidate_stats": dict(candidate.get("_OFW_STATS", {})),
++                     "reward": [state.reward for state in env.state]})
++    return rows
++
++
++def main() -> None:
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument("--base", type=Path, required=True); p.add_argument("--candidate", type=Path, required=True)
++    p.add_argument("--opponent", type=Path, required=True); p.add_argument("--seeds", nargs="+", type=int, required=True)
++    p.add_argument("--enabled", action="store_true"); p.add_argument("--out", type=Path, required=True)
++    a = p.parse_args()
++    rows = run(a.base.resolve(), a.candidate.resolve(), a.opponent.resolve(), a.seeds, identity=not a.enabled)
++    done = all(row["status"] == ["DONE", "DONE"] for row in rows)
++    result = {"mode": "enabled" if a.enabled else "identity", "valid": done,
++              "action_identical": not any(row["diffs"] for row in rows), "rows": rows}
++    a.out.parent.mkdir(parents=True, exist_ok=True)
++    a.out.write_text(json.dumps(result, indent=2) + "\n")
++    print(json.dumps({key: result[key] for key in ("mode", "valid", "action_identical")}))
++    if not done or (not a.enabled and not result["action_identical"]):
++        raise SystemExit(2)
++
++
++if __name__ == "__main__":
++    main()
+
+codex
+T038 завершён отрицательно: full-panel не запускался.
+
+- Off-версия: 0/1 438 action-diff, 4/4 DONE.
+- On-версия не нашла ни одного `PASS`-тайла с нативной цепочкой WATER→HARVEST; лишь удерживала продажи WHEAT.
+- Fresh 2-world screen: 8/8 DONE, score 0pp, cash −$215.50 (CI −$429…−$2).
+
+Карта посадочных слоёв и артефакты записаны в [T038-own-feed-wheat.md](/workspace/shared/tasks/T038-own-feed-wheat.md). Claude уведомлён; доска и ветки синхронизированы. Kaggle не трогал.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index dbfdbe4a6f74d129cbbff5671aa27d1d972fa79f..b64fe3d12e1db33762bf26df811f5f602cc4ff7b
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T038 own-feed WHEAT is closed at the mandatory screen: exhaustive map finds only V219 (10 fixed SE tomato cells), CARROT/CARROT2 (native tape WHEAT tiles only) and fixed early hybrid wheat; EXP182 is fertilizer-only. New default-off deficit/reserve wrapper is 0/1,438 action diffs, but on the fresh 2-world screen it plants 0 tiles (no PASS tile has native WATER→HARVEST path) and reserves sales; score 0pp, cash **−$215.50** (CI −$429…−$2). No full panel/candidate/Kaggle action. `tasks/T038-own-feed-wheat.md` [codex]
+ - 2026-09-26 — T025 **CMA4 paused resume-safely at completed gen-35** for Claude's server-centre + es7-WHEAT gate: `history=36`, last `gen=35`, `cma.pkl countiter=36`, no `gen_036`; the current local g035 full-panel gate and its 4 workers are also frozen with the wrapper in process group **998671**, releasing CPU. Resume exactly with `kill -CONT -- -998671`. No Kaggle action. [codex]
+ - 2026-09-26 — T037 top-RE review: M1 is viable only as a safe legal vertical slice; M2 `>95k` is a smoke metric, not a candidate decision, because cargo/shed routing and daily hand logistics are still the dominant unknowns. `es7_wm` is not reusable as a library (monolithic `exec`-embedded engine + tape state); copy only its Manhattan/shed semantics. Standalone `lab/re/top_re/units.py` now returns legal `(farmer,hands)` from current obs and passed official-engine action-contract smoke. [codex]
+ - 2026-09-26 — T036 raw early-route completion: correction: DSM/MMPQ use **one COOP per goose** (6/7 median), with NE-inner COOP rack, SW WHEAT field, distributed central-shed WHEAT→FEED workers; MMPQ’s 100 replays have no universal d0–d8 tape. Legal third-land-only phase screen is 24/24 valid but direct es7_wm **0/4/4, −$4.04k** (boatlee/fukami 8-0 each); no candidate. `research/re_production.md`, `runs/t036_land_phase_screen_v2` [codex]
+@@ -119,6 +120,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T031 | codex+claude | ✓ es7_wm PROMOTED 2026-09-26 15:10Z | es6_c4g15 + market-only wheat trading layer: codex gate +4.2pp, claude confirm +6.9pp (lower +5.0), h2h vs es6 27/32 & 30/32 → candidates/es7_wm = current recommendation |
++| T038 | codex | closed ✗ — no viable native service route; screen cash −$215.50, score 0pp | Default-off own-feed-wheat planting/reserve layer over es7_wm: map all non-tape planting layers, prove off identity, then 2-world screen and only then full-panel gate. Never submit. `tasks/T038-own-feed-wheat.md` |
+ | T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+ | T025 | codex+claude | in_progress — CMA4 gen35 restarted after preserved disk-full artifact, then es7 control gate | First gen35 attempt stopped at 373/1,056 DONE before CMA state update when disk filled; artifact retained and excluded from gates. Clean restart uses unchanged gen34 state. Gate composes frozen CMA centre with exact es7 WHEAT layer and compares to es7_wm on a fresh 16-world panel; training remains es5-mirror at ≤14 workers. `tasks/T025-route-conditioned-land.md` |
+diff --git a//workspace/shared/ledger.jsonl b//workspace/shared/ledger.jsonl
+index c63945e375fa07f0a6acb56e79e99450ede58dc5..4604d5f75f8d1cb74c98f65e0aaf6df96cb7ac7f
+--- a//workspace/shared/ledger.jsonl
++++ b//workspace/shared/ledger.jsonl
+@@ -103,3 +103,4 @@
+ {"ts":"2026-09-26T22:10Z","who":"claude","what":"top-RE: inverse-estimated task weights (conditional logit on 32k MMPQ unit trips, test top-1 21.9% vs chance 0.8%; distance −1.15/tile dominant) in unit choice","result":"16 games vs es7: zone 39.6k -> logit 50.7k (es7 ~135k). Fertilizing from d10: 36k (worse; lost fert sales) -> reverted.","artifacts":"runs/topre_v1, runs/topre_v2, research/re/logit_mmpq.json"}
+ {"ts":"2026-09-26T19:30Z","who":"claude","what":"ledger timestamp correction","result":"my entries stamped 20:05Z/21:00Z/22:10Z today were written ~19:00–19:30Z (clock misread); content unchanged"}
+ {"ts":"2026-09-26T19:40Z","who":"claude","what":"server CMA (cma5 from es5) results from human: gates vs es5 PASS for g005 (+5.0), g015 (+3.75), g025 (+4.06), g035 (+6.56pp lower +4.69, no negative opp); built es7_wm + cma5 centre knobs (g025/035/038) -> gating vs es7_wm on 16 fresh worlds x 10 opps","artifacts":"candidates_wip/es8, runs/gate_es8"}
++{"ts":"2026-09-26T19:51Z","by":"codex","task":"T038","candidate":"own_feed_wheat_on","path":"/workspace/wt/codex/experiments/t038_own_feed/main_on.py","sha256":"44d844be21cb0e31a42ee44164382deb42da4578d14a500755deb8d81f49e604","opponents":["parthenos_robust"],"seeds_file":"/workspace/shared/runs/t038_own_feed/screen/manifest.json","games":4,"wins":2,"draws":0,"losses":2,"mean_margin":46.0,"worst10_margin":-1238.0,"errors":0,"run_dir":"/workspace/shared/runs/t038_own_feed/screen","verdict":"worse","note":"Fresh two-world both-seat paired screen vs frozen es7_wm control: score delta 0pp; paired cash delta -215.50, whole-world 95% CI [-429,-2]. Off identity 0/1438 actions; enabled had 0 viable PASS-tile WATER/HARVEST paths and only reserved sales. No full panel."}
+diff --git a//workspace/shared/tasks/T038-own-feed-wheat.md b//workspace/shared/tasks/T038-own-feed-wheat.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..29fdab41e112b2a96c572017ee4d59c096fcdef7
+--- /dev/null
++++ b//workspace/shared/tasks/T038-own-feed-wheat.md
+@@ -0,0 +1,69 @@
++# T038 — Horizon own-feed WHEAT
++
++Owner: codex. Started 2026-09-26. Human priority. Never submit to Kaggle.
++
++## Hypothesis
++
++Outside the fixed Horizon tape, existing finite-harvest planting planners can
++turn harvested/empty owned tiles into WHEAT when a short-horizon feed deficit
++is projected, reducing d10--29 `BUY_PRODUCT WHEAT`.  While that deficit
++exists, harvested WHEAT should be reserved from discretionary sales.  The
++layer must be default-off and action-identical to `es7_wm` when off.
++
++## Method and gate
++
++1. Map every non-tape `PLANT` and seed/replant decision in the frozen
++   `es7_wm` source (tiles, dates, caps and controls), including EXP182 and
++   CARROT2.
++2. Implement the bounded gene above the frozen agent without modifying the
++   fixed tape.  It may act only in addition to a parent `PASS`/eligible planner
++   slot and must preserve parent actions/order otherwise.
++3. Demonstrate genome-off action identity, run a fresh two-world, both-seat
++   screen versus `es7_wm` (at most 8 workers), then run a fresh full panel only
++   if that screen is positive and error-free.  Record every run in the ledger.
++
++## Result
++
++### Planting/seed map of frozen `es7_wm` (`pkg/main.py`)
++
++| Layer | Tiles it may use | When / cap | Actual authority |
++|---|---|---|---|
++| Native route tape | Route-selected precomputed tile positions only | All game; its `PLANT` and `BUY_SEED` quantities are fixed literals | Baseline WHEAT/CARROT planting; not a reactive layer. |
++| V219 finite tomato | The ten third-land SE cells `(5..9, 5..6)` only | Plant d18; exactly 10 TOMATO seeds, only after NW/NE/SW, `money>=12000`, tomato >=$70, >=3 pizza/farmers shops and no native TOMATO/land obligation | Adds land, seed buy and dedicated hires; no WHEAT/replant authority. `main.py:1277-1476`. |
++| EXP182/R51 input planner | Existing observed WHEAT/CARROT plant cells only; no empty cells | d12--28, hours 1--3; at most 2 new fertilizer workers, beam depth <=8 but a worker needs >=3 target cells | Forecasts gain from **FERTILIZE** only; it never emits PLANT or BUY_SEED. `:2160-2314`. |
++| V9 CARROT | Only the current native route's WHEAT-PLANT cells | d10--23; may swap each currently planned WHEAT PLANT if CARROT/WHEAT >=1.8 and physical WHEAT >=40 (boom >=3.5 lowers reserve to 10); redirects matching seed orders | No new coordinates; earlier layer, normally subsumed by CARROT2. `:3048-3155`. |
++| CARROT2 (final active swap) | Only current action's native WHEAT-PLANT cells, after confirming empty tile | d6--28; all qualifying same-turn tape WHEAT plants, bounded by spare CARROT seed; target float `_CA_BUFFER=9`; price `3*CARROT-20 > 4*WHEAT-10+_CA_MARGIN`; one-day feed reserve; money >= `_CA_CASH + 20q` | Replaces PLANT WHEAT with CARROT, trims WHEAT/CARROT buys and may add CARROT seeds; no new coordinates. `:4472-4726`, current knobs `:7649`. |
++| Hybrid productive opening | One fixed `(2,4)` WHEAT cell | d0 PLANT, d0 one WHEAT seed; fixed hand route then water/harvest/restore pasture by d3 | Mutates the opening tape, not a general replant planner. `:6474-6618`. |
++| E402 / seed-float trim | No tiles | E402 d26+; seed-float d27+ route 2 | Caps existing WHEAT/CARROT seed buys to remaining native tape PLANTs; it never creates a plant. `:6662-6714`, `:7126-7190`. |
++
++The only non-tape free-cell crop program is V219, and it is TOMATO-only.  The
++requested WHEAT lever therefore cannot be delegated to EXP182: that layer's
++`input_forecast_wheat` means marginal harvest yield after fertilizer, not new
++WHEAT planting.
++
++### Implemented and evaluated
++
++`lab/hplus/own_feed_wheat.py` builds `experiments/t038_own_feed/main_off.py`
++and `main_on.py` from frozen `es7_wm` SHA-256 `d1220b…`.  Off returns the
++parent action byte-for-byte.  On is d10--27 only and may use at most two
++already-present WHEAT seeds per turn, solely by turning an inherited exact
++`PASS` on an owned `None` tile into PLANT WHEAT after CARROT2's native
++visit/yield model proves a future WATER/HARVEST route.  It adds no market buy,
++hire, movement, hand or tape action.  A three-day visible-herd feed deficit is
++`unfed_today + 2*all_animals - physical_WHEAT - actual_this-turn_WHEAT_buys`.
++While positive, WHEAT SELL orders are replaced by empty slots, retaining slot
++indices.
++
++- Off identity: fresh seeds `295843440, 2062279317`, two complete official
++  worlds versus `es7_wm`: **0/1,438 action diffs**, 4/4 DONE;
++  `runs/t038_own_feed/identity.json`.
++- Activation audit on the same two worlds: 0 plants, because no inherited PASS
++  position had a native future WATER→HARVEST visit chain.  It did suppress 497
++  WHEAT sale units across 67 turns; `runs/t038_own_feed/activation_mirror.json`.
++- Fresh mandatory two-world both-seat screen versus Parthenos, with es7_wm
++  control in the same invocation and eight workers: **8/8 valid/DONE**.
++  Paired score is **0pp**, paired cash is **−$215.50** (whole-world 95% CI
++  **−$429…−$2**); `runs/t038_own_feed/screen/`.
++
++The screen is not positive, so the predeclared full panel was not run.  No
++candidate, promotion or Kaggle action follows.
+diff --git a/lab/hplus/own_feed_wheat.py b/lab/hplus/own_feed_wheat.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..224ab8d5e5c6d884e80383a79e73b191dca40ae9
+--- /dev/null
++++ b/lab/hplus/own_feed_wheat.py
+@@ -0,0 +1,137 @@
++"""T038 default-off own-feed WHEAT layer over a sealed Horizon build.
++
++The layer has deliberately narrow authority.  It only replaces an inherited
++``PASS`` on an already-empty owned tile with ``PLANT WHEAT``, using a seed that
++is already present.  A plant is accepted only if the native continuation has
++enough visits to harvest it.  When the visible herd has more three-day feed
++demand than physical WHEAT plus this turn's actual product buys, it also removes
++WHEAT sale orders, preserving their order slots as empty holes.
++"""
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++
++
++DEFAULT: dict[str, Any] = {
++    "ofw_on": False,
++    "ofw_day0": 10,
++    "ofw_day1": 27,
++    "ofw_horizon_days": 3,
++    "ofw_max_plants": 2,
++}
++
++
++MODULE_SRC = r'''
++# ================= T038 own-feed WHEAT (lab/hplus/own_feed_wheat.py) =================
++_OFW = __OFW_GENES__
++_OFW_PARENT = agent
++del agent
++_OFW_STATE = {}
++_OFW_STATS = {"plants": 0, "sale_units_reserved": 0, "sale_turns_reserved": 0,
++              "deficit_turns": 0, "path_abstains": 0, "shape_abstains": 0, "errors": 0}
++
++def _ofw_stock(private):
++    return max(0, int((private.get("shed") or {}).get("WHEAT", 0))) + sum(
++        max(0, int(inv.get("WHEAT", 0))) for inv in (private.get("inventories") or []))
++
++def _ofw_feed_need(farm, day, horizon):
++    animals = []
++    for row in farm.get("tiles") or []:
++        for tile in row:
++            if isinstance(tile, dict) and tile.get("animal") in ("COW", "SHEEP", "GOOSE"):
++                animals.append(tile)
++    # Today only animals not already fed need grain; every surviving animal needs
++    # one unit on each following dawn.  This intentionally never predicts a new
++    # animal purchase, so it cannot invent demand from an opponent/private state.
++    return sum(0 if tile.get("fed_today") else 1 for tile in animals) + max(0, horizon - 1) * len(animals)
++
++def _ofw_deficit(obs, action):
++    seat = int(obs["player"]); farm = obs["farms"][seat]; private = obs.get("private") or {}
++    incoming = sum(max(0, int(o[2])) for o in (action.get("market") or [])
++                   if isinstance(o, list) and len(o) >= 3 and o[:2] == ["BUY_PRODUCT", "WHEAT"])
++    return max(0, _ofw_feed_need(farm, int(obs["step"]) // 24, int(_OFW["ofw_horizon_days"])) - _ofw_stock(private) - incoming)
++
++def _ofw_has_harvest_path(obs, action, pos, day):
++    # CARROT2's exact tape-visit/yield model is already in the frozen parent.
++    # It rejects a speculative PASS tile without a native watering+harvest path.
++    visits = _ca_visits(obs, action, pos, min(719, (day + 6) * 24), start=int(obs["step"]) + 1)
++    harvested, rescue, _ = _ca_yield_path("WHEAT", day, visits)
++    return max(harvested, rescue) > 0
++
++def agent(obs, config=None):
++    action = _OFW_PARENT(obs, config)
++    if not _OFW.get("ofw_on"):
++        return action
++    try:
++        step = int(obs["step"]); day = step // 24
++        if step >= 718 or not int(_OFW["ofw_day0"]) <= day <= int(_OFW["ofw_day1"]):
++            return action
++        deficit = _ofw_deficit(obs, action)
++        if deficit <= 0:
++            return action
++        _OFW_STATS["deficit_turns"] += 1
++        seat = int(obs["player"]); farm = obs["farms"][seat]; private = obs.get("private") or {}
++        positions = [farm["farmer"], *(farm.get("hands") or [])]
++        commands = [list(action.get("farmer") or ["PASS"]), *(list(c) for c in (action.get("hands") or []))]
++        if len(positions) != len(commands):
++            _OFW_STATS["shape_abstains"] += 1
++            return action
++        # Protect all parent same-turn wheat PLANTs: only truly spare existing seed
++        # is available to this layer.  No buys, hires, movement, or route edits.
++        seed = max(0, int((private.get("seeds") or {}).get("WHEAT", 0)) - sum(c[:2] == ["PLANT", "WHEAT"] for c in commands))
++        planted = 0
++        for i, (pos, command) in enumerate(zip(positions, commands)):
++            if not seed or planted >= int(_OFW["ofw_max_plants"]) or command != ["PASS"]:
++                continue
++            x, y = int(pos[0]), int(pos[1])
++            if farm["tiles"][y][x] is not None:
++                continue
++            if not _ofw_has_harvest_path(obs, action, (x, y), day):
++                _OFW_STATS["path_abstains"] += 1
++                continue
++            commands[i] = ["PLANT", "WHEAT"]
++            seed -= 1; planted += 1; _OFW_STATS["plants"] += 1
++        market = [list(o) if isinstance(o, list) else o for o in (action.get("market") or [])]
++        reserved = 0
++        # A current three-day deficit means every physical WHEAT sale defeats the
++        # feed reserve.  Empty lists preserve market-slot indices for the rival.
++        for i, order in enumerate(market):
++            if isinstance(order, list) and len(order) >= 3 and order[:2] == ["SELL", "WHEAT"]:
++                reserved += max(0, int(order[2])); market[i] = []
++        if reserved:
++            _OFW_STATS["sale_units_reserved"] += reserved; _OFW_STATS["sale_turns_reserved"] += 1
++        if not planted and not reserved:
++            return action
++        return dict(action, farmer=commands[0], hands=commands[1:], market=market)
++    except Exception:
++        _OFW_STATS["errors"] += 1
++        return action
++
++agent.telemetry = _OFW_STATS
++'''
++
++
++def normalise(genes: dict[str, Any] | None) -> dict[str, Any]:
++    value = dict(DEFAULT)
++    value.update(genes or {})
++    if set(value) != set(DEFAULT):
++        raise ValueError("unknown own-feed-wheat gene")
++    if type(value["ofw_on"]) is not bool or any(type(value[key]) is not int for key in value if key != "ofw_on"):
++        raise ValueError("invalid own-feed-wheat gene types")
++    if not 0 <= value["ofw_day0"] <= value["ofw_day1"] <= 29 or not 1 <= value["ofw_horizon_days"] <= 4 or not 1 <= value["ofw_max_plants"] <= 4:
++        raise ValueError("own-feed-wheat bounds invalid")
++    return value
++
++
++def build(base_main_py: str | Path, genes: dict[str, Any] | None, out_main_py: str | Path) -> dict[str, Any]:
++    value = normalise(genes)
++    base, out = Path(base_main_py), Path(out_main_py)
++    src = base.read_text().rstrip() + "\n" + MODULE_SRC.replace("__OFW_GENES__", repr(value))
++    compile(src, str(out), "exec")
++    out.parent.mkdir(parents=True, exist_ok=True)
++    out.write_text(src)
++    info = {"base": str(base.resolve()), "genes": value, "default_off": not value["ofw_on"]}
++    out.with_suffix(out.suffix + ".own_feed_wheat.json").write_text(json.dumps(info, indent=2, sort_keys=True) + "\n")
++    return info
+diff --git a/lab/hplus/own_feed_wheat_audit.py b/lab/hplus/own_feed_wheat_audit.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..c509d1bfb8c9c645aea01e10dbfe2490930e34b4
+--- /dev/null
++++ b/lab/hplus/own_feed_wheat_audit.py
+@@ -0,0 +1,56 @@
++#!/usr/bin/env python3
++"""Official-engine T038 identity and activation audit; never submits."""
++from __future__ import annotations
++
++import argparse
++import json
++from pathlib import Path
++
++
++def load(path: Path) -> dict:
++    ns = {"__file__": str(path), "__name__": f"t038_{path.stem}"}
++    exec(compile(path.read_text(), str(path), "exec"), ns)
++    return ns
++
++
++def run(base_path: Path, candidate_path: Path, opponent: Path, seeds: list[int], *, identity: bool) -> list[dict]:
++    from kaggle_environments import make
++
++    rows = []
++    for seed in seeds:
++        base, candidate = load(base_path), load(candidate_path)
++        diffs: list[int] = []
++
++        def audited(obs, cfg=None):
++            left, right = base["agent"](obs, cfg), candidate["agent"](obs, cfg)
++            if json.dumps(left, sort_keys=True, separators=(",", ":")) != json.dumps(right, sort_keys=True, separators=(",", ":")):
++                diffs.append(int(obs["step"]))
++            return left if identity else right
++
++        env = make("kaggriculture", configuration={"seed": seed}, debug=False)
++        env.run([audited, str(opponent)])
++        rows.append({"seed": seed, "status": [state.status for state in env.state], "diffs": diffs,
++                     "candidate_stats": dict(candidate.get("_OFW_STATS", {})),
++                     "reward": [state.reward for state in env.state]})
++    return rows
++
++
++def main() -> None:
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument("--base", type=Path, required=True); p.add_argument("--candidate", type=Path, required=True)
++    p.add_argument("--opponent", type=Path, required=True); p.add_argument("--seeds", nargs="+", type=int, required=True)
++    p.add_argument("--enabled", action="store_true"); p.add_argument("--out", type=Path, required=True)
++    a = p.parse_args()
++    rows = run(a.base.resolve(), a.candidate.resolve(), a.opponent.resolve(), a.seeds, identity=not a.enabled)
++    done = all(row["status"] == ["DONE", "DONE"] for row in rows)
++    result = {"mode": "enabled" if a.enabled else "identity", "valid": done,
++              "action_identical": not any(row["diffs"] for row in rows), "rows": rows}
++    a.out.parent.mkdir(parents=True, exist_ok=True)
++    a.out.write_text(json.dumps(result, indent=2) + "\n")
++    print(json.dumps({key: result[key] for key in ("mode", "valid", "action_identical")}))
++    if not done or (not a.enabled and not result["action_identical"]):
++        raise SystemExit(2)
++
++
++if __name__ == "__main__":
++    main()
+
+tokens used
+196,480
+T038 завершён отрицательно: full-panel не запускался.
+
+- Off-версия: 0/1 438 action-diff, 4/4 DONE.
+- On-версия не нашла ни одного `PASS`-тайла с нативной цепочкой WATER→HARVEST; лишь удерживала продажи WHEAT.
+- Fresh 2-world screen: 8/8 DONE, score 0pp, cash −$215.50 (CI −$429…−$2).
+
+Карта посадочных слоёв и артефакты записаны в [T038-own-feed-wheat.md](/workspace/shared/tasks/T038-own-feed-wheat.md). Claude уведомлён; доска и ветки синхронизированы. Kaggle не трогал.
