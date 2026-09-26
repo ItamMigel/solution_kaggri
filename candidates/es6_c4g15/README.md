@@ -1,4 +1,4 @@
-# Candidate es6_c4g15 — CMA4 gen-15 centre (+COLLECT)  ← CURRENT RECOMMENDATION (2026-09-26 10:30Z)
+# Candidate es6_c4g15 — CMA4 gen-15 centre (+COLLECT)  (superseded 2026-09-26 15:10Z by es7_wm)
 Archive `es6_c4g15.tar.gz` (sha256.txt). Agents never submit — the human decides. Archive smoke: 2/2 DONE, 719/719 calls.
 = Horizon v5_market + 24 knobs from cma4 (warm start es5_c3g15; wide rotating panel fitness from gen 14) + COLLECT module.
 Knob moves vs es5_c3g15 are small (_ADV_LOOK 19→20, _HD2_MIN_GAIN 805→1013, _Y_MARGIN −8→−10, …; params.json).

@@ -1,0 +1,41 @@
+{
+  "created_utc": "2026-09-26T15:01:28.418925+00:00",
+  "candidates": {
+    "base": "/workspace/shared/candidates_wip/es7_wm/main.py",
+    "buy32_window": "/workspace/wt/codex/experiments/t031_wheat_market/variants/buy32_window.py",
+    "buy28_tight": "/workspace/wt/codex/experiments/t031_wheat_market/variants/buy28_tight.py",
+    "sell42_reserve": "/workspace/wt/codex/experiments/t031_wheat_market/variants/sell42_reserve.py",
+    "room45": "/workspace/wt/codex/experiments/t031_wheat_market/variants/room45.py"
+  },
+  "opponents": {
+    "es7_wm": "/workspace/shared/candidates_wip/es7_wm/main.py"
+  },
+  "seeds": [
+    1851028621,
+    331157374
+  ],
+  "expected_games": 20,
+  "input_sha256": {
+    "/workspace/shared/candidates_wip/es7_wm/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/solution_kaggri/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/solution_kaggri/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/solution_kaggri/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9",
+    "/workspace/wt/codex/experiments/t031_wheat_market/variants/buy28_tight.py": "5bf492c03a2b32dc85d6112dfb188747a153d012f59a0e35162ca4c5e11cc15b",
+    "/workspace/wt/codex/experiments/t031_wheat_market/variants/buy32_window.py": "2d17354affce06724b302d57f1a9bf562fc770a3ce0715b4537a2e03db5e2db9",
+    "/workspace/wt/codex/experiments/t031_wheat_market/variants/room45.py": "05a84eed4ebf1c59968b9cc82b6d96e1913d5449b9a5a12c4d22c9f4bc43957e",
+    "/workspace/wt/codex/experiments/t031_wheat_market/variants/sell42_reserve.py": "cee12cb856498cb6cfcd93f38c27677a7a57ecce1852453a4200aa4a0d433a2e"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 8,
+  "decision_note": "T031 fixed 2-world both-seat screen: a variant advances only if it has a clear paired score improvement over byte-identical es7_wm, zero errors and no worse whole-world cash signal; otherwise no full gate.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "base",
+      "es7_wm"
+    ]
+  ]
+}
