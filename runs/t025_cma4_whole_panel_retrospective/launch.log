@@ -60,3 +60,24 @@ Frozen 864 games, 24 worlds, both seats. Output: /workspace/shared/runs/t025_cma
 708/864 completed; errors=0
 720/864 completed; errors=0
 732/864 completed; errors=0
+744/864 completed; errors=0
+756/864 completed; errors=0
+768/864 completed; errors=0
+780/864 completed; errors=0
+792/864 completed; errors=0
+804/864 completed; errors=0
+816/864 completed; errors=0
+828/864 completed; errors=0
+840/864 completed; errors=0
+852/864 completed; errors=0
+864/864 completed; errors=0
+Results: /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g005_extra/README.md
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/t025_whole_panel_report.py", line 96, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/t025_whole_panel_report.py", line 52, in main
+    rows = load([a.panel_games, a.extra_games], {a.candidate, a.control})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/t025_whole_panel_report.py", line 35, in load
+    raise RuntimeError(f"unexpected candidate/opponent in {path}: {row['candidate']}/{row['opponent']}")
+RuntimeError: unexpected candidate/opponent in /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g005_extra/games.jsonl: cma4_g005/v3
