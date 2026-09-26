@@ -6,3 +6,4 @@
 | 2026-09-25T00:46Z | es1_g9 1983.6 (new, climbing) | es1_g1 2650.0 |
 | 2026-09-25T15:32Z | submission.tar.gz (56550803, 12:45, unknown content) 1430.6 | es1_g9 2214.5 | es1_g1 displaced |
 | 2026-09-25T21:46Z | es3_g5 2519.0 | teammate bc3_mix4_mg_v2 1607.7 |
+- 2026-09-26 03:10Z ladder: actives = es3_g5 (56555111, 2541.5) + teammate bc3_mix4_mg_v2 (56554450, 1611.3); es1_g9 2214.5 (inactive). Next submit displaces bc3_mix4. Recommended: es5_c3g15.

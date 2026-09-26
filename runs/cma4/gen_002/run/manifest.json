@@ -1,0 +1,63 @@
+{
+  "created_utc": "2026-09-26T03:01:11.190153+00:00",
+  "candidates": {
+    "c": "/workspace/shared/runs/cma4/gen_002/c/main.py",
+    "x0": "/workspace/shared/runs/cma4/gen_002/x0/main.py",
+    "x1": "/workspace/shared/runs/cma4/gen_002/x1/main.py",
+    "x2": "/workspace/shared/runs/cma4/gen_002/x2/main.py",
+    "x3": "/workspace/shared/runs/cma4/gen_002/x3/main.py",
+    "x4": "/workspace/shared/runs/cma4/gen_002/x4/main.py",
+    "x5": "/workspace/shared/runs/cma4/gen_002/x5/main.py",
+    "x6": "/workspace/shared/runs/cma4/gen_002/x6/main.py",
+    "x7": "/workspace/shared/runs/cma4/gen_002/x7/main.py",
+    "x8": "/workspace/shared/runs/cma4/gen_002/x8/main.py",
+    "x9": "/workspace/shared/runs/cma4/gen_002/x9/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "best": "/workspace/shared/candidates/es5_c3g15/pkg/main.py",
+    "yhay0913": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    1167213867,
+    1524520287,
+    683836458,
+    2073306595,
+    1762753311,
+    721216233,
+    848512940,
+    780385952
+  ],
+  "expected_games": 880,
+  "input_sha256": {
+    "/workspace/shared/candidates/es5_c3g15/pkg/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/opponents/pool/yhay_router0913/main.py": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+    "/workspace/shared/runs/cma4/gen_002/c/main.py": "d01136b1372236ffad08fc9bee311298476bfb4b9020f7abf109e10ded78e730",
+    "/workspace/shared/runs/cma4/gen_002/x0/main.py": "2eff5c8100d85d36d4b13a7c62f3180679728c1677449abdc117c3f39738ede8",
+    "/workspace/shared/runs/cma4/gen_002/x1/main.py": "b4a43e56a0454395fe1d476ace17e545a2c321edcf21f82ccf3c7ef3a2bc46cb",
+    "/workspace/shared/runs/cma4/gen_002/x2/main.py": "32b94d52473485149a0fea72ed4ee7fdc9d4f59c3cd3847580f63f4d4ba706a6",
+    "/workspace/shared/runs/cma4/gen_002/x3/main.py": "0c5bf6e523674fd14d1be356c6154daf3acaceb0efc217b8a4e7250b2ea2dcb5",
+    "/workspace/shared/runs/cma4/gen_002/x4/main.py": "f167c53fdb7ba617421781bfe9e1943b8d5ac82bdc90239f0947ec0204307aac",
+    "/workspace/shared/runs/cma4/gen_002/x5/main.py": "0de024d9354a9449d6b5ddd33bb9c47825e6a1dba628ca9b00c359d022fdae6b",
+    "/workspace/shared/runs/cma4/gen_002/x6/main.py": "a211e085309354ed915c105612cf91bd75fdbb64f22ecd00a1671273eca5fcf2",
+    "/workspace/shared/runs/cma4/gen_002/x7/main.py": "6125555a25640e45ae51e0a695522ef91fe664fa7839ad1848e2573f383327eb",
+    "/workspace/shared/runs/cma4/gen_002/x8/main.py": "23aca6070426e05692a35d22fcde11278a31a04ed3ffcd262b6632d6290eeba4",
+    "/workspace/shared/runs/cma4/gen_002/x9/main.py": "971775b8b4f85a90bd2ae1d091927a6d5e6c83ccd97ff7a96b6238867108f2f9",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 18,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
