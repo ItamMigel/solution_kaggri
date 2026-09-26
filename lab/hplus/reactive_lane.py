@@ -21,6 +21,8 @@ MODULE_SRC = r'''
 _RLN = __RLN_GENES__
 _RLN_STATE = {}
 _RLN_REPORT = {"checks": 0, "matches": 0, "nonclone": 0, "clone": 0,
+               "early_checks": 0, "early_matches": 0, "early_nonclone": 0,
+               "early_clone": 0, "reserve_wheat_skips": 0,
                "land_orders": 0, "land_confirmed": 0, "launches": 0,
                "tomato_plants": 0, "goose_places": 0, "service": 0,
                "aborts": 0, "errors": 0}
@@ -51,6 +53,45 @@ def _rln_clone_check(obs, st):
     if st["checks"] >= 6:
         st["decision"] = st["matches"] == 0
         _RLN_REPORT["nonclone" if st["decision"] else "clone"] += 1
+
+def _rln_early_check(obs, st):
+    """A clone-safe early signal used only to preserve cash before d9.
+
+    Tape clones have the same farmer coordinate from the opening.  A single
+    equality permanently disables the reserve.  Conversely, six distinct
+    early observations with no equality only make the market reserve eligible;
+    the stronger 216..222 gate still controls all land and unit actions.
+    """
+    step = int(obs["step"])
+    if st.get("early_decision") is not None or not 0 <= step <= 167 or st.get("early_checked_step") == step:
+        return
+    st["early_checked_step"] = step
+    own, rival = obs["farms"][int(obs["player"])], obs["farms"][1 - int(obs["player"])]
+    equal = own.get("farmer") == rival.get("farmer")
+    st["early_checks"] += 1; st["early_matches"] += int(equal)
+    _RLN_REPORT["early_checks"] += 1; _RLN_REPORT["early_matches"] += int(equal)
+    if equal:
+        st["early_decision"] = False; _RLN_REPORT["early_clone"] += 1
+    elif st["early_checks"] >= 6:
+        st["early_decision"] = True; _RLN_REPORT["early_nonclone"] += 1
+
+def _rln_reserve_cash(obs, action, st):
+    """Keep d6--8 cash by dropping only a discretionary WHEAT product buy.
+
+    This layer cannot create an order or alter any worker action.  It runs
+    only after the early non-clone signal; clones have already returned the
+    frozen parent action object unchanged.
+    """
+    step = int(obs["step"])
+    if st.get("early_decision") is not True or not 144 <= step <= 215:
+        return action
+    market = action.get("market") or []
+    filtered = [o for o in market if not (isinstance(o, list) and len(o) >= 2
+                and o[0] == "BUY_PRODUCT" and o[1] == "WHEAT")]
+    if len(filtered) == len(market):
+        return action
+    _RLN_REPORT["reserve_wheat_skips"] += len(market) - len(filtered)
+    return dict(action, market=[list(o) if isinstance(o, list) else o for o in filtered])
 
 def _rln_owned_land(obs, action, st):
     """Accelerate only the current route's existing d11 BUY_LAND, with debt cleanup."""
@@ -193,9 +234,13 @@ def agent(obs, config=None):
         st = _RLN_STATE.get(p)
         if st is None or step <= st.get("last", -1):
             st = _RLN_STATE[p] = {"last": -1, "checks": 0, "matches": 0, "decision": None,
+                                   "early_checks": 0, "early_matches": 0, "early_decision": None,
+                                   "early_checked_step": -1,
                                    "checked_step": -1, "land_before": None, "land_confirmed": False,
                                    "land_order_step": None, "launch": None, "actors": None, "aborted": False}
-        st["last"] = step; _rln_clone_check(obs, st)
+        st["last"] = step; _rln_early_check(obs, st)
+        action = _rln_reserve_cash(obs, action, st)
+        _rln_clone_check(obs, st)
         if st.get("decision") is not True or st.get("aborted"):
             return action
         if 222 <= step <= 266 or (_HP_LAND.get(p) or {}).get("owed", 0):
