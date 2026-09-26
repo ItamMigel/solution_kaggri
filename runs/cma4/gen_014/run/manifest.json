@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-09-26T06:17:38.134728+00:00",
+  "created_utc": "2026-09-26T07:01:49.427687+00:00",
   "candidates": {
     "c": "/workspace/shared/runs/cma4/gen_014/c/main.py",
     "x0": "/workspace/shared/runs/cma4/gen_014/x0/main.py",
@@ -14,9 +14,6 @@
     "x9": "/workspace/shared/runs/cma4/gen_014/x9/main.py"
   },
   "opponents": {
-    "v3": "/workspace/wt/claude/agents/horizon_v3.py",
-    "v4_8turn": "/workspace/wt/claude/agents/horizon_v4_8turn.py",
-    "v4_12turn": "/workspace/wt/claude/agents/horizon_v4.py",
     "best": "/workspace/shared/candidates/es5_c3g15/pkg/main.py",
     "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
     "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
@@ -34,7 +31,7 @@
     1018960617,
     1059456567
   ],
-  "expected_games": 1584,
+  "expected_games": 1056,
   "input_sha256": {
     "/workspace/shared/candidates/es5_c3g15/pkg/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
     "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
@@ -53,9 +50,6 @@
     "/workspace/shared/runs/cma4/gen_014/x7/main.py": "8d0c95f40c8249bdef407f19319e80b99224fb121866f19a6faf366b666b2faf",
     "/workspace/shared/runs/cma4/gen_014/x8/main.py": "71295a1e10943596c8f432b5b68d5987ae140e5b8552ca7be7b5b0043ea90954",
     "/workspace/shared/runs/cma4/gen_014/x9/main.py": "ba7c4ac1d6ff304fa4f9ccd06fe7d48e08a6f5c0a96d04b865599e2c0ca4247e",
-    "/workspace/wt/claude/agents/horizon_v3.py": "1cff2bd49f0800171199a87718e92da32db8e5f811d56fc5ee01e27d674cd6f9",
-    "/workspace/wt/claude/agents/horizon_v4.py": "8934ed21b6806556a73f6aeae9ed1a611498ae2abfec13b79b281a0e24ad9483",
-    "/workspace/wt/claude/agents/horizon_v4_8turn.py": "8dc246ef18f4f3f9696cb57f6e14825e512e532ccccda3dfb6a1fa1a7fc0860d",
     "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
     "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
     "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"

@@ -88,3 +88,14 @@ Traceback (most recent call last):
 RuntimeError: incomplete opponent fitness for c: missing=['best', 'metav4', 'parthenos', 'pilkwang', 't2945', 'yhay0913'], extra=[]
 /workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
   _warnings.warn('Could not import matplotlib.pyplot, therefore'
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 242, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 229, in main
+    fit, breakdown = _fitness_from_games(gdir, cands, mode, g)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wt/codex/lab/tools/knob_cma.py", line 97, in _fitness_from_games
+    raise RuntimeError(f"incomplete opponent fitness for {name}: missing={sorted(missing)}, extra={sorted(extra)}")
+RuntimeError: incomplete opponent fitness for c: missing=[], extra=['v3', 'v4_12turn', 'v4_8turn']
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
