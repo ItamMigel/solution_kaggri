@@ -92,7 +92,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
 | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
-| T025 | codex | in_progress — CMA4 restarted at gen15 centre; gen15 gate awaits Claude review | Conditional early SW-land/c3g5 closed; CMA3 gen15 clears H2H and boundary-confirmed P+M NI, but no candidate action before independent review. CMA4 is local σ=.015 search against frozen es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+| T025 | codex | in_progress — CMA4 gen-0 running; gate after gen-5 | Conditional early SW-land/c3g5 closed; CMA4 is local σ=.015 search against promoted frozen es5_c3g15. `tasks/T025-route-conditioned-land.md` |
 | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
 | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
