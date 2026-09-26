@@ -15,4 +15,30 @@ The shared observation exposes the opponent's crops/animals and their states. Fo
 
 ## Result
 
-Pending.
+`experiments/t032_opponent_harvest/main.py` implements the bounded gene;
+`main_on.py` changes only the feature flag. The enabled version records a
+recent rival cash increase (a successful sale), counts public mature rival
+MILK/WOOL/STRAWBERRY/MELON yield plus only conservative first-yield-date cases,
+and advances an already planned own same-item SELL by at most 12 steps. It
+never edits a unit action, buys, or route choice.
+
+Default-off identity passes on two fresh worlds, both seats against Parthenos:
+**0/2,876 action differences**, equal cash, 8/8 valid/DONE.
+`runs/t032_identity_20260926T1535/`.
+
+The new `lab/tools/t032_harvest_audit.py` re-executes the exact 39 T028 losses
+with official-engine successful SELL hooks. At a conservative material-dump
+threshold (MILK/WOOL >=5, STRAWBERRY >=8, MELON >=6), opponents make **1,999**
+dumps (18,814 units); **1,603/1,999 (80.2%)** have our successful same-item
+sale in t−1/t/t+1, with **1,458** in the same lockstep tick. This establishes
+the shared-market timing overlap but not a causal counterfactual.
+`runs/t032_harvest_adjacency_20260926T1540/audit.json`.
+
+Fresh, fixed two-world, both-seat screen against the requested non-Horizon
+controllers and mirror (Parthenos, MetaV4, Shepherd, es7_wm) is **32/32 valid**.
+The forecaster has paired score **0.000pp** (whole-world bootstrap
+−12.5…+12.5pp), while paired cash is **+$436.75** (bootstrap +$13.5…+$860).
+Cash improves for all four named opponents, but there is no score signal and
+only two worlds; it does not satisfy the predeclared clear-score condition.
+Therefore T032 is closed: **no T025 full gate, candidate, or Kaggle action**.
+`runs/t032_harvest_screen_20260926T1555/`.
