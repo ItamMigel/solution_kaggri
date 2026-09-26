@@ -11,7 +11,7 @@ SHOPS = ["BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "YARN_STORE", "ICE_CREAM_SHOP", 
 ACCESS = [(4, 4), (5, 4), (4, 5), (5, 5)]
 _CACHE = {}
 HORIZON = 1
-USE_MPC = True
+USE_MPC = False
 def _silu(v): return [a / (1.0 + math.exp(-a)) if a > -60 else 0.0 for a in v]
 def _lin(W, b, v): return [sum(w * x for w, x in zip(row, v)) + bb for row, bb in zip(W, b)]
 def _net(inp):
