@@ -92,6 +92,20 @@ For herd≥10, mean units/turn are WATER 1.80, HARVEST .89, CARE .62, FEED .62, 
 
 Calendar presence generalises, but exact WATER is only 46.7%, reinforcing that raw path/state reconstruction is needed before calling this a clone.
 
+### d0–d10 fixed-opening falsification (M&M&P&Q + DSM)
+
+The requested direct test rejects the premise that these two teams share a deterministic early tape. On each team separately, use the first 75% of complete trajectories to take the per-step modal vector and predict all 240 d0–d9 turns of the held-out 25%. A full vector includes moves and all unit operations; the production vector includes `PICKUP, PLACE, BUILD_PASTURE, BUILD_COOP, PLANT, WATER, HARVEST, CARE, FEED, FERTILIZE, COLLECT_FERTILIZER`.
+
+| teacher | held-out exact full vector | held-out exact production vector |
+|---|---:|---:|
+| M&M&P&Q | 756/8,160 = **9.3%** | 1,500/8,160 = **18.4%** |
+| DSM | 2,220/6,240 = **35.6%** | 2,769/6,240 = **44.4%** |
+| pooled M&M&P&Q + DSM production template |  | 4,401/14,400 = **30.6%** |
+
+The common *state milestones* are real (d1 2C/3S and 5 pasture; d5 about 5C/3S and 8 pasture; d10 7C/3S/7G with 13 pasture/7 coop for M&M&P&Q, versus 7C/3S/6G with 13–14 pasture/6 coop for DSM), but their action timings, pathing and goose/coop pace are not a shared fixed opening. A fixed d0–d8 tape graft is therefore rejected before implementation. The only defensible feasibility experiment is a **state-gated d8+** module (e.g. conditional capacity/service once existing Horizon land and cash permit), with an identity-off check and a new screen; it must not claim to reproduce either top agent's early route.
+
+Feasibility disposition: do not re-run a cosmetic variant of the only existing tape-safe herd conversion. `lab/hplus/goose_microplan.py` can change a certified **d0–d3** Horizon COW/SHEEP pickup/build/place route to GOOSE/COOP, but it has no native d8 chain. Its first two-goose/cow-only leg was already rejected in T028's fresh both-seat capability screen (0/8, −$2,581). Coupled with the fixed-opening falsification above, there is no evidence-supported state-gated d8+ herd module to implement from the current parent tape. A free-moving d8 worker would be a new planner, not a reconstruction; reserve it for the separate top-RE opponent rather than claim it as a Horizon graft.
+
 ## DSM
 
 103 full trajectories; development 1–82, held-out 83–103. DSM is a close production-family relative of M&M&P&Q, with an earlier first strawberry sowing, one fewer goose, and a d13 sheep jump.
