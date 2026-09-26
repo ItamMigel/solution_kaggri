@@ -189,3 +189,9 @@ This gate applies to a frozen CMA centre only after its training generation is c
 
 - The newly predeclared 16-world fresh full-panel gate completed **640/640 valid DONE** games against frozen `candidates/es6_c4g15/pkg/main.py`; `compare.py` marked the evaluation valid and the control hash is unchanged. The paired point estimate is **+0.694pp**, and no named opponent is below −10pp (mirror +6.25pp; all other individual point estimates 0).
 - The joint 16-world, nine-stratum bootstrap one-sided 95% lower bound is **−1.042pp**, which fails the strictly-positive requirement. Therefore CMA4 gen-20 is rejected; no WIP, candidate, control, or Kaggle action changes. CMA4 training continues and the next due independent gate is gen 25. `runs/t025_cma4_g020_full_panel_vs_es6/gate_report.json`.
+
+## CMA4 centre gate — gen 25 versus es6_c4g15 (2026-09-26): REJECTED
+
+- The periodic independently seeded full-panel gate completed **640/640 valid DONE** games against frozen `candidates/es6_c4g15/pkg/main.py`. `compare.py` marked the evaluation valid; candidate and control hashes were unchanged.
+- Nine-stratum paired-score estimate was **+2.083pp** and cash was +$19.16/game. No named opponent was below −10pp (the lowest point estimates were 0pp). The joint 16-world, 200,000-resample one-sided 95% lower bound was **−1.042pp**, so it fails the strictly-positive criterion.
+- Therefore gen-25 is rejected: no WIP, candidate, control, or Kaggle action changes. The periodic runner already notified Claude; CMA4 local training continues on its unchanged `panel_rotating_8`/es5-mirror objective. Evidence: `runs/t025_cma4_g025_full_panel_vs_es6/gate_report.json`.
