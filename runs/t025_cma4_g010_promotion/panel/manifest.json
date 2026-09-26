@@ -1,0 +1,55 @@
+{
+  "created_utc": "2026-09-26T05:33:11.388109+00:00",
+  "candidates": {
+    "cma4_g010": "/workspace/shared/runs/cma4/gen_010/c/main.py",
+    "es5_c3g15": "/workspace/shared/candidates/es5_c3g15/pkg/main.py"
+  },
+  "opponents": {
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "metav4": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py"
+  },
+  "seeds": [
+    911979245,
+    374070266,
+    433619634,
+    253315889,
+    1188478598,
+    1709365547,
+    145964739,
+    829102817,
+    654775444,
+    1998687036,
+    833446417,
+    1728323103,
+    1224054354,
+    1065563335,
+    1850412073,
+    1750492392,
+    1155159618,
+    1437552651,
+    388513837,
+    1698973118,
+    1852267191,
+    534490780,
+    777357447,
+    1918420161
+  ],
+  "expected_games": 192,
+  "input_sha256": {
+    "/workspace/shared/candidates/es5_c3g15/pkg/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/shared/runs/cma4/gen_010/c/main.py": "bb68af3320b2e8af02a84a3fffc8c34daa997ecbb57d2de816733b9523a1564d",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 4,
+  "decision_note": "T025 CMA4 gen-010 standard gate stage 2: 24 fresh CSPRNG worlds, both seats, simultaneous P+M non-inferiority versus frozen es5_c3g15 after stage-1 H2H pass.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
