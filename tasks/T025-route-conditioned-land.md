@@ -201,3 +201,9 @@ This gate applies to a frozen CMA centre only after its training generation is c
 - The predeclared 16-world fresh full-panel gate completed **640/640 valid DONE** games. `compare.py` marked the evaluation valid and candidate/control hashes were unchanged.
 - The nine-stratum paired-score point estimate was **+0.694pp**; no named opponent was below −10pp. Its joint 16-world, 200,000-resample one-sided 95% lower bound was **−1.389pp**, failing the strictly-positive criterion.
 - Thus gen-30 creates no WIP, candidate, control, or Kaggle action. CMA4 continues unchanged through gen34; the next due independent gate is gen35. Evidence: `runs/t025_cma4_g030_full_panel_vs_es6/gate_report.json`.
+
+## CMA4 gate control/composition update — effective gen 35 (2026-09-26, requested by Claude)
+
+- The promoted comparison control is now `candidates/es7_wm/pkg/main.py`. Earlier g20/g25/g30 gates against es6 remain historical and are not pooled with this new control.
+- CMA fitness remains the unchanged `panel_rotating_8`/es5-mirror objective. For every new promotion gate, the immutable raw `runs/cma4/gen_NNN/c/main.py` is composed with the exact frozen es7 WHEAT parameters (`wm_on`, d6–17 buy ≤$30, 20-unit floor, $2,000 reserve; d10–28 sell ≥$40 above 35), creating a separately SHA-256-hashed `candidate_with_wheat/main.py` inside that gate's evidence directory. The composed candidate is compared with `es7_wm`; raw source, composed source, genes and control are all frozen and rehashed after evaluation.
+- The g35 gate keeps the existing fresh 16-world/10-opponent/both-seat, nine-stratum, 640-game criterion and must pass only with lower bound strictly >0, no opponent below −10pp, all valid rows and unchanged raw/composed/control hashes. A pass is WIP-only and needs Claude review; never Kaggle submission.
