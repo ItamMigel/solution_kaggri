@@ -32,8 +32,8 @@ def orders(obs, player, want, tg):
         if item == "FERTILIZER": have -= 4
         if have <= 0 or len(out) >= 6: continue
         if item in STEEP and not last and day < 28:
-            if prices[item] < 0.55 * BASE[item]: continue          # deep glut only: wait for town consumption
-            have = min(have, 12)
+            if prices[item] < 0.4 * BASE[item] and have < 25: continue   # deep glut: wait for town consumption
+            have = min(have, 15)
         out.append(["SELL", item, int(have)]); money += have * prices[item] * 0.9
     # --- LAND
     nq = len(farm.get("unlocked_quadrants") or ["NW"])
@@ -64,6 +64,7 @@ def orders(obs, player, want, tg):
         if t is None or (isinstance(t, dict) and t.get("kind") == kind and not t.get("animal")): need_a[a] += 1
     for a in ("COW", "SHEEP", "GOOSE"):
         n = need_a[a] - shed.get(a, 0) - carried.get(a, 0)
+        if shed.get(a, 0) + carried.get(a, 0) >= 2: n = 0   # animals waiting for placement: don't buy more
         while n > 0 and money >= ANIMAL[a] + 100 and len(out) < 10:
             k = min(n, int((money - 100) // ANIMAL[a]))
             if k <= 0: break
