@@ -1,0 +1,67 @@
+{
+  "created_utc": "2026-09-26T15:47:03.892546+00:00",
+  "candidates": {
+    "sw": "/workspace/shared/candidates_wip/t033/sw_g05/main.py",
+    "es7": "/workspace/shared/candidates/es7_wm/pkg/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "mirror": "/workspace/shared/candidates/es7_wm/pkg/main.py",
+    "es6": "/workspace/shared/candidates/es6_c4g15/pkg/main.py",
+    "es1_g9": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+    "m2965": "/workspace/shared/opponents/new0926/the-2965-master-hybrid-engine/main.py",
+    "shepherd": "/workspace/shared/opponents/new0926/the-shepherds-ledger-herd-safe-sovereign/main.py",
+    "demand": "/workspace/shared/opponents/new0926/demand-preserving-turn-sale-timing/main.py",
+    "parthenos_robust": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+    "tschinkel_metav4_v13": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+    "ozer_v45": "/workspace/shared/opponents/pool/ozer_v45/main.py"
+  },
+  "seeds": [
+    619133712,
+    1817071544,
+    1121143609,
+    1373238897,
+    1493174362,
+    833101472,
+    1646924154,
+    1083514711,
+    23654250,
+    1212751580,
+    1483217984,
+    1462944833,
+    1902732930,
+    1662800266,
+    1711487488,
+    1920309420
+  ],
+  "expected_games": 640,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g9/pkg/main.py": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c",
+    "/workspace/shared/candidates/es6_c4g15/pkg/main.py": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a",
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/candidates_wip/t033/sw_g05/main.py": "92cd25be39a4acaa17922f2952ef3ccb29b2a626171b3433b6ca5b4ef2719238",
+    "/workspace/shared/opponents/new0926/demand-preserving-turn-sale-timing/main.py": "127ed3e62988c0474d386db6527ae8ca9de9bb1fe7004128557ddef67126c652",
+    "/workspace/shared/opponents/new0926/the-2965-master-hybrid-engine/main.py": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
+    "/workspace/shared/opponents/new0926/the-shepherds-ledger-herd-safe-sovereign/main.py": "8378f73c82db7624ce5d0369cf896aa0761a662af147b119f67254f1f8634c56",
+    "/workspace/shared/opponents/pool/ozer_v45/main.py": "2536d41ed5a00c75204b6350f1c76c54259c774cb065ba2a3a0072eedf210d94",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 1200.0,
+  "workers": 10,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "es7",
+      "mirror"
+    ]
+  ]
+}
