@@ -4710,3 +4710,828 @@ index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63
 +
 +agent.telemetry = _T036_REPORT
 
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+ succeeded in 69157ms:
+Frozen 24 games, 4 worlds, both seats. Output: /workspace/shared/runs/t036_land_phase_screen_v2
+12/24 completed; errors=0
+24/24 completed; errors=0
+Results: /workspace/shared/runs/t036_land_phase_screen_v2/README.md
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "cat /workspace/shared/runs/t036_land_phase_screen_v2/README.md; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,collections
+rs=[json.loads(x) for x in open('/workspace/shared/runs/t036_land_phase_screen_v2/games.jsonl')]
+for op in sorted(set(x['opponent'] for x in rs)):
+ a=[x['margin'] for x in rs if x['opponent']==op];print(op,a,'mean',sum(a)/len(a))
+PY" in /workspace/wt/codex
+ succeeded in 0ms:
+# Local comparison results
+
+24 games requested on 4 world seeds; both seats. No submissions were made.
+
+All rates below are from the candidate agent’s perspective. Confidence intervals resample whole world seeds, including both seats and all opponents. They condition on this fixed suite.
+
+| Candidate | Opponent | W / D / L | Errors | Score rate | 95% world interval | Mean margin | Worst 10% mean | Worst margin |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| t036_land | boatlee | 8 / 0 / 0 | 0 | 100.0% | [100.0, 100.0]% | +28853.2 | +24969.0 | +24969 |
+| t036_land | es7_wm | 0 / 4 / 4 | 0 | 25.0% | [0.0, 50.0]% | -4044.2 | -12177.0 | -12177 |
+| t036_land | fukami | 8 / 0 / 0 | 0 | 100.0% | [100.0, 100.0]% | +26633.0 | +10642.0 | +10642 |
+
+`summary.json` includes per-seat results, severe-loss counts, worst games and paired comparisons between your candidates. A 100% observed score is not certainty. Identical policies can still have seat effects. Repeated use of a seed panel turns it into development evidence.
+boatlee [27333.0, 27333.0, 35957.0, 35957.0, 24969.0, 24969.0, 27154.0, 27154.0] mean 28853.25
+es7_wm [0.0, 0.0, 0.0, 0.0, -4000.0, -4000.0, -12177.0, -12177.0] mean -4044.25
+fukami [25016.0, 25016.0, 11588.0, 10642.0, 42891.0, 30917.0, 33497.0, 33497.0] mean 26633.0
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,glob,os,collections
+for fam,team in [('dsm','DSM'),('mmpq','M & M & P & Q')]:
+ f=glob.glob(f'/workspace/shared/replays/top10v4/{fam}/*.gz')[0];d=json.load(gzip.open(f,'rt'));p=d['info']['TeamNames'].index(team)
+ print('\\n#',fam,os.path.basename(f),d['info']['seed'])
+ for t in range(0,264):
+  a=d['steps'][t+1][p].get('action') or {}; ob=d['steps'][t][p]['observation'];farm=ob['farms'][p]
+  mo=[o for o in a.get('market',[]) if o and (o[0]=='BUY_LAND' or (len(o)>1 and o[1]=='GOOSE'))]
+  ev=[];workers=[a.get('farmer') or ['PASS'],*(a.get('hands') or [])];pos=[farm['farmer'],*farm['hands']]
+  for i,(c,xy) in enumerate(zip(workers,pos)):
+   if c and (c[0]=='BUILD_COOP' or (len(c)>1 and c[1]=='GOOSE')):ev.append((i,xy,c))
+  if mo or ev:print(t,f'd{t//24}h{t%24}','M',mo,'U',ev)
+ for day in [8,9,10,11]:
+  ob=d['steps'][day*24][p]['observation']; farm=ob['farms'][p];g=[];w=[];s=[]
+  for y,row in enumerate(farm['tiles']):
+   for x,z in enumerate(row):
+    if isinstance(z,dict):
+     if z.get('kind')=='COOP':g.append((x,y,z.get('animal')))
+     elif z.get('kind')=='PLANT' and z.get('crop')=='WHEAT':w.append((x,y))
+     elif z.get('kind')=='PLANT' and z.get('crop')=='STRAWBERRY':s.append((x,y))
+  print('start-d',day,'quads',farm['unlocked_quadrants'],'coop',g,'W',w,'S',s)
+PY" in /workspace/wt/codex
+ succeeded in 1442ms:
+
+# dsm episode-113609015-replay.json.gz 847060791
+146 d6h2 M [['BUY_LAND']] U []
+147 d6h3 M [['BUY_LAND']] U []
+148 d6h4 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+149 d6h5 M [] U [(1, [4, 4], ['PICKUP', 'GOOSE', 1])]
+150 d6h6 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+151 d6h7 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 4], ['BUILD_COOP']), (5, [4, 4], ['PICKUP', 'GOOSE', 1])]
+152 d6h8 M [] U [(0, [4, 4], ['PICKUP', 'GOOSE', 1]), (1, [5, 4], ['PLACE', 'GOOSE', 1])]
+153 d6h9 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+154 d6h10 M [] U [(2, [4, 4], ['PICKUP', 'GOOSE', 1]), (5, [5, 3], ['BUILD_COOP'])]
+155 d6h11 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(0, [5, 3], ['PLACE', 'GOOSE', 1]), (5, [5, 3], ['PLACE', 'GOOSE', 1])]
+156 d6h12 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+157 d6h13 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(0, [5, 4], ['PICKUP', 'GOOSE', 1]), (5, [5, 2], ['BUILD_COOP']), (6, [4, 4], ['PICKUP', 'GOOSE', 1])]
+158 d6h14 M [] U [(2, [5, 2], ['PLACE', 'GOOSE', 1]), (3, [4, 4], ['PICKUP', 'GOOSE', 1]), (5, [5, 2], ['PLACE', 'GOOSE', 1])]
+160 d6h16 M [] U [(5, [5, 1], ['BUILD_COOP'])]
+161 d6h17 M [] U [(0, [6, 2], ['BUILD_COOP']), (5, [5, 1], ['PLACE', 'GOOSE', 1])]
+162 d6h18 M [] U [(0, [6, 2], ['PLACE', 'GOOSE', 1])]
+163 d6h19 M [] U [(6, [6, 1], ['BUILD_COOP'])]
+164 d6h20 M [] U [(3, [6, 1], ['PLACE', 'GOOSE', 1])]
+165 d6h21 M [] U [(6, [6, 0], ['BUILD_COOP'])]
+166 d6h22 M [] U [(6, [6, 0], ['PLACE', 'GOOSE', 1])]
+196 d8h4 M [['BUY_LAND']] U []
+197 d8h5 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+198 d8h6 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 4], ['PICKUP', 'GOOSE', 1]), (6, [4, 4], ['PICKUP', 'GOOSE', 1])]
+199 d8h7 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(4, [4, 4], ['PICKUP', 'GOOSE', 1]), (6, [4, 4], ['PICKUP', 'GOOSE', 1])]
+200 d8h8 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(6, [4, 4], ['PICKUP', 'GOOSE', 1])]
+201 d8h9 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(7, [5, 4], ['PICKUP', 'GOOSE', 1])]
+202 d8h10 M [] U [(1, [3, 5], ['BUILD_COOP']), (3, [4, 4], ['PICKUP', 'GOOSE', 1])]
+203 d8h11 M [] U [(1, [3, 5], ['PLACE', 'GOOSE', 1]), (4, [2, 5], ['BUILD_COOP'])]
+204 d8h12 M [] U [(3, [4, 5], ['BUILD_COOP']), (4, [2, 5], ['PLACE', 'GOOSE', 1]), (6, [3, 6], ['BUILD_COOP'])]
+205 d8h13 M [] U [(3, [4, 5], ['PLACE', 'GOOSE', 1]), (6, [3, 6], ['PLACE', 'GOOSE', 1]), (7, [4, 6], ['BUILD_COOP'])]
+206 d8h14 M [] U [(7, [4, 6], ['PLACE', 'GOOSE', 1])]
+227 d9h11 M [] U [(5, [4, 7], ['BUILD_COOP'])]
+start-d 8 quads ['NW', 'NE'] coop [(6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (6, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (5, 4, 'GOOSE')] W [(5, 0), (7, 0), (7, 3), (8, 3)] S [(0, 0), (1, 0), (2, 0), (3, 0), (0, 1), (1, 1), (2, 1), (7, 1), (0, 2), (1, 2), (7, 2), (8, 2)]
+start-d 9 quads ['NW', 'NE', 'SW'] coop [(6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (6, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (5, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 5, 'GOOSE'), (3, 6, 'GOOSE'), (4, 6, 'GOOSE')] W [(5, 0), (7, 0), (8, 1), (7, 3), (8, 3), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (0, 7), (1, 7), (2, 7), (3, 7), (0, 8), (2, 8), (0, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (0, 1), (1, 1), (2, 1), (7, 1), (0, 2), (1, 2), (7, 2), (8, 2)]
+start-d 10 quads ['NW', 'NE', 'SW'] coop [(6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (6, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (5, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 5, 'GOOSE'), (3, 6, 'GOOSE'), (4, 6, 'GOOSE')] W [(5, 0), (7, 0), (8, 1), (9, 2), (8, 3), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (0, 7), (1, 7), (2, 7), (3, 7), (0, 8), (2, 8), (0, 9), (3, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (0, 1), (1, 1), (2, 1), (7, 1), (0, 2), (1, 2), (7, 2), (8, 2), (9, 3)]
+start-d 11 quads ['NW', 'NE', 'SW'] coop [(6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (6, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (5, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 5, 'GOOSE'), (3, 6, 'GOOSE'), (4, 6, 'GOOSE')] W [(5, 0), (7, 0), (4, 1), (9, 2), (2, 3), (3, 3), (1, 4), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (1, 7), (2, 7), (3, 7), (0, 8), (2, 8), (0, 9), (3, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (0, 1), (1, 1), (2, 1), (7, 1), (0, 2), (1, 2), (7, 2), (8, 2), (9, 3)]
+
+# mmpq episode-113607941-replay.json.gz 2044402514
+147 d6h3 M [['BUY_LAND']] U []
+148 d6h4 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+149 d6h5 M [] U [(1, [4, 4], ['PICKUP', 'GOOSE', 1]), (2, [4, 4], ['PICKUP', 'GOOSE', 1])]
+150 d6h6 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+151 d6h7 M [] U [(2, [5, 4], ['PICKUP', 'GOOSE', 1]), (5, [4, 4], ['PICKUP', 'GOOSE', 1])]
+152 d6h8 M [['BUY_ANIMAL', 'GOOSE', 1], ['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 3], ['BUILD_COOP']), (2, [5, 4], ['BUILD_COOP'])]
+153 d6h9 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 3], ['PLACE', 'GOOSE', 1]), (5, [5, 4], ['PICKUP', 'GOOSE', 1])]
+154 d6h10 M [] U [(2, [6, 4], ['BUILD_COOP']), (5, [5, 4], ['PLACE', 'GOOSE', 1])]
+155 d6h11 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 4], ['PICKUP', 'GOOSE', 1]), (2, [6, 4], ['PLACE', 'GOOSE', 1]), (5, [5, 4], ['PICKUP', 'GOOSE', 1])]
+156 d6h12 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+157 d6h13 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(0, [4, 4], ['PICKUP', 'GOOSE', 1]), (6, [4, 4], ['PICKUP', 'GOOSE', 1]), (9, [4, 4], ['PICKUP', 'GOOSE', 1])]
+158 d6h14 M [] U [(1, [5, 2], ['BUILD_COOP']), (5, [5, 2], ['BUILD_COOP']), (9, [4, 4], ['PICKUP', 'GOOSE', 1])]
+159 d6h15 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(1, [5, 2], ['PLACE', 'GOOSE', 1]), (5, [5, 2], ['PLACE', 'GOOSE', 1])]
+161 d6h17 M [] U [(3, [4, 4], ['PICKUP', 'GOOSE', 1]), (5, [5, 1], ['BUILD_COOP'])]
+162 d6h18 M [] U [(5, [5, 1], ['PLACE', 'GOOSE', 1]), (6, [5, 1], ['PLACE', 'GOOSE', 1]), (9, [6, 3], ['BUILD_COOP'])]
+163 d6h19 M [] U [(9, [6, 3], ['PLACE', 'GOOSE', 1])]
+164 d6h20 M [] U [(0, [6, 2], ['BUILD_COOP']), (6, [5, 0], ['BUILD_COOP'])]
+165 d6h21 M [] U [(0, [6, 2], ['PLACE', 'GOOSE', 1]), (6, [5, 0], ['PLACE', 'GOOSE', 1])]
+175 d7h7 M [] U [(7, [5, 4], ['PICKUP', 'GOOSE', 1])]
+181 d7h13 M [] U [(7, [6, 0], ['BUILD_COOP'])]
+182 d7h14 M [] U [(7, [6, 0], ['PLACE', 'GOOSE', 1])]
+198 d8h6 M [['BUY_LAND']] U []
+200 d8h8 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+201 d8h9 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(2, [4, 4], ['PICKUP', 'GOOSE', 1]), (7, [5, 4], ['PICKUP', 'GOOSE', 1])]
+202 d8h10 M [] U [(7, [5, 4], ['PICKUP', 'GOOSE', 1]), (10, [4, 4], ['PICKUP', 'GOOSE', 1])]
+203 d8h11 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+204 d8h12 M [] U [(2, [3, 5], ['BUILD_COOP'])]
+205 d8h13 M [] U [(2, [3, 5], ['PLACE', 'GOOSE', 1])]
+206 d8h14 M [] U [(10, [4, 4], ['PICKUP', 'GOOSE', 1])]
+207 d8h15 M [] U [(7, [2, 5], ['BUILD_COOP'])]
+208 d8h16 M [] U [(7, [2, 5], ['PLACE', 'GOOSE', 1])]
+209 d8h17 M [] U [(10, [4, 6], ['BUILD_COOP'])]
+210 d8h18 M [] U [(10, [4, 6], ['PLACE', 'GOOSE', 1])]
+221 d9h5 M [['BUY_ANIMAL', 'GOOSE', 1]] U []
+223 d9h7 M [['BUY_ANIMAL', 'GOOSE', 1]] U [(3, [4, 4], ['PICKUP', 'GOOSE', 1]), (5, [4, 4], ['PICKUP', 'GOOSE', 1])]
+224 d9h8 M [] U [(5, [4, 4], ['PICKUP', 'GOOSE', 1])]
+225 d9h9 M [] U [(3, [4, 5], ['BUILD_COOP'])]
+226 d9h10 M [] U [(3, [4, 5], ['PLACE', 'GOOSE', 1])]
+228 d9h12 M [] U [(5, [3, 6], ['BUILD_COOP'])]
+229 d9h13 M [] U [(5, [3, 6], ['PLACE', 'GOOSE', 1])]
+start-d 8 quads ['NW', 'NE'] coop [(5, 0, 'GOOSE'), (6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (6, 3, 'GOOSE'), (5, 4, 'GOOSE'), (6, 4, 'GOOSE')] W [(7, 0), (8, 0), (6, 1), (7, 1), (8, 1), (8, 3), (9, 4)] S [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (9, 0), (0, 1), (1, 1), (9, 1), (7, 2), (8, 2), (9, 2), (9, 3)]
+start-d 9 quads ['NW', 'NE', 'SW'] coop [(5, 0, 'GOOSE'), (6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (6, 3, 'GOOSE'), (5, 4, 'GOOSE'), (6, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 6, 'GOOSE')] W [(7, 0), (8, 0), (6, 1), (7, 1), (8, 1), (8, 3), (9, 4), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (0, 7), (1, 7), (2, 7), (4, 7), (0, 8), (4, 8), (0, 9), (2, 9), (3, 9), (4, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (9, 0), (0, 1), (1, 1), (9, 1), (7, 2), (8, 2), (9, 2), (9, 3)]
+start-d 10 quads ['NW', 'NE', 'SW'] coop [(5, 0, 'GOOSE'), (6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (6, 3, 'GOOSE'), (5, 4, 'GOOSE'), (6, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 5, 'GOOSE'), (3, 6, 'GOOSE'), (4, 6, 'GOOSE')] W [(7, 0), (8, 0), (6, 1), (7, 1), (8, 1), (8, 3), (9, 4), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (0, 8), (1, 8), (2, 8), (3, 8), (4, 8), (0, 9), (1, 9), (2, 9), (3, 9), (4, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (9, 0), (0, 1), (1, 1), (9, 1), (7, 2), (8, 2), (9, 2), (9, 3)]
+start-d 11 quads ['NW', 'NE', 'SW'] coop [(5, 0, 'GOOSE'), (6, 0, 'GOOSE'), (5, 1, 'GOOSE'), (5, 2, 'GOOSE'), (6, 2, 'GOOSE'), (5, 3, 'GOOSE'), (6, 3, 'GOOSE'), (5, 4, 'GOOSE'), (6, 4, 'GOOSE'), (2, 5, 'GOOSE'), (3, 5, 'GOOSE'), (4, 5, 'GOOSE'), (3, 6, 'GOOSE'), (4, 6, 'GOOSE')] W [(7, 0), (8, 0), (4, 1), (6, 1), (7, 1), (8, 1), (1, 3), (2, 3), (8, 3), (0, 4), (1, 4), (2, 4), (9, 4), (0, 5), (1, 5), (0, 6), (1, 6), (2, 6), (0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (0, 8), (1, 8), (2, 8), (3, 8), (4, 8), (0, 9), (1, 9), (2, 9), (3, 9), (4, 9)] S [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (9, 0), (0, 1), (1, 1), (9, 1), (7, 2), (8, 2), (9, 2), (9, 3)]
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "time /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import gzip,json,glob,collections
+for fam,team in [('mmpq','M & M & P & Q'),('dsm','DSM')]:
+ counts=collections.Counter(); eps=collections.defaultdict(set); totals=collections.Counter();n=0
+ for f in glob.glob(f'/workspace/shared/replays/top10v4/{fam}/*.gz'):
+  d=json.load(gzip.open(f,'rt'));p=d['info']['TeamNames'].index(team);n+=1
+  for t in range(719):
+   a=d['steps'][t+1][p].get('action') or {};cs=[a.get('farmer') or ['PASS'],*(a.get('hands') or [])]
+   for c in cs:
+    if len(c)>=2 and c[:2]==['PLANT','STRAWBERRY']:
+     day=t//24; counts[day]+=1;eps[day].add(f);totals[f]+=1
+ print(fam,'n',n,'S plant commands daily',[(d,counts[d],len(eps[d])) for d in sorted(counts)],'last_day',max(counts),'game total med',sorted(totals.values())[len(totals)//2])
+PY" in /workspace/wt/codex
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+ succeeded in 92253ms:
+mmpq n 100 S plant commands daily [(2, 77, 50), (3, 224, 92), (4, 292, 92), (5, 99, 73), (6, 1552, 100), (7, 61, 32), (8, 149, 36), (9, 199, 55), (10, 19, 16), (11, 25, 14), (12, 183, 47), (13, 114, 40), (14, 18, 11), (15, 164, 45), (16, 27, 18), (17, 7, 6), (18, 1, 1)] last_day 18 game total med 32
+dsm n 48 S plant commands daily [(2, 98, 48), (3, 176, 48), (4, 96, 35), (5, 17, 14), (6, 483, 48), (8, 17, 8), (9, 75, 24), (10, 3, 1), (11, 4, 3), (12, 107, 36), (13, 155, 48), (14, 8, 8), (15, 89, 28)] last_day 15 game total med 28
+
+real	1m32.399s
+user	1m2.086s
+sys	0m7.417s
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+codex
+Узкий тест завершён без сбоев: перенос только третьей земли на ~24 хода раньше уже проигрывает самому `es7_wm` (0–4–4, −$4.0k), хотя локально обыгрывает boatlee/fukami. Значит, это не самостоятельный рычаг; полный пакет требует нового согласованного маршрута с d6–d8, а не безопасной вставки после d8. Фиксирую это вместе с картой лидеров на доске.
+2026-09-26T19:09:33.987724Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /workspace/shared/BOARD.md:
+| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
+exec
+/bin/bash -lc "tail -20 /workspace/shared/research/re_production.md; rg -n '"'^'"\\| T036|"'^## Key findings'"' /workspace/shared/BOARD.md | head -10; sed -n '130,142p' /workspace/shared/BOARD.md" in /workspace/wt/codex
+ succeeded in 0ms:
+
+The state transition test makes the schedule concrete: all 32 development trajectories add WHEAT=15 on d0, 30/32 add CARROT=2 and 26/32 MELON=1. On d4, 31/32 add STRAWBERRY (median +4) and all 32 add MELON (median +3). TOMATO is not an incidental response: additions occur in 28/32, 29/32 and 30/32 trajectories on d16/d17/d18; the standing median then reaches 16 on d19–24. Late CARROT/WHEAT filling resumes most strongly d25 (27/32 and 28/32). This is the current direct production explanation for fuxi's tomato volume, although targets and the decision to react to an opponent still need raw-state attribution.
+
+Herd/structure rule: d1 is 6 PASTURE and **3 COW/3 SHEEP**; d6 10 pasture and 6/3/0; d8 begins a COOP/goose lane (11/1 and 7/4/1). By d10 it is 12/3 with 8/4/3, and d13 reaches 13 PASTURE/3 COOP with **8 COW/4 SHEEP/3 GOOSE**. This peak is then held to d18 before a controlled rundown to 6/3/3. It has a smaller herd than M&M&P&Q/DSM but much larger simultaneous crop surface.
+
+Fertilizer begins later than the other two high-herd teams (d14: 6, d15: 9, d17: 18), then deliberately supports 25–31 fertile tiles d20–27. Current explicit rule: `do not fertilize before the diversified crop expansion; begin at d14, strengthen the tomato/strawberry phase through d27`.
+
+At herd≥10, mean units/turn are WATER **2.03**, HARVEST .86, CARE .49, FEED .53, FERTILIZE .23 and COLLECT_FERTILIZER .60 (20,525 turns); at herd 1–9 they are 1.24/.44/.25/.26/.08/.28. Relative to M&M&P&Q/DSM this confirms the allocation trade: more worker capacity goes to crop WATER, less to animal service.
+
+| operation | held-out presence | held-out exact count | MAE |
+|---|---:|---:|---:|
+| PLANT | 76.6% | 76.1% | .325 |
+| WATER | 81.9% | 39.3% | 1.005 |
+| HARVEST | 72.6% | 58.6% | .581 |
+| CARE | 68.5% | 66.5% | .417 |
+| FEED | 66.9% | 64.4% | .445 |
+| FERTILIZE | 85.2% | 85.1% | .193 |
+| COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+
+The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
+14:## Key findings (newest first; one line each, link the task)
+140:| T036 | codex | production RE complete — standalone top-RE handoff; no Horizon graft | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. Fixed opening falsified (pooled exact production 30.6%); G1 d0–3 only and prior 0/8 failure means no honest d8+ graft/screen. Never submit. |
+| T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+| T030 | codex | closed ✗ — WHEAT volume is purchased turnover, not safe own-feed/idle-crop opportunity | 39-loss + 41-win replay attribution: opponents buy/re-sell WHEAT; default-off idle WHEAT gene fails 2-world both-seat screen 0/8 (−50pp/−$2,248), so no T025 gate. Never submit. |
+| T031 | codex | follow-up closed — never submit | FERTILIZER has real native pickup/use but no market round trip; default-off wrapper identity-only. Four wheat variants have no improvement over es7_wm, so no full gate. `tasks/T031-wheat-market-arbitrage.md` |
+| T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+| T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+| T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+| T036 | codex | production RE complete — standalone top-RE handoff; no Horizon graft | Boey/M&M&P&Q/DSM/fuxi crop, herd, fertilizer, quadrant and held-out aggregate-operation rules in `research/re_production.md`. Fixed opening falsified (pooled exact production 30.6%); G1 d0–3 only and prior 0/8 failure means no honest d8+ graft/screen. Never submit. |
+| T037 | codex | in_progress — units planner + feasibility review | Standalone top-RE: review plan, then implement legal task generation, greedy unit assignment and movement in `lab/re/top_re/units.py`; Claude owns plan/market/main. Never submit. |
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 94d2c572d435b3bdc4761427c6dc558ae3ed7dd4..b15d949537bb9d0e20e7a7b083b3c4f781dde93d
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -135,4 +135,4 @@
+ | T032 | codex | closed — 2w screen has cash-only signal, no score evidence; never submit | Opponent-harvest forecaster: 0/2,876 off diffs; 39L audit finds high temporal overlap, but fresh P/M/shepherd/mirror screen score 0pp (CI crosses 0), so no T025 gate/candidate. `tasks/T032-opponent-harvest-forecaster.md` |
+ | T034 | codex | closed — research complete; no candidate/gate/submission action | 40 current episodes × fuxi/istinetz/Joseph/«самогон», nine actual reactive losses, daily two-sided timelines, exact public-code attribution screen and three bounded counter hypotheses for es7_wm. `tasks/T034-reactive-class.md` |
+ | T035 | codex | closed ✗ — clone-safe cash reserve has no score signal | 96/96 fresh sanity games: 0pp vs mirror/boatlee/fukami; two activated boatlee cases −$493. No gate/candidate/Kaggle action. `tasks/T035-reactive-lane.md` |
+-| T036 | codex | in_progress — production RE | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`; never submit. |
++| T036 | codex | in_progress — redirected: exact DSM/M&M&P&Q d0–d10 map/feed/goose route + fixed-opening test; feasibility implementation and ≤8-worker screen vs es7_wm/boatlee/fukami. Never submit. | Teacher-forced reconstruction of top-team planting, unit allocation, and herd/structure rules from decision logs; Boey → M&M&P&Q → DSM → fuxi. Durable rules/agreement in `research/re_production.md`. |
+diff --git a//workspace/shared/tasks/T036-production-re.md b//workspace/shared/tasks/T036-production-re.md
+index b841293317739e478e0bdadd6d3ac94c5607a4c4..995e0e5b450ab09a2f7b1179d454812f0f09641b
+--- a//workspace/shared/tasks/T036-production-re.md
++++ b//workspace/shared/tasks/T036-production-re.md
+@@ -4,4 +4,4 @@
+ 
+ Method: use state/action decision logs, derive state-gated rules on a development episode subset, and report held-out action agreement by rule and action class. Record episode identifiers and coverage; avoid claiming a rule where action fields do not expose the needed state.
+ 
+-Status: in progress. No candidate, gate, training, or Kaggle submission action.
++Status: in progress — 2026-09-26 redirect: exact DSM/M&M&P&Q d0–d10 layout, goose/coop placement and feeding routes; test whether their d0–d8 actions are a shared fixed opening across 100 episodes; then implement only a feasible Horizon d8+ variant and screen it vs es7_wm plus boatlee/fukami. No candidate or Kaggle submission action.
+diff --git a/experiments/t036_land_phase/main.py b/experiments/t036_land_phase/main.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a984ae08012d64a0bf50b42cad4ce63fb04d217
+--- /dev/null
++++ b/experiments/t036_land_phase/main.py
+@@ -0,0 +1,42 @@
++"""T036 local-only phase probe: pull only Horizon's *third* land purchase forward.
++
++The frozen controller already owns all worker routing.  This leaves its unit tape
++untouched and changes only the legal BUY_LAND timing when two quadrants exist.
++It is deliberately not a candidate and does not claim to reproduce the top
++goose system.
++"""
++
++_BASE = "/workspace/shared/candidates/es7_wm/pkg/main.py"
++exec(compile(open(_BASE, "rb").read(), _BASE, "exec"), globals(), globals())
++
++_T036_PARENT_LAND = _hp_land
++_T036_REPORT = {"attempts": 0, "changed": 0, "errors": 0}
++
++
++def _hp_land(obs, action):
++    """The base helper looks ahead in its active route; limit it to land #3."""
++    try:
++        player = int(obs["player"])
++        quads = len(obs["farms"][player].get("unlocked_quadrants") or [])
++        if quads != 2:
++            return action
++        _T036_REPORT["attempts"] += 1
++        out = _T036_PARENT_LAND(obs, action)
++        if out is not action:
++            _T036_REPORT["changed"] += 1
++        return out
++    except Exception:
++        _T036_REPORT["errors"] += 1
++        return action
++
++
++_HP["land_on"] = True
++_HP["land_k"] = 24
++_T036_BASE_AGENT = agent
++
++
++def agent(obs, config=None):
++    return _T036_BASE_AGENT(obs, config)
++
++
++agent.telemetry = _T036_REPORT
+
