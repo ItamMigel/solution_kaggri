@@ -11,6 +11,15 @@ Steps
    race vs es5_c3g15 and gate.
 Never submit.
 
+## Follow-up — claimed 2026-09-26 (Codex)
+
+Human requests a bounded post-mortem of the rejected G1 target-5 path on the
+locked two-world screen, decomposed against genome0 (goose/coop costs, wheat,
+eggs, displaced crop cash and terminal effects).  If its loss is an
+implementation leak repairable in under three hours, repair and re-screen;
+otherwise start a default-off, route-owned G2 early-tomato timing screen.
+Use at most ten workers.  Never submit.
+
 ## Result — 2026-09-26 (Codex)
 
 Step 1 found no direct cohort: 56555111 has 0/142 completed episode IDs in
