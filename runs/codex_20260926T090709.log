@@ -1,0 +1,1047 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /workspace/wt/codex
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0dcf7-eaf4-7b00-aca9-d1714f3efb96
+--------
+user
+You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.
+
+T025: cma4 centre has declined 4 gens straight (1.098@g14 → 0.937@g18). Please pause cma4 cleanly at the next durable generation boundary (pickle intact, resume-safe, note in T025/BOARD), and give its CPU to the running t025_cma4_g005_and_g015_fresh_full_gate — if the gate can't be resized live without invalidating it, leave it and just let it use the freed CPU. Report via bin/say claude. Never submit.
+codex
+Принял T025: сначала сверю протокол и статус на доске, затем аккуратно остановлю `cma4` на границе поколения, не затрагивая отправку на Kaggle.
+exec
+/bin/bash -lc "sed -n '1,240p' /workspace/shared/AGENTS.md && sed -n '1,260p' /workspace/shared/BOARD.md" in /workspace/wt/codex
+ succeeded in 0ms:
+# Kaggriculture war room — shared protocol for Claude + Codex
+
+Two agents (Claude Code and Codex) work as a pair on the Kaggle **kaggriculture** simulation
+competition. This directory (`/workspace/shared`) is the **shared board**: the only place where the
+two of us exchange state. Read this file, then `BOARD.md`, then your inbox, at the start of every
+session and before picking up work. Talk to the human in **Russian**.
+
+## ☠ HARD RULE — NEVER SUBMIT ☠
+**No agent ever submits anything to Kaggle.** Not `kaggle competitions submit`, not the Python API,
+not a notebook "Submit", not via a script another agent wrote. The human submits, personally.
+Kaggle is **read-only** for us: leaderboard, our submissions, episodes, replays, agent logs,
+discussion topics, public notebooks, datasets. The CLI (`/workspace/shared/bin/kaggle`) and the
+Python API are patched to refuse submissions — do not work around the guard, do not reinstall
+`kaggle` elsewhere to bypass it. When a candidate is ready: put the frozen archive in
+`/workspace/shared/candidates/<name>/` with its evidence and tell the human.
+
+## Competition facts (as of 2026-09-23)
+- Deadline **2026-09-30 23:59 UTC**. After it, active submissions keep playing ~2 weeks, then a
+  single **Bradley-Terry tournament** decides the final ranking → true strength vs the field matters,
+  not a lucky rating streak.
+- Only the **2 most recent submissions** of a team are active on the ladder. Team "misis
+  biznessmenlb" (id 16739419). Team submissions/day are limited (see `kaggle competitions submission-limits kaggriculture`).
+- Medal cutoffs on public LB snapshot 2026-09-23: #1 ≈3063, #50 ≈2781, #100 ≈2719, #300 ≈2593, #500 ≈2502.
+  Our horizon_v4 reached 2590 before being displaced by the two v5 uploads (ratings still settling).
+
+## Where things are
+| Path | What |
+|---|---|
+| `/workspace/solution_kaggri` | **Primary repo** (teammates' Horizon agents + `compare.py` harness). Branch `lab` = merged workspace. |
+| `/workspace/wt/claude`, `/workspace/wt/codex` | Per-agent git worktrees (branches `lab-claude`, `lab-codex`). **Edit code only in your own worktree.** Merge into `lab` via small commits; tell the other agent in its inbox. |
+| `lab/gpuenv/` | Batched torch copy of the engine (bit-exact vs the OLD engine; must be re-difftested vs kaggle-environments 1.32.7 before trusting). |
+| `lab/tools/replay_mine.py`, `replay_report.py` | Re-simulate a Kaggle replay with hooks → per-episode P&L. Currently broken on engine 1.32.7 (task T001). |
+| `lab/census_legacy/` | Old ladder census pipeline (download → fingerprint → taxonomy → imitation fit). |
+| `lab/knowledge/` | Official rules, engine spec with undocumented mechanics, economics notes, lessons from the user's old attempt. |
+| `/workspace/kaggriculture` | User's old repo (read-only reference; RL/CEM/scripted engine, opponent pool). |
+| `/workspace/shared/replays/` | Downloaded Kaggle replays (large, ~30 MB each; not in git). |
+
+Python: `/workspace/solution_kaggri/.venv/bin/python` (py3.12, kaggle-environments==1.32.7, numpy).
+Torch/GPU work: `/workspace/kaggriculture/.venv/bin/python` (torch cu126, Tesla P40 24 GB).
+Local game: ~14 s per game per core; box has 48 cores.
+
+## Board layout
+- `BOARD.md` — **single source of truth**: current champion, top findings, task table. Keep it short. Edit only your own rows; add rows freely.
+- `tasks/T###-slug.md` — one file per task: goal, owner, hypothesis, method, **result**, next step.
+- `ledger.jsonl` — append-only, one JSON per completed evaluation run (schema below). Never rewrite lines.
+- `research/` — digests: Kaggle discussion threads, top-team replay analyses, engine facts. One topic per file, cite sources (topic id / episode id).
+- `inbox/claude.md`, `inbox/codex.md` — messages **to** that agent. Append with `bin/say <to> "<msg>"`. The recipient marks items `[done]` when handled.
+- `candidates/<name>/` — frozen agent archives ready for the human to consider submitting.
+- `runs/` — logs of cross-agent headless calls.
+
+### Ledger schema
+`{"ts": "...", "by": "claude|codex", "task": "T003", "candidate": "name", "path": "...", "sha256": "...", "opponents": [...], "seeds_file": "...", "games": N, "wins": W, "draws": D, "losses": L, "mean_margin": x, "worst10_margin": x, "errors": 0, "run_dir": "...", "verdict": "better|worse|noise|n/a", "note": "..."}`
+
+## Working rules
+1. **Claim before you start**: set yourself as owner in `BOARD.md` + create the task file. Never work on a task owned by the other agent; send a message instead.
+2. **CPU budget**: each agent uses **≤ 22 worker processes** at a time (48 cores; leave headroom). GPU: announce in BOARD before using it.
+3. **Evidence standard** (inherited from both repos): paired seeds, both seats, diverse opponents
+   (not only Horizon ancestors), whole-world CI. A claim of "better" needs a CI that excludes no-effect.
+   Don't tune on `seeds/*confirmation*`. Zero crashes/timeouts is mandatory.
+4. **Cross-check**: every result that would change the champion must be **independently reproduced or reviewed by the other agent** before it goes to `candidates/`. That's the point of pairing.
+5. **Divide by nature of work**: prefer giving each agent different hypotheses rather than the same one. When both attack the same question on purpose (red-team), say so in the task file.
+6. Write findings for the other agent to reuse: exact commands, file:line, numbers. Negative results are results — log them.
+7. `/workspace` is **not persistent** (no volume). Push with `bin/sync "msg"` → branches `board` and `lab` of github.com/AdilHAA/kaggriculture (remote `mine`). Merge your worktree branch into `lab` first. Human-approved 2026-09-24: sync also mirrors to the teammates repo ItamMigel/solution_kaggri as branches `adil-board` / `adil-lab` ONLY — never push to its main or any other branch.
+
+## Talking to each other directly (headless)
+- `bin/ask_codex "<prompt>"` — runs `codex exec` in `/workspace/wt/codex`, logs to `runs/`, prints Codex's final message. Add `--bg` to run in background.
+- `bin/ask_claude "<prompt>"` — runs `claude -p` in `/workspace/wt/claude`, same logging.
+- `bin/say <claude|codex> "<msg>"` — async note into the other's inbox (cheap; preferred for FYIs).
+Use headless calls for: independent review of a diff/result, a bounded research question, or a second opinion. Don't use them for open-ended loops.
+# BOARD — kaggriculture war room
+_Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)._
+
+## ☠ Agents never submit. Kaggle = read-only. (see AGENTS.md)
+
+## Current state
+- **Ratings 2026-09-24 05:27 UTC**: v5_guarded **2640.6**, v5_market 2185.6 (ladder W-L 73-12 / 72-4).
+- **Active on ladder**: `horizon_v5_market` (56504560), `horizon_v5_guarded` (56504572) — uploaded 2026-09-23 22:0x, ratings still climbing from 600 (1495 / 1737 after ~15 episodes).
+- **Previous best on ladder**: `horizon_v4` (56488922) = **2590.4** (~rank 300). Now inactive (only 2 latest subs play).
+- Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).
+- Local evidence: v5_market 767/768 vs 6 public controllers, 126/128 vs v4 — but all opponents share ancestry with Horizon; unknown vs real top (≈3000+).
+- Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+
+## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025: stopped stale-control CMA3 after completed gen16 (0.985 centre, σ=.0372); restarted local **CMA4** at exact gen15/es5_c3g15 centre with σ=.015, `CMA_BEST=es5_c3g15`, config/hash-checked resume and 18 workers. CMA3 is preserved/restartable; no candidate or Kaggle action changed. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA3 gen-15 boundary confirmation **passes predeclared replacement numbers**: fresh disjoint P+M 24-world panel is +6.25pp; combined 48-world paired one-sided 95% lower is 0.00pp (>−2pp), 384/384 valid, after H2H 16–0 +$836. **Pending Claude independent review before any candidate change; es3_g5 remains frozen meanwhile.** `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 standard CMA gate **rejects CMA3 gen-15**: fresh es3 H2H 16–0 (+$836; CI positive), but separate 24-world paired P+M panel is narrowly below predeclared NI (paired +4.17pp, one-sided lower −2.083pp vs required >−2.0; cash −$48.5); 208/208 valid. Keep es3_g5. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 failure localized: no early route/hire/land divergence; `_ADV_LOOK` 17→18 pulls premium milk/egg/wool sales one tick early against parthenos. Rollback to 17 improves the 7 adverse worlds (+$1,097→+$1,347; 4→2 losses) but fails fresh H2H, so this is an opponent-specific trade-off; Q/CH knobs inert/minor. Standard CMA gate is predeclared. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 red-team **rejects promotion**: on 24 new worlds × parthenos/metav4 × both seats (192/192 valid), c3g5−es3_g5 is −4.17pp score (CI −10.4…0) / −$69.3 (CI −$176.6…+$33.3); parthenos repeats in the adverse direction. CMA3 gen-10 is 15–0–1 (+$437) vs es3, but directly ties c3g5 on score (+$50.5, CI crosses 0): positive signal only. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-25 — PBT red-team/fix: published monotonic `roundNNN` snapshots eliminate stale `it` races after exploit; atomic exploit, all-4 common rotating official exams, invalid-exam rejection, 24 single-thread CPU workers, finite horizon stop. KL anchor remains immutable `ref.pt`; HoF is development-only and needs disjoint confirmation. `research/pbt_codex.md` [codex]
+- 2026-09-25 19:00 — BC→PPO **pkg v3** ready (`h100_pkg/kaggri_bcppo_v3.zip`): codex audit fixes (capped market P0/P1, target-KL P2, subset league, telemetry), vectorised allocator, 2048 envs defaults, es3 + 2000 DART games of es3_g5. Clean-teacher BC es3 failed closed loop (0/96, deterministic teacher → no coverage) → DART. [claude+codex]
+- 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
+- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+- 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+- 2026-09-25 — T025: EXP240-only SW acceleration fails capability; do not race. CMA2 gen-20 rejects 3–13 vs es3_g5 (−$350). Fresh CMA3 restart from es3_g5: gen-5 passes Claude 15–0–1 (+$979) and independent Codex 14–0–2 (+$558; score CI 62.5–100%), zero crashes; signal only, no automatic promotion. [claude+codex]
+- 2026-09-25 — T024 ladder snapshot (121 g1 + 66 g9): recurring losses are alternative late macros (Matt Motoki/Koba take SW d9/d8 vs our d11); no replay-visible tape-safe repair. Keep es2_c1; only a route-conditioned macro could justify a new gate. `research/ladder_losses_es1.md` [codex]
+- 2026-09-25 — T020 patched P40 K5: warm-up iterations 0–2 keep KL at numerical zero; PPO iterations 3–4 have KL .0173/.0094 and clipfrac .212/.127, with no crash. Training-health pass only, not a performance claim. [codex]
+- 2026-09-25 — T023 tape-safe mining screen: direct replay execution finds residual WATER/FEED/CARE opportunities, but fresh 32-game screen rejects FEED (−0.5/−$137) and finds WATER/CARE inert; no survivor. [codex]
+- 2026-09-25 — ✅ **es2_c1 promoted** (`candidates/es2_c1`) = es1_g9 + M1 COLLECT_FERTILIZER on idle units: vs g9 31-1 (claude) and 29-2-1 (codex, independent); vs v5 64-0; panel no regression. **Recommendation: es1_g9 + es2_c1** (submitting displaces es1_g1). Land-early macro closed (−0.42). M3-lite fertilizer hand closed (codex). [claude+codex]
+- 2026-09-25 — T022 independent review PASS: `es2_c1` is 29–2–1 vs g9 on 16 disjoint worlds (CI 84.4–100%, +$17; 0 errors), no panel regression; delayed t2945 add-on is 32–0. Recommend freezing it for the human. [codex]
+- 2026-09-24 — T021 M3lite appended fertilizer hand is closed: all four trace-derived high-surplus firing regimes lose a fresh 56-game paired screen (−$167…−$613); strict reserve variants are inert. No race/CMA. [codex]
+- 2026-09-24 — T021 M4 follow-up race rejects `room_guard_on`: fresh 4-world g9/v5/yhay paired score 0.000, CI [−.125,+.125], margin −$4.8; none of the M4 source flags advances. [codex]
+- 2026-09-24 — T020 old P40 control stopped after two diagnostic iterations: value-only drift repeats (`approx_kl .753→.312`, clipfrac `.697→.578`); it is not a valid PPO signal. Patched warm-up is under separate validation. [codex]
+- 2026-09-24 — T021 M4 capability screen (120 valid games) advances only `room_guard_on`: paired +.25 score vs byte-identical g9, CI [0,+.25], +$19.5. `hand_align_off` is catastrophic (−.75/−$44k); budget guard and opening12 lose. Fresh 4-world race running. [codex]
+- 2026-09-24 — T020 PPO diagnostic: value-only warm-up was changing action logits through the shared trunk (P40 iter0 `approx_kl=.753`, clipfrac `.697`). `7c2c1e2` freezes every non-value parameter during warm-up; regression proves policy tensors unchanged. Package control run remains active. [codex]
+- 2026-09-24 — T021 Codex M4/harness landed in `lab` (`71627f5`): source-level `_SETTINGS`, final opening, router and terminal-only FD anchors; genome-zero output is byte-identical to frozen g9. Paired staged runner locks disjoint folds and reports deltas vs genome0; 5 regression checks pass. [codex]
+- 2026-09-24 — T020 CMA gen-10 mean **fails g9 gate**: on 16 fresh worlds, both seats, 4–0–28 vs frozen g9 (12.5%, CI 0…31.2%; −$260.6, CI −$354…−$170; 0 errors); it still beats v5_market 28–0–4 (+$595). Do not promote. [codex]
+- 2026-09-24 — Horizon+ design review: **do not reuse the FD planner mid-season** (hard-codes day 29/step 719 and replaces all tape actions); start only PASS→CARE with exact legality/instrumentation. `_SETTINGS`/opening/router/FD switch points are build-time/literal, so current appended knob globals cannot evolve M4. Full Q1–Q4: `research/horizon_plus_design_codex.md`. [codex]
+- 2026-09-24 — T019 v2 H100 package final check PASS: unpacked `check.sh` (feature parity 1.2e-7, e2e 0 action diffs) plus two resumed PPO rounds all exit 0; 64-env bf16 smoke has $88.2k learner mean and exactly 32/32 learner seats. [codex review]
+- 2026-09-24 20:3x — BC→PPO v2 (joint plan F1–F11): engine-exact masks raised BC from $2k/$30k to **$62k greedy / $90k sampled** (HARVEST on animals + LOCKED walkable were blocked before). Codex F7–F10 (streaming buffer, zero-sum equity reward, metrics, league, seat randomisation). Data: 1077 games of 13 top teams. Package `h100_pkg/kaggri_bcppo_v2.zip` (168 MB) in final test. [claude+codex]
+- 2026-09-24 — T019 PPO seat symmetry (`2014d6b`): learner is assigned to each world seat for exactly half of every rollout batch; player axis/actions are mapped without extra policy forwards; equity reward, terminal cash correction and money metrics follow learner perspective. GPU smoke 2/2 seats pass. [codex]
+- 2026-09-24 — T019 integration: PPO policy-v2 entropy aggregation corrected (`c65ca5a`): PPO now uses `ent_parts["total"]` rather than summing components and total twice. Tensor/dict compatibility check and `py_compile` pass; fast-forwarded to `lab`. [codex]
+- 2026-09-24 — T019 F7–F10 merged (`1fd6259`): fp16 streaming rollout buffer; conservative zero-sum equity shaping with exact terminal-cash correction; PPO metrics/value warm-up/full optimizer+RNG resume; configurable current/snapshot/double league. GPU smoke and mixed-league smoke pass. F1–F6/F11 are with Claude. [codex]
+- 2026-09-24 — BC→PPO design review (Codex): **do not launch long H100 PPO before decoder fixes** — policy forbids LOCKED crossing although engine permits it; market decoder drops partial/sale-funded buys while PPO scores rejected buckets; v3 10×128/N-team cannot currently load into PPO. Full Q1–Q7: `research/bcppo_design_codex.md`. [codex]
+- 2026-09-24 — T017 PPO g3 re-centred on frozen g9: 96/96 target-panel games valid (288 total arena games); paired g3-minus-g9 score −.0104, CI [−.0625,+.0313], margin −$17.2, CI [−$59.4,+$41.3]. No promotion; g9 remains the anchor. [codex]
+- 2026-09-24 18:1x — Ladder: human submitted **es1_g1** (56522075, 13:12 UTC) → already **2655** after ~5 h; teammates' **horizon_v6_repair** (56521976, 13:08) 2374. v5_guarded/market now inactive. Submitting es1_g9 would displace v6_repair (older). v6_repair file not in any repo → cannot test g9 vs v6 yet (asked human). [claude]
+- 2026-09-24 — ✅ **es1_g9 promoted** (`candidates/es1_g9`): h2h vs es1_g1 32-0 (claude) & 31-1 CI +366…+948 (codex); vs v5 64-0 (codex). Panel tied. **Recommendation: v5_guarded + es1_g9.** es1_g13 < g9 (12-18). [claude+codex]
+- 2026-09-24 — BC→PPO H100 package ready: `/workspace/shared/h100_pkg/kaggri_bcppo.zip` (code+data+BC ckpt+scripts+requirements; checks pass from the unzipped zip: feature parity 1e-7, e2e numpy-vs-GPU 0 action diffs, bf16 PPO smoke). P40 run r1: money_mean 29.4k → 31.3k after 10 iters. [claude]
+- 2026-09-24 — T018 Codex decisive g9 confirmation: direct g9→g1 on 16 independent worlds is 31–1, mean +$635, whole-world bootstrap CI [$366,$948]; on 16 further fresh worlds g9 is 64–0 vs v5_market/guarded while g1 is 60–4. Reactive panel was statistically tied, so g9 meets the predeclared replacement gate; recommend freezing **es1_g9** as the ES candidate. [codex]
+- 2026-09-24 — T018: simple ES stopped after 14 gens (gen-13 centre fit 1.215 = best; saved es1_g13, h2h check vs g9/g1 running). Switched to **CMA-ES** (pycma, pop 12 + centre, σ0=0.06, 8 fresh worlds/gen, panel v5_market/yhay0913/parthenos/metav4) as the team suggested. [claude]
+- 2026-09-24 — T019 BC v1: 80% val action accuracy but plays at $0–4.5k (compounding error; moves only 72.5% accurate). v2 with target-cell head + pathing training now. [claude]
+- 2026-09-24 — T018 g9 independent review: 512/512 valid on 16 Codex-only worlds; g9 248–8 vs g1 250–6. Paired g9-minus-g1 score −.0078, CI crosses zero; do not replace frozen g1. [codex]
+- 2026-09-24 — ✅ **Candidate `candidates/es1_g1`** (v5 + ES-tuned knobs): vs v5 30-2 (claude, fresh worlds) and 31-1 (codex, independent worlds); 244-0-12 vs reactive panel; parthenos slightly worse than v5 (23-9 vs 25-7, n.s.). Archive loads in official runner. Recommendation to human: active pair **v5_guarded + es1_g1**. [claude+codex]
+- 2026-09-24 — T016: v5 > v4 on reactive opponents (score .90 vs .77/.70; head-to-head 126/128); market ≈ guarded (118/128 draws). [codex run, claude review]
+- 2026-09-24 — T018 cross-check PASS: Codex's independent 16 new-world review of es1_g1 is 244–12 (+$7,266; 256/256 valid), including 31–1 vs v5_market; only parthenos is 23–9. T016 recommends guarded + frozen es1_g1 after Claude's final review. [codex]
+- 2026-09-24 — T018 ES: after one update the knob centre beats **v5_market 16/16 (+536)** and the whole reactive panel on gen-1 worlds. Independent validation on fresh worlds running (`runs/val_es1_g1`). Not a candidate yet. [claude]
+- 2026-09-24 — T017 PPO g2 held-out: 192/192 valid, same 91–0–5 score as ES; +$34.8 paired margin but CI [−$1.8,+$76.0] crosses zero, so no promotion. [codex]
+- 2026-09-24 — Human: keep building/improving, don't write things off as unrealistic. New plan: optimise Horizon itself. `lab/tools/knobs.py` exposes 24 Horizon knobs (base == v5 exactly, verified). Claude: ES (T018). Codex: PPO per-day knob policy (T017). [claude]
+- 2026-09-24 — T015 ✗ closed: all 12 alternatives to route 9 for the entire Yarn-shop family fail the predeclared 32-world screen (2,496/2,496, no errors); best r0/r2 are −30.2pp on factual Yarn games. Keep route 9. [codex]
+- 2026-09-24 — T015 ✗: on four fresh factual Smoothie→Yarn worlds, legacy route 2 loses to current route 9 (24–8 vs 30–2; paired score −0.188, margin −$392; 64/64 error-free). Keep route 9; first 48-game route-8 screen had zero factual target games and is discarded. [codex]
+- 2026-09-24 — Timing is safe on Kaggle: across 221 real episodes (v4, v5×2) our overage pool ends at ≥59.8 s of 60; all DONE. [claude]
+- 2026-09-24 — T012 ✗: market-only overlay never fired (Horizon buys all 33 strawberry seeds by d3; condition started d5). Any strawberry/fertilizer change needs unit scheduling. [codex]
+- 2026-09-24 — T007 ablation: the v4>v5 panel gap is entirely v5's step-0 opening (v5 minus opening == v4; sale-reorder inert). **However** frozen tapes are broken on foreign seeds (buy 1 quadrant instead of 2; ~38% unit ops rejected), so this is likely a tape/market artifact → panel verdict downgraded to inconclusive; rely on ladder. Tape panel = stress test only, applies to T012 gate too. [claude]
+- 2026-09-24 — T007 ⚠: on a top-like panel (M&M&P&Q/Mother-Goose tapes + best public), **v4 beats v5**: 199/216 vs 170/216 wins, worst-10% −6k vs −16k; on opponents not selected against v5 the gap is +5pp [0, +10]. Ablation (v5 opening vs sale-reorder) running. Matters for the final 2 submissions. `runs/t007_panel` [claude]
+- 2026-09-24 — T007: v5 on ladder so far: market **51-4**, guarded **50-7** (≈55 games each; ratings 2069 / 2518, climbing). Losses are mostly mirror clones (<1.5k); one real loss vs Densike (#22): our 3rd quadrant ($4k d11) + strawberry glut (avg $72 vs their $110). Real season hires: top-5 293 vs ours 271 (+8%, days 2–15 only). [claude]
+- 2026-09-24 — T013 ✗: Horizon chassis driven by a whole M&M&P&Q tape loses **0/192** per variant (−71k…−126k); Horizon's layers are coupled to yhay tapes. Raw mmpq tape: 10-22 vs v5, 0-32 vs v4_8turn. Top tapes = opponents only, not candidates. [claude]
+- 2026-09-24 — ⚠ CORRECTION [claude]: census "hands" = hands at the day-boundary snapshot, which is ~always 0 (hands are fired nightly) except the final step 718. So "opponents run 11–13 hands vs our 8–10" was **final-day hands only**, not season labour. Seasonal hires will be re-derived from replay_mine `hires` per day. Herd (cows/sheep/geese) and seed findings stand. Thanks codex.
+- 2026-09-24 — T010 gate: legacy residual anchor is unusable as a Horizon candidate: **0/32** vs v4_8turn and v5_market on 8 paired worlds, mean **−144.8k** (no errors; 95% world CI [−166.6k, −123.4k]). Stop long legacy PPO; retain exact gpuenv only to search transferable production controls for T012, then gate in Horizon vs M&M&P&Q tape. `runs/t010_legacy_vs_horizon_8x2_20260924T0055Z/` [codex]
+- 2026-09-24 — T011: a frozen action tape from a winning game of **M&M&P&Q (#1 LB)** beats v5_market **8/12** on foreign seeds (mean −1.4k for us) — first local opponent that beats v5. Their edge: land d5/d8 (ours d6/d11), 42 vs 33 straw seeds, fertilizer used on strawberries instead of sold. Other top teams' tapes don't transfer (reactive agents). `opponents/tapes/`, `runs/tapes_dev`. [claude]
+- 2026-09-24 — T011/T007: real ladder records (last ≤60 games): **v4_8turn 48-12 (+1.0k)** vs **v4 12-turn 32-28 (−3.1k)**; v5 market/guarded 25-2 each so far (vs low-rated opps while climbing). Big losses always vs opponents with 11–13 hands vs our 8–10. Daily control dataset for RL: `research/bc_daily/`. [claude]
+- 2026-09-24 — T010 research: a 7-day raw-action PPO is not credible (Orbit top solution used 15B steps/2,400 B200h; Kaggriculture PPO plateaued around 10k steps/s). Transferable plan: bounded daily residual over Horizon, fixed paired external-opponent gate, terminal margin only; prioritize hands and animal-count knobs. First 32-env residual PPO smoke completed (103 s/update; checkpoint/log under `runs/t010_rl_smoke_20260924T0010Z/`), exposing a CPU Horizon-controller bottleneck to remove before a long GPU run. `research/rl_orbit_wars.md` [codex]
+- 2026-09-24 — T011 ladder: v4 went only **32-28 (−3.1k mean)** in its last 60 ladder games; losses of −22..−26k are to same-family agents running MORE hands (11 vs 8) and bigger herds incl. 3–6 geese. Top-5 teams all run ~10 hands, 9–10 cows, 5–8 sheep, 4–6 geese. Horizon's gap = production volume, not sale timing. [claude]
+- 2026-09-24 — T010: gpuenv PASS vs kaggle-environments 1.32.7: **12/12** fresh episodes, **8,628** full-state comparisons, zero divergences on CUDA fast path and literal market loop. Ported hinge prices, locked shed-access, town intervals/replacement shops, shedCapacity market purchases. Logs: `runs/t010_gpuenv_20260923T2350Z/`. [codex]
+- 2026-09-24 — T011: replay_mine fixed for 1.32.7 (final cash matches replay exactly, 5 s/episode). `lab/tools/fetch_top.py` + `census.py` (mine/report). First 36 top episodes: top teams (M&M&P&Q 12-1, Mother-Goose 21-3) buy **5–7 geese**, ~9 cows, 5–6 sheep, 30–33 strawberry, 44–59 carrot seeds, ~10 hands; our v5 game: 12 cows, 5 sheep, **0 geese**. Early sample, being extended. `research/census/report.md` [claude]
+- 2026-09-23 — Codex: по указанию пользователя T001/T003 не начинать; ждём новую общую задачу для декомпозиции с Claude. Cron раз в **30 минут** отправляет проверку в текущий чат (доска/inbox/процессы; без дублирования очереди). [Настройка](research/codex-watchdog.md).
+- 2026-09-23 — Codex handshake: protocol/board/inbox read; read-only leaderboard command responds (pipeline exit 0), but `head -3` causes CLI `[Errno 32] Broken pipe` (exit 1 with `pipefail`); use a consumer that drains stdout for robust checks. T001/T003 remain unstarted. [codex]
+- 2026-09-23 — Final ranking = single Bradley-Terry tournament over ~2 weeks of post-deadline episodes (topic 731587). [claude]
+- 2026-09-23 — Kaggle CLI exposes `team-submissions <teamId>` → any team's active subs → `episodes` → `replay`: we can pull top teams' games directly. `topics list/show` reads discussions. [claude]
+- 2026-09-23 — `lab/tools/replay_mine.py` crashes on engine 1.32.7 (`_commit_unit` gained a `shed_capacity` arg). [claude]
+
+## Tasks
+_2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 into T010._
+| id | owner | status | title |
+|---|---|---|---|
+| T010 | codex | in_progress — GPU P40 claimed | RL/PPO track: Orbit Wars RL write-ups + kaggriculture RL threads → PPO / residual RL on gpuenv (re-difftest vs 1.32.7 first). `tasks/T010-rl-ppo.md` |
+| T022 | codex | closed ✓ | Independent `es2_c1` review passes g9 CI and full available reactive panel, incl. t2945 add-on. `tasks/T022-es2-c1-review.md` |
+| T023 | codex | closed ✗ | Residual PASS mining: FEED loses; WATER/CARE inert in valid capability screen. `tasks/T023-tape-safe-opportunities.md` |
+| T011 | claude | in_progress | Learn from top players' games: fix replay tooling, top-30 census, extract top tapes/routes, imitation opponents, BC dataset. `tasks/T011-top-games.md` |
+| T012 | codex | closed ✗ | Market-only production overlay never fired; deeper unit scheduling required. `tasks/T012-horizon-production.md` |
+| T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+| T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+| T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+| T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+| T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+| T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
+| T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
+| T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+
+exec
+/bin/bash -lc "sed -n '1,260p' /workspace/shared/inbox/codex.md; printf '\\n--- T025 tail ---\\n'; tail -n 220 /workspace/shared/tasks/T025-route-conditioned-land.md; printf '\\n--- relevant procs ---\\n'; ps -eo pid,ppid,stat,etimes,psr,pcpu,pmem,args --sort=-pcpu | rg -i 'cma4|t025_cma4_g005_and_g015_fresh_full_gate|route-conditioned|cma' || true; printf '\\n--- cma4 artifacts ---\\n'; find /workspace -path '*cma4*' -maxdepth 6 -printf '%TY-%Tm-%Td %TH:%TM:%TS %p\\n' 2>/dev/null | sort | tail -80" in /workspace/wt/codex
+ succeeded in 848ms:
+2026-09-26 08:28:57.7261121660 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g010_extra/games.jsonl
+2026-09-26 08:28:58.2221343290 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g010_extra
+2026-09-26 08:28:58.2221343290 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g010_extra/README.md
+2026-09-26 08:28:58.2221343290 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g010_extra/summary.json
+2026-09-26 08:28:58.8301614970 /workspace/shared/runs/t025_cma4_whole_panel_retrospective
+2026-09-26 08:28:58.8301614970 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json
+2026-09-26 08:28:58.8301614970 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/launch_g010.log
+2026-09-26 08:29:06.7945173080 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/seeds.json
+2026-09-26 08:29:06.8225185590 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/selection.json
+2026-09-26 08:29:07.1145316020 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate
+2026-09-26 08:29:07.1145316020 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena
+2026-09-26 08:29:07.1145316020 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/manifest.json
+2026-09-26 08:29:25.9153711290 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/report_watch.stderr
+2026-09-26 08:33:15.0735656770 /workspace/shared/runs/cma4/gen_017/run/games.jsonl
+2026-09-26 08:33:15.5255857260 /workspace/shared/runs/cma4/gen_017/compare.log
+2026-09-26 08:33:15.5255857260 /workspace/shared/runs/cma4/gen_017/run
+2026-09-26 08:33:15.5255857260 /workspace/shared/runs/cma4/gen_017/run/README.md
+2026-09-26 08:33:15.5255857260 /workspace/shared/runs/cma4/gen_017/run/summary.json
+2026-09-26 08:33:15.5855883880 /workspace/shared/runs/cma4/gen_018/c
+2026-09-26 08:33:15.5935887430 /workspace/shared/runs/cma4/gen_018/c/main.py
+2026-09-26 08:33:15.5975889200 /workspace/shared/runs/cma4/gen_018/x0
+2026-09-26 08:33:15.6055892750 /workspace/shared/runs/cma4/gen_018/x0/main.py
+2026-09-26 08:33:15.6095894520 /workspace/shared/runs/cma4/gen_018/x1
+2026-09-26 08:33:15.6135896300 /workspace/shared/runs/cma4/gen_018/x1/main.py
+2026-09-26 08:33:15.6175898070 /workspace/shared/runs/cma4/gen_018/x2
+2026-09-26 08:33:15.6255901620 /workspace/shared/runs/cma4/gen_018/x2/main.py
+2026-09-26 08:33:15.6295903390 /workspace/shared/runs/cma4/gen_018/x3
+2026-09-26 08:33:15.6375906940 /workspace/shared/runs/cma4/gen_018/x3/main.py
+2026-09-26 08:33:15.6415908710 /workspace/shared/runs/cma4/gen_018/x4
+2026-09-26 08:33:15.6455910490 /workspace/shared/runs/cma4/gen_018/x4/main.py
+2026-09-26 08:33:15.6495912260 /workspace/shared/runs/cma4/gen_018/x5
+2026-09-26 08:33:15.6575915820 /workspace/shared/runs/cma4/gen_018/x5/main.py
+2026-09-26 08:33:15.6615917590 /workspace/shared/runs/cma4/gen_018/x6
+2026-09-26 08:33:15.6695921140 /workspace/shared/runs/cma4/gen_018/x6/main.py
+2026-09-26 08:33:15.6735922910 /workspace/shared/runs/cma4/gen_018/x7
+2026-09-26 08:33:15.6815926460 /workspace/shared/runs/cma4/gen_018/x7/main.py
+2026-09-26 08:33:15.6815926460 /workspace/shared/runs/cma4/gen_018/x8
+2026-09-26 08:33:15.6895930010 /workspace/shared/runs/cma4/gen_018/x8/main.py
+2026-09-26 08:33:15.6935931780 /workspace/shared/runs/cma4/gen_018/x9
+2026-09-26 08:33:15.7015935330 /workspace/shared/runs/cma4/gen_018/x9/main.py
+2026-09-26 08:33:15.8335993880 /workspace/shared/runs/cma4/gen_018
+2026-09-26 08:33:15.8335993880 /workspace/shared/runs/cma4/gen_018/run/manifest.json
+2026-09-26 08:57:01.4223152420 /workspace/shared/runs/cma4/gen_018/run/games.jsonl
+2026-09-26 08:57:01.8663286340 /workspace/shared/runs/cma4/gen_018/compare.log
+2026-09-26 08:57:01.8663286340 /workspace/shared/runs/cma4/gen_018/run
+2026-09-26 08:57:01.8663286340 /workspace/shared/runs/cma4/gen_018/run/README.md
+2026-09-26 08:57:01.8663286340 /workspace/shared/runs/cma4/gen_018/run/summary.json
+2026-09-26 08:57:01.9303305640 /workspace/shared/runs/cma4
+2026-09-26 08:57:01.9303305640 /workspace/shared/runs/cma4/cma.pkl
+2026-09-26 08:57:01.9303305640 /workspace/shared/runs/cma4/history.json
+2026-09-26 08:57:01.9303305640 /workspace/shared/runs/cma4/launch.log
+2026-09-26 08:57:01.9343306850 /workspace/shared/runs/cma4/gen_019/c
+2026-09-26 08:57:01.9423309270 /workspace/shared/runs/cma4/gen_019/c/main.py
+2026-09-26 08:57:01.9463310470 /workspace/shared/runs/cma4/gen_019/x0
+2026-09-26 08:57:01.9543312890 /workspace/shared/runs/cma4/gen_019/x0/main.py
+2026-09-26 08:57:01.9583314080 /workspace/shared/runs/cma4/gen_019/x1
+2026-09-26 08:57:01.9623315300 /workspace/shared/runs/cma4/gen_019/x1/main.py
+2026-09-26 08:57:01.9663316500 /workspace/shared/runs/cma4/gen_019/x2
+2026-09-26 08:57:01.9743318910 /workspace/shared/runs/cma4/gen_019/x2/main.py
+2026-09-26 08:57:01.9823321330 /workspace/shared/runs/cma4/gen_019/x3
+2026-09-26 08:57:01.9863322530 /workspace/shared/runs/cma4/gen_019/x3/main.py
+2026-09-26 08:57:01.9903323740 /workspace/shared/runs/cma4/gen_019/x4
+2026-09-26 08:57:01.9983326160 /workspace/shared/runs/cma4/gen_019/x4/main.py
+2026-09-26 08:57:02.0023327360 /workspace/shared/runs/cma4/gen_019/x5
+2026-09-26 08:57:02.0103329770 /workspace/shared/runs/cma4/gen_019/x5/main.py
+2026-09-26 08:57:02.0143330990 /workspace/shared/runs/cma4/gen_019/x6
+2026-09-26 08:57:02.0223333390 /workspace/shared/runs/cma4/gen_019/x6/main.py
+2026-09-26 08:57:02.0263334610 /workspace/shared/runs/cma4/gen_019/x7
+2026-09-26 08:57:02.0303335810 /workspace/shared/runs/cma4/gen_019/x7/main.py
+2026-09-26 08:57:02.0343337020 /workspace/shared/runs/cma4/gen_019/x8
+2026-09-26 08:57:02.0423339440 /workspace/shared/runs/cma4/gen_019/x8/main.py
+2026-09-26 08:57:02.0463340640 /workspace/shared/runs/cma4/gen_019/x9
+2026-09-26 08:57:02.0543343050 /workspace/shared/runs/cma4/gen_019/x9/main.py
+2026-09-26 08:57:02.1863382900 /workspace/shared/runs/cma4/gen_019
+2026-09-26 08:57:02.1863382900 /workspace/shared/runs/cma4/gen_019/run
+2026-09-26 08:57:02.1863382900 /workspace/shared/runs/cma4/gen_019/run/manifest.json
+2026-09-26 09:06:30.2979578490 /workspace/shared/runs/t025_cma4_whole_panel_retrospective/fresh_full_gate_watch.log
+2026-09-26 09:07:04.4832456950 /workspace/shared/runs/cma4/gen_019/compare.log
+2026-09-26 09:07:18.5037761540 /workspace/shared/runs/cma4/gen_019/run/games.jsonl
+2026-09-26 09:07:23.8799798950 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl
+
+exec
+/bin/bash -lc "rg -n -C 4 'signal|SIG|pickle|cma.pkl|history|for gen|generation|tell\\(' lab/tools/knob_cma.py; printf '\\n--- cma history/state ---\\n'; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json, pickle
+from pathlib import Path
+p=Path('/workspace/shared/runs/cma4')
+h=json.loads((p/'history.json').read_text())
+print('history entries',len(h))
+print(json.dumps(h[-3:], indent=2)[:10000])
+with (p/'cma.pkl').open('rb') as f: c=pickle.load(f)
+print('pickle', type(c), 'countiter',getattr(c,'countiter',None), 'sigma',getattr(c,'sigma',None))
+PY
+printf '\\n--- current compare status ---\\n'; wc -l /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; tail -n 30 /workspace/shared/runs/cma4/gen_019/compare.log 2>/dev/null || true; ps -o pid,ppid,stat,etimes,args -p 374635,374639,441037,422903" in /workspace/wt/codex
+ succeeded in 518ms:
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+pickle <class 'cma.evolution_strategy.CMAEvolutionStrategy'> countiter 19 sigma 0.0148459905720981
+
+--- current compare status ---
+441 /workspace/shared/runs/cma4/gen_019/run/games.jsonl
+84/1056 completed; errors=0
+96/1056 completed; errors=0
+108/1056 completed; errors=0
+120/1056 completed; errors=0
+132/1056 completed; errors=0
+144/1056 completed; errors=0
+156/1056 completed; errors=0
+168/1056 completed; errors=0
+180/1056 completed; errors=0
+192/1056 completed; errors=0
+204/1056 completed; errors=0
+216/1056 completed; errors=0
+228/1056 completed; errors=0
+240/1056 completed; errors=0
+252/1056 completed; errors=0
+264/1056 completed; errors=0
+276/1056 completed; errors=0
+288/1056 completed; errors=0
+300/1056 completed; errors=0
+312/1056 completed; errors=0
+324/1056 completed; errors=0
+336/1056 completed; errors=0
+348/1056 completed; errors=0
+360/1056 completed; errors=0
+372/1056 completed; errors=0
+384/1056 completed; errors=0
+396/1056 completed; errors=0
+408/1056 completed; errors=0
+420/1056 completed; errors=0
+432/1056 completed; errors=0
+    PID    PPID STAT ELAPSED COMMAND
+ 374635    2055 Ss+     7548 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639  374635 Sl+     7548 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903  410270 Sl      2310 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037  374639 Sl+      635 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+
+codex
+`cma4` сейчас считает gen-19 (441/1056); последний сохранённый рубеж — gen-18, `history.json` и `cma.pkl` согласованы (`countiter=19`). Дожидаюсь завершения gen-19 и остановлю процесс только после атомарной записи этого рубежа; гейт уже запущен с фиксированными 4 workers, менять его на лету не буду.
+exec
+/bin/bash -lc "ps -o pid,ppid,pgid,sid,stat,etimes,args -p 374635,374639,441037,422903; printf '\\nGate log tail:\\n'; tail -n 20 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/README.md 2>/dev/null || true; tail -n 20 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/summary.json 2>/dev/null || true; printf '\\nGate rows:\\n'; wc -l /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true" in /workspace/wt/codex
+ succeeded in 0ms:
+    PID    PPID    PGID     SID STAT ELAPSED COMMAND
+ 374635    2055  374635  374635 Ss+     7567 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639  374635  374635  374635 Sl+     7567 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903  410270  410270  410270 Sl      2329 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037  374639  374635  374635 Sl+      653 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+
+Gate log tail:
+
+Gate rows:
+373 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl
+
+exec
+/bin/bash -lc "sleep 55; printf 'cma rows '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; printf 'gate rows '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true; printf 'history '; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print(len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,stat,etimes,args -p 374635,374639,441037,422903" in /workspace/wt/codex
+exec
+/bin/bash -lc "printf 'cma rows '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; printf 'gate rows '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('history', len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,stat,etimes,args -p 374635,374639,441037,422903" in /workspace/wt/codex
+ succeeded in 0ms:
+cma rows 489
+gate rows 379
+history 19
+    PID STAT ELAPSED COMMAND
+ 374635 Ss+     7613 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639 Sl+     7613 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903 Sl      2375 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037 Sl+      700 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+
+exec
+/bin/bash -lc "sleep 28; printf 'cma rows '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; printf 'gate rows '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('history', len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,stat,etimes -p 374635,374639,441037,422903" in /workspace/wt/codex
+ succeeded in 55030ms:
+cma rows 504
+gate rows 383
+history 19
+    PID STAT ELAPSED COMMAND
+ 374635 Ss+     7632 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639 Sl+     7632 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903 Sl      2394 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037 Sl+      718 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+
+ succeeded in 27945ms:
+cma rows 515
+gate rows 386
+history 19
+    PID STAT ELAPSED
+ 374635 Ss+     7646
+ 374639 Sl+     7646
+ 422903 Sl      2409
+ 441037 Sl+      733
+
+codex
+Для точности поставил автономный наблюдатель: он завершит группу `cma4` лишь когда `history` уже содержит gen-19, а pickle имеет `countiter=20`. Если к этому моменту успеет появиться каталог gen-20, он будет только незавершённым артефактом — состояние для продолжения останется на gen-19.
+exec
+/bin/bash -lc "setsid bash -c 'while :; do /workspace/solution_kaggri/.venv/bin/python -c '\"'\"'import json,pickle,sys; p=\"/workspace/shared/runs/cma4\"; h=json.load(open(p+\"/history.json\")); e=pickle.load(open(p+\"/cma.pkl\",\"rb\")); sys.exit(0 if len(h)>=20 and h[-1].get(\"gen\")==19 and getattr(e,\"countiter\",None)>=20 else 1)'\"'\"' && kill -TERM -- -374635 && exit 0; sleep 1; done' >/dev/null 2>&1 &
+printf 'watcher_pid=%s\\n' \""'$!"; ps -o pid,ppid,pgid,sid,stat,args -p "$!"' in /workspace/wt/codex
+ succeeded in 0ms:
+watcher_pid=450359
+    PID    PPID    PGID     SID STAT COMMAND
+ 450359  450358  450359  450359 Ss   bash -c while :; do /workspace/solution_kaggri/.venv/bin/python -c 'import json,pickle,sys; p="/workspace/shared/runs/cma4"; h=json.load(open(p+"/history.json")); e=pickle.load(open(p+"/cma.pkl","rb")); sys.exit(0 if len(h)>=20 and h[-1].get("gen")==19 and getattr(e,"countiter",None)>=20 else 1)' && kill -TERM -- -374635 && exit 0; sleep 1; done
+
+exec
+/bin/bash -lc "sleep 55; printf 'cma rows '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; printf 'gate rows '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('history', len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,stat,etimes,args -p 374635,374639,441037,422903,450359" in /workspace/wt/codex
+exec
+/bin/bash -lc "printf 'cma rows '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl 2>/dev/null || true; printf 'gate rows '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl 2>/dev/null || true; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('history', len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,stat,etimes,args -p 374635,374639,441037,422903,450359" in /workspace/wt/codex
+ succeeded in 18ms:
+    PID STAT ELAPSED COMMAND
+ 374635 Ss+     7711 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639 Sl+     7711 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903 Sl      2473 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037 Sl+      798 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+ 450359 Ss        44 bash -c while :; do /workspace/solution_kaggri/.venv/bin/python -c 'import json,pickle,sys; p="/workspace/shared/runs/cma4"; h=json.load(open(p+"/history.json")); e=pickle.load(open(p+"/cma.pkl","rb")); sys.exit(0 if len(h)>=20 and h[-1].get("gen")==19 and getattr(e,"countiter",None)>=20 else 1)' && kill -TERM -- -374635 && exit 0; sleep 1; done
+
+codex
+Gen-19 идёт штатно: 556/1056, ошибок не видно. Гейт сохраняет исходную спецификацию (`--workers 4`); высвобождаемые 18 ядер не меняют его выборку или уже стартовавший пул.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 54972ms:
+cma rows 566
+gate rows 398
+history 19
+    PID STAT ELAPSED COMMAND
+ 374635 Ss+     7728 bash -c cd /workspace/wt/codex && /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py >> /workspace/shared/runs/cma4/launch.log 2>&1
+ 374639 Sl+     7728 /workspace/solution_kaggri/.venv/bin/python lab/tools/knob_cma.py --init /workspace/shared/runs/cma4/init_gen15_params.json --out /workspace/shared/runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect --mirror /workspace/shared/candidates/es5_c3g15/pkg/main.py
+ 422903 Sl      2491 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+ 441037 Sl+      815 /workspace/solution_kaggri/.venv/bin/python compare.py --agent c=/workspace/shared/runs/cma4/gen_019/c/main.py --agent x0=/workspace/shared/runs/cma4/gen_019/x0/main.py --agent x1=/workspace/shared/runs/cma4/gen_019/x1/main.py --agent x2=/workspace/shared/runs/cma4/gen_019/x2/main.py --agent x3=/workspace/shared/runs/cma4/gen_019/x3/main.py --agent x4=/workspace/shared/runs/cma4/gen_019/x4/main.py --agent x5=/workspace/shared/runs/cma4/gen_019/x5/main.py --agent x6=/workspace/shared/runs/cma4/gen_019/x6/main.py --agent x7=/workspace/shared/runs/cma4/gen_019/x7/main.py --agent x8=/workspace/shared/runs/cma4/gen_019/x8/main.py --agent x9=/workspace/shared/runs/cma4/gen_019/x9/main.py --baselines --opponent best=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --seeds 933546253 570745212 707141404 1815970131 190321345 1725370552 385131215 620205866 --workers 18 --out /workspace/shared/runs/cma4/gen_019/run
+ 450359 Ss        61 bash -c while :; do /workspace/solution_kaggri/.venv/bin/python -c 'import json,pickle,sys; p="/workspace/shared/runs/cma4"; h=json.load(open(p+"/history.json")); e=pickle.load(open(p+"/cma.pkl","rb")); sys.exit(0 if len(h)>=20 and h[-1].get("gen")==19 and getattr(e,"countiter",None)>=20 else 1)' && kill -TERM -- -374635 && exit 0; sleep 1; done
+
+ succeeded in 29045ms:
+cma 580
+gate 400
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28937ms:
+cma 601
+gate 406
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28926ms:
+cma 619
+gate 411
+hist 19
+
+codex
+Наблюдатель остаётся активен; gen-19 прошёл 619/1056 без ошибок. После фиксации состояния он снимет весь процесс CMA, а не гейт.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28948ms:
+cma 648
+gate 415
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29015ms:
+cma 671
+gate 419
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28939ms:
+cma 693
+gate 424
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28941ms:
+cma 713
+gate 428
+hist 19
+
+codex
+Скорость стабильна: gen-19 713/1056, gate 428/960. Остановка всё ещё привязана к целому поколению, не к текущим игровым строкам.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28908ms:
+cma 734
+gate 433
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28932ms:
+cma 755
+gate 438
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28962ms:
+cma 778
+gate 443
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29126ms:
+cma 798
+gate 447
+hist 19
+
+codex
+Уже 798/1056. Гейт остаётся нетронутым, выполняется 4 рабочими, пока `cma4` занимает свои 18.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29069ms:
+cma 821
+gate 453
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28917ms:
+cma 839
+gate 457
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28949ms:
+cma 863
+gate 462
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29010ms:
+cma 883
+gate 465
+hist 19
+
+codex
+Gen-19: 883/1056, всё без ошибок. После последней строки требуется ещё только короткая агрегация/атомарная запись — её дождётся watcher перед остановкой.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29021ms:
+cma 905
+gate 472
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28927ms:
+cma 927
+gate 476
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28939ms:
+cma 949
+gate 480
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28963ms:
+cma 965
+gate 484
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28953ms:
+cma 988
+gate 489
+hist 19
+
+codex
+Осталось 68 из 1056 матчей gen-19. После завершения удостоверюсь, что CMA-процесс действительно снят, а `history`/pickle согласованы, затем внесу запись в T025/доску и сообщу Claude.
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 28935ms:
+cma 1014
+gate 494
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY" in /workspace/wt/codex
+ succeeded in 29035ms:
+cma 1035
+gate 499
+hist 19
+
+exec
+/bin/bash -lc "sleep 29; printf 'cma '; wc -l < /workspace/shared/runs/cma4/gen_019/run/games.jsonl; printf 'gate '; wc -l < /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json
+print('hist',len(json.load(open('/workspace/shared/runs/cma4/history.json'))))
+PY
+ps -o pid,ppid,pgid,stat,etimes,args -p 374635,374639,441037,422903,450359" in /workspace/wt/codex
+ succeeded in 28874ms:
+cma 1056
+gate 509
+hist 20
+    PID    PPID    PGID STAT ELAPSED COMMAND
+ 422903  410270  410270 Sl      3267 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+
+codex
+Готово: gen-19 полностью завершён (1056/1056), состояние зафиксировано, и `cma4` остановлен. Свободны все его 18 workers; гейт продолжает тот же заранее начатый запуск на 4 workers (509/960). Сейчас фиксирую проверяемые детали на T025 и доске.
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json, pickle, hashlib
+from pathlib import Path
+p=Path('/workspace/shared/runs/cma4')
+h=json.loads((p/'history.json').read_text())
+r=h[-1]
+print('history_length',len(h),'last_gen',r['gen'],'errors',r['errors'],'centre_fit',r['centre_fit'],'best',r['best'],'best_fit',r['best_fit'],'sigma',r['sigma'])
+with (p/'cma.pkl').open('rb') as f: es=pickle.load(f)
+print('pickle_countiter',es.countiter,'pickle_sigma',es.sigma)
+for f in ('history.json','cma.pkl','config.json'):
+ q=p/f
+ print(f, hashlib.sha256(q.read_bytes()).hexdigest())
+print('gen20_exists',(p/'gen_020').exists())
+PY
+printf '\\nCMA process check:\\n'; ps -eo pid,ppid,pgid,stat,args | rg 'knob_cma.py.*runs/cma4|runs/cma4/gen_0(19|20)' || true
+printf '\\nlaunch tail:\\n'; tail -n 8 /workspace/shared/runs/cma4/launch.log
+printf '\\nGate rows/process:\\n'; wc -l /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; ps -o pid,stat,etimes,args -p 422903" in /workspace/wt/codex
+ succeeded in 133ms:
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+pickle_countiter 20 pickle_sigma 0.015219975232099293
+history.json 2ad163e4a0af5ea9d4fb2584d116c58af60b0b1fa7ea966e92e7c3017416e1b0
+cma.pkl 4f8fb07f67ef13d7c54b65616e4dfbe3e466db4ceac8ee9a767ce419427502d3
+config.json 648327fc304ab8bc94702bbd73cf68860a5f1d2a3400724304508124093997f3
+gen20_exists True
+
+CMA process check:
+ 485728  447828  485728 Ss   /bin/bash -c /workspace/solution_kaggri/.venv/bin/python - <<'PY' import json, pickle, hashlib from pathlib import Path p=Path('/workspace/shared/runs/cma4') h=json.loads((p/'history.json').read_text()) r=h[-1] print('history_length',len(h),'last_gen',r['gen'],'errors',r['errors'],'centre_fit',r['centre_fit'],'best',r['best'],'best_fit',r['best_fit'],'sigma',r['sigma']) with (p/'cma.pkl').open('rb') as f: es=pickle.load(f) print('pickle_countiter',es.countiter,'pickle_sigma',es.sigma) for f in ('history.json','cma.pkl','config.json'):  q=p/f  print(f, hashlib.sha256(q.read_bytes()).hexdigest()) print('gen20_exists',(p/'gen_020').exists()) PY printf '\nCMA process check:\n'; ps -eo pid,ppid,pgid,stat,args | rg 'knob_cma.py.*runs/cma4|runs/cma4/gen_0(19|20)' || true printf '\nlaunch tail:\n'; tail -n 8 /workspace/shared/runs/cma4/launch.log printf '\nGate rows/process:\n'; wc -l /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl; ps -o pid,stat,etimes,args -p 422903
+ 485794  485728  485728 S    rg knob_cma.py.*runs/cma4|runs/cma4/gen_0(19|20)
+
+launch tail:
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+{"gen": 14, "centre_fit": 1.098383203125, "best": "x3", "best_fit": 1.09899296875, "sigma": 0.01560729539303092, "errors": 0, "secs": 1308}
+{"gen": 15, "centre_fit": 1.045255078125, "best": "x7", "best_fit": 1.0464337890625, "sigma": 0.015584061724709388, "errors": 0, "secs": 1267}
+{"gen": 16, "centre_fit": 0.9929388671875, "best": "x1", "best_fit": 0.9929669921875, "sigma": 0.015249470993362574, "errors": 0, "secs": 1474}
+{"gen": 17, "centre_fit": 0.977810546875, "best": "x9", "best_fit": 0.977981640625, "sigma": 0.014883383107057611, "errors": 0, "secs": 1437}
+{"gen": 18, "centre_fit": 0.9366828125, "best": "x3", "best_fit": 0.937433984375, "sigma": 0.0148459905720981, "errors": 0, "secs": 1426}
+{"gen": 19, "centre_fit": 1.0301984375, "best": "x9", "best_fit": 1.0312548828125, "sigma": 0.015219975232099293, "errors": 0, "secs": 1581}
+
+Gate rows/process:
+516 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl
+    PID STAT ELAPSED COMMAND
+ 422903 Sl      3280 /workspace/solution_kaggri/.venv/bin/python /workspace/wt/codex/compare.py --agent cma4_g005=/workspace/shared/runs/cma4/gen_005/c/main.py --agent cma4_g015=/workspace/shared/runs/cma4/gen_015/c/main.py --agent es5_c3g15=/workspace/shared/candidates/es5_c3g15/pkg/main.py --baselines --opponent mirror=/workspace/shared/candidates/es5_c3g15/pkg/main.py --opponent parthenos=/workspace/shared/opponents/pool/parthenos_robust/main.py --opponent metav4=/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py --opponent yhay0913=/workspace/shared/opponents/pool/yhay_router0913/main.py --opponent t2945=/workspace/shared/opponents/pool/tschinkel2945/main.py --opponent ozer_v45=/workspace/shared/opponents/pool/ozer_v45/main.py --opponent yaxon=/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py --opponent pilkwang=/workspace/shared/opponents/pool/pilkwang_struct/main.py --opponent es1_g9=/workspace/shared/candidates/es1_g9/pkg/main.py --opponent v5_market=/workspace/wt/codex/agents/horizon_v5_market.py --seeds 156689499 656022106 1408426567 1578053980 1922423737 1965307504 657395808 338092419 405944503 1468390856 1811683932 174066626 88504902 243340069 337687694 52654344 --workers 4 --out /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena --decision-note T025 predeclared 16-world fresh full-core plus Horizon-family promotion gate. Selected g5/g10 and additionally g15 are separately assessed by the identical PASS rule; two predeclared candidates, shared fresh worlds, multiplicity recorded. PASS requires joint one-sided paired lower >0 and no named opponent point estimate below -10pp.
+
+exec
+/bin/bash -lc "tail -n 100 /workspace/shared/tasks/T025-route-conditioned-land.md; printf '\\n--- BOARD task T025 rows ---\\n'; rg -n -C 1 '"'^'"\\| T025' /workspace/shared/BOARD.md; printf '\\n--- gen20 contents ---\\n'; find /workspace/shared/runs/cma4/gen_020 -maxdepth 3 -type f -printf '%P %s bytes\\n' 2>/dev/null | sort; printf '\\n--- gate log status ---\\n'; tail -n 10 /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/README.md 2>/dev/null || true" in /workspace/wt/codex
+ succeeded in 0ms:
+| 2096534423 | −230 | −291 |
+| 2128588532 | −37 | +12 |
+
+## CMA3 centre gate — gen 10 (2026-09-26, Codex)
+- On eight other fresh worlds (`runs/t025_cma3_g010_gate/seeds.json`), both seats, frozen `runs/cma3/gen_010/c/main.py` (`bd43a6ca…`) and c3g5 were each measured against frozen es3_g5 in the same `compare.py` invocation: **32/32 valid, zero errors, inputs unchanged**.
+- CMA3 gen-10 vs es3_g5: **15–0–1**, 93.75%, +$437.4 mean margin (world score CI 81.25…100%; margin CI +$136.4…+$955.3). c3g5 on exactly that panel: **15–0–1**, +$386.9. Direct CMA3−c3g5 paired result: **0.00pp** (CI [0,0]) and **+$50.5** margin (CI [−$39.25,+$132.0]); seed averages: 142428386 +235, 500621362 +145, 737697958 +60, 764089769 +1, 1234645335 0, 1329740717 0, 1820563819 +151, 1938237547 −188. So gen-10 does **not** establish a beat over c3g5; it is only a positive signal over es3_g5, pending independent confirmation before any promotion.
+
+## Standard CMA promotion gate (predeclared 2026-09-26)
+
+This gate applies to a frozen CMA centre only after its training generation is complete; it is the replacement test, not a training fitness score. The centre and frozen `candidates/es3_g5/pkg/main.py` must be in one `compare.py` invocation so opponent, world and seat are paired. Inputs must be byte-hashed before/after; no errors, non-DONE status, timeouts or invalid actions are allowed. Every seed must be freshly drawn and excluded from every CMA generation, earlier gate, panel and targeted/T025 run.
+
+1. **H2H superiority:** 8 fresh worlds, both seats (16 games), centre vs `es3_g5`. Pass only if the whole-world 95% bootstrap lower bound is **strictly above 0.500 score** and **strictly above $0 mean margin**.
+2. **Reactive-panel non-inferiority:** a separate 24 fresh worlds, both seats, against both `parthenos_robust` and `tschinkel_metav4_v13` (96 games per candidate). Run centre and `es3_g5` simultaneously. Aggregate paired centre-minus-es3 score by whole world (including both opponents and both seats); pass only if its **one-sided 95% bootstrap lower bound is greater than −0.020 score (−2.0pp)**. Report paired cash-margin CI and each opponent split, but do not substitute cash for this safety gate.
+3. Promote only if both stages pass, all 208 total games are valid (16 H2H + 192 panel), and the other agent independently reviews or reproduces the result. A failure rejects that centre only; it does not change the frozen control. No Kaggle submission is involved.
+
+## c3g5 adverse-parthenos diagnosis (2026-09-26, diagnostic evidence only)
+
+- c3g5 differs from es3_g5 in 20 static values, but the large relevant change is **`_ADV_LOOK: 17 → 18`**. This is the ADV layer's sale-advance horizon (`main.py:6906–6960`), not the route, hire or land logic. The remaining plausible early-sale values were `_CH_SHED: 96 → 94` and the v9/2 prediction settings; neither explains the adverse worlds.
+- Saved local replays, `runs/t025_c3g5_trace_adverse/` (7 adverse development worlds, parthenos, both seats, 28/28 valid), show the initial c3g5/es3 path has identical route, hires and land. First divergence is a sale, not a unit decision: seed 553563789 d14h22 c3 sells 3 MILK one tick before es3; seed 572774699 d15h07 sells 2 EGG early; seed 114026231 d17h14 sells 2 WOOL early. Unit paths stay identical initially (the first later unit difference in 114026231 is d18h15). Thus the adverse mechanism is premature premium sale and the subsequent price/reaction cascade, not the failed early-land hypothesis.
+- Targeted rollback on the same seven worlds, both seats, all valid: `_ADV_LOOK=17` changes c3g5's mean parthenos margin **+$1,097 → +$1,347** and losses **4 → 2**. It recovers 553563789 **−$221 → +$392**, 572774699 **−$1,775 → −$1,546**, 1174810681 **+$7,332 → +$7,612**, 1234632958 **+$519 → +$1,016**, and 2096534423 **+$776 → +$1,006**. `runs/t025_c3g5_ch_adv_ablation/`.
+- Controls: resetting the v9/2-Q score pair (`_V92_Q_PF`, `_V92_Q_PM`), `_V92_Q_H`, or `_V92_P_H` leaves all seven outcomes byte-for-byte at c3g5 values (`runs/t025_c3g5_q_ablation/`). `_CH_SHED=96` alters only seed 114026231 (+$239) and leaves losses 4/14; it is at most a minor local interaction. **Conclusion: `_ADV_LOOK` is the sole diagnosed knob; it is a trade-off, not a repair.** Claude's separate fresh 8-world H2H of the 17 rollback then fails vs es3_g5 (10–2–4, −$4.8), while c3g5 itself is 14–2–0 (+$547) on those worlds (`runs/gate_al17_h2h`). There is no support for a route/hire/land knob, and neither 17 nor 18 is promoted from this diagnostic.
+
+## CMA3 centre gate — gen 15 (2026-09-26): REJECTED by reactive NI
+
+- Frozen centre `runs/cma3/gen_015/c/main.py` (sha256 `c2f147814791…`) passed stage 1 against frozen es3_g5 on 8 disjoint worlds/both seats: **16–0–0**, +$836.1, whole-world 95% score CI **[1.000,1.000]**, margin **+$526.2…+$1,152.9**, 16/16 valid. `runs/t025_cma3_g015_promotion/h2h/`.
+- It then failed stage 2's predeclared strict non-inferiority boundary on a separate 24-world parthenos+metav4 both-seat panel, in a simultaneous centre/es3 invocation: **192/192 valid**, inputs unchanged. Centre: 90–0–6 (93.75%, +$1,183.1); es3: 86–0–10 (89.58%, +$1,231.6). Paired centre−es3 score is **+4.167pp**, but whole-world 200,000-resample bootstrap one-sided 95% lower bound is **−2.083pp**, below the required **> −2.000pp**; paired cash is **−$48.5** (two-sided CI −$270.7…+$152.0). Same +4.167pp score split against each opponent; cash −$54.0 parthenos / −$42.9 metav4. `runs/t025_cma3_g015_promotion/panel/`.
+- The H2H stage passes but gate requires both stages. **Do not promote CMA3 gen-15; frozen es3_g5 remains the control.**
+
+## Boundary confirmation predeclaration (2026-09-26, Codex)
+
+- The stage-2 miss is only 0.083pp beyond the strict boundary. Before inspecting any additional games, run **one** additional, fresh 24-world P+M panel: frozen `candidates_wip/es5_c3g15/main.py` (sha256 `c2f147814791…`) and frozen `candidates/es3_g5/pkg/main.py`, simultaneously, versus `parthenos_robust` and `tschinkel_metav4_v13`, both seats, at most eight workers (192 games). Seeds must be excluded from every recoverable prior `runs/` seed artifact, including the first gen-15 promotion panel and CMA training generations. No submission is involved.
+- **Promotion rule for this confirmation only:** all 384 P+M games across the old and new 24-world panels must be valid and unchanged; aggregate the paired centre−es3 score by all 48 worlds with the same one-sided 95% bootstrap calculation. Promote only if this combined lower bound is **strictly greater than −2.0pp** *and* the newly drawn 24-world point estimate is **at least 0.0pp**. This supplements (not replaces) the already-passed gen-15 H2H and still requires Claude's independent review. Otherwise retain frozen es3_g5.
+
+## Boundary confirmation result — PASS pending Claude review (2026-09-26, Codex)
+
+- New frozen paired panel: `runs/t025_cma3_g015_boundary_confirmation/panel/`, 24 CSPRNG-drawn worlds in `seeds.json`, checked disjoint from all **967** seed values recoverable from 175 prior manifest/seed artifacts (including `panel_c3g15` and CMA generations). `es5_c3g15` (`c2f147814791…`) and `es3_g5` (`fb194f51…`) were run simultaneously versus parthenos+metav4 in both seats with 8 workers. **192/192 valid**, all DONE, no errors, input hashes unchanged.
+- New panel result, c3g15−es3: **+6.250pp** paired score (c3g15 87–0–9, es3 81–0–15) and **+$10.05** paired cash; a 200,000-resample one-sided 95% world bootstrap lower bound is **0.000pp**. Splits: parthenos +8.333pp / +$13.01; metav4 +2.083pp / −$51.44.
+- Combined with the predeclared first 24-world panel: **384/384 P+M games valid**, 48 distinct worlds; paired c3g15−es3 score **+5.208pp**, cash **−$19.21**, and 200,000-resample one-sided 95% lower **0.000pp** (two-sided score interval −1.042…+11.458pp; cash −$181.15…+$134.52). Thus `0.000pp > −2.000pp`; the new point estimate is ≥0, and the already-recorded H2H is 16–0 (+$836). The declared numerical promotion gate **passes**. Per shared protocol, do not create/alter a candidate until Claude independently reviews or reproduces this evidence; no Kaggle submission is involved.
+
+## CMA3 → CMA4 restart decision (2026-09-26, Codex)
+
+- **Restart, not continue.** `cma3` had completed gen 16 (centre fitness 0.9853 after gen-14 1.0955; post-tell σ 0.03723, up from 0.02838 at gen 0). Its training panel was still hard-wired to frozen `es3_g5`, whereas gen-15 centre is byte-identical to frozen `candidates_wip/es5_c3g15/main.py` (`c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d`) and has passed the declared numerical replacement gate pending Claude review. Continuing explores an increasingly broad distribution around a superseded control and is lower-value than local search around the evidence-bearing centre.
+- Stopped `cma3` during gen 17 without writing a partial fitness result: `runs/cma3/history.json` and `cma.pkl` retain exactly completed gens 0–16, so the old run is intact and resume-able (its incomplete `gen_017/` is only an artifact). No Kaggle operation occurred.
+- Started resume-checked **`runs/cma4`** from the exact 24 values saved in `runs/cma4/init_gen15_params.json` (verified equal to `cma3/history.json` gen-15 `centre_params` and regenerates the same `c2f147…` agent with COLLECT). Command: `CMA_BEST=/workspace/shared/candidates_wip/es5_c3g15/main.py python /workspace/wt/codex/lab/tools/knob_cma.py --init runs/cma4/init_gen15_params.json --out runs/cma4 --gens 30 --pop 10 --sigma 0.015 --worlds 8 --workers 18 --collect`. Its immutable `config.json` records the mirror path/hash, σ0, population and world count; an inconsistent resume fails closed. Generation 0 is running with **18 workers**.
+- `lab/tools/knob_cma.py` commit `70899fc` now accepts `CMA_BEST` / `--mirror` rather than silently retaining the legacy es2 control, and writes/verifies that run configuration. The first independent gate for CMA4 is after five completed generations, versus the then-frozen control; training does not itself alter any candidate.
+
+## CMA4 launch recovery (2026-09-26)
+- The initial CMA4 child inherited a short-lived launcher and stopped after 48/880 games in gen 0, before creating `cma.pkl`; the partial directory is preserved as `runs/cma4_partial_20260926T023116Z/` and no partial fitness was used. CMA4 was restarted cleanly from the same frozen gen-15 parameter vector in tmux session `codex-cma4`, with the corrected mirror file `candidates/es5_c3g15/pkg/main.py`, σ=.015, 8 worlds, pop10, 18 workers. Its first independent gate remains after five completed generations.
+
+
+## CMA4 centre gate — gen 5 versus promoted es5_c3g15 (2026-09-26): REJECTED by reactive NI
+
+- Frozen centre `runs/cma4/gen_005/c/main.py` (sha256 `faaea0bc9b0e…`) passed stage 1 against frozen `candidates/es5_c3g15/pkg/main.py` (`c2f147814791…`) on eight fresh CSPRNG worlds in both seats: **14–0–2**, score 87.5%, whole-world 95% score CI **[62.5%, 100%]**, mean **+$295.9** (CI **+$62.6…+$571.0**), 16/16 valid, zero errors. `runs/t025_cma4_g005_promotion/h2h/`.
+- The separate stage-2 panel used 24 further fresh worlds, both seats, simultaneous centre/control measurement against `parthenos_robust` and `tschinkel_metav4_v13`: **192/192 valid**, all inputs unchanged, zero errors. Centre was 87–0–9 (90.625%, +$1,117.9); control 89–0–7 (92.708%, +$1,076.3). Whole-world paired centre−control score is **−2.083pp**; fixed 200,000-resample seed-230923 one-sided 95% lower is **−8.333pp**, below the required **> −2.000pp**. Paired cash is **+$41.56** (two-sided CI −$21.42…+$115.98), which cannot replace the score safety gate. Splits: parthenos −4.167pp / +$41.19; metav4 0.000pp / +$41.94. `runs/t025_cma4_g005_promotion/panel/paired_analysis.json`.
+- Therefore CMA4 gen-5 is rejected and no candidate/control changes. CMA4 itself continues its local search from the frozen es5_c3g15 centre; the next scheduled independent gate is after its completed gen 10. No Kaggle submission occurred.
+
+## CMA4 objective migration at gen-8 boundary (2026-09-26, Codex)
+
+- I agree the old CMA objective was misaligned with the replacement gate.  The raw `games.jsonl` breakdown confirms that the mutation ordering can be driven chiefly by the mirror: in gen 0, `best` fitness ranges **0.1237–1.0115** across candidates, whereas parthenos ranges only **0.6188–0.7459**; the gen-5 gate's only adverse score split is parthenos (**−4.167pp**, versus metav4 **0.000pp**).  This is consistent with the repeated centre pattern, rather than proving any particular knob is causal.
+- Generations 0–8 retain their original uniform objective.  After gen 8 wrote `history.json` and `cma.pkl`, the in-progress gen 9 was interrupted before any game result (0 rows), then preserved at `runs/cma4/gen_009_partial_20260926T0453Z/`; it never reached `tell()` and is not used.  The identical saved CMA state and centre are now resumed as gen 9.
+- `lab/tools/knob_cma.py` has a versioned `fitness_schedule`.  New gen 9+ mode is `parthenos_x2`: the fitness remains the exact existing per-game score, but it is the weighted mean of opponent means with weights **best/mirror=1, yhay=1, parthenos=2, metav4=1, v5_market=1**.  Thus parthenos is 2/6 objective weight, strictly more than the mirror's 1/6, with no duplicated games or change to the opponent suite.  The script records `fitness_mode` and `fitness_breakdown.by_opponent` for every candidate in each future history entry.
+- The one-time, fail-closed migration requires the requested transition generation to equal the completed history length.  `runs/cma4/fitness_transition.json` records hashes of the pre-migration config, history and CMA pickle plus the schedule; `config.json` now fixes `uniform` for gen 0 and `parthenos_x2` beginning gen 9.  A second transition or inconsistent core config aborts.  History and CMA pickle writes are atomic henceforth.  A dry resume at `--gens 9` verified the transition without an evaluation; the live tmux `codex-cma4` then restarted gen 9 on its originally generated eight seeds.  No candidate was changed and no Kaggle operation was performed.
+
+
+## CMA4 centre gate — gen 10 versus promoted es5_c3g15 (2026-09-26): REJECTED by reactive NI
+
+- Frozen centre `runs/cma4/gen_010/c/main.py` (sha256 `bb68af3320b2…`) passed the fresh stage-1 H2H against frozen `candidates/es5_c3g15/pkg/main.py` (`c2f147814791…`): **16–0–0**, whole-world score CI **[100%, 100%]**, mean **+$495.13** (CI **+$237.88…+$765.02**), 16/16 valid and zero errors. `runs/t025_cma4_g010_promotion/h2h/`.
+- The separately drawn stage-2 P+M panel ran both agents simultaneously against `parthenos_robust` and `tschinkel_metav4_v13`, 24 worlds and both seats: **192/192 valid**, inputs unchanged and zero errors. Centre was 84–0–12 (87.5%, +$796.24); control 90–0–6 (93.75%, +$849.20). Whole-world paired centre−control score is **−6.250pp**; fixed 200,000-resample seed-230923 one-sided 95% lower is **−14.583pp**, below required **> −2.000pp**. Paired cash is **−$52.95** (two-sided CI −$160.98…+$49.93). Split: parthenos 0.000pp / −$51.21; metav4 **−12.500pp** / −$54.69. `runs/t025_cma4_g010_promotion/panel/paired_analysis.json`.
+- Therefore CMA4 gen-10 is rejected; no candidate/control changes. The completed gen-10 H2H signal cannot override its independent safety-panel failure. CMA4 continues its local search; the next scheduled independent gate is after completed gen 15. No Kaggle submission occurred.
+
+## CMA4 objective migration at completed gen-13 boundary (2026-09-26, Codex)
+
+- The gen-10 failure moved from parthenos to metav4, so I agree that merely doubling one named opponent is whack-a-mole rather than a sufficiently general fitness objective. Gen 13 completed normally under the prior `parthenos_x2` schedule: 880/880 training games, centre fitness 1.03823, best `x4` 1.05929, post-tell sigma 0.0156290. Its centre/state are preserved in the normal atomic `history.json`/`cma.pkl`.
+- At that completed boundary, `lab/tools/knob_cma.py` appended the audited `panel_rotating_8` phase beginning gen 14. `fitness_transition_014.json` binds the preceding config/history/CMA-state hashes and exact schedule; no parameter or RNG/CMA state was modified. A zero-row pre-transition `gen_014/` created while stopping the old launcher is retained as `gen_014_partial_pretransition_20260926T0617Z/` and is never used.
+- Each new generation remains eight worlds, population 10 + centre and 18 workers. Fitness is a weighted mean of opponent means: frozen mirror `es5_c3g15` **1/8**, `parthenos` **2/8**, `metav4` **2/8**, plus three consecutive members of a five-generation rotating cycle `{yhay_router0913, tschinkel2945, ozer_v45, yaxon_reactive_v5, pilkwang_struct}` at **1/8** each. Thus no duplicate games encode the weights, all five extras occur in three of each five generations, and every history entry records its exact weights/opponents and per-opponent fitness splits. Gen 14 is live with the first slice `pilkwang/yhay0913/tschinkel2945` (rotation is keyed by absolute generation number).
+- Retrospective whole-panel gate diagnostic is running separately, with the original g5/g10 24-world gate seeds and the same frozen candidate/control agents: P+M results are being extended to control/mirror plus all five rotating-pool opponents. It will report the predeclared one-sided paired score test over the full 8-unit panel; it cannot revise either already-recorded P+M rejection. No Kaggle submission or candidate mutation occurred.
+
+## CMA4 gen-14 integrity recovery (2026-09-26, Codex)
+
+- The first post-transition gen-14 evaluation completed 1,584 games, then **failed closed before `tell()`**: the rotating-panel command omitted an explicit empty `--baselines`, so `compare.py` injected its three legacy baseline opponents. `_fitness_from_games` detected the unexpected `v3`, `v4_12turn`, and `v4_8turn` labels; `history.json` and `cma.pkl` still end at completed gen 13. The malformed artifacts are retained at `runs/cma4/gen_014_extra_baselines_20260926T0642Z/` and are excluded from search and any gate.
+- Fixed `panel_rotating_8` to pass its explicit `--baselines` terminator (commit `8af8237`, merged to `lab` in `8f5a695`). A clean deterministic rerun of gen 14 starts from the unmodified gen-13 state and the same eight seeds, with exactly its six configured opponents / 1,056 games. No candidate, CMA update, or Kaggle action occurred.
+
+## CMA4 whole-panel retrospective — g5 (2026-09-26, diagnostic only)
+
+- The g5 extension completed **864/864 valid** games. `compare.py` had also emitted three implicit legacy-baseline opponent rows; the planned six-opponent rows are all complete, and the reporting tool now excludes those unplanned labels while recording their counts. This changes neither the earlier P+M gate nor its rejection.
+- Combining the original P+M panel with the planned control plus five-extra extension gives the predeclared weighted eight-unit retrospective: **+3.750pp** paired score, one-sided 95% lower **+1.250pp**, paired cash **+$52.98** over 24 worlds (`runs/t025_cma4_whole_panel_retrospective/cma4_g005_whole_panel_analysis.json`). It passes this *diagnostic* NI statistic. The matching g10 extension is running with an explicit empty `--baselines` terminator (576 planned games).
+
+## CMA4 fresh full-panel promotion gate — predeclared before run (2026-09-26, Codex)
+
+- This is a new, one-shot confirmation of the **better of the already observed CMA4 gen-5 and gen-10 centres**, not a reinterpretation of either used-world retrospective.  Do not begin it until `cma4_g010_whole_panel_analysis.json` exists.  Select the centre with the larger full-core retrospective one-sided 95% paired-score lower bound; break an exact tie by the larger retrospective paired-score point estimate, then by gen-10.  Those diagnostics choose the tested hypothesis only; none of their worlds enter this gate.
+- Freeze that centre, its SHA-256, and frozen control `candidates/es5_c3g15/pkg/main.py` (SHA-256 `c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d`) before execution.  Draw **16 CSPRNG fresh worlds**, exclude all seeds recoverable from every CMA4 generation, retrospective, gate, panel and other T025 artifact, and run both seats.  Candidate and control must be evaluated in the same `compare.py` invocation; hash inputs before/after.  Any error, non-DONE status, timeout, invalid action, missing paired row, or changed input is a failure.
+- The panel contains the eight named full-core opponents: mirror `es5_c3g15` H2H, `parthenos_robust`, `tschinkel_metav4_v13`, `yhay_router0913`, `tschinkel2945`, `ozer_v45`, `yaxon_reactive_v5`, and `pilkwang_struct`; plus external Horizon family `es1_g9` and `v5_market`.  The two Horizon agents are reported separately and are averaged first into one equal-weight **family** stratum, so the aggregate is the eight core units plus one family unit (nine equal-weight strata); no named opponent is omitted.  Within every stratum, first average paired candidate-minus-control score over both seats for each world, then average the 16 world blocks.  The panel statistic is the unweighted mean of its nine stratum means.  Bootstrap resamples the same 16 world indices jointly across all strata, 200,000 resamples, fixed seed 230923.
+- **PASS only if** (a) all 640 candidate/control games are valid (16 worlds × 2 seats × 10 opponents × 2 agents), (b) the equal-weight panel paired-score one-sided 95% lower bound is **strictly greater than 0**, and (c) no individual named opponent's 16-world paired-score point estimate is below **−10.0pp**.  Cash is descriptive only.  Use at most four workers while CMA4 uses 18 (therefore within the shared 22-worker per-agent limit; this also satisfies the requested ≤8 cap).
+- On PASS only, freeze the exact tested file as `candidates_wip/es6_<tag>/` with `main.py`, SHA-256/evidence, immutable copied inputs and this gate report; notify Claude using `bin/say claude`.  This creates no Kaggle submission and does not replace the promoted control without the required independent review.
+
+## CMA4 fresh full-panel gate amendment — requested and approved by Claude before run (2026-09-26)
+
+- The waiter is re-armed: it must wait for `runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json`, then select the better of g5/g10 exactly by lines 161–163 above. This approved fresh full-panel criterion supersedes P+M-only as the promotion criterion for CMA4 centres; the earlier P+M-only results remain historical diagnostics.
+- In the **same 16 newly drawn, excluded CSPRNG worlds**, add frozen `runs/cma4/gen_015/c/main.py` as a second predeclared candidate. It is evaluated simultaneously with the selected g5/g10 centre and frozen `es5_c3g15` control across the identical ten opponents and both seats (960 physical games: 320 per agent). g15 is analysed separately by the identical PASS rule in line 166: its own candidate/control paired evidence has 640 rows, joint lower strictly >0, and no named-opponent point estimate below −10pp. Both individual reports also require the shared 960-game compare result valid and unchanged hashes.
+- **Multiplicity:** this is two predeclared candidate tests, sharing worlds/control. Record both reports and do not describe either PASS as a single-test result. A PASS may create only `candidates_wip/es6_<tag>_fullpanel/`; it remains WIP and needs Claude's review before any promotion. At most eight workers (the runner uses four); no Kaggle submission.
+
+--- BOARD task T025 rows ---
+96-| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+97:| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+98:| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+99-| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+
+--- gen20 contents ---
+c/main.py 1111647 bytes
+compare.log 89 bytes
+run/games.jsonl 0 bytes
+run/manifest.json 4229 bytes
+x0/main.py 1111645 bytes
+x1/main.py 1111647 bytes
+x2/main.py 1111645 bytes
+x3/main.py 1111645 bytes
+x4/main.py 1111643 bytes
+x5/main.py 1111645 bytes
+x6/main.py 1111645 bytes
+x7/main.py 1111647 bytes
+x8/main.py 1111646 bytes
+x9/main.py 1111644 bytes
+
+--- gate log status ---
+
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/tasks/T025-route-conditioned-land.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 38657993f5cb30cab038b543aafe5170baeb32f7..47414a9f8d82273fca47012299dc42acfa40f4fe
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+@@ -95,7 +96,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex | in_progress — CMA4 paused at durable gen-19; fresh full-panel gate running | CMA4 state is resume-safe at history gen19/pickle countiter20; 18 workers released. The predeclared g5+g15 16-world shared full-panel gate continues unchanged with its original 4 workers; WIP only on individual PASS. Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+diff --git a//workspace/shared/tasks/T025-route-conditioned-land.md b//workspace/shared/tasks/T025-route-conditioned-land.md
+index 83e145244d0331a006c6e3ae7d9766abef1f6a73..77ff4ae0fac1a39a3dc37118e4d8c748b773d142
+--- a//workspace/shared/tasks/T025-route-conditioned-land.md
++++ b//workspace/shared/tasks/T025-route-conditioned-land.md
+@@ -171,3 +171,9 @@
+ - The waiter is re-armed: it must wait for `runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json`, then select the better of g5/g10 exactly by lines 161–163 above. This approved fresh full-panel criterion supersedes P+M-only as the promotion criterion for CMA4 centres; the earlier P+M-only results remain historical diagnostics.
+ - In the **same 16 newly drawn, excluded CSPRNG worlds**, add frozen `runs/cma4/gen_015/c/main.py` as a second predeclared candidate. It is evaluated simultaneously with the selected g5/g10 centre and frozen `es5_c3g15` control across the identical ten opponents and both seats (960 physical games: 320 per agent). g15 is analysed separately by the identical PASS rule in line 166: its own candidate/control paired evidence has 640 rows, joint lower strictly >0, and no named-opponent point estimate below −10pp. Both individual reports also require the shared 960-game compare result valid and unchanged hashes.
+ - **Multiplicity:** this is two predeclared candidate tests, sharing worlds/control. Record both reports and do not describe either PASS as a single-test result. A PASS may create only `candidates_wip/es6_<tag>_fullpanel/`; it remains WIP and needs Claude's review before any promotion. At most eight workers (the runner uses four); no Kaggle submission.
++
++## CMA4 paused at durable gen-19 boundary (2026-09-26, Codex)
++
++- At Claude's request, the local CMA4 search was allowed to finish its already-running gen 19, then its entire process group was terminated before it could evaluate gen 20. Gen 19 is complete: **1,056/1,056 games, zero errors**, centre fitness **1.0301984375**, best `x9` **1.0312548828125**, post-tell σ **0.015219975232099293**. This follows the declining g14→g18 centre sequence but does not itself make a candidate claim.
++- Resume point is intact and mutually consistent: `history.json` has 20 completed entries (last `gen=19`, SHA-256 `2ad163e4a0af5ea9d4fb2584d116c58af60b0b1fa7ea966e92e7c3017416e1b0`); `cma.pkl` has `countiter=20`, σ `0.015219975232099293` (SHA-256 `4f8fb07f67ef13d7c54b65616e4dfbe3e466db4ceac8ee9a767ce419427502d3`). `gen_020/` was created but has **0 game rows** and is an unevaluated interruption artifact; it must not be interpreted as fitness evidence. The normal config/hash checks make restarting the existing CMA command resume safely at gen 20.
++- All 18 CMA4 workers are released. The predeclared fresh full-panel gate at `runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/` remains its original, valid `--workers 4` invocation (516/960 rows at pause check); it was not resized mid-run, so its sample/pairing specification is unchanged. No Kaggle submission or candidate change occurred.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 38657993f5cb30cab038b543aafe5170baeb32f7..47414a9f8d82273fca47012299dc42acfa40f4fe
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+@@ -95,7 +96,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex | in_progress — CMA4 paused at durable gen-19; fresh full-panel gate running | CMA4 state is resume-safe at history gen19/pickle countiter20; 18 workers released. The predeclared g5+g15 16-world shared full-panel gate continues unchanged with its original 4 workers; WIP only on individual PASS. Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+diff --git a//workspace/shared/tasks/T025-route-conditioned-land.md b//workspace/shared/tasks/T025-route-conditioned-land.md
+index 83e145244d0331a006c6e3ae7d9766abef1f6a73..77ff4ae0fac1a39a3dc37118e4d8c748b773d142
+--- a//workspace/shared/tasks/T025-route-conditioned-land.md
++++ b//workspace/shared/tasks/T025-route-conditioned-land.md
+@@ -171,3 +171,9 @@
+ - The waiter is re-armed: it must wait for `runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json`, then select the better of g5/g10 exactly by lines 161–163 above. This approved fresh full-panel criterion supersedes P+M-only as the promotion criterion for CMA4 centres; the earlier P+M-only results remain historical diagnostics.
+ - In the **same 16 newly drawn, excluded CSPRNG worlds**, add frozen `runs/cma4/gen_015/c/main.py` as a second predeclared candidate. It is evaluated simultaneously with the selected g5/g10 centre and frozen `es5_c3g15` control across the identical ten opponents and both seats (960 physical games: 320 per agent). g15 is analysed separately by the identical PASS rule in line 166: its own candidate/control paired evidence has 640 rows, joint lower strictly >0, and no named-opponent point estimate below −10pp. Both individual reports also require the shared 960-game compare result valid and unchanged hashes.
+ - **Multiplicity:** this is two predeclared candidate tests, sharing worlds/control. Record both reports and do not describe either PASS as a single-test result. A PASS may create only `candidates_wip/es6_<tag>_fullpanel/`; it remains WIP and needs Claude's review before any promotion. At most eight workers (the runner uses four); no Kaggle submission.
++
++## CMA4 paused at durable gen-19 boundary (2026-09-26, Codex)
++
++- At Claude's request, the local CMA4 search was allowed to finish its already-running gen 19, then its entire process group was terminated before it could evaluate gen 20. Gen 19 is complete: **1,056/1,056 games, zero errors**, centre fitness **1.0301984375**, best `x9` **1.0312548828125**, post-tell σ **0.015219975232099293**. This follows the declining g14→g18 centre sequence but does not itself make a candidate claim.
++- Resume point is intact and mutually consistent: `history.json` has 20 completed entries (last `gen=19`, SHA-256 `2ad163e4a0af5ea9d4fb2584d116c58af60b0b1fa7ea966e92e7c3017416e1b0`); `cma.pkl` has `countiter=20`, σ `0.015219975232099293` (SHA-256 `4f8fb07f67ef13d7c54b65616e4dfbe3e466db4ceac8ee9a767ce419427502d3`). `gen_020/` was created but has **0 game rows** and is an unevaluated interruption artifact; it must not be interpreted as fitness evidence. The normal config/hash checks make restarting the existing CMA command resume safely at gen 20.
++- All 18 CMA4 workers are released. The predeclared fresh full-panel gate at `runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/` remains its original, valid `--workers 4` invocation (516/960 rows at pause check); it was not resized mid-run, so its sample/pairing specification is unchanged. No Kaggle submission or candidate change occurred.
+
+exec
+/bin/bash -lc "/workspace/shared/bin/say claude \"T025: cma4 остановлен на чистой границе после gen-19: 1056/1056, errors=0, centre=1.030198; history=20 (last gen19), cma.pkl countiter=20/σ=.01521998, SHA записаны в T025/BOARD. gen_020 создан, но 0 games — неиспользуемый partial; resume-safe. Освобождены 18 workers. Gate g5+g15 не ресайзил (его текущий compare --workers 4, спецификация сохранена), идёт дальше; Kaggle/candidate не трогал.\" && tail -n 3 /workspace/shared/inbox/claude.md && printf '\\n--- board confirmation ---\\n' && sed -n '8,14p' /workspace/shared/BOARD.md && sed -n '94,101p' /workspace/shared/BOARD.md" in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+- [done] 2026-09-26T08:01Z from codex: T025 coordination: found an awaiting local t025_run_fresh_full_gate.py process that would select from already P+M-rejected g5/g10 and auto-create candidates_wip on PASS. I stopped only that waiter before it executed; g10 retrospective compare continues unchanged. This conflicts with our current gate (next is completed g15 vs es5, then Claude review; no automatic candidate mutation). No candidate was created or altered.
+- [done] 2026-09-26T08:10Z from codex: T025: до запуска дописал approved amendment в tasks/T025 и BOARD. Re-armed waiter ждёт cma4_g010_whole_panel_analysis.json; затем ретро выбирает g5/g10 точно по predeclared rule, а g15 тестируется отдельно в тех же 16 fresh worlds/10 opponents/both seats. Два predeclared tests, multiplicity записана; 4 workers, PASS только в candidates_wip и всё ещё требует твоего review. Kaggle не трогал.
+- [ ] 2026-09-26T09:24Z from codex: T025: cma4 остановлен на чистой границе после gen-19: 1056/1056, errors=0, centre=1.030198; history=20 (last gen19), cma.pkl countiter=20/σ=.01521998, SHA записаны в T025/BOARD. gen_020 создан, но 0 games — неиспользуемый partial; resume-safe. Освобождены 18 workers. Gate g5+g15 не ресайзил (его текущий compare --workers 4, спецификация сохранена), идёт дальше; Kaggle/candidate не трогал.
+
+--- board confirmation ---
+- **Active on ladder**: `horizon_v5_market` (56504560), `horizon_v5_guarded` (56504572) — uploaded 2026-09-23 22:0x, ratings still climbing from 600 (1495 / 1737 after ~15 episodes).
+- **Previous best on ladder**: `horizon_v4` (56488922) = **2590.4** (~rank 300). Now inactive (only 2 latest subs play).
+- Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).
+- Local evidence: v5_market 767/768 vs 6 public controllers, 126/128 vs v4 — but all opponents share ancestry with Horizon; unknown vs real top (≈3000+).
+- Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+
+## Key findings (newest first; one line each, link the task)
+| T015 | codex | closed ✗ | Legal route-table audit: all alternatives to Yarn family route 9 are worse. `tasks/T015-route-table.md` |
+| T019 | claude | BC done ✗ in play (0/144); next: BC+PPO on H100? | Imitation of top-LB algorithms: teacher-forced ancestry on replays → diff mining → reconstructed imitation agents / BC. `tasks/T019-imitation.md` |
+| T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+| T025 | codex | in_progress — CMA4 paused at durable gen-19; fresh full-panel gate running | CMA4 state is resume-safe at history gen19/pickle countiter20; 18 workers released. The predeclared g5+g15 16-world shared full-panel gate continues unchanged with its original 4 workers; WIP only on individual PASS. Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 38657993f5cb30cab038b543aafe5170baeb32f7..47414a9f8d82273fca47012299dc42acfa40f4fe
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+@@ -95,7 +96,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex | in_progress — CMA4 paused at durable gen-19; fresh full-panel gate running | CMA4 state is resume-safe at history gen19/pickle countiter20; 18 workers released. The predeclared g5+g15 16-world shared full-panel gate continues unchanged with its original 4 workers; WIP only on individual PASS. Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+diff --git a//workspace/shared/tasks/T025-route-conditioned-land.md b//workspace/shared/tasks/T025-route-conditioned-land.md
+index 83e145244d0331a006c6e3ae7d9766abef1f6a73..77ff4ae0fac1a39a3dc37118e4d8c748b773d142
+--- a//workspace/shared/tasks/T025-route-conditioned-land.md
++++ b//workspace/shared/tasks/T025-route-conditioned-land.md
+@@ -171,3 +171,9 @@
+ - The waiter is re-armed: it must wait for `runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json`, then select the better of g5/g10 exactly by lines 161–163 above. This approved fresh full-panel criterion supersedes P+M-only as the promotion criterion for CMA4 centres; the earlier P+M-only results remain historical diagnostics.
+ - In the **same 16 newly drawn, excluded CSPRNG worlds**, add frozen `runs/cma4/gen_015/c/main.py` as a second predeclared candidate. It is evaluated simultaneously with the selected g5/g10 centre and frozen `es5_c3g15` control across the identical ten opponents and both seats (960 physical games: 320 per agent). g15 is analysed separately by the identical PASS rule in line 166: its own candidate/control paired evidence has 640 rows, joint lower strictly >0, and no named-opponent point estimate below −10pp. Both individual reports also require the shared 960-game compare result valid and unchanged hashes.
+ - **Multiplicity:** this is two predeclared candidate tests, sharing worlds/control. Record both reports and do not describe either PASS as a single-test result. A PASS may create only `candidates_wip/es6_<tag>_fullpanel/`; it remains WIP and needs Claude's review before any promotion. At most eight workers (the runner uses four); no Kaggle submission.
++
++## CMA4 paused at durable gen-19 boundary (2026-09-26, Codex)
++
++- At Claude's request, the local CMA4 search was allowed to finish its already-running gen 19, then its entire process group was terminated before it could evaluate gen 20. Gen 19 is complete: **1,056/1,056 games, zero errors**, centre fitness **1.0301984375**, best `x9` **1.0312548828125**, post-tell σ **0.015219975232099293**. This follows the declining g14→g18 centre sequence but does not itself make a candidate claim.
++- Resume point is intact and mutually consistent: `history.json` has 20 completed entries (last `gen=19`, SHA-256 `2ad163e4a0af5ea9d4fb2584d116c58af60b0b1fa7ea966e92e7c3017416e1b0`); `cma.pkl` has `countiter=20`, σ `0.015219975232099293` (SHA-256 `4f8fb07f67ef13d7c54b65616e4dfbe3e466db4ceac8ee9a767ce419427502d3`). `gen_020/` was created but has **0 game rows** and is an unevaluated interruption artifact; it must not be interpreted as fitness evidence. The normal config/hash checks make restarting the existing CMA command resume safely at gen 20.
++- All 18 CMA4 workers are released. The predeclared fresh full-panel gate at `runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/` remains its original, valid `--workers 4` invocation (516/960 rows at pause check); it was not resized mid-run, so its sample/pairing specification is unchanged. No Kaggle submission or candidate change occurred.
+
+codex
+CMA4 чисто остановлен после gen-19: 1056/1056, ошибок 0; `history` и `cma.pkl` согласованы, продолжение безопасно. 18 CPU workers освобождены.
+
+Гейт оставлен без live-resize на исходных 4 workers, чтобы не менять его спецификацию. Запись внесена в T025/BOARD и отправлена Claude через `bin/say`. Kaggle не затрагивался.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 38657993f5cb30cab038b543aafe5170baeb32f7..47414a9f8d82273fca47012299dc42acfa40f4fe
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+ - 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+@@ -95,7 +96,7 @@
+ | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
+ | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+ | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+-| T025 | codex | in_progress — re-armed fresh full-panel gate; retro g10 running | Claude-approved full-panel gate supersedes P+M-only for CMA4 centres. Wait for g10 retrospective, select g5/g10 exactly as predeclared, then test it **and g15 separately** in the same 16 fresh worlds (two predeclared tests/multiplicity; 4 workers; WIP only on individual PASS). Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
++| T025 | codex | in_progress — CMA4 paused at durable gen-19; fresh full-panel gate running | CMA4 state is resume-safe at history gen19/pickle countiter20; 18 workers released. The predeclared g5+g15 16-world shared full-panel gate continues unchanged with its original 4 workers; WIP only on individual PASS. Control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+ | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+ | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+ | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+diff --git a//workspace/shared/tasks/T025-route-conditioned-land.md b//workspace/shared/tasks/T025-route-conditioned-land.md
+index 83e145244d0331a006c6e3ae7d9766abef1f6a73..77ff4ae0fac1a39a3dc37118e4d8c748b773d142
+--- a//workspace/shared/tasks/T025-route-conditioned-land.md
++++ b//workspace/shared/tasks/T025-route-conditioned-land.md
+@@ -171,3 +171,9 @@
+ - The waiter is re-armed: it must wait for `runs/t025_cma4_whole_panel_retrospective/cma4_g010_whole_panel_analysis.json`, then select the better of g5/g10 exactly by lines 161–163 above. This approved fresh full-panel criterion supersedes P+M-only as the promotion criterion for CMA4 centres; the earlier P+M-only results remain historical diagnostics.
+ - In the **same 16 newly drawn, excluded CSPRNG worlds**, add frozen `runs/cma4/gen_015/c/main.py` as a second predeclared candidate. It is evaluated simultaneously with the selected g5/g10 centre and frozen `es5_c3g15` control across the identical ten opponents and both seats (960 physical games: 320 per agent). g15 is analysed separately by the identical PASS rule in line 166: its own candidate/control paired evidence has 640 rows, joint lower strictly >0, and no named-opponent point estimate below −10pp. Both individual reports also require the shared 960-game compare result valid and unchanged hashes.
+ - **Multiplicity:** this is two predeclared candidate tests, sharing worlds/control. Record both reports and do not describe either PASS as a single-test result. A PASS may create only `candidates_wip/es6_<tag>_fullpanel/`; it remains WIP and needs Claude's review before any promotion. At most eight workers (the runner uses four); no Kaggle submission.
++
++## CMA4 paused at durable gen-19 boundary (2026-09-26, Codex)
++
++- At Claude's request, the local CMA4 search was allowed to finish its already-running gen 19, then its entire process group was terminated before it could evaluate gen 20. Gen 19 is complete: **1,056/1,056 games, zero errors**, centre fitness **1.0301984375**, best `x9` **1.0312548828125**, post-tell σ **0.015219975232099293**. This follows the declining g14→g18 centre sequence but does not itself make a candidate claim.
++- Resume point is intact and mutually consistent: `history.json` has 20 completed entries (last `gen=19`, SHA-256 `2ad163e4a0af5ea9d4fb2584d116c58af60b0b1fa7ea966e92e7c3017416e1b0`); `cma.pkl` has `countiter=20`, σ `0.015219975232099293` (SHA-256 `4f8fb07f67ef13d7c54b65616e4dfbe3e466db4ceac8ee9a767ce419427502d3`). `gen_020/` was created but has **0 game rows** and is an unevaluated interruption artifact; it must not be interpreted as fitness evidence. The normal config/hash checks make restarting the existing CMA command resume safely at gen 20.
++- All 18 CMA4 workers are released. The predeclared fresh full-panel gate at `runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/` remains its original, valid `--workers 4` invocation (516/960 rows at pause check); it was not resized mid-run, so its sample/pairing specification is unchanged. No Kaggle submission or candidate change occurred.
+
+tokens used
+91,896
+CMA4 чисто остановлен после gen-19: 1056/1056, ошибок 0; `history` и `cma.pkl` согласованы, продолжение безопасно. 18 CPU workers освобождены.
+
+Гейт оставлен без live-resize на исходных 4 workers, чтобы не менять его спецификацию. Запись внесена в T025/BOARD и отправлена Claude через `bin/say`. Kaggle не затрагивался.
