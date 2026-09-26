@@ -46,6 +46,7 @@ FIRST_YIELD_DAY = {
     "MELON": 10,
 }
 PRODUCT_FOR_ANIMAL = {"COW": "MILK", "SHEEP": "WOOL", "GOOSE": "EGG"}
+_CARGO_TO_KEEP = {"WHEAT", "FERTILIZER", *ANIMALS}
 DEFAULT_PRIORITY = {
     "FEED": 260,
     "CARE": 230,
@@ -278,7 +279,8 @@ def _operation_legal(world: _World, actor: int, task: Task) -> bool:
         return (world.at_shed(xy) and bool(item) and
                 int(world.shed.get(item, 0) or 0) > world.reserved_pickup.get(item, 0))
     if op == "DROP":
-        return world.at_shed(xy) and any(int(v) > 0 for v in inv.values()) and \
+        return world.at_shed(xy) and any(int(v) > 0 for item, v in inv.items()
+                                          if item not in _CARGO_TO_KEEP) and \
             sum(max(0, int(v)) for v in inv.values()) <= world.room()
     if op == "PLACE":
         return (item in ANIMALS and isinstance(tile, Mapping) and
@@ -430,7 +432,11 @@ def _logistics_tasks(world: _World, plan: Any, tasks: list[Task]) -> list[Task]:
                 n += 1
     # Cargo delivery is deliberately lower-priority than same-day service.
     for actor, inv in enumerate(world.inventories):
-        if any(int(v) > 0 for v in inv.values()) and sum(int(v) for v in inv.values()) <= world.room():
+        # WHEAT is route cargo: dropping it merely to collect it again makes
+        # workers ping-pong at the shed and starves animals.  Likewise retain
+        # fertilizer and animals until their target operation consumes them.
+        if (any(int(v) > 0 for item, v in inv.items() if item not in _CARGO_TO_KEEP)
+                and sum(int(v) for v in inv.values()) <= world.room()):
             target = min(world.shed_tiles(), key=lambda xy: _distance(_position(world, actor), xy))
             result.append(Task("DROP", target, priority=_priority(plan, "DROP", DEFAULT_PRIORITY["DROP"]),
                                source=f"drop-{actor}"))
