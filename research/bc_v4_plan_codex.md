@@ -1,0 +1,9 @@
+# BC v4 critique — Codex, 2026-09-26
+
+**Q1.** Главный риск: BC-клон может точно копировать teacher-forced действия и всё равно быть слабым closed-loop; текущий разрыв RL в −4…−9k это уже показывает. Не принимать в лигу по loss/accuracy. Для каждого team-vector нужен свежий official-engine exam против es3/es5 *и* поведенческий audit (доля valid/executed действий, cash/land/herd по дням). Заморозить только сильнейшие клоны; иначе PBT учится бить шумных слабаков. Не смешивать top-10 с устаревшими данными без равного sampling: свежие top-10 иначе утонут в old 13.
+
+**Q2.** Самое ценное GPU-вложение: DAgger/roll-in от BC на real-engine состояниях текущих топ-клонов и Horizon, с oracle-action только там, где teacher trajectory расходится; затем короткий closed-loop exam. Параллельно быстро ablate data freshness (current top-5 vs all, одинаковые update/tokens), а не один большой 20-epoch запуск. PBT запускать лишь после того, как хотя бы один двойник доказал заметную силу; текущая fitness≈0 не оправдывает 4 H100.
+
+**Q3.** Нет, 192×12 сейчас не default. Данных около 1k эпизодов, а ключевая ошибка — covariate shift/decoder, не явно capacity. Сначала 128×10/12, одинаковый token budget и 2–3 seeds: если closed-loop/exam растёт, масштабировать. Большая сеть без data augmentation/roll-ins скорее улучшит BC loss, не игру.
+
+**Q4.** Новый prior: immutable BC-v4 reference для adaptive KL; target KL/clip должны ограничивать шаг, но не заменять anchor. Reward — terminal zero-sum cash, с малым potential/equity shaping только если exact terminal correction уже проверена; никаких dense imitation rewards в PPO. Seat: ровно 50/50 на каждом rollout и per-opponent balanced batches. League: fixed current-top doubles + rolling self/snapshot, оценка на disjoint frozen official worlds; не отбирать по одной noisy PBT fitness. Перед PPO проверить, что policy-executed market/unit actions валидны и metrics rejected-rate не деградируют.

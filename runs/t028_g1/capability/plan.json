@@ -1,0 +1,36 @@
+{
+  "created_utc": "2026-09-26T09:43:03.252183+00:00",
+  "stage": "capability",
+  "stage_contract": {
+    "worlds": 2,
+    "opponents": 2,
+    "description": "2 worlds \u00d7 g9 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/runs/t028_g1/capability_fold.json",
+  "seeds": [
+    1462704181,
+    638736238
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/runs/t028_g1/default/main.py",
+      "sha256": "b9a7fb7b26504edc6ffca13e596b4fd96c555b4b861cb0a4e4dfb4207edee2e3"
+    },
+    "g1_target4": {
+      "path": "/workspace/shared/runs/t028_g1/g1_target4/main.py",
+      "sha256": "28675d51679764b8b2a0a35f22fa5c951db478edb753bd847e23c353d2d3187a"
+    }
+  },
+  "opponents": {
+    "es5": {
+      "path": "/workspace/shared/candidates/es5_c3g15/pkg/main.py",
+      "sha256": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d"
+    },
+    "parthenos": {
+      "path": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    }
+  },
+  "expected_games": 16,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

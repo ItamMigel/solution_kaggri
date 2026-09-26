@@ -1,0 +1,2683 @@
+{
+  "candidates": {
+    "cma4_g005": {
+      "games": 320,
+      "errors": 0,
+      "worlds": 16,
+      "games_per_world": [
+        20
+      ],
+      "balanced": true,
+      "wins": 298,
+      "draws": 2,
+      "losses": 20,
+      "score_rate": 0.934375,
+      "world_macro_score": 0.934375,
+      "world_block_score_95": [
+        0.875,
+        0.98125
+      ],
+      "world_macro_margin": 3769.5875,
+      "world_block_margin_95": [
+        2679.8571875,
+        4880.13859375
+      ],
+      "mean_margin": 3769.5875,
+      "median_margin": 1298.5,
+      "p10_margin": 105.60000000000001,
+      "worst_margin": -990.0,
+      "worst_decile_mean_margin": -251.375,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "perfect_worlds": 10,
+      "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+      "max_candidate_callback_ms": 1400.082,
+      "non_done": 0,
+      "by_opponent": {
+        "es1_g9": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 529.625,
+          "world_block_margin_95": [
+            333.6765625,
+            730.0640625
+          ],
+          "mean_margin": 529.625,
+          "median_margin": 619.0,
+          "p10_margin": 130.9,
+          "worst_margin": -295.0,
+          "worst_decile_mean_margin": -83.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 1000.844,
+          "non_done": 0
+        },
+        "metav4": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 26,
+          "draws": 0,
+          "losses": 6,
+          "score_rate": 0.8125,
+          "world_macro_score": 0.8125,
+          "world_block_score_95": [
+            0.625,
+            1.0
+          ],
+          "world_macro_margin": 1003.5,
+          "world_block_margin_95": [
+            630.3046875,
+            1359.1265625
+          ],
+          "mean_margin": 1003.5,
+          "median_margin": 1063.0,
+          "p10_margin": -286.5,
+          "worst_margin": -487.0,
+          "worst_decile_mean_margin": -401.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 13,
+          "perfect_world_fraction_wilson_lower_95": 0.5699111903802586,
+          "max_candidate_callback_ms": 763.764,
+          "non_done": 0
+        },
+        "mirror": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 2,
+          "losses": 0,
+          "score_rate": 0.96875,
+          "world_macro_score": 0.96875,
+          "world_block_score_95": [
+            0.90625,
+            1.0
+          ],
+          "world_macro_margin": 341.375,
+          "world_block_margin_95": [
+            210.5609375,
+            476.50312499999995
+          ],
+          "mean_margin": 341.375,
+          "median_margin": 314.0,
+          "p10_margin": 44.900000000000006,
+          "worst_margin": 0.0,
+          "worst_decile_mean_margin": 21.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 1400.082,
+          "non_done": 0
+        },
+        "ozer_v45": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 5627.875,
+          "world_block_margin_95": [
+            3947.225,
+            7441.38125
+          ],
+          "mean_margin": 5627.875,
+          "median_margin": 4356.0,
+          "p10_margin": 2082.3,
+          "worst_margin": 1917.0,
+          "worst_decile_mean_margin": 1979.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 913.3489999999999,
+          "non_done": 0
+        },
+        "parthenos": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 24,
+          "draws": 0,
+          "losses": 8,
+          "score_rate": 0.75,
+          "world_macro_score": 0.75,
+          "world_block_score_95": [
+            0.5,
+            0.9375
+          ],
+          "world_macro_margin": 463.625,
+          "world_block_margin_95": [
+            111.3734375,
+            807.1531249999996
+          ],
+          "mean_margin": 463.625,
+          "median_margin": 626.5,
+          "p10_margin": -831.5,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -941.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 12,
+          "perfect_world_fraction_wilson_lower_95": 0.5050168346449122,
+          "max_candidate_callback_ms": 725.726,
+          "non_done": 0
+        },
+        "pilkwang": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10126.6875,
+          "world_block_margin_95": [
+            6938.528125,
+            13706.998437499995
+          ],
+          "mean_margin": 10126.6875,
+          "median_margin": 8623.5,
+          "p10_margin": 2973.3,
+          "worst_margin": 2874.0,
+          "worst_decile_mean_margin": 2919.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 805.5120000000001,
+          "non_done": 0
+        },
+        "t2945": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 1657.625,
+          "world_block_margin_95": [
+            1092.9671875,
+            2249.06875
+          ],
+          "mean_margin": 1657.625,
+          "median_margin": 1428.5,
+          "p10_margin": 112.0,
+          "worst_margin": -251.0,
+          "worst_decile_mean_margin": -72.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 777.775,
+          "non_done": 0
+        },
+        "v5_market": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 519.25,
+          "world_block_margin_95": [
+            271.29375,
+            770.8125
+          ],
+          "mean_margin": 519.25,
+          "median_margin": 476.5,
+          "p10_margin": 48.70000000000001,
+          "worst_margin": -629.0,
+          "worst_decile_mean_margin": -295.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 911.357,
+          "non_done": 0
+        },
+        "yaxon": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 6585.0,
+          "world_block_margin_95": [
+            4457.8390625,
+            8760.723437499999
+          ],
+          "mean_margin": 6585.0,
+          "median_margin": 6289.0,
+          "p10_margin": 1150.5,
+          "worst_margin": 1032.0,
+          "worst_decile_mean_margin": 1050.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 1088.116,
+          "non_done": 0
+        },
+        "yhay0913": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10841.3125,
+          "world_block_margin_95": [
+            7079.2265625,
+            14745.184374999997
+          ],
+          "mean_margin": 10841.3125,
+          "median_margin": 8007.0,
+          "p10_margin": 1878.2,
+          "worst_margin": 1152.0,
+          "worst_decile_mean_margin": 1484.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 1135.5059999999999,
+          "non_done": 0
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 149,
+          "draws": 1,
+          "losses": 10,
+          "score_rate": 0.934375,
+          "world_macro_score": 0.934375,
+          "world_block_score_95": [
+            0.875,
+            0.98125
+          ],
+          "world_macro_margin": 3772.1625,
+          "world_block_margin_95": [
+            2680.076875,
+            4884.525
+          ],
+          "mean_margin": 3772.1625,
+          "median_margin": 1298.5,
+          "p10_margin": 105.6,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -251.375,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 10,
+          "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+          "max_candidate_callback_ms": 806.64,
+          "non_done": 0
+        },
+        "1": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 149,
+          "draws": 1,
+          "losses": 10,
+          "score_rate": 0.934375,
+          "world_macro_score": 0.934375,
+          "world_block_score_95": [
+            0.875,
+            0.98125
+          ],
+          "world_macro_margin": 3767.0125,
+          "world_block_margin_95": [
+            2679.0521875,
+            4875.50296875
+          ],
+          "mean_margin": 3767.0125,
+          "median_margin": 1298.5,
+          "p10_margin": 105.6,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -251.375,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 10,
+          "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+          "max_candidate_callback_ms": 1400.082,
+          "non_done": 0
+        }
+      },
+      "by_first_shop": {
+        "BAKERY": {
+          "games": 100,
+          "errors": 0,
+          "worlds": 5,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 82,
+          "draws": 2,
+          "losses": 16,
+          "score_rate": 0.83,
+          "world_macro_score": 0.8299999999999998,
+          "world_block_score_95": [
+            0.71,
+            0.95
+          ],
+          "world_macro_margin": 1570.2800000000002,
+          "world_block_margin_95": [
+            815.74,
+            2475.6600000000003
+          ],
+          "mean_margin": 1570.28,
+          "median_margin": 938.5,
+          "p10_margin": -297.0,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -662.6,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.03622410863243013,
+          "max_candidate_callback_ms": 1091.758,
+          "non_done": 0
+        },
+        "BRUNCH_SPOT": {
+          "games": 80,
+          "errors": 0,
+          "worlds": 4,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 80,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 3884.9249999999997,
+          "world_block_margin_95": [
+            2916.85,
+            4631.7
+          ],
+          "mean_margin": 3884.925,
+          "median_margin": 1343.0,
+          "p10_margin": 146.8,
+          "worst_margin": 89.0,
+          "worst_decile_mean_margin": 118.25,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 4,
+          "perfect_world_fraction_wilson_lower_95": 0.5101091635454027,
+          "max_candidate_callback_ms": 1400.082,
+          "non_done": 0
+        },
+        "FARMERS_MARKET": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 20,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 3958.5,
+          "world_block_margin_95": [
+            3958.5,
+            3958.5
+          ],
+          "mean_margin": 3958.5,
+          "median_margin": 2353.0,
+          "p10_margin": 98.9,
+          "worst_margin": 71.0,
+          "worst_decile_mean_margin": 71.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.20654931437723742,
+          "max_candidate_callback_ms": 1013.9849999999999,
+          "non_done": 0
+        },
+        "ICE_CREAM_SHOP": {
+          "games": 60,
+          "errors": 0,
+          "worlds": 3,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 56,
+          "draws": 0,
+          "losses": 4,
+          "score_rate": 0.9333333333333333,
+          "world_macro_score": 0.9333333333333332,
+          "world_block_score_95": [
+            0.9,
+            1.0
+          ],
+          "world_macro_margin": 6442.7,
+          "world_block_margin_95": [
+            5702.600000000001,
+            7646.899999999999
+          ],
+          "mean_margin": 6442.7,
+          "median_margin": 1576.5,
+          "p10_margin": 167.70000000000002,
+          "worst_margin": -287.0,
+          "worst_decile_mean_margin": -115.66666666666667,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.061491944720396215,
+          "max_candidate_callback_ms": 1135.5059999999999,
+          "non_done": 0
+        },
+        "PET_CAFE": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 20,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 8497.0,
+          "world_block_margin_95": [
+            8497.0,
+            8497.0
+          ],
+          "mean_margin": 8497.0,
+          "median_margin": 3021.5,
+          "p10_margin": 931.5000000000001,
+          "worst_margin": 450.0,
+          "worst_decile_mean_margin": 450.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.20654931437723742,
+          "max_candidate_callback_ms": 979.598,
+          "non_done": 0
+        },
+        "SMOOTHIE_SHOP": {
+          "games": 40,
+          "errors": 0,
+          "worlds": 2,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 40,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 2569.3500000000004,
+          "world_block_margin_95": [
+            2173.9,
+            2964.8
+          ],
+          "mean_margin": 2569.35,
+          "median_margin": 1585.5,
+          "p10_margin": 646.4,
+          "worst_margin": 360.0,
+          "worst_decile_mean_margin": 491.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 2,
+          "perfect_world_fraction_wilson_lower_95": 0.3423802275066531,
+          "max_candidate_callback_ms": 345.87600000000003,
+          "non_done": 0
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -990.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -990.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -892.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -892.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 0,
+          "margin": -629.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 1,
+          "margin": -629.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 0,
+          "margin": -487.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 1,
+          "margin": -487.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 156689499,
+          "opponent": "metav4",
+          "seat": 0,
+          "margin": -315.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "PET_CAFE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP",
+            "YARN_STORE"
+          ]
+        },
+        {
+          "seed": 156689499,
+          "opponent": "metav4",
+          "seat": 1,
+          "margin": -315.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "PET_CAFE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP",
+            "YARN_STORE"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "es1_g9",
+          "seat": 0,
+          "margin": -295.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "es1_g9",
+          "seat": 1,
+          "margin": -295.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        }
+      ]
+    },
+    "cma4_g015": {
+      "games": 320,
+      "errors": 0,
+      "worlds": 16,
+      "games_per_world": [
+        20
+      ],
+      "balanced": true,
+      "wins": 298,
+      "draws": 2,
+      "losses": 20,
+      "score_rate": 0.934375,
+      "world_macro_score": 0.934375,
+      "world_block_score_95": [
+        0.875,
+        0.98125
+      ],
+      "world_macro_margin": 3760.265625,
+      "world_block_margin_95": [
+        2672.89046875,
+        4873.18765625
+      ],
+      "mean_margin": 3760.265625,
+      "median_margin": 1290.0,
+      "p10_margin": 129.0,
+      "worst_margin": -990.0,
+      "worst_decile_mean_margin": -231.125,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "perfect_worlds": 10,
+      "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+      "max_candidate_callback_ms": 998.927,
+      "non_done": 0,
+      "by_opponent": {
+        "es1_g9": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 491.09375,
+          "world_block_margin_95": [
+            302.2671875,
+            692.5398437499998
+          ],
+          "mean_margin": 491.09375,
+          "median_margin": 504.5,
+          "p10_margin": 129.6,
+          "worst_margin": -205.0,
+          "worst_decile_mean_margin": -38.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 830.2969999999999,
+          "non_done": 0
+        },
+        "metav4": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 28,
+          "draws": 0,
+          "losses": 4,
+          "score_rate": 0.875,
+          "world_macro_score": 0.875,
+          "world_block_score_95": [
+            0.6875,
+            1.0
+          ],
+          "world_macro_margin": 1006.1875,
+          "world_block_margin_95": [
+            616.121875,
+            1399.7515625
+          ],
+          "mean_margin": 1006.1875,
+          "median_margin": 978.0,
+          "p10_margin": -278.9,
+          "worst_margin": -487.0,
+          "worst_decile_mean_margin": -401.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 14,
+          "perfect_world_fraction_wilson_lower_95": 0.6397717273424132,
+          "max_candidate_callback_ms": 718.524,
+          "non_done": 0
+        },
+        "mirror": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 28,
+          "draws": 2,
+          "losses": 2,
+          "score_rate": 0.90625,
+          "world_macro_score": 0.90625,
+          "world_block_score_95": [
+            0.75,
+            1.0
+          ],
+          "world_macro_margin": 327.5,
+          "world_block_margin_95": [
+            198.7484375,
+            464.06562499999995
+          ],
+          "mean_margin": 327.5,
+          "median_margin": 254.5,
+          "p10_margin": 8.000000000000007,
+          "worst_margin": -8.0,
+          "worst_decile_mean_margin": -4.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 14,
+          "perfect_world_fraction_wilson_lower_95": 0.6397717273424132,
+          "max_candidate_callback_ms": 998.927,
+          "non_done": 0
+        },
+        "ozer_v45": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 5640.6875,
+          "world_block_margin_95": [
+            3966.1671875,
+            7443.1609375
+          ],
+          "mean_margin": 5640.6875,
+          "median_margin": 4356.0,
+          "p10_margin": 2082.3,
+          "worst_margin": 1917.0,
+          "worst_decile_mean_margin": 1979.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 794.449,
+          "non_done": 0
+        },
+        "parthenos": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 24,
+          "draws": 0,
+          "losses": 8,
+          "score_rate": 0.75,
+          "world_macro_score": 0.75,
+          "world_block_score_95": [
+            0.5,
+            0.9375
+          ],
+          "world_macro_margin": 483.4375,
+          "world_block_margin_95": [
+            129.4984375,
+            832.1390624999998
+          ],
+          "mean_margin": 483.4375,
+          "median_margin": 641.0,
+          "p10_margin": -763.0999999999999,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -903.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 12,
+          "perfect_world_fraction_wilson_lower_95": 0.5050168346449122,
+          "max_candidate_callback_ms": 804.024,
+          "non_done": 0
+        },
+        "pilkwang": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10089.875,
+          "world_block_margin_95": [
+            6922.66875,
+            13624.332812499997
+          ],
+          "mean_margin": 10089.875,
+          "median_margin": 8623.5,
+          "p10_margin": 2927.4,
+          "worst_margin": 2831.0,
+          "worst_decile_mean_margin": 2872.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 705.153,
+          "non_done": 0
+        },
+        "t2945": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 1593.6875,
+          "world_block_margin_95": [
+            1047.9984375,
+            2183.921874999999
+          ],
+          "mean_margin": 1593.6875,
+          "median_margin": 1428.5,
+          "p10_margin": 167.6,
+          "worst_margin": -251.0,
+          "worst_decile_mean_margin": -42.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 973.6590000000001,
+          "non_done": 0
+        },
+        "v5_market": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 545.3125,
+          "world_block_margin_95": [
+            284.5625,
+            813.6343749999999
+          ],
+          "mean_margin": 545.3125,
+          "median_margin": 464.0,
+          "p10_margin": 48.50000000000001,
+          "worst_margin": -561.0,
+          "worst_decile_mean_margin": -261.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 800.765,
+          "non_done": 0
+        },
+        "yaxon": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 6586.375,
+          "world_block_margin_95": [
+            4485.8265625,
+            8721.545312499999
+          ],
+          "mean_margin": 6586.375,
+          "median_margin": 6252.0,
+          "p10_margin": 1144.2,
+          "worst_margin": 1052.0,
+          "worst_decile_mean_margin": 1056.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 786.4499999999999,
+          "non_done": 0
+        },
+        "yhay0913": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10838.5,
+          "world_block_margin_95": [
+            7075.009375,
+            14731.599999999999
+          ],
+          "mean_margin": 10838.5,
+          "median_margin": 8007.0,
+          "p10_margin": 1869.0,
+          "worst_margin": 1165.0,
+          "worst_decile_mean_margin": 1488.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 994.6270000000001,
+          "non_done": 0
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 149,
+          "draws": 1,
+          "losses": 10,
+          "score_rate": 0.934375,
+          "world_macro_score": 0.934375,
+          "world_block_score_95": [
+            0.875,
+            0.98125
+          ],
+          "world_macro_margin": 3763.05,
+          "world_block_margin_95": [
+            2673.668125,
+            4878.16796875
+          ],
+          "mean_margin": 3763.05,
+          "median_margin": 1290.0,
+          "p10_margin": 129.0,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -231.125,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 10,
+          "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+          "max_candidate_callback_ms": 998.927,
+          "non_done": 0
+        },
+        "1": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 149,
+          "draws": 1,
+          "losses": 10,
+          "score_rate": 0.934375,
+          "world_macro_score": 0.934375,
+          "world_block_score_95": [
+            0.875,
+            0.98125
+          ],
+          "world_macro_margin": 3757.48125,
+          "world_block_margin_95": [
+            2671.9159374999995,
+            4870.467031249999
+          ],
+          "mean_margin": 3757.48125,
+          "median_margin": 1290.0,
+          "p10_margin": 129.0,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -231.125,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 10,
+          "perfect_world_fraction_wilson_lower_95": 0.38641040545502725,
+          "max_candidate_callback_ms": 994.6270000000001,
+          "non_done": 0
+        }
+      },
+      "by_first_shop": {
+        "BAKERY": {
+          "games": 100,
+          "errors": 0,
+          "worlds": 5,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 82,
+          "draws": 2,
+          "losses": 16,
+          "score_rate": 0.83,
+          "world_macro_score": 0.8299999999999998,
+          "world_block_score_95": [
+            0.71,
+            0.95
+          ],
+          "world_macro_margin": 1574.9199999999998,
+          "world_block_margin_95": [
+            826.28,
+            2481.68
+          ],
+          "mean_margin": 1574.92,
+          "median_margin": 938.5,
+          "p10_margin": -257.4,
+          "worst_margin": -990.0,
+          "worst_decile_mean_margin": -633.8,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.03622410863243013,
+          "max_candidate_callback_ms": 887.28,
+          "non_done": 0
+        },
+        "BRUNCH_SPOT": {
+          "games": 80,
+          "errors": 0,
+          "worlds": 4,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 80,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 3889.1875,
+          "world_block_margin_95": [
+            2905.0499999999997,
+            4649.575
+          ],
+          "mean_margin": 3889.1875,
+          "median_margin": 1334.5,
+          "p10_margin": 177.9,
+          "worst_margin": 117.0,
+          "worst_decile_mean_margin": 130.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 4,
+          "perfect_world_fraction_wilson_lower_95": 0.5101091635454027,
+          "max_candidate_callback_ms": 998.927,
+          "non_done": 0
+        },
+        "FARMERS_MARKET": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 20,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 3862.4,
+          "world_block_margin_95": [
+            3862.4,
+            3862.4
+          ],
+          "mean_margin": 3862.4,
+          "median_margin": 1566.5,
+          "p10_margin": 129.5,
+          "worst_margin": 80.0,
+          "worst_decile_mean_margin": 80.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.20654931437723742,
+          "max_candidate_callback_ms": 803.043,
+          "non_done": 0
+        },
+        "ICE_CREAM_SHOP": {
+          "games": 60,
+          "errors": 0,
+          "worlds": 3,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 56,
+          "draws": 0,
+          "losses": 4,
+          "score_rate": 0.9333333333333333,
+          "world_macro_score": 0.9333333333333332,
+          "world_block_score_95": [
+            0.9,
+            1.0
+          ],
+          "world_macro_margin": 6443.433333333334,
+          "world_block_margin_95": [
+            5695.100000000001,
+            7648.3
+          ],
+          "mean_margin": 6443.433333333333,
+          "median_margin": 1616.5,
+          "p10_margin": 167.70000000000002,
+          "worst_margin": -287.0,
+          "worst_decile_mean_margin": -115.66666666666667,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.061491944720396215,
+          "max_candidate_callback_ms": 973.6590000000001,
+          "non_done": 0
+        },
+        "PET_CAFE": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 20,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 8480.2,
+          "world_block_margin_95": [
+            8480.2,
+            8480.2
+          ],
+          "mean_margin": 8480.2,
+          "median_margin": 3537.0,
+          "p10_margin": 810.4000000000001,
+          "worst_margin": 301.0,
+          "worst_decile_mean_margin": 301.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 1,
+          "perfect_world_fraction_wilson_lower_95": 0.20654931437723742,
+          "max_candidate_callback_ms": 994.6270000000001,
+          "non_done": 0
+        },
+        "SMOOTHIE_SHOP": {
+          "games": 40,
+          "errors": 0,
+          "worlds": 2,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 40,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 2530.0,
+          "world_block_margin_95": [
+            2118.6,
+            2941.4
+          ],
+          "mean_margin": 2530.0,
+          "median_margin": 1585.5,
+          "p10_margin": 537.9,
+          "worst_margin": 221.0,
+          "worst_decile_mean_margin": 352.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 2,
+          "perfect_world_fraction_wilson_lower_95": 0.3423802275066531,
+          "max_candidate_callback_ms": 385.84499999999997,
+          "non_done": 0
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -990.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -990.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -816.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -816.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 0,
+          "margin": -561.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 1,
+          "margin": -561.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 0,
+          "margin": -487.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 1,
+          "margin": -487.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 156689499,
+          "opponent": "metav4",
+          "seat": 0,
+          "margin": -315.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "PET_CAFE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP",
+            "YARN_STORE"
+          ]
+        },
+        {
+          "seed": 156689499,
+          "opponent": "metav4",
+          "seat": 1,
+          "margin": -315.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "PET_CAFE",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP",
+            "YARN_STORE"
+          ]
+        },
+        {
+          "seed": 338092419,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -287.0,
+          "shops": [
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "YARN_STORE",
+            "SMOOTHIE_SHOP",
+            "BRUNCH_SPOT",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP"
+          ]
+        },
+        {
+          "seed": 338092419,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -287.0,
+          "shops": [
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "YARN_STORE",
+            "SMOOTHIE_SHOP",
+            "BRUNCH_SPOT",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP"
+          ]
+        }
+      ]
+    },
+    "es5_c3g15": {
+      "games": 320,
+      "errors": 0,
+      "worlds": 16,
+      "games_per_world": [
+        20
+      ],
+      "balanced": true,
+      "wins": 266,
+      "draws": 32,
+      "losses": 22,
+      "score_rate": 0.88125,
+      "world_macro_score": 0.88125,
+      "world_block_score_95": [
+        0.825,
+        0.925
+      ],
+      "world_macro_margin": 3724.4312499999996,
+      "world_block_margin_95": [
+        2661.8165625,
+        4836.627343749999
+      ],
+      "mean_margin": 3724.43125,
+      "median_margin": 1257.5,
+      "p10_margin": 0.0,
+      "worst_margin": -946.0,
+      "worst_decile_mean_margin": -226.3125,
+      "losses_over_1000": 0,
+      "losses_over_5000": 0,
+      "perfect_worlds": 0,
+      "perfect_world_fraction_wilson_lower_95": 0.0,
+      "max_candidate_callback_ms": 1120.1870000000001,
+      "non_done": 0,
+      "by_opponent": {
+        "es1_g9": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 28,
+          "draws": 0,
+          "losses": 4,
+          "score_rate": 0.875,
+          "world_macro_score": 0.875,
+          "world_block_score_95": [
+            0.6875,
+            1.0
+          ],
+          "world_macro_margin": 353.6875,
+          "world_block_margin_95": [
+            206.9375,
+            510.63593749999984
+          ],
+          "mean_margin": 353.6875,
+          "median_margin": 353.0,
+          "p10_margin": -74.89999999999999,
+          "worst_margin": -144.0,
+          "worst_decile_mean_margin": -116.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 14,
+          "perfect_world_fraction_wilson_lower_95": 0.6397717273424132,
+          "max_candidate_callback_ms": 1008.0659999999999,
+          "non_done": 0
+        },
+        "metav4": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 28,
+          "draws": 0,
+          "losses": 4,
+          "score_rate": 0.875,
+          "world_macro_score": 0.875,
+          "world_block_score_95": [
+            0.6875,
+            1.0
+          ],
+          "world_macro_margin": 1026.1875,
+          "world_block_margin_95": [
+            649.4921875,
+            1404.1484374999995
+          ],
+          "mean_margin": 1026.1875,
+          "median_margin": 964.0,
+          "p10_margin": -146.29999999999998,
+          "worst_margin": -444.0,
+          "worst_decile_mean_margin": -310.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 14,
+          "perfect_world_fraction_wilson_lower_95": 0.6397717273424132,
+          "max_candidate_callback_ms": 714.921,
+          "non_done": 0
+        },
+        "mirror": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 0,
+          "draws": 32,
+          "losses": 0,
+          "score_rate": 0.5,
+          "world_macro_score": 0.5,
+          "world_block_score_95": [
+            0.5,
+            0.5
+          ],
+          "world_macro_margin": 0.0,
+          "world_block_margin_95": [
+            0.0,
+            0.0
+          ],
+          "mean_margin": 0.0,
+          "median_margin": 0.0,
+          "p10_margin": 0.0,
+          "worst_margin": 0.0,
+          "worst_decile_mean_margin": 0.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 1096.5720000000001,
+          "non_done": 0
+        },
+        "ozer_v45": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 5599.1875,
+          "world_block_margin_95": [
+            3924.7828125,
+            7405.012499999998
+          ],
+          "mean_margin": 5599.1875,
+          "median_margin": 4373.5,
+          "p10_margin": 2112.7,
+          "worst_margin": 1837.0,
+          "worst_decile_mean_margin": 1958.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 816.351,
+          "non_done": 0
+        },
+        "parthenos": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 22,
+          "draws": 0,
+          "losses": 10,
+          "score_rate": 0.6875,
+          "world_macro_score": 0.6875,
+          "world_block_score_95": [
+            0.4375,
+            0.875
+          ],
+          "world_macro_margin": 379.3125,
+          "world_block_margin_95": [
+            43.92187500000001,
+            705.440625
+          ],
+          "mean_margin": 379.3125,
+          "median_margin": 591.5,
+          "p10_margin": -704.9,
+          "worst_margin": -946.0,
+          "worst_decile_mean_margin": -843.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 11,
+          "perfect_world_fraction_wilson_lower_95": 0.44404355834740666,
+          "max_candidate_callback_ms": 787.748,
+          "non_done": 0
+        },
+        "pilkwang": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10193.375,
+          "world_block_margin_95": [
+            7025.8109375,
+            13766.670312499995
+          ],
+          "mean_margin": 10193.375,
+          "median_margin": 8570.0,
+          "p10_margin": 3349.2,
+          "worst_margin": 3068.0,
+          "worst_decile_mean_margin": 3198.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 712.438,
+          "non_done": 0
+        },
+        "t2945": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 1712.0625,
+          "world_block_margin_95": [
+            1195.74375,
+            2281.6062499999985
+          ],
+          "mean_margin": 1712.0625,
+          "median_margin": 1459.5,
+          "p10_margin": 290.8,
+          "worst_margin": -100.0,
+          "worst_decile_mean_margin": 78.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 788.257,
+          "non_done": 0
+        },
+        "v5_market": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 30,
+          "draws": 0,
+          "losses": 2,
+          "score_rate": 0.9375,
+          "world_macro_score": 0.9375,
+          "world_block_score_95": [
+            0.8125,
+            1.0
+          ],
+          "world_macro_margin": 539.1875,
+          "world_block_margin_95": [
+            280.36875,
+            825.0734374999998
+          ],
+          "mean_margin": 539.1875,
+          "median_margin": 395.0,
+          "p10_margin": 44.50000000000001,
+          "worst_margin": -295.0,
+          "worst_decile_mean_margin": -128.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 15,
+          "perfect_world_fraction_wilson_lower_95": 0.7167126242970107,
+          "max_candidate_callback_ms": 1120.1870000000001,
+          "non_done": 0
+        },
+        "yaxon": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 6592.5,
+          "world_block_margin_95": [
+            4497.5203125,
+            8716.278124999997
+          ],
+          "mean_margin": 6592.5,
+          "median_margin": 6264.5,
+          "p10_margin": 1297.2,
+          "worst_margin": 1126.0,
+          "worst_decile_mean_margin": 1177.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 707.611,
+          "non_done": 0
+        },
+        "yhay0913": {
+          "games": 32,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            2
+          ],
+          "balanced": true,
+          "wins": 32,
+          "draws": 0,
+          "losses": 0,
+          "score_rate": 1.0,
+          "world_macro_score": 1.0,
+          "world_block_score_95": [
+            1.0,
+            1.0
+          ],
+          "world_macro_margin": 10848.8125,
+          "world_block_margin_95": [
+            7075.86875,
+            14765.076562499999
+          ],
+          "mean_margin": 10848.8125,
+          "median_margin": 8023.0,
+          "p10_margin": 2006.5,
+          "worst_margin": 1118.0,
+          "worst_decile_mean_margin": 1544.5,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 16,
+          "perfect_world_fraction_wilson_lower_95": 0.8063923194655636,
+          "max_candidate_callback_ms": 990.85,
+          "non_done": 0
+        }
+      },
+      "by_seat": {
+        "0": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 133,
+          "draws": 16,
+          "losses": 11,
+          "score_rate": 0.88125,
+          "world_macro_score": 0.88125,
+          "world_block_score_95": [
+            0.825,
+            0.925
+          ],
+          "world_macro_margin": 3726.98125,
+          "world_block_margin_95": [
+            2662.4685937500003,
+            4841.046562500001
+          ],
+          "mean_margin": 3726.98125,
+          "median_margin": 1257.5,
+          "p10_margin": 0.0,
+          "worst_margin": -946.0,
+          "worst_decile_mean_margin": -226.3125,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 803.526,
+          "non_done": 0
+        },
+        "1": {
+          "games": 160,
+          "errors": 0,
+          "worlds": 16,
+          "games_per_world": [
+            10
+          ],
+          "balanced": true,
+          "wins": 133,
+          "draws": 16,
+          "losses": 11,
+          "score_rate": 0.88125,
+          "world_macro_score": 0.88125,
+          "world_block_score_95": [
+            0.825,
+            0.925
+          ],
+          "world_macro_margin": 3721.88125,
+          "world_block_margin_95": [
+            2659.3540625,
+            4830.31765625
+          ],
+          "mean_margin": 3721.88125,
+          "median_margin": 1257.5,
+          "p10_margin": 0.0,
+          "worst_margin": -946.0,
+          "worst_decile_mean_margin": -226.3125,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 1120.1870000000001,
+          "non_done": 0
+        }
+      },
+      "by_first_shop": {
+        "BAKERY": {
+          "games": 100,
+          "errors": 0,
+          "worlds": 5,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 74,
+          "draws": 10,
+          "losses": 16,
+          "score_rate": 0.79,
+          "world_macro_score": 0.7899999999999999,
+          "world_block_score_95": [
+            0.6699999999999999,
+            0.9099999999999999
+          ],
+          "world_macro_margin": 1600.34,
+          "world_block_margin_95": [
+            899.04,
+            2453.24
+          ],
+          "mean_margin": 1600.34,
+          "median_margin": 1021.5,
+          "p10_margin": -147.2,
+          "worst_margin": -946.0,
+          "worst_decile_mean_margin": -520.4,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 990.85,
+          "non_done": 0
+        },
+        "BRUNCH_SPOT": {
+          "games": 80,
+          "errors": 0,
+          "worlds": 4,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 72,
+          "draws": 8,
+          "losses": 0,
+          "score_rate": 0.95,
+          "world_macro_score": 0.95,
+          "world_block_score_95": [
+            0.95,
+            0.95
+          ],
+          "world_macro_margin": 3862.8500000000004,
+          "world_block_margin_95": [
+            2900.075,
+            4603.400000000001
+          ],
+          "mean_margin": 3862.85,
+          "median_margin": 1340.0,
+          "p10_margin": 121.50000000000004,
+          "worst_margin": 0.0,
+          "worst_decile_mean_margin": 0.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 1096.5720000000001,
+          "non_done": 0
+        },
+        "FARMERS_MARKET": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 16,
+          "draws": 2,
+          "losses": 2,
+          "score_rate": 0.85,
+          "world_macro_score": 0.85,
+          "world_block_score_95": [
+            0.85,
+            0.85
+          ],
+          "world_macro_margin": 3647.4,
+          "world_block_margin_95": [
+            3647.4,
+            3647.4
+          ],
+          "mean_margin": 3647.4,
+          "median_margin": 1582.0,
+          "p10_margin": -37.99999999999995,
+          "worst_margin": -380.0,
+          "worst_decile_mean_margin": -380.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 803.935,
+          "non_done": 0
+        },
+        "ICE_CREAM_SHOP": {
+          "games": 60,
+          "errors": 0,
+          "worlds": 3,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 52,
+          "draws": 6,
+          "losses": 2,
+          "score_rate": 0.9166666666666666,
+          "world_macro_score": 0.9166666666666666,
+          "world_block_score_95": [
+            0.85,
+            0.9499999999999998
+          ],
+          "world_macro_margin": 6392.866666666666,
+          "world_block_margin_95": [
+            5565.100000000001,
+            7674.8
+          ],
+          "mean_margin": 6392.866666666667,
+          "median_margin": 1617.5,
+          "p10_margin": 0.0,
+          "worst_margin": -187.0,
+          "worst_decile_mean_margin": -62.333333333333336,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 4.8683609171202235e-17,
+          "max_candidate_callback_ms": 1120.1870000000001,
+          "non_done": 0
+        },
+        "PET_CAFE": {
+          "games": 20,
+          "errors": 0,
+          "worlds": 1,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 18,
+          "draws": 2,
+          "losses": 0,
+          "score_rate": 0.95,
+          "world_macro_score": 0.95,
+          "world_block_score_95": [
+            0.95,
+            0.95
+          ],
+          "world_macro_margin": 8475.4,
+          "world_block_margin_95": [
+            8475.4,
+            8475.4
+          ],
+          "mean_margin": 8475.4,
+          "median_margin": 3603.0,
+          "p10_margin": 767.7000000000002,
+          "worst_margin": 0.0,
+          "worst_decile_mean_margin": 0.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 887.673,
+          "non_done": 0
+        },
+        "SMOOTHIE_SHOP": {
+          "games": 40,
+          "errors": 0,
+          "worlds": 2,
+          "games_per_world": [
+            20
+          ],
+          "balanced": true,
+          "wins": 34,
+          "draws": 4,
+          "losses": 2,
+          "score_rate": 0.9,
+          "world_macro_score": 0.8999999999999999,
+          "world_block_score_95": [
+            0.85,
+            0.95
+          ],
+          "world_macro_margin": 2418.2,
+          "world_block_margin_95": [
+            2147.8,
+            2688.6
+          ],
+          "mean_margin": 2418.2,
+          "median_margin": 1625.0,
+          "p10_margin": 0.0,
+          "worst_margin": -120.0,
+          "worst_decile_mean_margin": -60.0,
+          "losses_over_1000": 0,
+          "losses_over_5000": 0,
+          "perfect_worlds": 0,
+          "perfect_world_fraction_wilson_lower_95": 0.0,
+          "max_candidate_callback_ms": 319.812,
+          "non_done": 0
+        }
+      },
+      "worst_games": [
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -946.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -946.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -741.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -741.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 0,
+          "margin": -444.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 657395808,
+          "opponent": "metav4",
+          "seat": 1,
+          "margin": -444.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "YARN_STORE",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 1578053980,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -380.0,
+          "shops": [
+            "FARMERS_MARKET",
+            "ICE_CREAM_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP"
+          ]
+        },
+        {
+          "seed": 1578053980,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -380.0,
+          "shops": [
+            "FARMERS_MARKET",
+            "ICE_CREAM_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 0,
+          "margin": -295.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 337687694,
+          "opponent": "v5_market",
+          "seat": 1,
+          "margin": -295.0,
+          "shops": [
+            "BAKERY",
+            "SMOOTHIE_SHOP",
+            "FARMERS_MARKET",
+            "SMOOTHIE_SHOP",
+            "SMOOTHIE_SHOP",
+            "BAKERY",
+            "ICE_CREAM_SHOP",
+            "SMOOTHIE_SHOP"
+          ]
+        },
+        {
+          "seed": 174066626,
+          "opponent": "parthenos",
+          "seat": 0,
+          "margin": -187.0,
+          "shops": [
+            "ICE_CREAM_SHOP",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "YARN_STORE",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP"
+          ]
+        },
+        {
+          "seed": 174066626,
+          "opponent": "parthenos",
+          "seat": 1,
+          "margin": -187.0,
+          "shops": [
+            "ICE_CREAM_SHOP",
+            "ICE_CREAM_SHOP",
+            "PIZZA_SHOP",
+            "SMOOTHIE_SHOP",
+            "PIZZA_SHOP",
+            "YARN_STORE",
+            "SMOOTHIE_SHOP",
+            "ICE_CREAM_SHOP"
+          ]
+        }
+      ]
+    }
+  },
+  "paired_against": "cma4_g005",
+  "paired": {
+    "cma4_g015": {
+      "matched_games": 320,
+      "unmatched_games": 0,
+      "worlds": 16,
+      "paired_score_gain": 0.0,
+      "paired_score_gain_95": [
+        0.0,
+        0.0
+      ],
+      "paired_margin_gain": -9.321874999999999,
+      "paired_margin_gain_95": [
+        -25.056796875,
+        3.778437499999997
+      ]
+    },
+    "es5_c3g15": {
+      "matched_games": 320,
+      "unmatched_games": 0,
+      "worlds": 16,
+      "paired_score_gain": -0.053125000000000006,
+      "paired_score_gain_95": [
+        -0.08125,
+        -0.025
+      ],
+      "paired_margin_gain": -45.15625,
+      "paired_margin_gain_95": [
+        -100.69624999999999,
+        4.634374999999952
+      ]
+    }
+  },
+  "pairwise": {
+    "cma4_g005": {
+      "cma4_g015": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": 0.0,
+        "paired_score_gain_95": [
+          0.0,
+          0.0
+        ],
+        "paired_margin_gain": -9.321874999999999,
+        "paired_margin_gain_95": [
+          -25.056796875,
+          3.778437499999997
+        ]
+      },
+      "es5_c3g15": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": -0.053125000000000006,
+        "paired_score_gain_95": [
+          -0.08125,
+          -0.025
+        ],
+        "paired_margin_gain": -45.15625,
+        "paired_margin_gain_95": [
+          -100.69624999999999,
+          4.634374999999952
+        ]
+      }
+    },
+    "cma4_g015": {
+      "cma4_g005": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": 0.0,
+        "paired_score_gain_95": [
+          0.0,
+          0.0
+        ],
+        "paired_margin_gain": 9.321874999999999,
+        "paired_margin_gain_95": [
+          -3.7784375000000012,
+          25.05679687499999
+        ]
+      },
+      "es5_c3g15": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": -0.053125000000000006,
+        "paired_score_gain_95": [
+          -0.08125,
+          -0.025
+        ],
+        "paired_margin_gain": -35.83437500000001,
+        "paired_margin_gain_95": [
+          -81.825546875,
+          7.292421874999974
+        ]
+      }
+    },
+    "es5_c3g15": {
+      "cma4_g005": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": 0.053125000000000006,
+        "paired_score_gain_95": [
+          0.025,
+          0.08125
+        ],
+        "paired_margin_gain": 45.15625,
+        "paired_margin_gain_95": [
+          -4.634374999999997,
+          100.69624999999996
+        ]
+      },
+      "cma4_g015": {
+        "matched_games": 320,
+        "unmatched_games": 0,
+        "worlds": 16,
+        "paired_score_gain": 0.053125000000000006,
+        "paired_score_gain_95": [
+          0.025,
+          0.08125
+        ],
+        "paired_margin_gain": 35.83437500000001,
+        "paired_margin_gain_95": [
+          -7.292421875,
+          81.82554687499996
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "Intervals condition on the frozen opponent suite.",
+    "Both seats and all opponents in a world are resampled together.",
+    "Shop-stratified summaries are post-hoc descriptive analyses.",
+    "All-success bootstrap intervals are degenerate; also inspect perfect-world Wilson bounds."
+  ],
+  "expected_games": 960,
+  "completed_games": 960,
+  "inputs_unchanged": true,
+  "evaluation_valid": true
+}

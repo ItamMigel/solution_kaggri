@@ -75,3 +75,23 @@ Frozen 960 games, 16 worlds, both seats. Output: /workspace/shared/runs/t025_cma
 888/960 completed; errors=0
 900/960 completed; errors=0
 912/960 completed; errors=0
+924/960 completed; errors=0
+936/960 completed; errors=0
+948/960 completed; errors=0
+960/960 completed; errors=0
+Results: /workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/README.md
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/t025_fresh_full_panel_report.py", line 105, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/t025_fresh_full_panel_report.py", line 71, in main
+    per_op[op] = np.mean(values, axis=0)
+           ^^
+NameError: name 'op' is not defined. Did you mean: 'ap'?
+Traceback (most recent call last):
+  File "/workspace/wt/codex/lab/tools/t025_run_fresh_full_gate.py", line 152, in <module>
+    main()
+  File "/workspace/wt/codex/lab/tools/t025_run_fresh_full_gate.py", line 122, in main
+    subprocess.run(report_command, cwd=ROOT, check=True)
+  File "/venv/main/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/workspace/solution_kaggri/.venv/bin/python', '/workspace/wt/codex/lab/tools/t025_fresh_full_panel_report.py', '--games', '/workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/arena/games.jsonl', '--candidate', 'cma4_g005', '--control', 'es5_c3g15', '--out', '/workspace/shared/runs/t025_cma4_g005_and_g015_fresh_full_gate/cma4_g005_gate_report.json', '--allowed-agent', 'cma4_g015']' returned non-zero exit status 1.

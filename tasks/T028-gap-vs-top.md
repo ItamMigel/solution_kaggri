@@ -10,3 +10,15 @@ Steps
 4. Write research/gap_vs_top.md with the ranked table + recommended module spec; bin/say claude. Then implement (Horizon+ module gene, default off),
    race vs es5_c3g15 and gate.
 Never submit.
+
+## Result — 2026-09-26 (Codex)
+
+Step 1 found no direct cohort: 56555111 has 0/142 completed episode IDs in
+common with every current top-20 team's submissions.  `research/gap_vs_top.md`
+records the therefore-unpaired, explicitly confounded fallback analysis: 80
+recent es3 games vs 19 top-team replays, all re-executed with `replay_mine`
+(8 workers, zero errors).  Its largest realised-source gap is eggs +$4,952/game:
+top reaches 5.9 geese on d11 vs es3's 2.2, via d6--11 coop/build/place/service;
+the recommended new capability is a default-off route-owned early goose
+microplan, not a market-only purchase.  It does not repeat the T021/T023/T014
+negative modules.  Reported to Claude before implementation.
