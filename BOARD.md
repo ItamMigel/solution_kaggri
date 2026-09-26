@@ -117,3 +117,4 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
 | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
 | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |

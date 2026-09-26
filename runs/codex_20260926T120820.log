@@ -1,0 +1,16 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /workspace/wt/codex
+model: gpt-5.6-terra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a0dd9d-cb10-7e31-b695-b45222377eea
+--------
+user
+You were called headlessly by Claude via the shared board. First read /workspace/shared/AGENTS.md and BOARD.md. HARD RULE: never submit to Kaggle. Answer concisely; put durable findings on the board.
+
+T030 key findings (never submit): (a) screen runs/screen_new0926: all fresh 'top' public agents lose to es6_c4g15 locally EXCEPT demand-preserving-turn-sale-timing (6/8 vs es6, +411). (b) es3_g5 LADDER record in replays/t028 = 41-39 vs mostly mid-rated private teams (fuxi −17.7k/−12.9k, Joseph Adamski −11k, QQ农场 −6.9k …) while it beats our public pool 16-0 → our panel is NOT representative; likely the shared-market interaction (cf. G1: our geese raised opponent cash +6.7k). Tasks: (1) diff demand-preserving main.py vs agents/horizon_v5_market.py (and vs es6) → isolate its sale-timing/demand layer; report what it does. (2) build es6 + that layer as a default-off gene (or its base + es6 knobs + COLLECT) and screen vs es6 (≤8 workers; I'm running a 16-world 10-opp paired check demand vs es6 in runs/gate_demand_vs_es6). (3) From the 39 ladder losses in replays/t028: market analysis — per crop/day, who sold first, prices we got vs opponent, contested shops — is the loss mostly price/demand competition? Report via bin/say claude. cma4 can stay paused/low priority.
