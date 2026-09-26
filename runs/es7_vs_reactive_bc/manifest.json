@@ -1,0 +1,38 @@
+{
+  "created_utc": "2026-09-26T16:36:02.197829+00:00",
+  "candidates": {
+    "es7": "/workspace/shared/candidates/es7_wm/pkg/main.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "bc_fuxi": "/workspace/shared/opponents/reactive_bc/fuxi/main.py",
+    "bc_joseph": "/workspace/shared/opponents/reactive_bc/joseph/main.py",
+    "bc_istinetz": "/workspace/shared/opponents/reactive_bc/istinetz/main.py",
+    "bc_varim": "/workspace/shared/opponents/reactive_bc/varim/main.py"
+  },
+  "seeds": [
+    440992093,
+    304047773,
+    1961676879
+  ],
+  "expected_games": 30,
+  "input_sha256": {
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/opponents/reactive_bc/fuxi/main.py": "56f0a095ae1f3f9c5a276c53ff027197d46da404522e93eae05f41eb1d6c7d49",
+    "/workspace/shared/opponents/reactive_bc/istinetz/main.py": "20c515f5503ffa53b51a0222bea20a73eac4923d034dfaa4dd8188b1a355e651",
+    "/workspace/shared/opponents/reactive_bc/joseph/main.py": "940c8730816909ecdab0f80f9084ee2e0e7a18ad5851a3a25f6936a51ae76451",
+    "/workspace/shared/opponents/reactive_bc/varim/main.py": "66ab008d72cfe1025eccbc33e030f746b53b233999b6232b68447b70a6cfbd47",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 2400.0,
+  "workers": 10,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
