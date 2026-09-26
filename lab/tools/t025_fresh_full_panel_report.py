@@ -68,8 +68,8 @@ def main():
                 if kc not in rows or kb not in rows:
                     raise RuntimeError(f"missing paired row: seed={seed}, opponent={opponent}, seat={seat}")
                 values.append((rows[kc][0] - rows[kb][0], rows[kc][1] - rows[kb][1]))
-            per_op[op] = np.mean(values, axis=0)
-            by_opponent[op].append(per_op[op])
+            per_op[opponent] = np.mean(values, axis=0)
+            by_opponent[opponent].append(per_op[opponent])
         strata = [per_op[op] for op in CORE] + [np.mean([per_op[op] for op in FAMILY], axis=0)]
         per_world.append({"seed": seed, "score": float(np.mean([x[0] for x in strata])),
                           "cash": float(np.mean([x[1] for x in strata]))})
