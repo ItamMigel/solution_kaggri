@@ -29,7 +29,7 @@ def orders(obs, player, want, tg):
     for item in ("MELON", "STRAWBERRY", "MILK", "WOOL", "EGG", "CARROT", "TOMATO", "WHEAT", "FERTILIZER"):
         have = shed.get(item, 0)
         if item == "WHEAT": have -= feed_need
-        if item == "FERTILIZER": have -= 4
+        if item == "FERTILIZER": have -= (25 if day >= 10 else 2)   # keep fertilizer for FERTILIZE from d10 (DSM from d11); sell before for cash
         if have <= 0 or len(out) >= 6: continue
         if item in STEEP and not last and day < 28:
             if prices[item] < 0.4 * BASE[item] and have < 25: continue   # deep glut: wait for town consumption

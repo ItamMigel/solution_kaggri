@@ -8,6 +8,20 @@ def _step_toward(p, q):
     if p[1] < q[1]: return ["SOUTH"]
     if p[1] > q[1]: return ["NORTH"]
     return None
+import math
+W = {'WATER': 0.29830579931433887, 'HARVEST_P': 0.0671040946792054, 'HARVEST_A': -0.17265410499451764, 'FEED': 0.10546262000740361, 'CARE': 0.11983580041589408, 'COLLECT_FERTILIZER': 0.3800343153566766, 'PLANT': 0.2514896113763875, 'DIG': 0.013690389748303099, 'BUILD': -0.1460021406695152, 'PLACE': -0.031605376482775754, 'FERTILIZE': -0.8856610087513993, 'dist': -1.1461936814955174, 'log1p_dist': -0.43259014730261003, 'unwatered': 0.19916721739468857, 'unfed': 0.04805598104353318, 'yield': 0.07498254425595476, 'hour': 1.7664124801432992e-18, 'feed_needs_fetch': 0.10546262000740361, 'water_x_hour': 0.1345397106986807}
+OPMAP = {"WATER": "WATER", "HARVEST": None, "FEED": "FEED", "CARE": "CARE", "COLLECT_FERTILIZER": "COLLECT_FERTILIZER", "PLANT": "PLANT", "DIG": "DIG",
+         "BUILD_COOP": "BUILD", "BUILD_PASTURE": "BUILD", "PLACE": "PLACE", "FERTILIZE": "FERTILIZE"}
+def utility(a, pos, d, tiles, hour, carrying_w):
+    op = a[0]; t = tiles[pos[1]][pos[0]]
+    key = ("HARVEST_A" if isinstance(t, dict) and t.get("animal") else "HARVEST_P") if op == "HARVEST" else OPMAP.get(op, "DIG")
+    u = W.get(key, 0) + W["dist"] * d + W["log1p_dist"] * math.log1p(d) + W["hour"] * hour / 23.0
+    if isinstance(t, dict):
+        if op == "WATER": u += W["unwatered"] * t.get("consecutive_unwatered", 0) + W["water_x_hour"] * hour / 23.0
+        if op == "FEED": u += W["unfed"] * t.get("consecutive_unfed", 0) + W["feed_needs_fetch"] * (1 - carrying_w)
+        if op == "HARVEST": u += W["yield"] * t.get("yield_units", 0)
+    return u
+
 def act(obs, plan):
     p = plan["player"]; farm = obs["farms"][p]; priv = obs.get("private") or {}; day = int(obs["day"]); hour = int(obs.get("hour", 0))
     tiles = farm["tiles"]; want = plan["want"]; seeds = dict(priv.get("seeds") or {}); shed = dict(priv.get("shed") or {})
@@ -28,6 +42,9 @@ def act(obs, plan):
             if k == "PLANT":
                 fyd, myd, ongoing, mx = CROPS[t["crop"]]; age = day - t["planted_day"]
                 if not t["watered_today"]: tasks.append((9 if t["consecutive_unwatered"] >= 1 else 4, (x, y), ["WATER"], None))
+                win = (ongoing and age >= fyd - 1) or ((myd + 1) // 2 <= age <= myd)
+                if day >= 10 and win and t.get("fertilized_until_day", -1) < day and t["crop"] in ("STRAWBERRY", "WHEAT", "MELON", "TOMATO", "CARROT"):
+                    tasks.append((6 if t["crop"] in ("STRAWBERRY", "MELON") else 4, (x, y), ["FERTILIZE"], "FERTILIZER"))
                 if t.get("yield_units", 0) > 0 and (ongoing or age >= myd or t["yield_units"] >= mx): tasks.append((7, (x, y), ["HARVEST"], None))
                 if role and role != t["crop"] and not ongoing and age >= myd and t.get("yield_units", 0) <= 0: tasks.append((1, (x, y), ["DIG"], None))
                 continue
@@ -47,13 +64,14 @@ def act(obs, plan):
     taken = set(); acts = []
     for i, u in enumerate(units):
         inv = invs[i]; carrying = {k: v for k, v in inv.items() if v > 0}
-        prod = sum(v for k, v in carrying.items() if k in PRODUCTS and k != "WHEAT")
+        prod = sum(v for k, v in carrying.items() if k in PRODUCTS and k not in ("WHEAT", "FERTILIZER"))
         best = None
         for val, pos, a, need in tasks:
             if (pos, a[0]) in taken: continue
             if need and carrying.get(need, 0) <= 0: continue
-            d = abs(u[0] - pos[0]) + abs(u[1] - pos[1]); score = val / (1 + d)
-            if zone.get(pos, 0) == i % nz: score *= 3.0
+            d = abs(u[0] - pos[0]) + abs(u[1] - pos[1])
+            score = utility(a, pos, d, tiles, hour, 1 if carrying.get("WHEAT", 0) > 0 else 0) + 0.15 * val
+            if zone.get(pos, 0) == i % nz: score += 1.0
             if best is None or score > best[0]: best = (score, pos, a, d)
         # shed errands: drop products / fetch wheat or animals
         acc = min(ACCESS, key=lambda q: abs(u[0] - q[0]) + abs(u[1] - q[1])); dacc = abs(u[0] - acc[0]) + abs(u[1] - acc[1])
@@ -65,6 +83,8 @@ def act(obs, plan):
         if at_shed and prod > 0: errand = ["DROP"]
         elif at_shed and carrying.get("WHEAT", 0) < 2 and shed.get("WHEAT", 0) >= 4 and unfed > 0:
             k = min(shed["WHEAT"], 4); errand = ["PICKUP", "WHEAT", k]; shed["WHEAT"] -= k
+        elif at_shed and day >= 10 and carrying.get("FERTILIZER", 0) < 1 and shed.get("FERTILIZER", 0) >= 2 and any(n == "FERTILIZER" for _, _, _, n in tasks):
+            k = min(shed["FERTILIZER"], 4); errand = ["PICKUP", "FERTILIZER", k]; shed["FERTILIZER"] -= k
         elif at_shed and need_animal: errand = ["PICKUP", need_animal, 1]; shed[need_animal] -= 1
         elif prod >= 8 or (hour >= 22 and prod > 0): errand = ["DROP"]
         elif need_wheat: k = min(shed.get("WHEAT", 0), max(4, unfed)); errand = ["PICKUP", "WHEAT", k]; shed["WHEAT"] = shed.get("WHEAT", 0) - k
