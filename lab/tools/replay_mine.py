@@ -22,7 +22,7 @@ def mine(path, verbose=True):
     steps = d["steps"]
 
     # ---- instrumentation state -------------------------------------------
-    cur = {"step": 0}
+    cur = {"step": 0, "day": 0}
     farms_ref = {}
     sells = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]  # item -> [units, revenue]
     buys = [defaultdict(lambda: [0, 0.0]), defaultdict(lambda: [0, 0.0])]
@@ -36,6 +36,11 @@ def mine(path, verbose=True):
     market_ops = [Counter(), Counter()]
     order_lane = [Counter(), Counter()]  # (op, index) counts
     first_sell_day = [{}, {}]
+    # Per-day wheat-flow instrumentation is deliberately action-success based.
+    # End-of-day tile snapshots alone cannot distinguish a crop that was grown
+    # and harvested from a crop never planted at all.
+    wheat_daily = [defaultdict(Counter), defaultdict(Counter)]
+    wheat_state = [[], []]
 
     orig_commit = K._commit_unit
     orig_hire = K._do_hire
@@ -46,7 +51,7 @@ def mine(path, verbose=True):
         pid = farms_ref.get(id(farm), 0)
         ok = orig_commit(op, item, price, farm, private, market, *extra)
         if ok:
-            day = cur["step"] // 24
+            day = cur["day"]
             if op == "SELL":
                 sells[pid][item][0] += 1
                 sells[pid][item][1] += price
@@ -57,6 +62,10 @@ def mine(path, verbose=True):
                 key = op + ":" + item
                 buys[pid][key][0] += 1
                 buys[pid][key][1] += price
+                if item == "WHEAT" and op in ("BUY_PRODUCT", "BUY_SEED"):
+                    prefix = "buy_product" if op == "BUY_PRODUCT" else "buy_seed"
+                    wheat_daily[pid][day][prefix + "_wheat_units"] += 1
+                    wheat_daily[pid][day][prefix + "_wheat_cost"] += price
                 if op == "BUY_PRODUCT":
                     sell_by_day[pid][day]["BUY_" + item] -= 1
                     sell_price_by_day[pid][day].append(("BUY_" + item, price))
@@ -83,6 +92,16 @@ def mine(path, verbose=True):
         pid = farms_ref.get(id(farm), 0)
         op = action[0] if isinstance(action, list) and action else "?"
         unit_ops[pid][op] += 1
+        pos = _farmer_pos(farm, idx)
+        tile_before = None
+        if pos is not None:
+            x, y = pos
+            tile = farm["tiles"][y][x]
+            if isinstance(tile, dict):
+                # Only scalar fields are used below; do not retain a mutable
+                # reference which _apply_unit_action changes in-place.
+                tile_before = dict(tile)
+        inv_before_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
         snap = (farm["money"], json.dumps(private["shed"], sort_keys=True),
                 str(_farmer_pos(farm, idx)), json.dumps(private["inventories"], sort_keys=True))
         orig_unit(farm, private, idx, action, board_size, day, turns_per_day, shed_capacity)
@@ -91,6 +110,25 @@ def mine(path, verbose=True):
         # crude but sufficient: tile mutations not caught -> handle separately
         if snap != snap2:
             unit_ops_ok[pid][op] += 1
+        if pos is not None:
+            x, y = pos
+            tile_after = farm["tiles"][y][x]
+            if op == "PLANT" and len(action) >= 2 and action[1] == "WHEAT":
+                if isinstance(tile_after, dict) and tile_after.get("kind") == "PLANT" and tile_after.get("crop") == "WHEAT":
+                    wheat_daily[pid][day]["wheat_tiles_planted"] += 1
+            elif op == "HARVEST" and tile_before and tile_before.get("kind") == "PLANT" and tile_before.get("crop") == "WHEAT":
+                # A successful harvest clears yield_units (and removes a
+                # finite crop); record both the tile action and yielded units.
+                yielded = tile_before.get("yield_units", 0)
+                after_yield = tile_after.get("yield_units", 0) if isinstance(tile_after, dict) else 0
+                if yielded > 0 and after_yield == 0:
+                    wheat_daily[pid][day]["wheat_tiles_harvested"] += 1
+                    wheat_daily[pid][day]["wheat_units_harvested"] += yielded
+            elif op == "FEED" and tile_before and "animal" in tile_before:
+                inv_after_wheat = private["inventories"][idx].get("WHEAT", 0) if idx < len(private["inventories"]) else 0
+                if inv_after_wheat == inv_before_wheat - 1:
+                    wheat_daily[pid][day]["feed_actions"] += 1
+                    wheat_daily[pid][day]["wheat_units_fed"] += 1
 
     def _farmer_pos(farm, idx):
         return farm["farmer"] if idx == 0 else (farm["hands"][idx - 1] if idx - 1 < len(farm["hands"]) else None)
@@ -120,7 +158,9 @@ def mine(path, verbose=True):
         tiles_hist = []
         for t in range(1, len(steps)):
             cur["step"] = t
-            f0 = env.state[0]["observation"]["farms"]
+            before_obs = env.state[0]["observation"]
+            cur["day"] = before_obs["day"]
+            f0 = before_obs["farms"]
             farms_ref.clear()
             farms_ref[id(f0[0])] = 0
             farms_ref[id(f0[1])] = 1
@@ -144,6 +184,14 @@ def mine(path, verbose=True):
                                    [len(obs["farms"][p]["hands"]) for p in range(2)],
                                    [list(obs["farms"][p]["unlocked_quadrants"]) for p in range(2)],
                                    list(obs["town"]["unlocked_shops"])))
+                for p in range(2):
+                    census = _tile_census(obs["farms"][p])
+                    # step 24 is the end of playable day 0 (the observation
+                    # has already advanced to day 1), hence this label.
+                    wheat_state[p].append({"day": (t - 1) // 24,
+                                           "wheat_tiles_eod": census.get("P_WHEAT", 0),
+                                           "hands_eod": len(obs["farms"][p]["hands"]),
+                                           "quadrants_eod": len(obs["farms"][p]["unlocked_quadrants"])})
     finally:
         K._commit_unit = orig_commit
         K._do_hire = orig_hire
@@ -164,6 +212,8 @@ def mine(path, verbose=True):
         "tiles_hist": tiles_hist,
         "sell_by_day": [{d_: dict(v) for d_, v in s.items()} for s in sell_by_day],
         "sell_price_by_day": [{d_: v for d_, v in s.items()} for s in sell_price_by_day],
+        "wheat_daily": [{d_: dict(v) for d_, v in days.items()} for days in wheat_daily],
+        "wheat_state": wheat_state,
     }
     if verbose:
         report(res)
