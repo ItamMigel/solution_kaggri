@@ -1119,3 +1119,499 @@ exec
  succeeded in 0ms:
 19
 
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import concurrent.futures, glob, json, os, sys
+sys.path.insert(0, 'lab/tools')
+from replay_mine import mine
+TOP={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+ours=sorted(glob.glob('/workspace/shared/replays/t028/episode-*-replay.json'))
+tops=sorted(glob.glob('/workspace/shared/replays/t028_top/episode-*-replay.json'))
+def job(arg):
+ label,f=arg
+ try:
+  r=mine(f, verbose=False)
+  return {'label':label,'file':os.path.basename(f),'result':r}
+ except Exception as e: return {'label':label,'file':os.path.basename(f),'error':repr(e)}
+args=[('ours',f) for f in ours]
+for f in tops:
+ with open(f) as h: d=json.load(h)
+ names=d['info'].get('TeamNames',[])
+ t=next((x for x in names if x in TOP),None)
+ args.append((f'top{TOP[t]}' if t else 'top_unknown',f))
+with concurrent.futures.ProcessPoolExecutor(max_workers=8) as ex: out=list(ex.map(job,args))
+dst='/workspace/shared/runs/t028_income_mined.json'
+json.dump(out,open(dst,'w'))
+print('wrote',dst,'jobs',len(out),'errors',sum('error'in x for x in out))
+from collections import Counter
+print(Counter(x['label'] for x in out))
+PY" in /workspace/wt/codex
+exec
+/bin/bash -lc "ps -eo pid,ppid,stat,pcpu,cmd | rg 't028_income|replay_mine|python -' || true; ls -lh /workspace/shared/runs/t028_income_mined.json 2>/dev/null || true; find /workspace/shared/replays/t028_top -maxdepth 1 -type f -printf '%f\\n' | wc -l" in /workspace/wt/codex
+ succeeded in 0ms:
+ 504048  493731 Ss    0.0 /bin/bash -c /workspace/solution_kaggri/.venv/bin/python - <<'PY' import concurrent.futures, glob, json, os, sys sys.path.insert(0, 'lab/tools') from replay_mine import mine TOP={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20} ours=sorted(glob.glob('/workspace/shared/replays/t028/episode-*-replay.json')) tops=sorted(glob.glob('/workspace/shared/replays/t028_top/episode-*-replay.json')) def job(arg):  label,f=arg  try:   r=mine(f, verbose=False)   return {'label':label,'file':os.path.basename(f),'result':r}  except Exception as e: return {'label':label,'file':os.path.basename(f),'error':repr(e)} args=[('ours',f) for f in ours] for f in tops:  with open(f) as h: d=json.load(h)  names=d['info'].get('TeamNames',[])  t=next((x for x in names if x in TOP),None)  args.append((f'top{TOP[t]}' if t else 'top_unknown',f)) with concurrent.futures.ProcessPoolExecutor(max_workers=8) as ex: out=list(ex.map(job,args)) dst='/workspace/shared/runs/t028_income_mined.json' json.dump(out,open(dst,'w')) print('wrote',dst,'jobs',len(out),'errors',sum('error'in x for x in out)) from collections import Counter print(Counter(x['label'] for x in out)) PY
+ 504049  504048 Sl   29.9 /workspace/solution_kaggri/.venv/bin/python -
+ 504301  504049 R    76.9 /workspace/solution_kaggri/.venv/bin/python -
+ 504302  504049 R    76.8 /workspace/solution_kaggri/.venv/bin/python -
+ 504303  504049 R    76.9 /workspace/solution_kaggri/.venv/bin/python -
+ 504304  504049 R    77.6 /workspace/solution_kaggri/.venv/bin/python -
+ 504305  504049 R    78.1 /workspace/solution_kaggri/.venv/bin/python -
+ 504306  504049 R    76.8 /workspace/solution_kaggri/.venv/bin/python -
+ 504307  504049 R    77.4 /workspace/solution_kaggri/.venv/bin/python -
+ 504308  504049 R    78.1 /workspace/solution_kaggri/.venv/bin/python -
+ 504806  493731 Ss    0.0 /bin/bash -c ps -eo pid,ppid,stat,pcpu,cmd | rg 't028_income|replay_mine|python -' || true; ls -lh /workspace/shared/runs/t028_income_mined.json 2>/dev/null || true; find /workspace/shared/replays/t028_top -maxdepth 1 -type f -printf '%f\n' | wc -l
+ 504814  504806 S     0.0 rg t028_income|replay_mine|python -
+19
+
+codex
+Разбор запущен на 99 реплеях с лимитом ровно 8 процессов: доходы по товарам и дням, покупки/найм/земля и фактические действия юнитов. Он не запускает матчей и не меняет агентов.
+exec
+/bin/bash -lc 'while ps -p 504049 >/dev/null 2>&1; do sleep 5; done; ls -lh /workspace/shared/runs/t028_income_mined.json' in /workspace/wt/codex
+exec
+/bin/bash -lc 'while ps -p 504049 >/dev/null 2>&1; do sleep 5; done; ls -lh /workspace/shared/runs/t028_income_mined.json' in /workspace/wt/codex
+ succeeded in 74851ms:
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+wrote /workspace/shared/runs/t028_income_mined.json jobs 99 errors 0
+Counter({'ours': 80, 'top19': 2, 'top7': 2, 'top14': 2, 'top13': 2, 'top2': 2, 'top10': 1, 'top15': 1, 'top11': 1, 'top1': 1, 'top9': 1, 'top6': 1, 'top16': 1, 'top3': 1, 'top5': 1})
+
+ succeeded in 4900ms:
+-rw-rw-r-- 1 root root 13M Sep 26 09:35 /workspace/shared/runs/t028_income_mined.json
+
+ succeeded in 40109ms:
+-rw-rw-r-- 1 root root 13M Sep 26 09:35 /workspace/shared/runs/t028_income_mined.json
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,collections,statistics
+x=json.load(open('/workspace/shared/runs/t028_income_mined.json'))
+for label in ['ours','top1','top2','top3']:
+ r=next(y['result'] for y in x if y['label']==label)
+ print(label,r['names'],r['rewards'])
+ for p in range(2): print(p, r['sells'][p].keys(),r['buys'][p].keys(),r['unit_ops'][p])
+PY" in /workspace/wt/codex
+ succeeded in 237ms:
+ours ['misis biznessmenlb', 'Ryo'] [112945.0, 113746.0]
+0 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'CARROT', 'MELON', 'EGG', 'STRAWBERRY']) dict_keys(['BUY_PRODUCT:WHEAT', 'BUY_SEED:WHEAT', 'BUY_ANIMAL:COW', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:STRAWBERRY', 'BUY_PRODUCT:FERTILIZER', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:CARROT']) {'PASS': 402, 'NORTH': 920, 'SOUTH': 500, 'PICKUP': 208, 'WEST': 857, 'BUILD_PASTURE': 10, 'PLACE': 89, 'PLANT': 239, 'CARE': 393, 'WATER': 1094, 'FEED': 342, 'COLLECT_FERTILIZER': 412, 'EAST': 565, 'HARVEST': 488, 'DROP': 50, 'BUILD_COOP': 9, 'FERTILIZE': 109, 'DIG': 36}
+1 dict_keys(['FERTILIZER', 'WHEAT', 'WOOL', 'MILK', 'MELON', 'EGG', 'STRAWBERRY', 'CARROT']) dict_keys(['BUY_PRODUCT:WHEAT', 'BUY_SEED:WHEAT', 'BUY_ANIMAL:COW', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:STRAWBERRY', 'BUY_ANIMAL:GOOSE', 'BUY_PRODUCT:FERTILIZER', 'BUY_SEED:CARROT']) {'PASS': 461, 'NORTH': 926, 'SOUTH': 505, 'PICKUP': 208, 'WEST': 865, 'BUILD_PASTURE': 10, 'PLACE': 91, 'PLANT': 239, 'CARE': 396, 'WATER': 1094, 'FEED': 343, 'COLLECT_FERTILIZER': 360, 'EAST': 573, 'HARVEST': 490, 'DROP': 53, 'BUILD_COOP': 9, 'FERTILIZE': 109, 'DIG': 37}
+top1 ['Boey', 'M & M & P & Q'] [109027.0, 110555.0]
+0 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'EGG', 'MILK', 'MELON', 'STRAWBERRY', 'CARROT']) dict_keys(['BUY_PRODUCT:WHEAT', 'BUY_SEED:WHEAT', 'BUY_ANIMAL:SHEEP', 'BUY_PRODUCT:FERTILIZER', 'BUY_ANIMAL:COW', 'BUY_SEED:MELON', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:STRAWBERRY', 'BUY_SEED:CARROT']) {'PASS': 206, 'PICKUP': 189, 'WEST': 1025, 'NORTH': 939, 'BUILD_PASTURE': 14, 'PLACE': 88, 'DROP': 111, 'PLANT': 253, 'WATER': 1004, 'EAST': 589, 'CARE': 376, 'FEED': 373, 'SOUTH': 543, 'COLLECT_FERTILIZER': 473, 'HARVEST': 528, 'BUILD_COOP': 6, 'FERTILIZE': 227, 'DIG': 29}
+1 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'MELON', 'EGG', 'STRAWBERRY', 'TOMATO', 'CARROT']) dict_keys(['BUY_ANIMAL:COW', 'BUY_PRODUCT:WHEAT', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:WHEAT', 'BUY_SEED:STRAWBERRY', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:TOMATO', 'BUY_SEED:CARROT']) {'PASS': 169, 'PICKUP': 187, 'BUILD_PASTURE': 16, 'PLACE': 88, 'NORTH': 918, 'WEST': 994, 'FEED': 325, 'CARE': 332, 'SOUTH': 817, 'PLANT': 216, 'WATER': 1125, 'COLLECT_FERTILIZER': 447, 'DROP': 84, 'EAST': 576, 'HARVEST': 506, 'BUILD_COOP': 5, 'FERTILIZE': 225, 'DIG': 45}
+top2 ['M & M & P & Q', 'Densike'] [105105.0, 98398.0]
+0 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'MELON', 'EGG', 'STRAWBERRY', 'CARROT']) dict_keys(['BUY_ANIMAL:COW', 'BUY_PRODUCT:WHEAT', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:WHEAT', 'BUY_SEED:STRAWBERRY', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:CARROT']) {'PASS': 297, 'PICKUP': 195, 'BUILD_PASTURE': 12, 'PLACE': 40, 'NORTH': 990, 'WEST': 897, 'CARE': 399, 'FEED': 390, 'PLANT': 282, 'EAST': 553, 'SOUTH': 608, 'WATER': 1080, 'COLLECT_FERTILIZER': 502, 'DROP': 131, 'HARVEST': 558, 'BUILD_COOP': 10, 'FERTILIZE': 242, 'DIG': 23}
+1 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'MELON', 'EGG', 'STRAWBERRY', 'CARROT', 'TOMATO']) dict_keys(['BUY_ANIMAL:COW', 'BUY_PRODUCT:WHEAT', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:WHEAT', 'BUY_SEED:STRAWBERRY', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:TOMATO', 'BUY_SEED:CARROT']) {'PASS': 555, 'PICKUP': 195, 'BUILD_PASTURE': 13, 'PLACE': 23, 'WEST': 720, 'NORTH': 786, 'FEED': 337, 'CARE': 345, 'SOUTH': 653, 'PLANT': 280, 'WATER': 1340, 'COLLECT_FERTILIZER': 457, 'DROP': 127, 'EAST': 626, 'HARVEST': 613, 'BUILD_COOP': 9, 'FERTILIZE': 236, 'DIG': 57}
+top3 ['URAD', 'DSM'] [52219.0, 88805.0]
+0 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'MELON', 'CARROT', 'STRAWBERRY']) dict_keys(['BUY_PRODUCT:WHEAT', 'BUY_SEED:WHEAT', 'BUY_ANIMAL:COW', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:STRAWBERRY', 'BUY_SEED:CARROT', 'BUY_PRODUCT:FERTILIZER']) {'PASS': 680, 'NORTH': 950, 'SOUTH': 613, 'PICKUP': 152, 'WEST': 939, 'BUILD_PASTURE': 17, 'PLACE': 118, 'PLANT': 278, 'CARE': 397, 'WATER': 1170, 'FEED': 316, 'COLLECT_FERTILIZER': 377, 'EAST': 647, 'HARVEST': 478, 'DROP': 29, 'DIG': 38, 'BUILD_COOP': 2, 'FERTILIZE': 57}
+1 dict_keys(['WHEAT', 'FERTILIZER', 'WOOL', 'MILK', 'MELON', 'CARROT', 'EGG', 'STRAWBERRY']) dict_keys(['BUY_ANIMAL:COW', 'BUY_PRODUCT:WHEAT', 'BUY_ANIMAL:SHEEP', 'BUY_SEED:MELON', 'BUY_SEED:WHEAT', 'BUY_SEED:STRAWBERRY', 'BUY_ANIMAL:GOOSE', 'BUY_SEED:CARROT']) {'PASS': 332, 'PICKUP': 190, 'BUILD_PASTURE': 16, 'PLACE': 51, 'NORTH': 971, 'WEST': 855, 'CARE': 382, 'FEED': 381, 'PLANT': 328, 'EAST': 571, 'SOUTH': 631, 'WATER': 1166, 'COLLECT_FERTILIZER': 470, 'DROP': 128, 'HARVEST': 522, 'BUILD_COOP': 7, 'DIG': 25, 'FERTILIZE': 214}
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics,collections
+x=json.load(open('/workspace/shared/runs/t028_income_mined.json'))
+TOP={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+def picks():
+ for z in x:
+  if 'error'in z: continue
+  r=z['result']; lab=z['label']
+  if lab=='ours': yield 'ours',r, r['names'].index('misis biznessmenlb')
+  elif lab.startswith('top'):
+   n=int(lab[3:]); team=next(k for k,v in TOP.items() if v==n)
+   if team in r['names']: yield 'top',r,r['names'].index(team)
+   else: print('MISSING',lab,r['names'])
+D=collections.defaultdict(list); U=collections.defaultdict(list); A=collections.defaultdict(list); F=collections.defaultdict(list); n=collections.Counter()
+for grp,r,p in picks():
+ n[grp]+=1
+ ss=collections.defaultdict(float)
+ for k,v in r['sells'][p].items():
+  cat='animal_product' if k in {'MILK','WOOL','EGG'} else 'fertilizer' if k=='FERTILIZER' else 'animal_sale' if k in {'COW','SHEEP','GOOSE','CHICKEN'} else 'crop'
+  ss[cat]+=v[1]
+ for c in ('crop','animal_product','fertilizer','animal_sale'):D[(grp,c)].append(ss[c])
+ for c in ('seed_buy','animal_buy','product_buy','hire','land'):
+  if c=='hire':v=r['hire_cost'][p]
+  elif c=='land':v=sum(a[2] for a in r['land'][p])
+  else:
+   pref={'seed_buy':'BUY_SEED:','animal_buy':'BUY_ANIMAL:','product_buy':'BUY_PRODUCT:'}[c];v=sum(a[1] for k,a in r['buys'][p].items() if k.startswith(pref))
+  D[(grp,c)].append(v)
+ D[(grp,'final')].append(r['rewards'][p])
+ for op,c in r['unit_ops'][p].items():U[(grp,op)].append(c)
+ for d,v in r['sell_by_day'][p].items():
+  for item,q in v.items():
+   cat='animal_product' if item in {'MILK','WOOL','EGG'} else 'fertilizer' if item=='FERTILIZER' else 'crop'
+   F[(grp,cat,int(d))].append(q)
+ for ti in r['tiles_hist'][-1][1][p].items(): A[(grp,ti[0])].append(ti[1])
+print('N',n)
+for c in ['final','crop','animal_product','fertilizer','animal_sale','seed_buy','animal_buy','product_buy','hire','land']:
+ o=statistics.mean(D['ours',c]);t=statistics.mean(D['top',c]);print(c,round(t),round(o),round(t-o))
+print('\\nops top-minus-ours')
+for op in sorted({op for g,op in U},key=lambda q: statistics.mean(U['top',q])-statistics.mean(U['ours',q]),reverse=True):print(op,round(statistics.mean(U['top',op])),round(statistics.mean(U['ours',op])),round(statistics.mean(U['top',op])-statistics.mean(U['ours',op])))
+print('\\nfinal animals top/ours')
+for a in ['A_COW','A_SHEEP','A_GOOSE','P_STRAWBERRY','P_MELON','P_CARROT']:
+ print(a,round(statistics.mean(A['top',a]),1),round(statistics.mean(A['ours',a]),1),round(statistics.mean(A['top',a])-statistics.mean(A['ours',a]),1))
+print('\\ndaily sale unit diffs top-ours')
+for c in ['crop','animal_product','fertilizer']:
+ print(c,[(d,round(statistics.mean(F['top',c,d]) if F['top',c,d] else 0,1),round(statistics.mean(F['ours',c,d]) if F['ours',c,d] else 0,1)) for d in range(30)])
+PY" in /workspace/wt/codex
+ exited 1 in 393ms:
+N Counter({'ours': 80, 'top': 19})
+final 106074 98345 7728
+crop 77759 76941 817
+animal_product 51214 45048 6167
+fertilizer 14458 14858 -400
+animal_sale 0 0 0
+seed_buy 7177 6730 448
+animal_buy 8526 7522 1004
+product_buy 14304 18153 -3849
+hire 5875 5196 679
+land 4474 3900 574
+
+ops top-minus-ours
+SOUTH 667 524 144
+FERTILIZE 214 114 101
+WATER 1171 1111 60
+DROP 89 43 46
+HARVEST 524 484 40
+PLANT 277 241 36
+EAST 632 597 35
+FEED 363 332 31
+WEST 890 875 15
+COLLECT_FERTILIZER 447 433 14
+NORTH 934 923 11
+PICKUP 205 194 11
+BUILD_COOP 7 4 3
+BUILD_PASTURE 19 16 3
+DIG 35 37 -2
+PLACE 76 101 -24
+CARE 361 405 -45
+PASS 390 466 -76
+
+final animals top/ours
+A_COW 5.6 7.2 -1.5
+A_SHEEP 2.9 5.2 -2.4
+A_GOOSE 5.2 3.3 1.8
+Traceback (most recent call last):
+  File "<stdin>", line 41, in <module>
+  File "/venv/main/lib/python3.12/statistics.py", line 486, in mean
+    raise StatisticsError('mean requires at least one data point')
+statistics.StatisticsError: mean requires at least one data point
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics,collections
+x=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+S=collections.defaultdict(lambda:collections.defaultdict(list)); B=collections.defaultdict(lambda:collections.defaultdict(list)); final=collections.defaultdict(list)
+for z in x:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label'];grp=None;p=None
+ if lab=='ours':grp='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):
+  tm=next(k for k,v in top.items() if v==int(lab[3:]));grp='top';p=r['names'].index(tm)
+ else:continue
+ final[grp].append(r['rewards'][p])
+ for k,v in r['sells'][p].items():S[k][grp].append(v[1])
+ for k,v in r['buys'][p].items():B[k][grp].append(v[1])
+print('sales item avg top ours gap')
+for k in sorted(S,key=lambda k:statistics.mean(S[k]['top'])-statistics.mean(S[k]['ours']),reverse=True):print(k,*[round(statistics.mean(S[k][g])) for g in ['top','ours']],round(statistics.mean(S[k]['top'])-statistics.mean(S[k]['ours'])))
+print('buys item avg top ours gap')
+for k in sorted(B,key=lambda k:statistics.mean(B[k]['top'])-statistics.mean(B[k]['ours']),reverse=True):print(k,*[round(statistics.mean(B[k][g])) for g in ['top','ours']],round(statistics.mean(B[k]['top'])-statistics.mean(B[k]['ours'])))
+PY" in /workspace/wt/codex
+ succeeded in 365ms:
+sales item avg top ours gap
+EGG 8951 6006 2945
+CARROT 8738 6441 2298
+WOOL 21834 20433 1401
+WHEAT 25186 24571 614
+MILK 20900 21086 -186
+FERTILIZER 14458 14858 -400
+MELON 13683 14463 -780
+STRAWBERRY 25958 29525 -3566
+TOMATO 6940 11952 -5012
+buys item avg top ours gap
+BUY_PRODUCT:FERTILIZER 6496 2254 4242
+BUY_ANIMAL:GOOSE 1917 1136 780
+BUY_ANIMAL:COW 3474 2880 594
+BUY_SEED:CARROT 1239 877 362
+BUY_SEED:TOMATO 761 500 261
+BUY_SEED:WHEAT 1695 1511 183
+BUY_SEED:MELON 956 960 -4
+BUY_SEED:STRAWBERRY 2858 3300 -442
+BUY_ANIMAL:SHEEP 3237 3975 -738
+BUY_PRODUCT:WHEAT 12253 15899 -3646
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics,collections
+x=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+R=collections.defaultdict(list)
+for z in x:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label'];
+ if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):
+  tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+ else:continue
+ R[g].append(r)
+allitems=set(k for g in R for r in R[g] for p in range(2) for k in r['sells'][p])
+for typ in ['sells','buys']:
+ keys=set(k for g in R for r in R[g] for k in r[typ][r['names'].index('misis biznessmenlb') if g=='ours' else r['names'].index(next(t for t,n in top.items() if f'top{n}'==next(z['label'] for z in x if z.get('result') is r)))] ) if False)
+# direct stored sample vectors
+V=collections.defaultdict(lambda:collections.defaultdict(list))
+for z in x:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label']
+ if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):
+  tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+ else:continue
+ for k in set().union(r['sells'][p],r['buys'][p]):
+  V[k][g].append((r['sells'][p].get(k,[0,0])[1],r['buys'][p].get(k,[0,0])[1]))
+keys=sorted(V,key=lambda k:(sum(v[0] for v in V[k]['top'])/19 if V[k]['top'] else 0)-(sum(v[0] for v in V[k]['ours'])/80 if V[k]['ours'] else 0),reverse=True)
+# needs all records zeros; adjust easy generator per raw list
+for kind in ['sell','buy']:
+ vals=collections.defaultdict(lambda: {'top':[],'ours':[]})
+ for z in x:
+  if 'error'in z:continue
+  r=z['result'];lab=z['label']
+  if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+  elif lab.startswith('top'):tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+  else:continue
+  d=r['sells'][p] if kind=='sell' else r['buys'][p]
+  for k in set().union(*( (zz['result']['sells'][zz['result']['names'].index('misis biznessmenlb')] if False else {}) for zz in [])):pass
+  vals['_ALL_'][g].append(d)
+ allk=set(k for L in vals['_ALL_'].values() for d in L for k in d)
+ print('\\n',kind)
+ out=[]
+ for k in allk:
+  a=[d.get(k,[0,0])[1] for d in vals['_ALL_']['top']];b=[d.get(k,[0,0])[1] for d in vals['_ALL_']['ours']]
+  out.append((statistics.mean(a)-statistics.mean(b),k,statistics.mean(a),statistics.mean(b)))
+ for gap,k,a,b in sorted(out,reverse=True):print(k,round(a),round(b),round(gap))
+PY" in /workspace/wt/codex
+ exited 1 in 0ms:
+  File "<stdin>", line 14
+    keys=set(k for g in R for r in R[g] for k in r[typ][r['names'].index('misis biznessmenlb') if g=='ours' else r['names'].index(next(t for t,n in top.items() if f'top{n}'==next(z['label'] for z in x if z.get('result') is r)))] ) if False)
+                                                                                                                                                                                                                                               ^
+SyntaxError: unmatched ')'
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics,collections
+x=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+D={'top':[],'ours':[]}
+for z in x:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label']
+ if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):
+  tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+ else:continue
+ D[g].append((r,p))
+for kind in ['sells','buys']:
+ allk=set(k for g in D for r,p in D[g] for k in r[kind][p])
+ out=[]
+ for k in allk:
+  a=statistics.mean(r[kind][p].get(k,[0,0])[1] for r,p in D['top']);b=statistics.mean(r[kind][p].get(k,[0,0])[1] for r,p in D['ours']);out.append((a-b,k,a,b))
+ print('\\n',kind,' top ours gap')
+ for gap,k,a,b in sorted(out,reverse=True):print(k,round(a),round(b),round(gap))
+PY" in /workspace/wt/codex
+ succeeded in 378ms:
+
+ sells  top ours gap
+EGG 8480 3528 4952
+TOMATO 5114 1942 3171
+WOOL 21834 20433 1401
+CARROT 7818 6441 1378
+WHEAT 25186 24571 614
+MILK 20900 21086 -186
+FERTILIZER 14458 14858 -400
+MELON 13683 14463 -780
+STRAWBERRY 25958 29525 -3566
+
+ buys  top ours gap
+BUY_ANIMAL:GOOSE 1816 668 1148
+BUY_ANIMAL:COW 3474 2880 594
+BUY_SEED:TOMATO 561 81 479
+BUY_SEED:CARROT 1108 877 231
+BUY_SEED:WHEAT 1695 1511 183
+BUY_SEED:MELON 956 960 -4
+BUY_PRODUCT:FERTILIZER 2051 2254 -203
+BUY_SEED:STRAWBERRY 2858 3300 -442
+BUY_ANIMAL:SHEEP 3237 3975 -738
+BUY_PRODUCT:WHEAT 12253 15899 -3646
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,glob
+f=glob.glob('/workspace/shared/replays/t028_top/*')[0]; d=json.load(open(f));print(f,d['info']['TeamNames'])
+for t,s in enumerate(d['steps']):
+ for p,st in enumerate(s):
+  a=st.get('action') or {}
+  for idx,u in enumerate(a.get('farmers',[]) or []):
+   if u and u[0]=='FERTILIZE': print('t',t,'d',t//24,'p',p,'i',idx,'act',u);raise SystemExit
+PY" in /workspace/wt/codex
+ succeeded in 383ms:
+/workspace/shared/replays/t028_top/episode-113639666-replay.json ['Azat Akhtyamov', 'Fourth Quadrant']
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,glob
+f=glob.glob('/workspace/shared/replays/t028_top/*')[0];d=json.load(open(f));print(d['steps'][1][0].keys());print(d['steps'][1][0].get('action')); 
+for t,s in enumerate(d['steps']):
+ for p,st in enumerate(s):
+  a=st.get('action') or {}
+  txt=str(a)
+  if 'FERTILIZE' in txt: print('t',t,'d',t//24,'p',p,'act',txt[:500]);raise SystemExit
+PY" in /workspace/wt/codex
+ succeeded in 352ms:
+dict_keys(['action', 'info', 'observation', 'reward', 'status'])
+{'farmer': ['PASS'], 'hands': [], 'market': [['BUY_ANIMAL', 'COW', 1], ['BUY_PRODUCT', 'WHEAT', 5]]}
+t 25 d 1 p 0 act {'farmer': ['COLLECT_FERTILIZER'], 'hands': [], 'market': [['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]}
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import glob,json,os,statistics,collections
+M=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+lookup={z['file']:(z['label'],z['result']) for z in M if 'result'in z}
+rows=[]
+for folder in ['t028','t028_top']:
+ for f in glob.glob('/workspace/shared/replays/'+folder+'/*'):
+  lab,r=lookup.get(os.path.basename(f),(None,None))
+  if not r:continue
+  if lab=='ours': g='ours';p=r['names'].index('misis biznessmenlb')
+  elif lab.startswith('top'):
+   tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+  else:continue
+  d=json.load(open(f)); acts=[]
+  for t,s in enumerate(d['steps']):
+   a=(s[p].get('action') or {}); arr=[a.get('farmer') or []]+list(a.get('hands') or [])
+   for u in arr:
+    if u: acts.append((t//24,u[0]))
+   for o in a.get('market') or []:
+    if o and o[0]=='BUY_ANIMAL' and o[1]=='GOOSE':acts.append((t//24,'BUY_GOOSE'))
+  rows.append((g,r,p,acts))
+for g in ['top','ours']:
+ print('\\n',g,'n',sum(x[0]==g for x in rows))
+ for act in ['BUY_GOOSE','FERTILIZE','FEED','BUILD_COOP','HARVEST']:
+  a=[]
+  for gg,r,p,acts in rows:
+   if gg==g:a.append(collections.Counter(d for d,o in acts if o==act))
+  print(act,[(d,round(statistics.mean(c[d] for c in a),1)) for d in range(30) if statistics.mean(c[d] for c in a)>0.2])
+ print('eggs sold',[(d,round(statistics.mean(r['sell_by_day'][p].get(d,{}).get('EGG',0) for gg,r,p,a in rows if gg==g),1)) for d in range(30)])
+ print('goose tiles',[(d,round(statistics.mean(r['tiles_hist'][d][1][p].get('A_GOOSE',0) for gg,r,p,a in rows if gg==g),1)) for d in range(30)])
+# local immediate predecessor for FERTILIZE in ordered *agent-wide* stream
+for g in ['top','ours']:
+ c=collections.Counter()
+ for gg,r,p,acts in rows:
+  if gg"'!=g:continue
+  for i,(d,op) in enumerate(acts):
+   if op=='"'FERTILIZE' and i:c[acts[i-1][1]]+=1
+ print('pre',g,c.most_common())
+PY" in /workspace/wt/codex
+exec
+/bin/bash -lc "ps -eo pid,ppid,stat,cmd | rg 'goose tiles|python -' || true" in /workspace/wt/codex
+ succeeded in 0ms:
+ 509966  493731 Ss   /bin/bash -c /workspace/solution_kaggri/.venv/bin/python - <<'PY' import glob,json,os,statistics,collections M=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20} lookup={z['file']:(z['label'],z['result']) for z in M if 'result'in z} rows=[] for folder in ['t028','t028_top']:  for f in glob.glob('/workspace/shared/replays/'+folder+'/*'):   lab,r=lookup.get(os.path.basename(f),(None,None))   if not r:continue   if lab=='ours': g='ours';p=r['names'].index('misis biznessmenlb')   elif lab.startswith('top'):    tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)   else:continue   d=json.load(open(f)); acts=[]   for t,s in enumerate(d['steps']):    a=(s[p].get('action') or {}); arr=[a.get('farmer') or []]+list(a.get('hands') or [])    for u in arr:     if u: acts.append((t//24,u[0]))    for o in a.get('market') or []:     if o and o[0]=='BUY_ANIMAL' and o[1]=='GOOSE':acts.append((t//24,'BUY_GOOSE'))   rows.append((g,r,p,acts)) for g in ['top','ours']:  print('\n',g,'n',sum(x[0]==g for x in rows))  for act in ['BUY_GOOSE','FERTILIZE','FEED','BUILD_COOP','HARVEST']:   a=[]   for gg,r,p,acts in rows:    if gg==g:a.append(collections.Counter(d for d,o in acts if o==act))   print(act,[(d,round(statistics.mean(c[d] for c in a),1)) for d in range(30) if statistics.mean(c[d] for c in a)>0.2])  print('eggs sold',[(d,round(statistics.mean(r['sell_by_day'][p].get(d,{}).get('EGG',0) for gg,r,p,a in rows if gg==g),1)) for d in range(30)])  print('goose tiles',[(d,round(statistics.mean(r['tiles_hist'][d][1][p].get('A_GOOSE',0) for gg,r,p,a in rows if gg==g),1)) for d in range(30)]) # local immediate predecessor for FERTILIZE in ordered *agent-wide* stream for g in ['top','ours']:  c=collections.Counter()  for gg,r,p,acts in rows:   if gg!=g:continue   for i,(d,op) in enumerate(acts):    if op=='FERTILIZE' and i:c[acts[i-1][1]]+=1  print('pre',g,c.most_common()) PY
+ 509967  509966 R    /workspace/solution_kaggri/.venv/bin/python -
+ 510371  493731 Ss   /bin/bash -c ps -eo pid,ppid,stat,cmd | rg 'goose tiles|python -' || true
+ 510373  510371 S    rg goose tiles|python -
+
+exec
+/bin/bash -lc 'while ps -p 509967 >/dev/null 2>&1; do sleep 5; done' in /workspace/wt/codex
+ succeeded in 41696ms:
+
+ top n 19
+BUY_GOOSE [(2, 0.3), (6, 1.8), (7, 0.3), (8, 0.4), (9, 2), (10, 0.9), (11, 0.4)]
+FERTILIZE [(10, 2.8), (11, 7.4), (12, 7.6), (13, 8.2), (14, 7.4), (15, 15.5), (16, 9.1), (17, 10.2), (18, 9.2), (19, 15.8), (20, 11.3), (21, 12.2), (22, 11.6), (23, 12.7), (24, 14.5), (25, 15.2), (26, 15.3), (27, 14), (28, 13), (29, 1.5)]
+FEED [(0, 3.4), (1, 4.8), (2, 3.8), (3, 5.5), (4, 6.2), (5, 6.9), (6, 6.8), (7, 12.5), (8, 10.7), (9, 15), (10, 17.6), (11, 17.2), (12, 17.7), (13, 18.7), (14, 18), (15, 16.9), (16, 16.8), (17, 18.6), (18, 13.3), (19, 17.6), (20, 14.8), (21, 16.2), (22, 13.3), (23, 16.3), (24, 12.2), (25, 15.6), (26, 12.1), (27, 10.9), (28, 3.3), (29, 0.2)]
+BUILD_COOP [(2, 0.2), (6, 1.8), (7, 0.3), (8, 0.4), (9, 2.1), (10, 0.8), (11, 0.5), (28, 0.2), (29, 1.1)]
+HARVEST [(2, 4.7), (3, 4), (4, 1.7), (5, 0.5), (6, 3.3), (7, 0.2), (8, 4.3), (9, 5.5), (10, 11.7), (11, 11.5), (12, 19.4), (13, 18.3), (14, 21.8), (15, 20.8), (16, 28.8), (17, 22.5), (18, 30.9), (19, 23.8), (20, 29.6), (21, 25.4), (22, 30.3), (23, 25.1), (24, 27.2), (25, 25.8), (26, 27.3), (27, 29.2), (28, 37.6), (29, 32.7)]
+eggs sold [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0), (11, 0), (12, 0), (13, 0), (14, 0), (15, 0), (16, 0), (17, 0), (18, 0), (19, 0), (20, 0), (21, 0), (22, 0), (23, 0), (24, 0), (25, 0), (26, 0), (27, 0), (28, 0), (29, 0)]
+goose tiles [(0, 0), (1, 0), (2, 0.2), (3, 0.2), (4, 0.2), (5, 0.2), (6, 2), (7, 2.3), (8, 2.7), (9, 4.7), (10, 5.5), (11, 5.9), (12, 5.9), (13, 5.9), (14, 5.9), (15, 5.9), (16, 5.9), (17, 5.9), (18, 5.9), (19, 5.9), (20, 5.9), (21, 5.7), (22, 5.5), (23, 5.3), (24, 5.3), (25, 5.3), (26, 5.3), (27, 5.2), (28, 4.9), (29, 4.9)]
+
+ ours n 80
+BUY_GOOSE [(6, 0.3), (10, 0.5), (11, 0.5)]
+FERTILIZE [(13, 1), (14, 4.7), (15, 8.4), (16, 4.3), (17, 4.3), (18, 4.8), (19, 10.5), (20, 14.1), (21, 3.3), (22, 7.9), (23, 5.4), (24, 20.2), (25, 7.4), (26, 6.5), (27, 10.1), (28, 0.8)]
+FEED [(0, 2), (1, 4), (2, 4), (3, 3), (4, 5), (5, 6), (6, 7.7), (7, 7.6), (8, 10.3), (9, 13.7), (10, 16), (11, 13.8), (12, 17.4), (13, 16.9), (14, 15.2), (15, 15.8), (16, 13.7), (17, 15.3), (18, 13.9), (19, 14.8), (20, 13.8), (21, 14.2), (22, 13.7), (23, 14.8), (24, 11.5), (25, 13.5), (26, 14.5), (27, 13.6), (28, 6.4)]
+BUILD_COOP [(6, 0.6), (10, 2.1), (11, 0.3), (28, 0.8)]
+HARVEST [(2, 3), (3, 5), (4, 3), (5, 4), (6, 4.3), (7, 0.7), (8, 7), (9, 6), (10, 15.5), (11, 3.4), (12, 9.6), (13, 8.3), (14, 14.8), (15, 19.0), (16, 22.3), (17, 22.2), (18, 26.0), (19, 22.4), (20, 25.3), (21, 31.1), (22, 28.4), (23, 30.1), (24, 26.4), (25, 28.5), (26, 21.5), (27, 33.7), (28, 30.1), (29, 32.8)]
+eggs sold [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0), (11, 0), (12, 0), (13, 0), (14, 0), (15, 0), (16, 0), (17, 0), (18, 0), (19, 0), (20, 0), (21, 0), (22, 0), (23, 0), (24, 0), (25, 0), (26, 0), (27, 0), (28, 0), (29, 0)]
+goose tiles [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0.6), (7, 0.6), (8, 0.6), (9, 0.6), (10, 1.7), (11, 2.2), (12, 2.2), (13, 2.2), (14, 2.2), (15, 2.2), (16, 2.2), (17, 2.2), (18, 2.2), (19, 2.2), (20, 2.2), (21, 2.2), (22, 2.2), (23, 2.2), (24, 2.2), (25, 2.2), (26, 1.9), (27, 1.9), (28, 1.9), (29, 1.9)]
+pre top [('WATER', 854), ('WEST', 470), ('NORTH', 461), ('HARVEST', 418), ('SOUTH', 393), ('EAST', 345), ('FERTILIZE', 241), ('PLANT', 210), ('COLLECT_FERTILIZER', 198), ('CARE', 193), ('FEED', 176), ('PASS', 43), ('DROP', 33), ('DIG', 24), ('PICKUP', 8), ('PLACE', 5), ('BUILD_PASTURE', 3)]
+pre ours [('WATER', 2073), ('NORTH', 1031), ('HARVEST', 1007), ('WEST', 958), ('SOUTH', 797), ('EAST', 645), ('COLLECT_FERTILIZER', 594), ('FEED', 481), ('PLANT', 324), ('CARE', 320), ('FERTILIZE', 265), ('PICKUP', 167), ('PASS', 159), ('DIG', 144), ('PLACE', 104), ('DROP', 15)]
+
+ succeeded in 24988ms:
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import glob,json,os,statistics,collections
+M=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}; lookup={z['file']:(z['label'],z['result']) for z in M if 'result'in z}; rows=[]
+for f in glob.glob('/workspace/shared/replays/t028_top/*'):
+ lab,r=lookup[os.path.basename(f)];tm=next(k for k,v in top.items() if v==int(lab[3:]));p=r['names'].index(tm);d=json.load(open(f));acts=[]
+ for t,s in enumerate(d['steps']):
+  a=s[p].get('action') or {}
+  for u in [a.get('farmer') or []]+list(a.get('hands') or []):
+   if u:acts.append((t//24,u[0]))
+  for o in a.get('market') or []:
+   if o and o[0]=='BUY_ANIMAL' and o[1]=='GOOSE':acts.append((t//24,'BUY_GOOSE'))
+ rows.append((r,p,acts))
+for act in ['BUY_GOOSE','FERTILIZE','FEED','BUILD_COOP','HARVEST']:
+ cs=[collections.Counter(d for d,o in a if o==act) for r,p,a in rows]
+ print(act,[(d,round(statistics.mean(c[d] for c in cs),1)) for d in range(30) if statistics.mean(c[d] for c in cs)>=.2])
+print('eggs',[(d,round(statistics.mean(r['sell_by_day'][p].get(d,{}).get('EGG',0) for r,p,a in rows),1)) for d in range(30)])
+print('goose tiles',[(d,round(statistics.mean(r['tiles_hist'][d][1][p].get('A_GOOSE',0) for r,p,a in rows),1)) for d in range(30)])
+print('fertilize predecessor',collections.Counter(a[i-1][1] for r,p,a in rows for i,x in enumerate(a) if x[1]=='FERTILIZE' and i).most_common())
+PY" in /workspace/wt/codex
+ succeeded in 8678ms:
+BUY_GOOSE [(2, 0.3), (6, 1.8), (7, 0.3), (8, 0.4), (9, 2), (10, 0.9), (11, 0.4)]
+FERTILIZE [(10, 2.8), (11, 7.4), (12, 7.6), (13, 8.2), (14, 7.4), (15, 15.5), (16, 9.1), (17, 10.2), (18, 9.2), (19, 15.8), (20, 11.3), (21, 12.2), (22, 11.6), (23, 12.7), (24, 14.5), (25, 15.2), (26, 15.3), (27, 14), (28, 13), (29, 1.5)]
+FEED [(0, 3.4), (1, 4.8), (2, 3.8), (3, 5.5), (4, 6.2), (5, 6.9), (6, 6.8), (7, 12.5), (8, 10.7), (9, 15), (10, 17.6), (11, 17.2), (12, 17.7), (13, 18.7), (14, 18), (15, 16.9), (16, 16.8), (17, 18.6), (18, 13.3), (19, 17.6), (20, 14.8), (21, 16.2), (22, 13.3), (23, 16.3), (24, 12.2), (25, 15.6), (26, 12.1), (27, 10.9), (28, 3.3), (29, 0.2)]
+BUILD_COOP [(2, 0.2), (6, 1.8), (7, 0.3), (8, 0.4), (9, 2.1), (10, 0.8), (11, 0.5), (28, 0.2), (29, 1.1)]
+HARVEST [(2, 4.7), (3, 4), (4, 1.7), (5, 0.5), (6, 3.3), (7, 0.2), (8, 4.3), (9, 5.5), (10, 11.7), (11, 11.5), (12, 19.4), (13, 18.3), (14, 21.8), (15, 20.8), (16, 28.8), (17, 22.5), (18, 30.9), (19, 23.8), (20, 29.6), (21, 25.4), (22, 30.3), (23, 25.1), (24, 27.2), (25, 25.8), (26, 27.3), (27, 29.2), (28, 37.6), (29, 32.7)]
+eggs [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 0), (11, 0), (12, 0), (13, 0), (14, 0), (15, 0), (16, 0), (17, 0), (18, 0), (19, 0), (20, 0), (21, 0), (22, 0), (23, 0), (24, 0), (25, 0), (26, 0), (27, 0), (28, 0), (29, 0)]
+goose tiles [(0, 0), (1, 0), (2, 0.2), (3, 0.2), (4, 0.2), (5, 0.2), (6, 2), (7, 2.3), (8, 2.7), (9, 4.7), (10, 5.5), (11, 5.9), (12, 5.9), (13, 5.9), (14, 5.9), (15, 5.9), (16, 5.9), (17, 5.9), (18, 5.9), (19, 5.9), (20, 5.9), (21, 5.7), (22, 5.5), (23, 5.3), (24, 5.3), (25, 5.3), (26, 5.3), (27, 5.2), (28, 4.9), (29, 4.9)]
+fertilize predecessor [('WATER', 854), ('WEST', 470), ('NORTH', 461), ('HARVEST', 418), ('SOUTH', 393), ('EAST', 345), ('FERTILIZE', 241), ('PLANT', 210), ('COLLECT_FERTILIZER', 198), ('CARE', 193), ('FEED', 176), ('PASS', 43), ('DROP', 33), ('DIG', 24), ('PICKUP', 8), ('PLACE', 5), ('BUILD_PASTURE', 3)]
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics
+M=json.load(open('/workspace/shared/runs/t028_income_mined.json')); top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20}
+D={'top':[],'ours':[]}
+for z in M:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label']
+ if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+ else:continue
+ D[g].append((r,p))
+for item in ['EGG','TOMATO','FERTILIZER']:
+ print(item)
+ for g in ['top','ours']:
+  aa=[]
+  for d in range(30):aa.append(statistics.mean(r['sell_by_day'][p].get(str(d),r['sell_by_day'][p].get(d,{})).get(item,0) for r,p in D[g]))
+  print(g,[(i,round(v,1))for i,v in enumerate(aa) if v>=.2])
+PY" in /workspace/wt/codex
+ succeeded in 257ms:
+EGG
+top [(6, 0.8), (7, 0.4), (8, 0.2), (9, 0.3), (10, 0.3), (11, 3.5), (12, 4.4), (13, 6.3), (14, 10.4), (15, 11.1), (16, 10.8), (17, 10.3), (18, 13.9), (19, 10.2), (20, 10.7), (21, 10.5), (22, 7.9), (23, 11.5), (24, 9.9), (25, 8.7), (26, 9.7), (27, 9.8), (28, 10.3), (29, 15.5)]
+ours [(11, 1.2), (13, 1.0), (14, 2.8), (15, 4.3), (16, 5.7), (17, 2.8), (18, 4.5), (19, 3.5), (20, 5.4), (21, 4.2), (22, 3.6), (23, 5.4), (24, 4.0), (25, 5.4), (26, 2.0), (27, 2.8), (28, 5.2), (29, 6.7)]
+TOMATO
+top [(18, 0.5), (19, 1.6), (20, 3.3), (21, 8), (22, 7.3), (23, 11.9), (24, 5.7), (25, 7), (26, 3.1), (27, 5.4), (28, 7.7), (29, 11.4)]
+ours [(26, 2.1), (27, 2.1), (28, 5.5), (29, 3.2)]
+FERTILIZER
+top [(0, 0.5), (1, 5.2), (2, 5), (3, 5.5), (4, 6.1), (5, 6.5), (6, 6.4), (7, 11.8), (8, 10.2), (9, 11), (10, 10.3), (11, 16.4), (12, 13.2), (13, 14.1), (14, 14.6), (15, 10.5), (16, 10.2), (17, 11.8), (18, 13.3), (19, 10.2), (20, 9.8), (21, 11.3), (22, 11.8), (23, 9.1), (24, 11.6), (25, 7.6), (26, 6.5), (27, 6.7), (28, 6.8), (29, 13.4)]
+ours [(1, 3), (2, 5), (3, 4), (4, 6), (5, 5), (6, 7.9), (7, 8.2), (8, 9.3), (9, 14.7), (10, 6.3), (11, 13.4), (12, 16.3), (13, 16.1), (14, 11.6), (15, 19.2), (16, 11.5), (17, 11.2), (18, 13.8), (19, 6.8), (20, 8.2), (21, 13.9), (22, 18.1), (23, 19.1), (24, 9.8), (25, 16.2), (26, 14.6), (27, 19.8), (28, 9.3), (29, 17.0)]
+
+exec
+/bin/bash -lc "/workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,statistics
+M=json.load(open('/workspace/shared/runs/t028_income_mined.json'));top={'Boey':1,'M & M & P & Q':2,'DSM':3,'Fourth Quadrant':4,'DECEM':5,'Unknown Mother-Goose':6,'Azat Akhtyamov':7,'🐚seek inspiration🐚':8,'吃白饭的大肥鱼':9,'Majkel1337':10,'THIRD FARM CLUB':11,'Pii':12,'Smackaveli':13,'mtmr_s1':14,'TheEggman':15,'Russell Kirk':16,'Densike':17,'kigasudayooo':18,'tetsuya & yuanzhe & guoqin':19,'Arda Ceylan':20};D={'top':[],'ours':[]}
+for z in M:
+ if 'error'in z:continue
+ r=z['result'];lab=z['label']
+ if lab=='ours':g='ours';p=r['names'].index('misis biznessmenlb')
+ elif lab.startswith('top'):tm=next(k for k,v in top.items() if v==int(lab[3:]));g='top';p=r['names'].index(tm)
+ else:continue
+ D[g].append((r,p))
+for g in ['top','ours']:
+ print(g,[(d,round(statistics.mean(r['tiles_hist'][d][1][p].get('A_GOOSE',0)for r,p in D[g]),1))for d in range(30)])
+PY" in /workspace/wt/codex
+ succeeded in 269ms:
+top [(0, 0), (1, 0), (2, 0.2), (3, 0.2), (4, 0.2), (5, 0.2), (6, 2), (7, 2.3), (8, 2.7), (9, 4.7), (10, 5.5), (11, 5.9), (12, 5.9), (13, 5.9), (14, 5.9), (15, 5.9), (16, 5.9), (17, 5.9), (18, 5.9), (19, 5.9), (20, 5.9), (21, 5.7), (22, 5.5), (23, 5.3), (24, 5.3), (25, 5.3), (26, 5.3), (27, 5.2), (28, 4.9), (29, 4.9)]
+ours [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0.6), (7, 0.6), (8, 0.6), (9, 0.6), (10, 1.7), (11, 2.2), (12, 2.2), (13, 2.2), (14, 2.2), (15, 2.2), (16, 2.2), (17, 2.2), (18, 2.2), (19, 2.2), (20, 2.2), (21, 2.2), (22, 2.2), (23, 2.2), (24, 2.2), (25, 2.2), (26, 1.9), (27, 1.9), (28, 1.9), (29, 1.9)]
+
