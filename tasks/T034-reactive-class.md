@@ -1,6 +1,6 @@
 # T034 — reactive-class opponents
 
-Owner: codex. Status: in progress. Priority task set 2026-09-26. **Never submit to Kaggle.**
+Owner: codex. Status: closed — research complete, no candidate/gate/submission action. Priority task set 2026-09-26. **Never submit to Kaggle.**
 
 ## Goal
 
@@ -27,4 +27,21 @@ notebook supplies a copyable local stand-in; do not infer source from a replay.
 
 ## Result
 
-Pending.
+Read-only fetch completed: 40 recent completed episodes from the two current
+active submissions of each requested team (160 total), under
+`/workspace/shared/replays/reactive/`. `lab/tools/reactive_census.py`
+re-executes official-engine sales/land/hire traces and records each player's
+30-day state timeline; tool commit is `9fa7558`.
+
+The reclassified 9 actual own-route losses are fully recorded in
+`research/t034_reactive/losses_9.jsonl`; current samples are in
+`episodes.jsonl`/`summary.json`. The top defensible mechanisms are (1) third
+land d9--10 instead of Horizon d11 (6/9 losses; fuxi/Breaking also fourth
+land), (2) a third-land tomato + goose lane rather than fixed late crops, and
+(3) better strawberry/milk realized price at lower volume. The last is causal
+uncertain and T032 already rejects a narrow advance-only timing gene.
+
+No exact team/member public Kaggle notebook could be attributed to any of the
+four, so no strong reactive local stand-in can honestly be copied from source.
+Full evidence, caveats, and proposed default-off es7_wm counter-modules are in
+`research/reactive_class.md`. No candidate, gate, or Kaggle action is implied.
