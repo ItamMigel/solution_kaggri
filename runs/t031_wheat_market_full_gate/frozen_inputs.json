@@ -1,0 +1,55 @@
+{
+  "candidate": {
+    "path": "/workspace/wt/codex/experiments/t031_wheat_market/main_on.py",
+    "sha256": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6"
+  },
+  "control": {
+    "path": "/workspace/shared/candidates/es6_c4g15/pkg/main.py",
+    "sha256": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a"
+  },
+  "opponents": {
+    "mirror": {
+      "path": "/workspace/shared/candidates/es6_c4g15/pkg/main.py",
+      "sha256": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a"
+    },
+    "parthenos": {
+      "path": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    },
+    "metav4": {
+      "path": "/workspace/shared/opponents/pool/tschinkel_metav4_v13/main.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+    },
+    "yhay0913": {
+      "path": "/workspace/shared/opponents/pool/yhay_router0913/main.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa"
+    },
+    "t2945": {
+      "path": "/workspace/shared/opponents/pool/tschinkel2945/main.py",
+      "sha256": "4f3ca95dd12d9a94b03339999d8803c155f450a8d3956636f050643301fcc5dd"
+    },
+    "ozer_v45": {
+      "path": "/workspace/shared/opponents/pool/ozer_v45/main.py",
+      "sha256": "2536d41ed5a00c75204b6350f1c76c54259c774cb065ba2a3a0072eedf210d94"
+    },
+    "yaxon": {
+      "path": "/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py",
+      "sha256": "ea4c28e64d77ddcdd5f08cb150b408de3c10f4bc9a18c6e681758b7da2e8f022"
+    },
+    "pilkwang": {
+      "path": "/workspace/shared/opponents/pool/pilkwang_struct/main.py",
+      "sha256": "21e4b79bbc7bca97ad1af6337322303987d73d95b963b08ebe80a67900bd5360"
+    },
+    "es1_g9": {
+      "path": "/workspace/shared/candidates/es1_g9/pkg/main.py",
+      "sha256": "7cc44e572e2f8aecb873578de971b67c1230c69773a62a002c72718bbc08505c"
+    },
+    "v5_market": {
+      "path": "/workspace/wt/codex/agents/horizon_v5_market.py",
+      "sha256": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4"
+    }
+  },
+  "workers": 4,
+  "expected_games": 640,
+  "criterion": "T025 nine equal-weight strata; joint 16-world one-sided lower > 0; every named opponent >= -10pp"
+}
