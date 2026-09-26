@@ -8,4 +8,8 @@
 
 ## Result
 
-In progress.
+Implemented locally in `lab/hplus/reactive_lane.py`; it appends a self-contained layer to the exact es7_wm hash (`d1220b…`). The gene is default-off. Enabled mode records six calls from step 216, then only treats `matches == 0` as non-clone; any positional match remains base-only. The d9 order is delegated to `_hp_land`, which verifies a current-route future d11 `BUY_LAND`, confirms the observed land increase, and absorbs the original d11 debt. The d12 launch is limited to route hour 289, observed empty SW cells, two appended workers, one tomato seed and one goose; any precondition drift aborts later rewrites to base.
+
+Official-engine audit (`runs/t035_reactive_lane/audit_required.json`, seed 135791): mirror and tape_unknown/tape_mmpq/tape_dsm have **0 action diffs**, all DONE; boatlee/fukami each have six checks, zero matches, `nonclone=1`, all DONE. Active-path probe seed 702 vs boatlee: `land_orders=land_confirmed=launches=tomato_plants=goose_places=1`, `aborts=errors=0`. Eight-worker bounded scan seeds 701–708 finds this full path only on 702; the other seven safely abstain because d9 cash is insufficient for the route-owned land. No score gate/candidate/submission action.
+
+Next: extend daily hand ownership through d15 before any economic screen; current verified service is the d12 launch interval and returns to parent after the daily worker reset.
