@@ -17,3 +17,14 @@ Boey: wheat/fertilizer churn (buy+sell same turns, zero-cost round trips by the 
 ## Mechanism (hypothesis)
 DSM/MMPQ system = early land (d8/d10) → big own wheat field feeding 7 geese + herd → eggs +8k and feed savings ~10k vs us;
 fewer strawberries. Our G1 goose module added geese alone (no own feed, no early land) → failed. Need the whole system.
+## Exact event timing (median over games; declog market orders)
+| event | DSM | MMPQ | ours es6/es7 |
+|---|---|---|---|
+| 2nd quadrant order | d6.1 (step 147) | d6.1 | d6.2 (150) |
+| **3rd quadrant order** | **d8.2 (196)** | **d8.2 (198)** | **d11.0 (265)** |
+| **first goose order** | **d6.4 (153)** | **d6.4** | **d10.0 (241), only 38/65 games** |
+| first melon sale | d10.2 | d10.2 | d10.4 |
+Identical up to d6; they then buy land#3 2.8 days earlier and start geese 3.6 days earlier, BEFORE melon income (cash ~1.6k at d8),
+while we spend on strawberries (33 vs 21–24 tiles) and early cows. => port their d6–d10 priorities, not their whole agent.
+Decision-tree rules (lab/re/rules.py → research/re/rules_dsm_mmpq.md): land purchase keyed on shed MELON>17 / clock proxies — trees mostly learn the clock.
+Openings: DSM/MMPQ diverge by step ~96 (reactive, no shared tape); Boey: 50% of games share an identical 199-step tape (one tape sub + one reactive).

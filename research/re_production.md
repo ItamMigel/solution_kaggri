@@ -47,6 +47,19 @@ At herd size 10+, mean units/turn are WATER 1.59, HARVEST .78, CARE .70, FEED .7
 
 Calendar phase captures much of the aggregate decision but is not a playable clone: next step is raw target/path reconstruction and state-bucket residuals (ripe/water need, animal status, carried fertilizer).
 
+### Spatial audit from raw actions
+
+The aggregate log intentionally drops coordinates, so a separate raw-action audit was made on 10 replay trajectories per team. Coordinates are farm `(row,column)` before the action; crop/land geometry is stable enough to infer blocks, but exact within-block tile order is not invariant across episodes.
+
+| family/team | initial 5×5 block (d0–4) | block `(5:9,0:4)` at d6 | block `(0:4,5:9)` at d8 |
+|---|---|---|---|
+| Boey | WHEAT/MELON mix, then STRAWBERRY replaces openings | predominantly STRAWBERRY | predominantly WHEAT |
+| M&M&P&Q | WHEAT/MELON mix, then STRAWBERRY replaces openings | predominantly STRAWBERRY (with edge MELON/WHEAT) | predominantly WHEAT |
+| DSM | WHEAT/MELON mix, STRAWBERRY starts d2 | STRAWBERRY plus larger MELON/WHEAT edge mix | predominantly WHEAT |
+| fuxi | WHEAT-dominant d0; CARROT/MELON already present | WHEAT-dominant, with some S/C | WHEAT plus CARROT; no berry-only block |
+
+For example, in the 10-replay Boey audit d6 plant actions at `(7:9,1:4)` are overwhelmingly STRAWBERRY (136 S versus 14 M and 48 W total that day), while d8 actions in the lower-left block are 90 W. M&M&P&Q is still clearer (d6: 150 S; d8: 137 W). This gives a usable first layout rule for top-RE: allocate the second unlocked quadrant to berry production and third to wheat for the M&M&P&Q/DSM/Boey family; fuxi requires its own mixed-block policy. Do not hard-code a coordinate ordering within a block yet.
+
 ## M&M&P&Q
 
 134 full trajectories; development trajectories 1–107, held-out 108–134. M&M&P&Q shares the broad crop calendar with Boey but has a materially stronger early cow/goose build and earlier fertilizer.
@@ -111,4 +124,33 @@ At herd≥10, mean units/turn are WATER 1.76, HARVEST .90, CARE .64, FEED .65, F
 
 ## fuxi
 
-Pending completed decision log.
+40 full trajectories; development 1–32, held-out 33–40. fuxi is not the M&M&P&Q/DSM monoculture-to-terminal-CARROT family. It runs a diversified five-crop production plan, including the tomato lane identified in reactive-loss audits.
+
+| days | explicit crop rule | median day-start state (S/C/M/T/W) |
+|---|---|---|
+| d0–3 | bootstrap **15 WHEAT + 2 CARROT + 1 MELON**; no strawberry yet | d1 0/2/1/0/15 |
+| d4–7 | add STRAWBERRY+MELON (d4) and restore WHEAT; no single-crop replacement | d5 4/0/5/0/3; d7 6/0/5/0/14 |
+| d8–13 | build all crop lanes, especially STRAWBERRY; WHEAT stays 17–22 | d13 29/2/12/2/22 |
+| d14–18 | begin fertilizer and scale TOMATO hard while S peaks 31–34 | d16 34/2/9/6/20; d18 33/1/8/13/13 |
+| d19–24 | maintain **16 TOMATO** and ≈33 STRAWBERRY alongside WHEAT/CARROT/MELON | d21 33/2/7/16/15 |
+| d25–29 | only then run down strawberry/tomato and re-fill CARROT/WHEAT | d27 11/10/3/12/18 |
+
+The state transition test makes the schedule concrete: all 32 development trajectories add WHEAT=15 on d0, 30/32 add CARROT=2 and 26/32 MELON=1. On d4, 31/32 add STRAWBERRY (median +4) and all 32 add MELON (median +3). TOMATO is not an incidental response: additions occur in 28/32, 29/32 and 30/32 trajectories on d16/d17/d18; the standing median then reaches 16 on d19–24. Late CARROT/WHEAT filling resumes most strongly d25 (27/32 and 28/32). This is the current direct production explanation for fuxi's tomato volume, although targets and the decision to react to an opponent still need raw-state attribution.
+
+Herd/structure rule: d1 is 6 PASTURE and **3 COW/3 SHEEP**; d6 10 pasture and 6/3/0; d8 begins a COOP/goose lane (11/1 and 7/4/1). By d10 it is 12/3 with 8/4/3, and d13 reaches 13 PASTURE/3 COOP with **8 COW/4 SHEEP/3 GOOSE**. This peak is then held to d18 before a controlled rundown to 6/3/3. It has a smaller herd than M&M&P&Q/DSM but much larger simultaneous crop surface.
+
+Fertilizer begins later than the other two high-herd teams (d14: 6, d15: 9, d17: 18), then deliberately supports 25–31 fertile tiles d20–27. Current explicit rule: `do not fertilize before the diversified crop expansion; begin at d14, strengthen the tomato/strawberry phase through d27`.
+
+At herd≥10, mean units/turn are WATER **2.03**, HARVEST .86, CARE .49, FEED .53, FERTILIZE .23 and COLLECT_FERTILIZER .60 (20,525 turns); at herd 1–9 they are 1.24/.44/.25/.26/.08/.28. Relative to M&M&P&Q/DSM this confirms the allocation trade: more worker capacity goes to crop WATER, less to animal service.
+
+| operation | held-out presence | held-out exact count | MAE |
+|---|---:|---:|---:|
+| PLANT | 76.6% | 76.1% | .325 |
+| WATER | 81.9% | 39.3% | 1.005 |
+| HARVEST | 72.6% | 58.6% | .581 |
+| CARE | 68.5% | 66.5% | .417 |
+| FEED | 66.9% | 64.4% | .445 |
+| FERTILIZE | 85.2% | 85.1% | .193 |
+| COLLECT_FERTILIZER | 65.8% | 61.8% | .477 |
+
+The small held-out set (8 trajectories) means these are descriptive agreement measurements, not a final generalisation claim. Exact WATER is especially poor because the diversified crop plan requires state/position-aware dispatch; raw target reconstruction is mandatory for top-RE.
