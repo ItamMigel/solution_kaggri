@@ -119,3 +119,10 @@ This gate applies to a frozen CMA centre only after its training generation is c
 
 ## CMA4 launch recovery (2026-09-26)
 - The initial CMA4 child inherited a short-lived launcher and stopped after 48/880 games in gen 0, before creating `cma.pkl`; the partial directory is preserved as `runs/cma4_partial_20260926T023116Z/` and no partial fitness was used. CMA4 was restarted cleanly from the same frozen gen-15 parameter vector in tmux session `codex-cma4`, with the corrected mirror file `candidates/es5_c3g15/pkg/main.py`, σ=.015, 8 worlds, pop10, 18 workers. Its first independent gate remains after five completed generations.
+
+
+## CMA4 centre gate — gen 5 versus promoted es5_c3g15 (2026-09-26): REJECTED by reactive NI
+
+- Frozen centre `runs/cma4/gen_005/c/main.py` (sha256 `faaea0bc9b0e…`) passed stage 1 against frozen `candidates/es5_c3g15/pkg/main.py` (`c2f147814791…`) on eight fresh CSPRNG worlds in both seats: **14–0–2**, score 87.5%, whole-world 95% score CI **[62.5%, 100%]**, mean **+$295.9** (CI **+$62.6…+$571.0**), 16/16 valid, zero errors. `runs/t025_cma4_g005_promotion/h2h/`.
+- The separate stage-2 panel used 24 further fresh worlds, both seats, simultaneous centre/control measurement against `parthenos_robust` and `tschinkel_metav4_v13`: **192/192 valid**, all inputs unchanged, zero errors. Centre was 87–0–9 (90.625%, +$1,117.9); control 89–0–7 (92.708%, +$1,076.3). Whole-world paired centre−control score is **−2.083pp**; fixed 200,000-resample seed-230923 one-sided 95% lower is **−8.333pp**, below the required **> −2.000pp**. Paired cash is **+$41.56** (two-sided CI −$21.42…+$115.98), which cannot replace the score safety gate. Splits: parthenos −4.167pp / +$41.19; metav4 0.000pp / +$41.94. `runs/t025_cma4_g005_promotion/panel/paired_analysis.json`.
+- Therefore CMA4 gen-5 is rejected and no candidate/control changes. CMA4 itself continues its local search from the frozen es5_c3g15 centre; the next scheduled independent gate is after its completed gen 10. No Kaggle submission occurred.

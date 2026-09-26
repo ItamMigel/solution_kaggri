@@ -12,6 +12,7 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
 - 2026-09-26 — T025: stopped stale-control CMA3 after completed gen16 (0.985 centre, σ=.0372); restarted local **CMA4** at exact gen15/es5_c3g15 centre with σ=.015, `CMA_BEST=es5_c3g15`, config/hash-checked resume and 18 workers. CMA3 is preserved/restartable; no candidate or Kaggle action changed. `tasks/T025-route-conditioned-land.md` [codex]
 - 2026-09-26 — T025 CMA3 gen-15 boundary confirmation **passes predeclared replacement numbers**: fresh disjoint P+M 24-world panel is +6.25pp; combined 48-world paired one-sided 95% lower is 0.00pp (>−2pp), 384/384 valid, after H2H 16–0 +$836. **Pending Claude independent review before any candidate change; es3_g5 remains frozen meanwhile.** `tasks/T025-route-conditioned-land.md` [codex]
 - 2026-09-26 — T025 standard CMA gate **rejects CMA3 gen-15**: fresh es3 H2H 16–0 (+$836; CI positive), but separate 24-world paired P+M panel is narrowly below predeclared NI (paired +4.17pp, one-sided lower −2.083pp vs required >−2.0; cash −$48.5); 208/208 valid. Keep es3_g5. `tasks/T025-route-conditioned-land.md` [codex]
@@ -92,7 +93,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T027 | claude+codex | in_progress | BC→PPO v3: audit + perf (GPU underused 10/80 GB) + Horizon-double BC (es3_g5 games) + stronger league. `tasks/T027-bcppo-v3.md` |
 | T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
 | T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
-| T025 | codex | in_progress — CMA4 gen-0 running; gate after gen-5 | Conditional early SW-land/c3g5 closed; CMA4 is local σ=.015 search against promoted frozen es5_c3g15. `tasks/T025-route-conditioned-land.md` |
+| T025 | codex | in_progress — CMA4 gen-7 running; next gate after gen-10 | Gen-5 passes H2H but fails independent P+M NI (−2.083pp; lower −8.333pp): rejected, control remains es5_c3g15. `tasks/T025-route-conditioned-land.md` |
 | T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
 | T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
 | T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
