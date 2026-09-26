@@ -1,0 +1,33 @@
+{
+  "created_utc": "2026-09-26T09:48:26.171896+00:00",
+  "candidates": {
+    "genome0": "/workspace/shared/runs/t028_g1c/default/main.py",
+    "g1_target2": "/workspace/shared/runs/t028_g1c/g1_target2/main.py"
+  },
+  "opponents": {
+    "es5": "/workspace/shared/candidates/es5_c3g15/pkg/main.py",
+    "parthenos": "/workspace/shared/opponents/pool/parthenos_robust/main.py"
+  },
+  "seeds": [
+    1481384045,
+    1845519267
+  ],
+  "expected_games": 16,
+  "input_sha256": {
+    "/workspace/shared/candidates/es5_c3g15/pkg/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3",
+    "/workspace/shared/runs/t028_g1c/default/main.py": "e0eb20daf640be0bca68beec239cda0c5530de855fa13f1793b622619f478e8e",
+    "/workspace/shared/runs/t028_g1c/g1_target2/main.py": "5c97e365173c19ea9624443a659b01814fd981c7be541b3605a1731bb7dcb793",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 8,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}

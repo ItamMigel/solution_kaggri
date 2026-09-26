@@ -22,3 +22,43 @@ top reaches 5.9 geese on d11 vs es3's 2.2, via d6--11 coop/build/place/service;
 the recommended new capability is a default-off route-owned early goose
 microplan, not a market-only purchase.  It does not repeat the T021/T023/T014
 negative modules.  Reported to Claude before implementation.
+
+## G1 capability screen — 2026-09-26 (Codex)
+
+Implemented `lab/hplus/goose_microplan.py`: default-off exact conversion of the
+two opening cows into geese (buy/build/pickup/place; no new hand, movement or
+market slot). The official trace has 10 rewrites and zero mismatches/errors,
+but only reaches two geese: target 4--6 needs a genuinely new route. Fresh
+2-world both-seat es5_c3g15+Parthenos screen rejects target-2: paired score
+−0.750, margin −$2,581 [−$3,198,−$1,965], 16/16 DONE. Do not race/gate it.
+Evidence: `runs/t028_g1c/capability/`.
+
+## G1 targets 4/5/6 implementation audit — 2026-09-26 (Codex)
+
+The rejected two-goose leg above is retained only as a negative result.  G1 was
+then rebuilt as the specified default-off route-owned 4/5/6-goose plan on
+frozen `candidates/es5_c3g15/pkg/main.py`, retaining its COLLECT layer.  It
+rewrites only certified parent BUY/BUILD/PICKUP/PLACE actions; later mismatch
+disables its rewrites.  It owns only PASS slots on confirmed G1 sites for
+in-place service, and sells EGG only through a parent-existing sale slot.
+
+`runs/t028_g1_ready/identity_trace_audit.json` passes: genome-off is action
+byte-identical over 1,438 callbacks on two worlds, while all enabled targets
+finish DONE with exact final 4/5/6 geese, all sites confirmed and zero
+mismatches/errors.  The locked small capability screen is next.  No candidate
+or Kaggle operation occurred.
+
+## G1 targets 4/5/6 capability screen — REJECTED, 2026-09-26 (Codex)
+
+On a separately locked two-world fold (seeds `1900229603`, `1149430256`), all
+four agents were evaluated simultaneously versus frozen `es5_c3g15` and
+`parthenos_robust`, both seats, eight workers: 32/32 games valid and all
+inputs unchanged.  Relative to genome0, each enabled target loses 0.750 paired
+score: target 4 is −$18,410.75 (world CI −$25,281.5…−$11,540.0), target 5 is
+−$23,487.0 (−$24,647.0…−$22,327.0), and target 6 is −$23,670.25
+(−$30,637.0…−$16,703.5).  Evidence: `runs/t028_g1_ready/capability/`.
+
+Thus no target survives the capability screen; do **not** run the T025 fresh
+full-panel gate and do not create a candidate.  The result is a production
+composition trade-off, not an implementation failure: the identity/trace
+audit remains clean.  No Kaggle operation occurred.

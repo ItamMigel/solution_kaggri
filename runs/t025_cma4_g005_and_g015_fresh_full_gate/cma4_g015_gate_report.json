@@ -1,0 +1,160 @@
+{
+  "worlds": 16,
+  "expected_valid_games": 640,
+  "valid_games": 640,
+  "core_strata": [
+    "mirror",
+    "parthenos",
+    "metav4",
+    "yhay0913",
+    "t2945",
+    "ozer_v45",
+    "yaxon",
+    "pilkwang"
+  ],
+  "family_stratum": [
+    "es1_g9",
+    "v5_market"
+  ],
+  "equal_weight_strata": 9,
+  "point_score_gain": 0.05555555555555555,
+  "cash_gain": 31.842013888888886,
+  "score_one_sided_lower_95": 0.03125,
+  "score_two_sided_95": [
+    0.027777777777777776,
+    0.08333333333333334
+  ],
+  "cash_two_sided_95": [
+    -11.350694444444446,
+    80.31076388888889
+  ],
+  "by_opponent": {
+    "mirror": {
+      "score_gain": 0.40625,
+      "cash_gain": 327.5
+    },
+    "parthenos": {
+      "score_gain": 0.0625,
+      "cash_gain": 104.125
+    },
+    "metav4": {
+      "score_gain": 0.0,
+      "cash_gain": -20.0
+    },
+    "yhay0913": {
+      "score_gain": 0.0,
+      "cash_gain": -10.3125
+    },
+    "t2945": {
+      "score_gain": 0.0,
+      "cash_gain": -118.375
+    },
+    "ozer_v45": {
+      "score_gain": 0.0,
+      "cash_gain": 41.5
+    },
+    "yaxon": {
+      "score_gain": 0.0,
+      "cash_gain": -6.125
+    },
+    "pilkwang": {
+      "score_gain": 0.0,
+      "cash_gain": -103.5
+    },
+    "es1_g9": {
+      "score_gain": 0.0625,
+      "cash_gain": 137.40625
+    },
+    "v5_market": {
+      "score_gain": 0.0,
+      "cash_gain": 6.125
+    }
+  },
+  "per_world": [
+    {
+      "seed": 52654344,
+      "score": 0.05555555555555555,
+      "cash": -20.77777777777778
+    },
+    {
+      "seed": 88504902,
+      "score": 0.05555555555555555,
+      "cash": -2.888888888888889
+    },
+    {
+      "seed": 156689499,
+      "score": 0.05555555555555555,
+      "cash": 5.333333333333333
+    },
+    {
+      "seed": 174066626,
+      "score": 0.05555555555555555,
+      "cash": 113.05555555555556
+    },
+    {
+      "seed": 243340069,
+      "score": 0.05555555555555555,
+      "cash": 10.88888888888889
+    },
+    {
+      "seed": 337687694,
+      "score": -0.05555555555555555,
+      "cash": -92.61111111111111
+    },
+    {
+      "seed": 338092419,
+      "score": -0.05555555555555555,
+      "cash": -42.0
+    },
+    {
+      "seed": 405944503,
+      "score": 0.05555555555555555,
+      "cash": 63.388888888888886
+    },
+    {
+      "seed": 656022106,
+      "score": 0.05555555555555555,
+      "cash": 39.22222222222222
+    },
+    {
+      "seed": 657395808,
+      "score": 0.1111111111111111,
+      "cash": -111.44444444444444
+    },
+    {
+      "seed": 1408426567,
+      "score": 0.05555555555555555,
+      "cash": 10.88888888888889
+    },
+    {
+      "seed": 1468390856,
+      "score": 0.0,
+      "cash": -1.7222222222222223
+    },
+    {
+      "seed": 1578053980,
+      "score": 0.16666666666666666,
+      "cash": 231.44444444444446
+    },
+    {
+      "seed": 1811683932,
+      "score": 0.16666666666666666,
+      "cash": 237.27777777777777
+    },
+    {
+      "seed": 1922423737,
+      "score": 0.05555555555555555,
+      "cash": 1.6666666666666667
+    },
+    {
+      "seed": 1965307504,
+      "score": 0.05555555555555555,
+      "cash": 67.75
+    }
+  ],
+  "resamples": 200000,
+  "rng_seed": 230923,
+  "passes_lower_gt_zero": true,
+  "passes_no_opponent_below_minus_10pp": true,
+  "passes_gate": true
+}

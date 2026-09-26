@@ -1,0 +1,44 @@
+{
+  "created_utc": "2026-09-26T10:03:18.546084+00:00",
+  "stage": "capability",
+  "stage_contract": {
+    "worlds": 2,
+    "opponents": 2,
+    "description": "2 worlds \u00d7 g9 + one hard opponent \u00d7 both seats"
+  },
+  "fold": "/workspace/shared/runs/t028_g1_ready/capability_fold.json",
+  "seeds": [
+    1900229603,
+    1149430256
+  ],
+  "agents": {
+    "genome0": {
+      "path": "/workspace/shared/runs/t028_g1_ready/genome0/main.py",
+      "sha256": "c2166d70404c0d77d0ec4e3ef1f2a09060af0ac10cc33a972fd42d055f00542c"
+    },
+    "g1_target4": {
+      "path": "/workspace/shared/runs/t028_g1_ready/g1_target4/main.py",
+      "sha256": "17813df9b5ace783c46471b66b2b97075d9bb5afda86dd928ccb8e970eb6a97f"
+    },
+    "g1_target5": {
+      "path": "/workspace/shared/runs/t028_g1_ready/g1_target5/main.py",
+      "sha256": "746db8f5e8e9f8778fd734bc5a43d18142d96c903bb7edb687692e2d8802a4b8"
+    },
+    "g1_target6": {
+      "path": "/workspace/shared/runs/t028_g1_ready/g1_target6/main.py",
+      "sha256": "9d6a09e7120c6d9526c233393d35e091f2b87e356e88f5df9a67a61a8f43a537"
+    }
+  },
+  "opponents": {
+    "es5": {
+      "path": "/workspace/shared/candidates/es5_c3g15/pkg/main.py",
+      "sha256": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d"
+    },
+    "parthenos": {
+      "path": "/workspace/shared/opponents/pool/parthenos_robust/main.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    }
+  },
+  "expected_games": 32,
+  "decision": "Paired delta vs genome0 only. No automatic selection or promotion."
+}

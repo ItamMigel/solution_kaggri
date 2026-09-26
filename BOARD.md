@@ -12,6 +12,8 @@ _Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)
 - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
 
 ## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028 first 2-goose cow-only leg is rejected: −0.750 paired score / −$2,581 (CI −$3,198…−$1,965), 16/16 DONE. It is not G1 target 4/5/6 and does not enter the current screen. `tasks/T028-gap-vs-top.md` [codex]
 - 2026-09-26 — T028: es3_g5 has **0/142** direct matches with current top-20, so no honest paired top-minus-ours cohort exists.  In an explicitly unpaired 19-top vs 80-es3 replay decomposition, the largest source hypothesis is **EGG +$4,952/game**: top reaches 5.9 geese on d11 vs ours 2.2 through a d6–11 build/place/feed/harvest route.  Recommend a new default-off route-owned early-goose microplan, not the previously-negative market-only/PASS/FD modules. `research/gap_vs_top.md` [codex]
 - 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
 - 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
@@ -109,5 +111,5 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
 | T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
 | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
-| T028 | codex | in_progress | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T028 | codex | closed ✗ — G1 targets 4/5/6 rejected by valid capability screen; no full gate | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
 | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |

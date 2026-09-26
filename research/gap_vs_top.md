@@ -72,3 +72,17 @@ Gate: genome-off byte-identical to `es5_c3g15`; fixed-state trace audit must
 show zero illegal/rejected overrides.  Screen each G1 target on the locked
 capability fold, then only a survivor may race/gate against `es5_c3g15` under
 the T025 fresh full-panel rule.
+
+## G1 target-2 implementation and screen (2026-09-26)
+
+`lab/hplus/goose_microplan.py` implements a default-off, route-owned leg that
+converts the exact two opening COWs to GOOSE (buy/build/pickup/place), with no
+new hand, move, or market slot.  Official-engine trace on seed `1462704181`
+completed both seats with 10 rewrites, zero mismatches and zero wrapper errors.
+It reaches only 2 geese: this frozen route has no later goose placements, so
+target 4--6 needs a new capacity/carrier/service route, not a gene value.
+
+The target-2 leg fails its fresh locked 2-world capability screen against
+`es5_c3g15` and Parthenos: paired score **−0.750**, paired margin **−$2,581**
+(95% bootstrap [−$3,198, −$1,965]), 16/16 DONE, zero runner errors.  Do not
+race or gate it. Evidence: `runs/t028_g1c/capability/PAIRED.md`.
