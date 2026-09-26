@@ -71,3 +71,41 @@ Thus no target survives the capability screen; do **not** run the T025 fresh
 full-panel gate and do not create a candidate.  The result is a production
 composition trade-off, not an implementation failure: the identity/trace
 audit remains clean.  No Kaggle operation occurred.
+
+## Follow-up result — G1 post-mortem and G2 timing, 2026-09-26 (Codex)
+
+`runs/t028_g1_postmortem_20260926/postmortem_v2.json` replays all 16 locked
+G1 screen games with the official miner, pairing target5 with genome0 by
+world/opponent/seat.  Target5 has **higher own final cash, +$3,214.5/game**:
+egg sales +$8,612.2, offset by milk −$6,672.5, fertilizer sales −$1,280.5,
+wheat −$1,220.0, extra wheat purchases +$328.0 and only 28.8 fewer successful
+feeds.  Its cash is initially lower (−$2,407 d10, −$1,916 d17), becomes
+positive at d24 (+$1,564) and gains a further +$832 in the final day.  So it
+is neither a late-placement/idle-goose/wrong-feed failure nor a terminal-only
+artifact; its herd trace had already completed with zero mismatches/errors.
+
+The decisive structural loss is the other player in the same worlds: their
+final cash rises **+$26,701.5/game** under target5, already +$10,086.5 d17 and
++$20,847.2 d24 (milk +$6,478, among other endogenous sales/shopping effects).
+This explains the target5 paired screen margin −$23,487 despite its own cash
+gain.  Source rows are not additive because changed actions alter the shared
+market/town path.  No sub-three-hour local micro-fix can preserve the G1 herd
+while remove that shared-world composition response; G1 remains rejected.
+
+For G2, static inspection of all 41 Horizon route tapes finds **zero native
+`PLANT TOMATO` actions**.  The only current plan is dynamic V219: at d18 it
+buys SE land + ten tomato seeds and dedicated workers, hence first yield/sale
+d26.  The only parent-audited earlier route that fits the tape is
+`TomatoInsteadOfCow`: one d0 tomato in the second-cow carrier slot.  Its inner
+seed order was overwritten by the final Horizon opening; a default-off G2
+wrapper added that single certified spare market order and fails closed if the
+three parent opening orders drift.  Official trace: d0 plant, tomato harvests
+d8--11, zero mismatch/wrapper errors; genome-off is byte-identical.
+
+That maximum tape-fitting early leg is rejected on a new locked two-world
+es5+Parthenos both-seat capability screen (`762192689`, `640729344`): **0/8**,
+paired score −0.750 and paired margin **−$4,288.8** (95% world bootstrap
+[−$6,651.5, −$1,926.0]), 16/16 DONE.  A larger early crop does not fit the
+existing tape: it needs new land/worker movement, which is precisely V219's
+d18 route rather than a safe timing knob.  Do not race, gate or create a
+candidate.  No Kaggle operation occurred.

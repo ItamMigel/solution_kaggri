@@ -1,4 +1,4 @@
-# Candidate es5_c3g15 — CMA-ES v3 (gen-15 centre) knobs + Horizon+ M1 COLLECT  ← CURRENT RECOMMENDATION (2026-09-26)
+# Candidate es5_c3g15 — CMA-ES v3 (gen-15 centre) knobs + Horizon+ M1 COLLECT  (superseded 2026-09-26 by es6_c4g15)
 Archive `es5_c3g15.tar.gz` (main.py + LICENSE.txt + NOTICE.txt; sha256.txt). Agents never submit — the human decides.
 = Horizon v5_market + 24 knobs from cma3 (warm-started at es3_g5, mirror opponent es3_g5) + COLLECT_FERTILIZER module.
 Main knob changes vs es3_g5: _ADV_LOOK 17→19, _V92_P_H 61→67, _RACE_HORIZON_CLONE 10→7, _Y_MARGIN −2→−8, _CS_MIN_GAIN 463→842,

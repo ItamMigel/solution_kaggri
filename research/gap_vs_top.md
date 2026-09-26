@@ -86,3 +86,36 @@ The target-2 leg fails its fresh locked 2-world capability screen against
 `es5_c3g15` and Parthenos: paired score **−0.750**, paired margin **−$2,581**
 (95% bootstrap [−$3,198, −$1,965]), 16/16 DONE, zero runner errors.  Do not
 race or gate it. Evidence: `runs/t028_g1c/capability/PAIRED.md`.
+
+## Follow-up: G1 target5 source P&L and G2 tomato timing (2026-09-26)
+
+The target5 post-mortem uses 16 re-saved official replays from the exact
+locked G1 fold, rather than inferring from final margins.  The diagnostic
+pairing is target5-minus-genome0 within each world/opponent/seat:
+
+| realised component | target5 own Δ/game | opposing controller Δ/game |
+|---|---:|---:|
+| final cash | **+$3,214.5** | **+$26,701.5** |
+| egg sales | +$8,612.2 | −$746.5 |
+| milk sales | −$6,672.5 | +$6,478.0 |
+| fertilizer sales | −$1,280.5 | +$1,623.0 |
+| bought geese | −$1,125.0 | $0.0 |
+| bought wheat | +$328.0 | −$3.0 |
+| successful FEED actions | −28.8 | +15.8 |
+
+Own cash is −$2,407 d10, −$1,916 d17, +$1,564 d24, +$2,383 d28 and +$3,214
+after the final day.  The opponent's corresponding deltas are +$960, +$10,087,
++$20,847, +$25,608 and +$26,702.  G1 therefore has no own-P&L implementation
+leak to repair: eggs genuinely pay, but the changed shared market/town path
+and displaced herd mix benefit the rival far more.  Evidence:
+`runs/t028_g1_postmortem_20260926/postmortem_v2.json`.
+
+No static Horizon route plants tomatoes.  V219 creates a d18, ten-cell, new
+land/new-worker plan, so first tomato harvest is d26.  The sole parent-audited
+early tape fit is a d0 one-tomato-for-second-cow alternative.  Its final
+opening had silently removed the inner tomato seed; G2 restores that one seed
+only if the frozen parent opening is exact, so it fails closed on drift.  Trace
+proves d0 planting and harvests d8--11 (`runs/t028_g2_ready/route_trace_audit.json`),
+but its separate new two-world es5+Parthenos screen is 0/8, paired **−$4,289**
+(CI [−$6,652, −$1,926]); no race/gate.  Evidence:
+`runs/t028_g2_ready/capability/PAIRED.md`.
