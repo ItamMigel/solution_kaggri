@@ -25,9 +25,10 @@ from kaggle_environments.envs.kaggriculture import kaggriculture as K
 import kaggle_environments as KE
 
 TEAM = "misis biznessmenlb"
+ITEM = "WHEAT"
 
 
-def rows(replays):
+def rows(replays, outcome="loss", expected=None):
     ans = []
     for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
         d = json.loads(Path(raw).read_text())
@@ -35,10 +36,12 @@ def rows(replays):
         if TEAM not in names:
             continue
         us = names.index(TEAM)
-        if rewards[us] < rewards[1 - us]:
+        won = rewards[us] > rewards[1 - us]
+        lost = rewards[us] < rewards[1 - us]
+        if outcome == "all" or (outcome == "loss" and lost) or (outcome == "win" and won):
             ans.append((raw, us, d["info"]["EpisodeId"], names[1-us]))
-    if len(ans) != 39:
-        raise RuntimeError(f"expected 39 losses, got {len(ans)}")
+    if expected is not None and len(ans) != expected:
+        raise RuntimeError(f"expected {expected} {outcome} replays, got {len(ans)}")
     return ans
 
 
@@ -63,7 +66,7 @@ def mine(row):
         before_i = market["inventory"].get(item, 0)
         before_s = private["shed"].get(item, 0)
         ok = oc(op, item, price, farm, private, market, *extra)
-        if ok and item == "WHEAT" and op in ("SELL", "BUY_PRODUCT"):
+        if ok and item == ITEM and op in ("SELL", "BUY_PRODUCT"):
             cur["seq"] += 1
             events[pid].append({"step": cur["step"], "day": cur["day"], "seq": cur["seq"],
                                 "op": op, "price": price, "market_before": before_i,
@@ -74,15 +77,18 @@ def mine(row):
     def unit(farm, private, idx, action, board_size, day, turns, shed_capacity=100):
         pid = refs.get(id(farm), 0)
         inv = private["inventories"][idx] if idx < len(private["inventories"]) else {}
-        b_inv, b_shed = inv.get("WHEAT", 0), private["shed"].get("WHEAT", 0)
+        b_inv, b_shed = inv.get(ITEM, 0), private["shed"].get(ITEM, 0)
+        pos = farm["farmer"] if idx == 0 else farm["hands"][idx - 1]
+        tile = farm["tiles"][pos[1]][pos[0]]
+        crop = tile.get("crop") if isinstance(tile, dict) else None
         ou(farm, private, idx, action, board_size, day, turns, shed_capacity)
         inv2 = private["inventories"][idx] if idx < len(private["inventories"]) else {}
-        a_inv, a_shed = inv2.get("WHEAT", 0), private["shed"].get("WHEAT", 0)
+        a_inv, a_shed = inv2.get(ITEM, 0), private["shed"].get(ITEM, 0)
         op = action[0] if isinstance(action, list) and action else "?"
-        if op in ("PICKUP", "DROP", "HARVEST", "FEED") and (b_inv != a_inv or b_shed != a_shed):
+        if op in ("PICKUP", "DROP", "HARVEST", "FEED", "FERTILIZE") and (b_inv != a_inv or b_shed != a_shed):
             cur["seq"] += 1
             events[pid].append({"step": cur["step"], "day": cur["day"], "seq": cur["seq"],
-                                "op": op, "price": None, "inv_delta": a_inv-b_inv,
+                                "op": op, "price": None, "crop": crop, "inv_delta": a_inv-b_inv,
                                 "shed_delta": a_shed-b_shed})
 
     def eod(state, env, day):
@@ -101,9 +107,9 @@ def mine(row):
 
     def town(env, state, step):
         m = state[0].observation.market
-        bi, bp = m["inventory"]["WHEAT"], m["prices"]["WHEAT"]
+        bi, bp = m["inventory"][ITEM], m["prices"][ITEM]
         ot(env, state, step)
-        ai, ap = m["inventory"]["WHEAT"], m["prices"]["WHEAT"]
+        ai, ap = m["inventory"][ITEM], m["prices"][ITEM]
         if ai != bi:
             towns.append({"step": cur["step"], "day": cur["day"], "before_inv": bi,
                           "after_inv": ai, "before_price": bp, "after_price": ap})
@@ -150,6 +156,7 @@ def game_summary(g):
     buy = [e for e in pe if e["op"] == "BUY_PRODUCT"]
     sell = [e for e in pe if e["op"] == "SELL"]
     ours = [e for e in ue if e["op"] == "BUY_PRODUCT"]
+    use = [e for e in pe if e["op"] == "FERTILIZE"]
     matched = _temporal(buy, sell)
     # Conservative inter-turn price exposure: remove a purchase only while it
     # is outstanding until the FIFO-matched later sale.  We deliberately apply
@@ -165,7 +172,7 @@ def game_summary(g):
     for step in sorted(set(starts) | set(ends) | set(by_step)):
         # Purchases/sales made this turn take effect only next turn here.
         for e in by_step[step]:
-            cf = _price("WHEAT", e["market_before"] - 1 + held, {"params": {}})
+            cf = _price(ITEM, e["market_before"] - 1 + held, {"params": {}})
             extra += e["price"] - cf
         held += starts[step] - ends[step]
     first_town_after = []
@@ -186,7 +193,10 @@ def game_summary(g):
             "town_price_delta_after_buy_mean": sum(x for x in first_town_after if x is not None)/max(1,sum(x is not None for x in first_town_after)),
             "our_buy_units": len(ours), "our_buy_cost": sum(e["price"] for e in ours),
             "our_buy_mean_price": sum((e["price"] for e in ours), 0)/max(1,len(ours)),
-            "our_interturn_shadow_extra_cost": extra}
+            "our_interturn_shadow_extra_cost": extra,
+            "opp_use_units": sum(max(0, -int(e.get("inv_delta", 0))) for e in use),
+            "opp_use_wheat": sum(max(0, -int(e.get("inv_delta", 0))) for e in use if e.get("crop") == "WHEAT"),
+            "opp_use_carrot": sum(max(0, -int(e.get("inv_delta", 0))) for e in use if e.get("crop") == "CARROT")}
 
 
 def mean(a, k): return sum(x[k] for x in a)/len(a)
@@ -194,10 +204,10 @@ def mean(a, k): return sum(x[k] for x in a)/len(a)
 def report(out):
     games = out["games"]
     return "\n".join([
-        "# T031 — WHEAT buy/sell time audit", "",
-        "Exact 39 loss replays, official engine 1.32.7. `temporal_match` is FIFO cash-flow matching of a purchase to a later sale, not physical provenance: WHEAT is fungible and farms harvest it too. `shadow_extra` holds opponent purchases in shared inventory only; it is a local price-exposure accounting diagnostic, not a feasible behaviour counterfactual.", "",
-        "| per loss mean | value |", "|---|---:|",
-        *[f"| {k} | {mean(games,k):,.2f} |" for k in ("opp_buy_units","opp_buy_cost","opp_sell_units","opp_sell_revenue","cashflow_wheat","buy_mean_price","sell_mean_price","buy_mean_day","sell_mean_day","temporal_match_units","temporal_match_pnl","temporal_match_mean_hold_steps","town_price_delta_after_buy_mean","our_buy_units","our_buy_cost","our_buy_mean_price","our_interturn_shadow_extra_cost")],
+        f"# T031 — {ITEM} buy/sell time audit", "",
+        f"Exact {len(games)} {out.get('outcome', 'selected')} replays, official engine 1.32.7. `temporal_match` is FIFO cash-flow matching of a purchase to a later sale, not physical provenance: {ITEM} is fungible and farms may also create it. `shadow_extra` holds opponent purchases in shared inventory only; it is a local price-exposure accounting diagnostic, not a feasible behaviour counterfactual.", "",
+        f"| per-{out.get('outcome', 'selected')} replay mean | value |", "|---|---:|",
+        *[f"| {k} | {mean(games,k):,.2f} |" for k in ("opp_buy_units","opp_buy_cost","opp_sell_units","opp_sell_revenue","cashflow_wheat","buy_mean_price","sell_mean_price","buy_mean_day","sell_mean_day","temporal_match_units","temporal_match_pnl","temporal_match_mean_hold_steps","town_price_delta_after_buy_mean","our_buy_units","our_buy_cost","our_buy_mean_price","our_interturn_shadow_extra_cost","opp_use_units","opp_use_wheat","opp_use_carrot")],
         "", "## Per opponent identity", "",
         "| opponent | games | opp buy $ | opp sale $ | cash-flow $ | FIFO later-sale P&L $ | buy d | sell d | our shadow cost $ |",
         "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
@@ -212,11 +222,14 @@ def _groups(games):
 
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--out",required=True); ap.add_argument("--replays",default="/workspace/shared/replays/t028"); ap.add_argument("--workers",type=int,default=8); args=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("--out",required=True); ap.add_argument("--replays",default="/workspace/shared/replays/t028"); ap.add_argument("--workers",type=int,default=8); ap.add_argument("--item",default="WHEAT",choices=("WHEAT","FERTILIZER")); ap.add_argument("--outcome",default="loss",choices=("loss","win","all")); ap.add_argument("--expect",type=int); args=ap.parse_args()
     if not 1 <= args.workers <= 8: ap.error("workers must be 1..8")
-    with mp.Pool(args.workers) as p: raw=list(p.imap_unordered(mine, rows(args.replays)))
+    global ITEM
+    ITEM = args.item
+    selected = rows(args.replays, args.outcome, args.expect)
+    with mp.Pool(args.workers) as p: raw=list(p.imap_unordered(mine, selected))
     games=[game_summary(g) for g in sorted(raw,key=lambda x:x["episode"])]
-    out={"method":"official replay hooks; cash-flow and price shadow qualified in report", "games":games}
+    out={"method":"official replay hooks; cash-flow and price shadow qualified in report", "item": ITEM, "outcome": args.outcome, "games":games}
     dest=Path(args.out)
     if dest.exists() or dest.with_suffix(".md").exists():
         raise FileExistsError(f"refusing to overwrite existing result: {dest}")
