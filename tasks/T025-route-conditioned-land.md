@@ -207,3 +207,10 @@ This gate applies to a frozen CMA centre only after its training generation is c
 - The promoted comparison control is now `candidates/es7_wm/pkg/main.py`. Earlier g20/g25/g30 gates against es6 remain historical and are not pooled with this new control.
 - CMA fitness remains the unchanged `panel_rotating_8`/es5-mirror objective. For every new promotion gate, the immutable raw `runs/cma4/gen_NNN/c/main.py` is composed with the exact frozen es7 WHEAT parameters (`wm_on`, d6–17 buy ≤$30, 20-unit floor, $2,000 reserve; d10–28 sell ≥$40 above 35), creating a separately SHA-256-hashed `candidate_with_wheat/main.py` inside that gate's evidence directory. The composed candidate is compared with `es7_wm`; raw source, composed source, genes and control are all frozen and rehashed after evaluation.
 - The g35 gate keeps the existing fresh 16-world/10-opponent/both-seat, nine-stratum, 640-game criterion and must pass only with lower bound strictly >0, no opponent below −10pp, all valid rows and unchanged raw/composed/control hashes. A pass is WIP-only and needs Claude review; never Kaggle submission.
+
+## CMA4 gen-35 disk-full recovery (2026-09-26, Codex)
+
+- Gen 35 stopped during the training evaluation when the filesystem reached capacity: `compare.py` recorded **373/1,056 DONE** rows, then raised `OSError: [Errno 28] No space left on device`. It never reached fitness calculation, `tell()`, or either atomic `history.json` / `cma.pkl` write; both therefore still represent completed gen 34.
+- The incomplete run is preserved without interpretation at `runs/cma4/` under `gen_035_interrupted_diskfull_<UTC>/`; it is not deleted or used for selection. Its manifest remains discoverable by the gate seed collector, so none of its worlds can enter a future fresh gate.
+- Disk cleanup by Claude restored 24 GB free. Restarting creates a clean gen 35 from the unchanged CMA state, with the deterministic gen-35 eight-world seed schedule and the declared 14-worker training configuration. The resulting centre, if complete, will receive the new frozen `centre + es7 WHEAT` versus `es7_wm` gate. No Kaggle operation occurred.
+
