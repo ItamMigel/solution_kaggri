@@ -4350,3 +4350,1495 @@ index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e925
 +
 +Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
 
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+codex
+Boundary-monitor всё ещё видит только сохранённые 23 поколения; он не меняет fitness/кандидата и остановит процесс сразу после атомарного сохранения `gen_023`.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+codex
+Проверка состояния сохранения продолжается; прочие процессы я не запускаю, чтобы не добавлять нагрузку до остановки CMA4.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+ succeeded in 1401081ms:
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+watch 23
+STOP 24 1790425527343488201
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+exec
+/bin/bash -lc 'git -C /workspace/shared status --short; sha256sum /workspace/shared/opponents/new0926/{four-turn-forecast-notebook-version-2,kaggriculture-master-engine-v3,kaggriculture-v40-challenger,kaggriculture-thomas-2944-candidate}/main.py' in /workspace/wt/codex
+ succeeded in 29ms:
+b137c80db04a45028cccd95ee963581dc1406807bce5e31ab8a03aed2bbe4d05  /workspace/shared/opponents/new0926/four-turn-forecast-notebook-version-2/main.py
+127ed3e62988c0474d386db6527ae8ca9de9bb1fe7004128557ddef67126c652  /workspace/shared/opponents/new0926/kaggriculture-master-engine-v3/main.py
+d5a192fac67f00da31fe2bc7b747b8c33766bf1024780c53e49f2292a97db2de  /workspace/shared/opponents/new0926/kaggriculture-v40-challenger/main.py
+2714b6eb6c67fea70eb1dfd90fff0e25bbf15ea8c3391fadf890c7ae274bae70  /workspace/shared/opponents/new0926/kaggriculture-thomas-2944-candidate/main.py
+
+exec
+/bin/bash -lc "ps -o pid,ppid,pgid,stat,wchan:30,etime,args -p 572287,630787; pgrep -P 630787 -a || true; ps -eo pid,ppid,stat,pcpu,args | awk '"'$2==630787 || $2==572287'"'; /workspace/solution_kaggri/.venv/bin/python - <<'PY'
+import json,os,pickle
+p='/workspace/shared/runs/cma4'; h=json.load(open(p+'/history.json')); r=h[-1]; es=pickle.load(open(p+'/cma.pkl','rb'))
+print('history',len(h),'last_gen',r['gen'],'errors',r['errors'],'centre_fit',r['centre_fit'],'best',r['best'],r['best_fit'],'sigma',r['sigma'])
+print('countiter',es.countiter,'pkl_bytes',os.path.getsize(p+'/cma.pkl'))
+print('gen024_exists',os.path.exists(p+'/gen_024'))
+PY" in /workspace/wt/codex
+ succeeded in 295ms:
+/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/cma/s.py:17: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+history 24 last_gen 23 errors 0 centre_fit 1.047623828125 best x2 1.0477980468749999 sigma 0.014849015061047037
+countiter 24 pkl_bytes 33668
+gen024_exists False
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+2026-09-26T12:26:01.100647Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /workspace/shared/BOARD.md:
+| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+exec
+/bin/bash -lc "sed -n '1,35p' /workspace/shared/BOARD.md; tail -18 /workspace/shared/BOARD.md; sed -n '1,240p' /workspace/shared/tasks/T030-new0926-public-bases.md" in /workspace/wt/codex
+ succeeded in 0ms:
+# BOARD — kaggriculture war room
+_Updated: 2026-09-23 23:10 UTC by claude. Deadline 2026-09-30 23:59 UTC (7 days)._
+
+## ☠ Agents never submit. Kaggle = read-only. (see AGENTS.md)
+
+## Current state
+- **Ratings 2026-09-24 05:27 UTC**: v5_guarded **2640.6**, v5_market 2185.6 (ladder W-L 73-12 / 72-4).
+- **Active on ladder**: `horizon_v5_market` (56504560), `horizon_v5_guarded` (56504572) — uploaded 2026-09-23 22:0x, ratings still climbing from 600 (1495 / 1737 after ~15 episodes).
+- **Previous best on ladder**: `horizon_v4` (56488922) = **2590.4** (~rank 300). Now inactive (only 2 latest subs play).
+- Team rank on snapshot 2026-09-23 23:01: 2158 (artifact of fresh v5 ratings, not strength).
+- Local evidence: v5_market 767/768 vs 6 public controllers, 126/128 vs v4 — but all opponents share ancestry with Horizon; unknown vs real top (≈3000+).
+- Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+
+## Key findings (newest first; one line each, link the task)
+- 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+- 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+- 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028 first 2-goose cow-only leg is rejected: −0.750 paired score / −$2,581 (CI −$3,198…−$1,965), 16/16 DONE. It is not G1 target 4/5/6 and does not enter the current screen. `tasks/T028-gap-vs-top.md` [codex]
+- 2026-09-26 — T028: es3_g5 has **0/142** direct matches with current top-20, so no honest paired top-minus-ours cohort exists.  In an explicitly unpaired 19-top vs 80-es3 replay decomposition, the largest source hypothesis is **EGG +$4,952/game**: top reaches 5.9 geese on d11 vs ours 2.2 through a d6–11 build/place/feed/harvest route.  Recommend a new default-off route-owned early-goose microplan, not the previously-negative market-only/PASS/FD modules. `research/gap_vs_top.md` [codex]
+- 2026-09-26 — T025 **CMA4 paused resume-safely after completed gen-19** (1,056/1,056, 0 errors; centre 1.0302; `history`/pickle at gen19/countiter20; gen20 has 0 rows only). Its 18 CPU workers are released; the predeclared g5+g15 fresh full-panel gate continues unchanged at 4 workers. No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 **CMA4 gen-10 rejected** by the predeclared es5_c3g15 gate: H2H is 16–0 (+$495), but independent 24-world P+M panel paired score −6.25pp with one-sided lower −14.583pp (< −2pp), driven by metav4; 208/208 valid. Keep es5_c3g15; CMA4 continues to gen-15 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 **CMA4 gen-5 rejected** by the predeclared es5_c3g15 gate: H2H passes 14–0–2 (+$296), but independent 24-world P+M panel paired score −2.083pp with one-sided lower −8.333pp (< −2pp); 208/208 valid. Keep promoted es5_c3g15; CMA4 search continues to gen-10 gate. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA4 fitness migrated at completed gen-8 boundary: saved CMA state/centre unchanged; gen-9+ weights parthenos 2/6 vs mirror 1/6, writes every candidate's per-opponent split, and is config/hash transition-audited. Training g0–7 showed mirror dominates mutation ranking (g0 best .124–1.012 vs P .619–.746); gate adverse split is parthenos (−4.167pp; metav4 0). No candidate/Kaggle action. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025: stopped stale-control CMA3 after completed gen16 (0.985 centre, σ=.0372); restarted local **CMA4** at exact gen15/es5_c3g15 centre with σ=.015, `CMA_BEST=es5_c3g15`, config/hash-checked resume and 18 workers. CMA3 is preserved/restartable; no candidate or Kaggle action changed. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 CMA3 gen-15 boundary confirmation **passes predeclared replacement numbers**: fresh disjoint P+M 24-world panel is +6.25pp; combined 48-world paired one-sided 95% lower is 0.00pp (>−2pp), 384/384 valid, after H2H 16–0 +$836. **Pending Claude independent review before any candidate change; es3_g5 remains frozen meanwhile.** `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 standard CMA gate **rejects CMA3 gen-15**: fresh es3 H2H 16–0 (+$836; CI positive), but separate 24-world paired P+M panel is narrowly below predeclared NI (paired +4.17pp, one-sided lower −2.083pp vs required >−2.0; cash −$48.5); 208/208 valid. Keep es3_g5. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 failure localized: no early route/hire/land divergence; `_ADV_LOOK` 17→18 pulls premium milk/egg/wool sales one tick early against parthenos. Rollback to 17 improves the 7 adverse worlds (+$1,097→+$1,347; 4→2 losses) but fails fresh H2H, so this is an opponent-specific trade-off; Q/CH knobs inert/minor. Standard CMA gate is predeclared. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-26 — T025 c3g5 red-team **rejects promotion**: on 24 new worlds × parthenos/metav4 × both seats (192/192 valid), c3g5−es3_g5 is −4.17pp score (CI −10.4…0) / −$69.3 (CI −$176.6…+$33.3); parthenos repeats in the adverse direction. CMA3 gen-10 is 15–0–1 (+$437) vs es3, but directly ties c3g5 on score (+$50.5, CI crosses 0): positive signal only. `tasks/T025-route-conditioned-land.md` [codex]
+- 2026-09-25 — PBT red-team/fix: published monotonic `roundNNN` snapshots eliminate stale `it` races after exploit; atomic exploit, all-4 common rotating official exams, invalid-exam rejection, 24 single-thread CPU workers, finite horizon stop. KL anchor remains immutable `ref.pt`; HoF is development-only and needs disjoint confirmation. `research/pbt_codex.md` [codex]
+- 2026-09-25 19:00 — BC→PPO **pkg v3** ready (`h100_pkg/kaggri_bcppo_v3.zip`): codex audit fixes (capped market P0/P1, target-KL P2, subset league, telemetry), vectorised allocator, 2048 envs defaults, es3 + 2000 DART games of es3_g5. Clean-teacher BC es3 failed closed loop (0/96, deterministic teacher → no coverage) → DART. [claude+codex]
+- 2026-09-25 — ✅ **es3_g5 promoted** (`candidates/es3_g5`) = cma2 gen-5 knobs + COLLECT: vs es2_c1 32-0 (claude) & 30-0-2 CI [84,100]% (codex T026); vs g9 32-0; panel no score loss. Supersedes es2_c1/es1_g9. H100 BC→PPO run 1: nothing beats g9 yet (best strong_v3 ~−5k). [claude+codex]
+- 2026-09-25 — T027 BC→PPO v3 audit: **fix market truncated-bucket likelihood/entropy and add true target-KL early-stop before long H100 run**. P40 profile: learner+5 full-batch policy calls are 71% step time; subset league evaluation is first perf lever. Horizon-double BC is only conditional on closed-loop/DAgger gate. `research/bcppo_v3_design_codex.md` [codex]
+- 2026-09-25 — T026 independent review **PASS**: es3_g5 is 30–0–2 vs es2_c1 on 16 new worlds (93.75%, score CI 84.4–100%, +$469; 0 errors); 576-game paired 9-opponent panel has no significant paired-score regression. `tasks/T026-es3g5-review.md` [codex]
+| T024 | codex | closed — 187 ladder episodes mined; no tape-safe proposal | Mine es1_g1/es1_g9 ladder losses → actionable gaps → modules (race vs es2_c1). `tasks/T024-ladder-losses.md` |
+| T025 | codex+claude | ✓ es6_c4g15 PROMOTED 2026-09-26 10:30Z | cma4 gen-15 centre: fresh full-panel PASS twice (codex +5.6pp, claude +3.1pp; h2h vs es5 29/32 & 24/32, no regression) → candidates/es6_c4g15 = current recommendation |
+| T025 | codex+claude | ✓ es5_c3g15 PROMOTED 2026-09-26 | cma3 gen-15 centre: h2h 16-0 vs es3_g5, P+M +5.2pp (48 worlds), family 24w +2.1pp; candidates/es5_c3g15 = current recommendation; cma4 continues from it |
+| T025 | codex+claude | in_progress — CMA4 gen-20 gate rejected; training at gen-21 | Fresh 16-world full panel versus es6: +0.694pp but one-sided lower −1.042pp (<0), 640/640 valid; no WIP/candidate change. CMA uses unchanged panel_rotating_8/es5 mirror at ≤14 workers; next gate gen25 vs es6. `tasks/T025-route-conditioned-land.md` |
+| T026 | codex | closed ✓ PASS | es3_g5 clears 16 new-world es2_c1 h2h CI and paired nine-opponent no-regression gate. `tasks/T026-es3g5-review.md` |
+| T027 | codex | closed ✓ | BC→PPO v3 design/code audit (correctness, performance, H100 scaling); `research/bcppo_v3_design_codex.md`. |
+| T021 | claude+codex | in_progress | Horizon+: capability modules (M1 in-place ops, early macros, build-time flags) + staged racing→CMA search. `tasks/T021-horizon-plus.md` |
+| T020 | codex | closed — patched P40 K5 completed; CMA gen-10 failed g9 gate | Detect PPO pathologies before H100 return; CMA centre is below g9 on fresh both-seat gate. `tasks/T020-local-signal.md` |
+| T017 | codex | stopped — no promotion signal; CPU reassigned to T019 | PPO over Horizon: daily knob policy. g0–g3 gave no promotable gain; Claude stopped this track at the BC→PPO v2 handoff. `tasks/T017-ppo-horizon.md` |
+| T018 | claude | paused (cma1 stopped gen 11; gate 4-28 vs g9) | ES→**CMA-ES** (team suggestion, runs/cma1, warm start from ES gen-13 centre) over 24 Horizon knobs (static), real engine, reactive panel, fresh worlds/gen → `runs/es1` |
+| T016 | codex | closed ✓ | Final-pair confirmation: v5 decisively beats v4; market≈guarded. `tasks/T016-final-pair.md` |
+| T013 | claude | closed ✗ | Horizon chassis + M&M&P&Q tape (their production plan + Horizon repair/sale/endgame layers) vs v5_market; `runs/t013_screen` |
+| T014 | claude | closed (null) | Final-day labour: lower `_FD_HIRE_RATIO` (1.4→1.0/0.7/0.5) in v5; clones end with 11.4 hands vs our 8.3 in all 55 mirror ladder games. `runs/t014_fdhire` |
+| T004 | codex | in_progress | Discussion digest (non-RL threads) → `research/discussions.md` |
+| T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+| T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+| T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
+| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
+# T030 — new0926 public bases
+
+Owner: codex.  Started 2026-09-26.
+
+Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
+
+Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+
+## Amendment 2026-09-26 — demand timing and ladder market audit
+
+Claim: codex.  User-directed follow-on; Kaggle is read-only and no submission.
+
+1. Diff `opponents/new0926/demand-preserving-turn-sale-timing/main.py` against
+`agents/horizon_v5_market.py` and promoted `candidates/es6_c4g15/pkg/main.py`; isolate
+the market demand/sale-timing layer.
+2. Transplant the isolated layer as a default-off, identity-audited gene into an es6-based
+agent (or use its base with es6 knobs and COLLECT), then run a paired, both-seat screen
+vs es6 at <=8 workers. Claude's independent 16-world/10-opponent gate is at
+`runs/gate_demand_vs_es6`; it must not be overwritten.
+3. From the 39 losses in `replays/t028`, mine per crop/day first seller, realized prices
+for each side, and contested shops, to distinguish price/demand competition from other
+causes. Report durable facts via `bin/say claude`.
+
+## Result — market audit 2026-09-26
+
+All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero miner failures). The market is shared and sales are often simultaneous, but it is not primarily a sale-order/price failure: WHEAT is −20,162 realised units and −$794,851 gross aggregate versus opponents at a *slightly higher* own mean price (+$0.47); carrot/egg/fertilizer similarly lose volume with near-equal prices. Strawberry is the exception (+159 units but −$6.40/unit, −$41,367 gross), so it is a conditional research lead only. Full table and day rows: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`.
+
+## Result — demand-layer diff / implementation status 2026-09-26
+
+`demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
+
+Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..7c206e3b7b9bab52aa46690c803da6e5f8ab4e72
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -117,3 +117,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — CMA4 boundary pause + public-notebook extraction/lineage | Pause CMA4 after `gen_022` without losing its resumable state; extract the four remaining `new0926` public agents and identify Horizon ancestry. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba26c5204d1354ef54ce686ed89e9257f31904a
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,7 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
+
+apply patch
+patch: completed
+/workspace/shared/BOARD.md
+/workspace/shared/tasks/T030-new0926-public-bases.md
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..519a2b7edf42357bd13fad28b8b1d8a2c01d5465
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,7 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
++- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+ - 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+ - 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+ - 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+@@ -117,3 +119,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c61a888d3217f916abaa9c37aa20037874723ae
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,40 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
++
++## Result — notebook recovery and CMA pause 2026-09-26
++
++- CMA4 completed gen-22 and gen-23 without errors (each 1,056 games), then stopped immediately after the atomic gen-23 pickle write: `history.json` has 24 records (last `gen=23`), `cma.pkl` has `countiter=24`, and `gen_024` is absent. `knob_cma.py` PID 630787 is deliberately `T` while its shell waits; resume exactly with `kill -CONT 630787`.
++- Recovered + compiled (`py_compile`) `main.py`: four-turn forecast `b137c80d…`; master-engine-v3 `127ed3e6…`; v40 challenger `d5a192fa…`; Thomas 2944 `2714b6eb…`.
++- Thomas metadata reports `dataset_sources=[]`: its inputs are read-only kernel outputs `thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots` and `statma/kaggriculture-herd-safe-sale-window-submit`. Their archive inner-source hashes matched `bfee70e9…` / `4889137f…` exactly.
++- All recovered agents carry the same state-router/Horizon markers (`DEFAULT_SETTINGS`, `_R108_SHOP_ROUTES`, `_V92_TABLE`, `_V9_ITEM_HZ`, `make_agent`); Thomas runs Thomas before step 336 and HerdSafe afterwards. No independent base emerged. Of the initial nine, only God’s Mode and Hybu lack these markers, but the current screen makes both invalid (missing sibling imports / no final callable).
++
++
++## Amendment 2026-09-26 — demand timing and ladder market audit
++
++Claim: codex.  User-directed follow-on; Kaggle is read-only and no submission.
++
++1. Diff `opponents/new0926/demand-preserving-turn-sale-timing/main.py` against
++`agents/horizon_v5_market.py` and promoted `candidates/es6_c4g15/pkg/main.py`; isolate
++the market demand/sale-timing layer.
++2. Transplant the isolated layer as a default-off, identity-audited gene into an es6-based
++agent (or use its base with es6 knobs and COLLECT), then run a paired, both-seat screen
++vs es6 at <=8 workers. Claude's independent 16-world/10-opponent gate is at
++`runs/gate_demand_vs_es6`; it must not be overwritten.
++3. From the 39 losses in `replays/t028`, mine per crop/day first seller, realized prices
++for each side, and contested shops, to distinguish price/demand competition from other
++causes. Report durable facts via `bin/say claude`.
++
++## Result — market audit 2026-09-26
++
++All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero miner failures). The market is shared and sales are often simultaneous, but it is not primarily a sale-order/price failure: WHEAT is −20,162 realised units and −$794,851 gross aggregate versus opponents at a *slightly higher* own mean price (+$0.47); carrot/egg/fertilizer similarly lose volume with near-equal prices. Strawberry is the exception (+159 units but −$6.40/unit, −$41,367 gross), so it is a conditional research lead only. Full table and day rows: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`.
++
++## Result — demand-layer diff / implementation status 2026-09-26
++
++`demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
++
++Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..519a2b7edf42357bd13fad28b8b1d8a2c01d5465
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,7 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
++- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+ - 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+ - 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+ - 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+@@ -117,3 +119,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c61a888d3217f916abaa9c37aa20037874723ae
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,40 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
++
++## Result — notebook recovery and CMA pause 2026-09-26
++
++- CMA4 completed gen-22 and gen-23 without errors (each 1,056 games), then stopped immediately after the atomic gen-23 pickle write: `history.json` has 24 records (last `gen=23`), `cma.pkl` has `countiter=24`, and `gen_024` is absent. `knob_cma.py` PID 630787 is deliberately `T` while its shell waits; resume exactly with `kill -CONT 630787`.
++- Recovered + compiled (`py_compile`) `main.py`: four-turn forecast `b137c80d…`; master-engine-v3 `127ed3e6…`; v40 challenger `d5a192fa…`; Thomas 2944 `2714b6eb…`.
++- Thomas metadata reports `dataset_sources=[]`: its inputs are read-only kernel outputs `thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots` and `statma/kaggriculture-herd-safe-sale-window-submit`. Their archive inner-source hashes matched `bfee70e9…` / `4889137f…` exactly.
++- All recovered agents carry the same state-router/Horizon markers (`DEFAULT_SETTINGS`, `_R108_SHOP_ROUTES`, `_V92_TABLE`, `_V9_ITEM_HZ`, `make_agent`); Thomas runs Thomas before step 336 and HerdSafe afterwards. No independent base emerged. Of the initial nine, only God’s Mode and Hybu lack these markers, but the current screen makes both invalid (missing sibling imports / no final callable).
++
++
++## Amendment 2026-09-26 — demand timing and ladder market audit
++
++Claim: codex.  User-directed follow-on; Kaggle is read-only and no submission.
++
++1. Diff `opponents/new0926/demand-preserving-turn-sale-timing/main.py` against
++`agents/horizon_v5_market.py` and promoted `candidates/es6_c4g15/pkg/main.py`; isolate
++the market demand/sale-timing layer.
++2. Transplant the isolated layer as a default-off, identity-audited gene into an es6-based
++agent (or use its base with es6 knobs and COLLECT), then run a paired, both-seat screen
++vs es6 at <=8 workers. Claude's independent 16-world/10-opponent gate is at
++`runs/gate_demand_vs_es6`; it must not be overwritten.
++3. From the 39 losses in `replays/t028`, mine per crop/day first seller, realized prices
++for each side, and contested shops, to distinguish price/demand competition from other
++causes. Report durable facts via `bin/say claude`.
++
++## Result — market audit 2026-09-26
++
++All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero miner failures). The market is shared and sales are often simultaneous, but it is not primarily a sale-order/price failure: WHEAT is −20,162 realised units and −$794,851 gross aggregate versus opponents at a *slightly higher* own mean price (+$0.47); carrot/egg/fertilizer similarly lose volume with near-equal prices. Strawberry is the exception (+159 units but −$6.40/unit, −$41,367 gross), so it is a conditional research lead only. Full table and day rows: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`.
++
++## Result — demand-layer diff / implementation status 2026-09-26
++
++`demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
++
++Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+exec
+/bin/bash -lc '/workspace/shared/bin/say claude "T030 FINAL: CMA4 pause confirmed after gen23 atomic state: 1056/1056, errors=0, history=24,last=23,cma.pkl countiter=24; gen_024 absent; PID 630787 is T (no workers) and resumes exactly `kill -CONT 630787`. Board/task updated. Recovery hashes/compile PASS: four-turn b137c80d; master-v3 127ed3e6; v40 d5a192fa; Thomas 2714b6eb. Thomas had dataset_sources=[]; inputs were the two kernel outputs I downloaded read-only (expected bfee70e9/4889137f matched). All four are Horizon/state-router family, so not an independent base. Initial non-Horizon God/Hybu remain invalid crashes."' in /workspace/wt/codex
+ succeeded in 0ms:
+sent to claude
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..519a2b7edf42357bd13fad28b8b1d8a2c01d5465
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,7 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
++- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+ - 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+ - 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+ - 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+@@ -117,3 +119,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c61a888d3217f916abaa9c37aa20037874723ae
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,40 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
++
++## Result — notebook recovery and CMA pause 2026-09-26
++
++- CMA4 completed gen-22 and gen-23 without errors (each 1,056 games), then stopped immediately after the atomic gen-23 pickle write: `history.json` has 24 records (last `gen=23`), `cma.pkl` has `countiter=24`, and `gen_024` is absent. `knob_cma.py` PID 630787 is deliberately `T` while its shell waits; resume exactly with `kill -CONT 630787`.
++- Recovered + compiled (`py_compile`) `main.py`: four-turn forecast `b137c80d…`; master-engine-v3 `127ed3e6…`; v40 challenger `d5a192fa…`; Thomas 2944 `2714b6eb…`.
++- Thomas metadata reports `dataset_sources=[]`: its inputs are read-only kernel outputs `thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots` and `statma/kaggriculture-herd-safe-sale-window-submit`. Their archive inner-source hashes matched `bfee70e9…` / `4889137f…` exactly.
++- All recovered agents carry the same state-router/Horizon markers (`DEFAULT_SETTINGS`, `_R108_SHOP_ROUTES`, `_V92_TABLE`, `_V9_ITEM_HZ`, `make_agent`); Thomas runs Thomas before step 336 and HerdSafe afterwards. No independent base emerged. Of the initial nine, only God’s Mode and Hybu lack these markers, but the current screen makes both invalid (missing sibling imports / no final callable).
++
++
++## Amendment 2026-09-26 — demand timing and ladder market audit
++
++Claim: codex.  User-directed follow-on; Kaggle is read-only and no submission.
++
++1. Diff `opponents/new0926/demand-preserving-turn-sale-timing/main.py` against
++`agents/horizon_v5_market.py` and promoted `candidates/es6_c4g15/pkg/main.py`; isolate
++the market demand/sale-timing layer.
++2. Transplant the isolated layer as a default-off, identity-audited gene into an es6-based
++agent (or use its base with es6 knobs and COLLECT), then run a paired, both-seat screen
++vs es6 at <=8 workers. Claude's independent 16-world/10-opponent gate is at
++`runs/gate_demand_vs_es6`; it must not be overwritten.
++3. From the 39 losses in `replays/t028`, mine per crop/day first seller, realized prices
++for each side, and contested shops, to distinguish price/demand competition from other
++causes. Report durable facts via `bin/say claude`.
++
++## Result — market audit 2026-09-26
++
++All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero miner failures). The market is shared and sales are often simultaneous, but it is not primarily a sale-order/price failure: WHEAT is −20,162 realised units and −$794,851 gross aggregate versus opponents at a *slightly higher* own mean price (+$0.47); carrot/egg/fertilizer similarly lose volume with near-equal prices. Strawberry is the exception (+159 units but −$6.40/unit, −$41,367 gross), so it is a conditional research lead only. Full table and day rows: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`.
++
++## Result — demand-layer diff / implementation status 2026-09-26
++
++`demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
++
++Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+codex
+Выполнено, без Kaggle submit.
+
+- CMA4 безопасно остановлен после `gen_023`: `history=24`, `cma.pkl countiter=24`, 0 ошибок, `gen_024` не создан. Возобновление: `kill -CONT 630787`.
+- Распакованы и проверены четыре `main.py`; все — производные Horizon/state-router, не независимый базовый движок.
+- Thomas использует два kernel-output, а не Dataset; хеши входов совпали.
+- Findings записаны на BOARD и отправлены Claude через `bin/say`.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 4aceeff6347a56badacd48d1cb907c4603b23ab9..519a2b7edf42357bd13fad28b8b1d8a2c01d5465
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,7 +12,9 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-26 — T030: CMA4 is **paused resume-safely after completed gen-23**: 1,056/1,056, zero errors; `history=24`, `cma.pkl countiter=24`, and no `gen_024`. Stopped `knob_cma.py` PID 630787 is after its atomic pickle write (resume `kill -CONT 630787`). All four remaining `new0926` notebooks now emit verified/compiled `main.py`; every one is Horizon-family (Thomas is a d14 Thomas→HerdSafe wrapper). Thomas declares two kernel outputs, not Datasets. `tasks/T030-new0926-public-bases.md` [codex]
+ - 2026-09-26 — T025 resumed from intact CMA4 gen19 at **14 workers** after preserving the 0-row `gen_020` interruption artifact; `panel_rotating_8`/es5 training mirror are unchanged. New declared gates are fresh 16-world 10-opponent full panels at g20/g25 versus promoted `es6_c4g15` (SHA `53c93a…`), ≤4 workers, independent/WIP-only. `tasks/T025-route-conditioned-land.md` [codex]
++- 2026-09-26 — T030 market audit of all 39 es3_g5 ladder losses: shared market is real but realised prices do **not** support a global sale-timing diagnosis. Biggest gross gap is WHEAT volume (−20,162 units/−$794.9k aggregate at our +$0.47 mean price); strawberry is the only sizeable adverse price signal (−$6.40/unit). Details: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`. [codex]
+ - 2026-09-26 — Carrot audit: promoted es6 already has CARROT2 d6–28; its seed float `_CA_BUFFER` is a CMA knob (range 0–30, current 9), so “more carrot seeds” through that route is already reachable. Non-CMA-only levers are CARROT2 date/feed/price controls and legacy V9 carrot thresholds/reserves; the route-2 late trim only prevents unharvestable end-game seed float. [codex]
+ - 2026-09-26 — T028 follow-up closes G1/G2: target5’s own cash is **+$3.21k** (eggs +$8.61k) but it changes the shared world so the opposing controller gets **+$26.70k** (already +$10.09k d17); no late-placement/feed/idle leak. Horizon has no native tomato tape: V219 plants d18→harvest d26. The only audited tape-fitting d0 tomato-for-cow leg (plant d0, harvest d8–11) fails new es5+Parthenos screen 0/8, −$4.29k vs genome0. No race/gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+ - 2026-09-26 — T028 G1 targets 4/5/6 **rejected by capability screen**: implementation/identity is sound (0/1,438 genome-off action diffs; exact surviving target herd; zero mismatch/errors), but all three lose the locked 2-world es5+Parthenos fold by −75pp: target4 −$18.4k, target5 −$23.5k, target6 −$23.7k; 32/32 valid. No survivor → no T025 gate/candidate/Kaggle action. `tasks/T028-gap-vs-top.md` [codex]
+@@ -117,3 +119,4 @@
+ | T007 | claude | ongoing (ratings log: research/ladder_ratings.md) | Monitor ladder ratings of v4/v5; recommend final 2 active submissions to the human by 2026-09-28 |
+ | T028 | codex | closed ✗ — G1 is structural shared-world composition loss; the only tape-fitting early G2 tomato route loses 0/8 | Gap vs top-20: income decomposition es3_g5 ladder games → one capability module → gate. `tasks/T028-gap-vs-top.md` |
+ | T029 | claude | in_progress | GPU line v4: fetch CURRENT top-10 subs (replays/top10v4) → BC v4 (bigger net, per-team) → current-meta league doubles + PBT seeds. `research/bc_v4_plan.md` |
++| T030 | codex | in_progress — demand timing + ladder-market audit | Diff `demand-preserving-turn-sale-timing` against v5/es6; add it as default-off gene and ≤8-worker screen vs es6; mine 39 T028 ladder losses for first-sale/price/shop contention. CMA4 stays low priority. |
+diff --git a//workspace/shared/tasks/T030-new0926-public-bases.md b//workspace/shared/tasks/T030-new0926-public-bases.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c61a888d3217f916abaa9c37aa20037874723ae
+--- /dev/null
++++ b//workspace/shared/tasks/T030-new0926-public-bases.md
+@@ -0,0 +1,40 @@
++# T030 — new0926 public bases
++
++Owner: codex.  Started 2026-09-26.
++
++Goal: safely pause CMA4 at the current completed-generation boundary, recover the four remaining public notebook agents under `opponents/new0926/`, and classify their lineage before any evaluation decision.  Kaggle access is read-only; no submission.
++
++Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
++
++## Result — notebook recovery and CMA pause 2026-09-26
++
++- CMA4 completed gen-22 and gen-23 without errors (each 1,056 games), then stopped immediately after the atomic gen-23 pickle write: `history.json` has 24 records (last `gen=23`), `cma.pkl` has `countiter=24`, and `gen_024` is absent. `knob_cma.py` PID 630787 is deliberately `T` while its shell waits; resume exactly with `kill -CONT 630787`.
++- Recovered + compiled (`py_compile`) `main.py`: four-turn forecast `b137c80d…`; master-engine-v3 `127ed3e6…`; v40 challenger `d5a192fa…`; Thomas 2944 `2714b6eb…`.
++- Thomas metadata reports `dataset_sources=[]`: its inputs are read-only kernel outputs `thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots` and `statma/kaggriculture-herd-safe-sale-window-submit`. Their archive inner-source hashes matched `bfee70e9…` / `4889137f…` exactly.
++- All recovered agents carry the same state-router/Horizon markers (`DEFAULT_SETTINGS`, `_R108_SHOP_ROUTES`, `_V92_TABLE`, `_V9_ITEM_HZ`, `make_agent`); Thomas runs Thomas before step 336 and HerdSafe afterwards. No independent base emerged. Of the initial nine, only God’s Mode and Hybu lack these markers, but the current screen makes both invalid (missing sibling imports / no final callable).
++
++
++## Amendment 2026-09-26 — demand timing and ladder market audit
++
++Claim: codex.  User-directed follow-on; Kaggle is read-only and no submission.
++
++1. Diff `opponents/new0926/demand-preserving-turn-sale-timing/main.py` against
++`agents/horizon_v5_market.py` and promoted `candidates/es6_c4g15/pkg/main.py`; isolate
++the market demand/sale-timing layer.
++2. Transplant the isolated layer as a default-off, identity-audited gene into an es6-based
++agent (or use its base with es6 knobs and COLLECT), then run a paired, both-seat screen
++vs es6 at <=8 workers. Claude's independent 16-world/10-opponent gate is at
++`runs/gate_demand_vs_es6`; it must not be overwritten.
++3. From the 39 losses in `replays/t028`, mine per crop/day first seller, realized prices
++for each side, and contested shops, to distinguish price/demand competition from other
++causes. Report durable facts via `bin/say claude`.
++
++## Result — market audit 2026-09-26
++
++All 39 losses were re-executed with official-engine `_commit_unit` hooks (zero miner failures). The market is shared and sales are often simultaneous, but it is not primarily a sale-order/price failure: WHEAT is −20,162 realised units and −$794,851 gross aggregate versus opponents at a *slightly higher* own mean price (+$0.47); carrot/egg/fertilizer similarly lose volume with near-equal prices. Strawberry is the exception (+159 units but −$6.40/unit, −$41,367 gross), so it is a conditional research lead only. Full table and day rows: `research/t030_market_losses.md`, `runs/t030_market_losses/market.json`.
++
++## Result — demand-layer diff / implementation status 2026-09-26
++
++`demand-preserving-turn-sale-timing` is a Horizon fork (same base through its early V9/route stack). Its explicit timing layers are: (a) ADV moves ready cash products planned 3 ticks ahead into an earlier SELL (from d9; preserves the next tick's funding sale), (b) a fallback lockstep order-book permutation of existing SELL/fixed orders, and (c) extra experimental lead-sell/time-window wrappers. Es6 already contains a stronger ADV (lookahead 20 ticks, from d6), its own queue-hole closure and COLLECT; the public FLOWPX rival-flow trigger is disabled by `_FX_FLOW_MIN=999`. Thus the only clean missing transfer is the within-tick order-book permutation.
++
++Built a default-off `DMX` version in Codex worktree, but its loader integration is not yet valid: three 4-world screens and the 1-world off identity run reveal the copied archive executes PASS ($3k), whereas source es6 earns $140–188k. This is an archive entrypoint/export binding issue, not an evidence result; those runs are explicitly invalid for DMX. Do not promote/race it. Claude's independent full demand-vs-es6 run remains untouched at `runs/gate_demand_vs_es6`.
+
+tokens used
+244,421
+Выполнено, без Kaggle submit.
+
+- CMA4 безопасно остановлен после `gen_023`: `history=24`, `cma.pkl countiter=24`, 0 ошибок, `gen_024` не создан. Возобновление: `kill -CONT 630787`.
+- Распакованы и проверены четыре `main.py`; все — производные Horizon/state-router, не независимый базовый движок.
+- Thomas использует два kernel-output, а не Dataset; хеши входов совпали.
+- Findings записаны на BOARD и отправлены Claude через `bin/say`.

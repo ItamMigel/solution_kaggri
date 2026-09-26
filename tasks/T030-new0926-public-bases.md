@@ -6,6 +6,13 @@ Goal: safely pause CMA4 at the current completed-generation boundary, recover th
 
 Method: let the active CMA4 `gen_022` finish and verify `history.json`/`cma.pkl` before stopping its launcher; execute only notebook extraction/verification cells locally; download any declared Kaggle input dataset read-only; fingerprint emitted `main.py` for Horizon markers and structural origin.
 
+## Result — notebook recovery and CMA pause 2026-09-26
+
+- CMA4 completed gen-22 and gen-23 without errors (each 1,056 games), then stopped immediately after the atomic gen-23 pickle write: `history.json` has 24 records (last `gen=23`), `cma.pkl` has `countiter=24`, and `gen_024` is absent. `knob_cma.py` PID 630787 is deliberately `T` while its shell waits; resume exactly with `kill -CONT 630787`.
+- Recovered + compiled (`py_compile`) `main.py`: four-turn forecast `b137c80d…`; master-engine-v3 `127ed3e6…`; v40 challenger `d5a192fa…`; Thomas 2944 `2714b6eb…`.
+- Thomas metadata reports `dataset_sources=[]`: its inputs are read-only kernel outputs `thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots` and `statma/kaggriculture-herd-safe-sale-window-submit`. Their archive inner-source hashes matched `bfee70e9…` / `4889137f…` exactly.
+- All recovered agents carry the same state-router/Horizon markers (`DEFAULT_SETTINGS`, `_R108_SHOP_ROUTES`, `_V92_TABLE`, `_V9_ITEM_HZ`, `make_agent`); Thomas runs Thomas before step 336 and HerdSafe afterwards. No independent base emerged. Of the initial nine, only God’s Mode and Hybu lack these markers, but the current screen makes both invalid (missing sibling imports / no final callable).
+
 
 ## Amendment 2026-09-26 — demand timing and ladder market audit
 

@@ -1,0 +1,33 @@
+{
+  "created_utc": "2026-09-26T12:11:28.391313+00:00",
+  "candidates": {
+    "off": "/workspace/wt/codex/experiments/t030_demand_timing/main_off.py",
+    "dmx": "/workspace/wt/codex/experiments/t030_demand_timing/main_on.py"
+  },
+  "opponents": {
+    "es6": "/workspace/shared/candidates/es6_c4g15/pkg/main.py"
+  },
+  "seeds": [
+    485005521,
+    530874782,
+    1760781606,
+    789740796
+  ],
+  "expected_games": 16,
+  "input_sha256": {
+    "/workspace/shared/candidates/es6_c4g15/pkg/main.py": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a",
+    "/workspace/wt/codex/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/codex/experiments/t030_demand_timing/main_off.py": "4a17c2ccfc631515169ec2b4cf001e7704eabb6f195ee49fcf8aeedae0ceadc8",
+    "/workspace/wt/codex/experiments/t030_demand_timing/main_on.py": "d10d684d021e57ebabd4f9fde25e47f1b03565ce8e6ab4aa22090dc1ea627c31",
+    "/workspace/wt/codex/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/codex/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 300.0,
+  "workers": 8,
+  "decision_note": "T030 capability screen only: off must match es6; default-off DMX changes only within-tick SELL/fixed-order order. No promotion decision.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
