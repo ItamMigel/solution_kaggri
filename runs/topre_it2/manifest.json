@@ -1,0 +1,39 @@
+{
+  "created_utc": "2026-09-27T07:46:53.221921+00:00",
+  "candidates": {
+    "it1": "/workspace/shared/candidates_wip/top_re/main_mpc2d.py",
+    "it2": "/workspace/shared/candidates_wip/top_re/main_mpc2e.py"
+  },
+  "opponents": {
+    "v5_market": "/workspace/wt/claude/agents/horizon_v5_market.py",
+    "es7": "/workspace/shared/candidates/es7_wm/pkg/main.py"
+  },
+  "seeds": [
+    1161353989,
+    1062369897,
+    1573259102,
+    452728153,
+    1407386411,
+    6453265,
+    2068970706,
+    382236121
+  ],
+  "expected_games": 64,
+  "input_sha256": {
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/candidates_wip/top_re/main_mpc2d.py": "f812a3f7767c7cf46e8bf50a885930c083f87f1ad49a48b409ab40d3d6bed261",
+    "/workspace/shared/candidates_wip/top_re/main_mpc2e.py": "fc66ce89666c0a48e7ef7fcfd52679f608c00b0d9493c4106de0ae45dc210661",
+    "/workspace/wt/claude/agents/horizon_v5_market.py": "2038124b9ee04b362ec56511de9e92514c9b0f369c61b019a6178618950e07d4",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 1800.0,
+  "workers": 12,
+  "decision_note": "Win rate first; inspect every opponent, both seats, severe losses and runtime. No automatic promotion.",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
