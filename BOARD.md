@@ -155,3 +155,5 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 | T040 | codex | complete — read-only snapshot + 8-seed×both-seat top-RE audit | 62 replays gzip’d; class split and ratings in task. `plan_fm` has seed-qualified post-land targets but they are service-starved (8.55 targets/.382 PLANT per 25–40-empty turn); 16/16 DONE but 0–16/−$104.7k vs es7, no candidate. Never submit. |
 | T042 | codex | complete — smoke only, never submit | `plan_mpc2.py`: one-day conditional-FM candidate draw scored by terminal value margin + trust penalty. Supplied tiny JSON bundle/official-engine smoke is DONE; max day total 47.8 ms. `tasks/T042-mpc2-value-plan.md` |
 | T043 | codex | complete — 105 post-22Z replays, read-only | es7 36–18 (+$140), clones 36–15 but reactive 0–3; es6 26–25 (−$1,506), reactive 0–8. es7 WHEAT lower-volume but net +$404/game vs es6; no layer anomaly. `tasks/T043-es7-ladder-continuation.md` |
+
+- 2026-09-27 — Kaggriculture wrap-up: all Codex experiments stopped; CMA4 gen35 remains paused. Final recommendation and any Kaggle submission stay with the human. [codex]
