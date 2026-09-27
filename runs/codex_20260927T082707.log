@@ -9360,3 +9360,645 @@ index 0000000000000000000000000000000000000000..bb4bd97828619b01f23432a3c3105091
 +    T031 = importlib.util.module_from_spec(spec); spec.loader.exec_module(T031)
 +    main()
 
+exec
+/bin/bash -lc "/workspace/shared/bin/sync 'T043 read-only es7/es6 post-22Z ladder audit' && git -C /workspace/shared status --short && git -C /workspace/solution_kaggri status --short && git -C /workspace/shared log -1 --oneline" in /workspace/wt/codex
+ succeeded in 16192ms:
+pushed board + lab (AdilHAA/kaggriculture: board, lab; ItamMigel/solution_kaggri: adil-board, adil-lab)
+ M runs/codex_20260927T082707.log
+203e648c T043 read-only es7/es6 post-22Z ladder audit
+
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 8417437342a58a96d491b2c240d2d51605cc852b..90ca432407afb09ab61dc3b139193dfe3bb8aeb5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-27 — T043 read-only post-22Z continuation: es7 is **2058.4** (was 1969) after 54 games, 36–18 / +$140; es6 is 2458.8 after 51, 26–25 / −$1,506. es7 clones 36–15 (+$686), but reactive 0–3 (−$9.14k); es6 clones 26–17 (−$210), reactive 0–8 (−$8.47k). No API rating history: 2h W-L buckets soften late. Official-hook WHEAT is lower-volume for es7 (BUY/SELL 304/518 vs es6 396/608) but has +$404 higher net cash/game ($8,863 vs $8,459), so no evident layer misbehaviour; reactive n=3 is small. 105 gzip replays and raw report: `tasks/T043-es7-ladder-continuation.md` [codex]
+ - 2026-09-26 — T042 complete: `plan_mpc2` is a bundle-selectable one-day FM/value-MPC (`TOPRE_PLAN=plan_mpc2`, model path `TOPRE_MODEL`), scoring 12 tomorrow samples by E[final margin] minus normalised trust penalty — no long learned rollouts. Tiny supplied-model official-engine smoke is DONE/DONE; max call 16.9 ms and max day total 47.8 ms (<0.3 s). Plumbing only, never submit. `tasks/T042-mpc2-value-plan.md` [codex]
+ - 2026-09-26 — T040 read-only post-18:30Z ladder snapshot: `es7_wm` 1968.6 has tape-clones 32–12, +$726 (n=44) and reactive 1–0, +$5,882 (n=1); `es6_c4g15` 2458.5 has clones 8–6, +$66 (n=14) and reactive 1–2, +$173 (n=3). 62 gzip replays at `replays/ours_final/{es7_wm,es6_c4g15}/`; reactive n is too small. 16-game (8 seed × both seat) `TOPRE_PLAN=plan_fm` audit is 16/16 DONE but 0–16 / −$104.7k vs es7; land#2 has 25–29 empties, 3.69 seed-qualified plant targets yet no immediate PLANT, and 25–40-empty states average 8.55 plant targets but .382 PLANT/turn. Targets exist but are starved by global service/navigation; move share 42.51%. `tasks/T040-ladder-topre-audit.md` [codex]
+ - 2026-09-26 — T039 original headless deliverable complete: `candidates_wip/t039/wrapper_template.py` is an append-only default-off final `es7_wm` SELL-hold hook (after RACE/V92 queue/FD/WHEAT); it can remove only advisor-held STRAWBERRY/MILK/WOOL/MELON/EGG/CARROT/TOMATO SELL rows, never BUY/HIRE/LAND/WHEAT or unit commands, and fails open at `step>=696`/free shed <12. Enabled `sell` stub is **0 action diffs** on two official DONE worlds (2×721); forced-hold smoke has zero protected-order/unit/final-day violations. Per the T039 redirect, this is handoff-only, never submit. `tasks/T039-flow-market-wrapper.md` [codex]
+@@ -153,3 +154,4 @@
+ | T041 | codex | closed ✗ — bounded PLANT reservation harms service | Fresh 8-seed×both-seat screen: 32/32 DONE, own cash −$4.34k; PLANT in the 25–40-empty band falls .351→.263/turn and FEED falls 31/game. Reverted; no candidate/Kaggle action. `tasks/T041-plant-throughput.md` |
+ | T040 | codex | complete — read-only snapshot + 8-seed×both-seat top-RE audit | 62 replays gzip’d; class split and ratings in task. `plan_fm` has seed-qualified post-land targets but they are service-starved (8.55 targets/.382 PLANT per 25–40-empty turn); 16/16 DONE but 0–16/−$104.7k vs es7, no candidate. Never submit. |
+ | T042 | codex | complete — smoke only, never submit | `plan_mpc2.py`: one-day conditional-FM candidate draw scored by terminal value margin + trust penalty. Supplied tiny JSON bundle/official-engine smoke is DONE; max day total 47.8 ms. `tasks/T042-mpc2-value-plan.md` |
++| T043 | codex | complete — 105 post-22Z replays, read-only | es7 36–18 (+$140), clones 36–15 but reactive 0–3; es6 26–25 (−$1,506), reactive 0–8. es7 WHEAT lower-volume but net +$404/game vs es6; no layer anomaly. `tasks/T043-es7-ladder-continuation.md` |
+diff --git a//workspace/shared/tasks/T043-es7-ladder-continuation.md b//workspace/shared/tasks/T043-es7-ladder-continuation.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..35f1723efccdb75ec79628fdda7d98981ef4d6c4
+--- /dev/null
++++ b//workspace/shared/tasks/T043-es7-ladder-continuation.md
+@@ -0,0 +1,56 @@
++# T043 — es7_wm ladder continuation
++
++Owner: codex. Status: complete. **Kaggle read-only; never submit.**
++
++## Scope
++
++For submissions `es7_wm` (56584540) and `es6_c4g15` (56580877), fetch every
++COMPLETED episode ending at or after `2026-09-26T22:00:00Z`, gzip the replay to
++`/workspace/shared/replays/ours_final/<submission-id>/`, and report W-D-L,
++mean own margin, and the position-based tape-clone/reactive split defined in
++`research/ladder_two_classes.md`. Establish whether es7 is climbing from an
++API rating trajectory if available, otherwise time buckets. Replay the games
++through official-engine hooks to compare own WHEAT `BUY_PRODUCT`/`SELL` volumes
++and cash-flow, using the T031 accounting definition.
++
++## Method
++
++Read-only Kaggle CLI/API only; no submission command or mutation. Preserve raw
++gzip replays and write a timestamped JSON/Markdown result under
++`/workspace/shared/runs/`.
++
++## Result (2026-09-27 08:37Z)
++
++The read-only API returned 54 completed public episodes for `es7_wm` ending
++22:07--08:12Z and 51 for `es6_c4g15` ending 22:11--08:18Z. All were fetched
++and gzip-preserved in `replays/ours_final/56584540/` and
++`replays/ours_final/56580877/` (the directories also retain older snapshots).
++Exact included IDs/outcomes, 2-hour buckets, positional-match shares, current
++leaderboard rating joins, and accepted official-engine WHEAT commits are in
++`runs/t043_ladder_20260927T0835Z/report.json` and `report.md`.
++
++At API time, submissions reported es7 **2058.4** (up from the caller's 1969)
++and es6 **2458.8**. The endpoint exposes only the current submission rating,
++not a per-episode rating history, so no monotonic rating trajectory is claimed.
++
++| submission | class | n | W-D-L | mean margin | mean current opponent rating |
++|---|---|---:|---:|---:|---:|
++| es7_wm | all | 54 | 36-0-18 | +$140 | 2089 |
++| es7_wm | tape-clone | 51 | 36-0-15 | +$686 | 2081 |
++| es7_wm | reactive | 3 | 0-0-3 | −$9,141 | 2224 |
++| es6_c4g15 | all | 51 | 26-0-25 | −$1,506 | 2445 |
++| es6_c4g15 | tape-clone | 43 | 26-0-17 | −$210 | 2417 |
++| es6_c4g15 | reactive | 8 | 0-0-8 | −$8,473 | 2593 |
++
++The 2-hour es7 W-L buckets are 9-1, 8-4, 8-5, 4-4, 7-2, then 0-2 (the last
++bucket has only two games). Thus the +89-point current-rating change is upward,
++but the observed later record is not evidence of a clean continuing climb.
++
++Replay-exact accepted own WHEAT trade means per game are es7 BUY **303.6** /
++$12,025, SELL **518.1** / $20,887, net **+$8,863**; es6 BUY **395.9** /
++$15,771, SELL **607.7** / $24,231, net **+$8,459**. So es7 trades about 92
++fewer buys and 90 fewer sales but nets **+$404/game** more. Its losses still
++have positive WHEAT net cash (+$8,312 versus +$9,138 in wins); all three
++reactive losses are +$11,765. This rejects a simple "WHEAT layer is
++overtrading/losing cash" explanation, but is not a causal counterfactual and
++reactive `n=3` is far too small to clear the barrier.
+diff --git a/lab/tools/t031_wheat_arbitrage.py b/lab/tools/t031_wheat_arbitrage.py
+index cc5a396329a28ca77e16320aa9febb0b6d6870aa..d11ab1bd6c718a83fe3ddf7b3c2a67c574df10b3
+--- a/lab/tools/t031_wheat_arbitrage.py
++++ b/lab/tools/t031_wheat_arbitrage.py
+@@ -15,6 +15,7 @@
+ 
+ import argparse
+ import glob
++import gzip
+ import json
+ import multiprocessing as mp
+ from collections import defaultdict, deque
+@@ -28,10 +29,17 @@
+ ITEM = "WHEAT"
+ 
+ 
++def load_replay(path):
++    """Read either the Kaggle-native gzip archive or an unpacked replay."""
++    opener = gzip.open if str(path).endswith(".gz") else open
++    with opener(path, "rt") as f:
++        return json.load(f)
++
++
+ def rows(replays, outcome="loss", expected=None):
+     ans = []
+-    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
+-        d = json.loads(Path(raw).read_text())
++    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json*"))):
++        d = load_replay(raw)
+         names, rewards = d["info"]["TeamNames"], d["rewards"]
+         if TEAM not in names:
+             continue
+@@ -51,7 +59,7 @@
+ 
+ def mine(row):
+     path, us, episode, opponent = row
+-    d = json.loads(Path(path).read_text())
++    d = load_replay(path)
+     cfg = dict(d["configuration"]); cfg["seed"] = d["info"]["seed"]
+     steps = d["steps"]
+     cur = {"step": 0, "day": 0, "seq": 0}
+diff --git a/lab/tools/t043_ladder_audit.py b/lab/tools/t043_ladder_audit.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..bb4bd97828619b01f23432a3c31050912f711b9d
+--- /dev/null
++++ b/lab/tools/t043_ladder_audit.py
+@@ -0,0 +1,177 @@
++#!/usr/bin/env python3
++"""T043 read-only ladder report: positions, outcomes and own WHEAT trades."""
++from __future__ import annotations
++
++import argparse
++import csv
++import gzip
++import importlib.util
++import io
++import json
++import multiprocessing as mp
++import zipfile
++from collections import defaultdict
++from datetime import datetime, timezone
++from pathlib import Path
++
++TEAM = "misis biznessmenlb"
++START = "2026-09-26T22:00:00"
++
++
++def replay(path):
++    with gzip.open(path, "rt") as f:
++        return json.load(f)
++
++
++def positions(farm):
++    return (tuple(farm["farmer"]), *(tuple(x) for x in farm["hands"]))
++
++
++def record(path, ratings):
++    d = replay(path)
++    names, rewards = d["info"]["TeamNames"], d["rewards"]
++    us = names.index(TEAM)
++    opponent = names[1-us]
++    observed = []
++    for state in d["steps"]:
++        obs = state[0].get("observation") or {}
++        if 9 <= obs.get("day", -1) <= 29:
++            farms = obs["farms"]
++            observed.append(positions(farms[us]) == positions(farms[1-us]))
++    share = sum(observed) / len(observed) if observed else 0.0
++    margin = rewards[us] - rewards[1-us]
++    return {
++        "path": str(path), "episode": d["info"]["EpisodeId"], "end": None,
++        "opponent": opponent, "opponent_rating": ratings.get(opponent),
++        "margin": margin, "outcome": "W" if margin > 0 else "L" if margin < 0 else "D",
++        "position_match_share": share, "position_turns": len(observed),
++        "class": "tape-clone" if share >= .5 else "reactive",
++    }
++
++
++def own_wheat(row):
++    # t031 records accepted official-engine commits for both sides.  Its normal
++    # report calls the non-team side "opponent"; flip us here to focus on ours.
++    g = T031.mine((row["path"], row["us"], row["episode"], row["opponent"]))
++    g["us"] = 1 - g["us"]
++    s = T031.game_summary(g)
++    return {
++        "episode": row["episode"],
++        "buy_units": s["opp_buy_units"], "buy_cost": s["opp_buy_cost"],
++        "sell_units": s["opp_sell_units"], "sell_revenue": s["opp_sell_revenue"],
++        "net_cashflow": s["cashflow_wheat"],
++        "buy_mean_day": s["buy_mean_day"], "sell_mean_day": s["sell_mean_day"],
++    }
++
++
++def wdl(rows):
++    return {x: sum(r["outcome"] == x for r in rows) for x in ("W", "D", "L")}
++
++
++def avg(rows, key):
++    return sum(r[key] for r in rows) / len(rows) if rows else None
++
++
++def aggregate(rows, wheat):
++    by_ep = {x["episode"]: x for x in wheat}
++    ans = {}
++    for key, subset in {"all": rows, **{c: [r for r in rows if r["class"] == c]
++                                      for c in ("tape-clone", "reactive")}}.items():
++        ws = [by_ep[x["episode"]] for x in subset]
++        ans[key] = {
++            "n": len(subset), "wdl": wdl(subset), "mean_margin": avg(subset, "margin"),
++            "mean_opponent_rating_known": avg([x for x in subset if x["opponent_rating"] is not None], "opponent_rating"),
++            "wheat_per_game": {k: avg(ws, k) for k in ("buy_units", "buy_cost", "sell_units", "sell_revenue", "net_cashflow")},
++        }
++    return ans
++
++
++def time_bucket(rows):
++    buckets = defaultdict(list)
++    for r in rows:
++        dt = datetime.fromisoformat(r["end"].replace("Z", "+00:00"))
++        hour = dt.hour - dt.hour % 2
++        stamp = dt.replace(hour=hour, minute=0, second=0, microsecond=0).isoformat()
++        buckets[stamp].append(r)
++    return [{"start": k, "n": len(v), "wdl": wdl(v), "mean_margin": avg(v, "margin")}
++            for k, v in sorted(buckets.items())]
++
++
++def rating_buckets(rows):
++    cuts = (("unknown", None, None), ("<2000", None, 2000), ("2000-2499", 2000, 2500),
++            ("2500-2799", 2500, 2800), ("2800+", 2800, None))
++    out = []
++    for name, lo, hi in cuts:
++        xs = [r for r in rows if (r["opponent_rating"] is None if name == "unknown" else
++              r["opponent_rating"] is not None and (lo is None or r["opponent_rating"] >= lo) and (hi is None or r["opponent_rating"] < hi))]
++        if xs:
++            out.append({"rating_band": name, "n": len(xs), "wdl": wdl(xs), "mean_margin": avg(xs, "margin"),
++                        "classes": {c: len([x for x in xs if x["class"] == c]) for c in ("tape-clone", "reactive")}})
++    return out
++
++
++def md(data):
++    lines = ["# T043 — ladder continuation (read-only)", "",
++             "Position class: d9–29 farmer+hands positions equal on ≥50% of observed turns = tape-clone.", ""]
++    for sub, x in data["submissions"].items():
++        a = x["aggregate"]
++        lines += [f"## {sub}", "", "| class | n | W-D-L | mean margin | mean current opponent rating | WHEAT buy / sell / net cash per game |",
++                  "|---|---:|---:|---:|---:|---:|"]
++        for c in ("all", "tape-clone", "reactive"):
++            z, q = a[c], a[c]["wheat_per_game"]
++            rating = z["mean_opponent_rating_known"]
++            rating_text = f"{rating:.0f}" if rating is not None else "n/a"
++            lines.append(f"| {c} | {z['n']} | {z['wdl']['W']}-{z['wdl']['D']}-{z['wdl']['L']} | ${z['mean_margin']:+,.0f} | {rating_text} | {q['buy_units']:.1f}/${q['buy_cost']:,.0f} / {q['sell_units']:.1f}/${q['sell_revenue']:,.0f} / ${q['net_cashflow']:+,.0f} |")
++        lines += ["", "2-hour outcome buckets:", "", "| start UTC | n | W-D-L | mean margin |", "|---|---:|---:|---:|"]
++        lines += [f"| {b['start']} | {b['n']} | {b['wdl']['W']}-{b['wdl']['D']}-{b['wdl']['L']} | ${b['mean_margin']:+,.0f} |" for b in x["time_buckets"]]
++        lines += ["", "Opponent current-rating × class:", "", "| rating | n | W-D-L | mean margin | clones / reactive |", "|---|---:|---:|---:|---:|"]
++        lines += [f"| {b['rating_band']} | {b['n']} | {b['wdl']['W']}-{b['wdl']['D']}-{b['wdl']['L']} | ${b['mean_margin']:+,.0f} | {b['classes']['tape-clone']} / {b['classes']['reactive']} |" for b in x["rating_buckets"]]
++        lines.append("")
++    return "\n".join(lines)
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--es7", required=True); ap.add_argument("--es6", required=True)
++    ap.add_argument("--episodes7", required=True); ap.add_argument("--episodes6", required=True)
++    ap.add_argument("--leaderboard", required=True); ap.add_argument("--out", required=True)
++    ap.add_argument("--workers", type=int, default=8)
++    a = ap.parse_args()
++    if not 1 <= a.workers <= 8: ap.error("workers must be 1..8")
++    with zipfile.ZipFile(a.leaderboard) as z:
++        name = z.namelist()[0]
++        ratings = {r["TeamName"]: float(r["Score"]) for r in csv.DictReader(io.TextIOWrapper(z.open(name), "utf-8-sig")) if r.get("Score")}
++    subs = {"es7_wm": (Path(a.es7), a.episodes7), "es6_c4g15": (Path(a.es6), a.episodes6)}
++    out = {"task": "T043", "start": START, "generated_at": datetime.now(timezone.utc).isoformat(), "submissions": {}}
++    all_wheat_rows = []
++    for name, (root, episode_file) in subs.items():
++        metadata = {x["id"]: x for x in json.JSONDecoder().raw_decode(Path(episode_file).read_text().lstrip())[0] if x["endTime"] >= START}
++        rows = []
++        for p in sorted(root.glob("episode-*-replay.json.gz")):
++            r = record(p, ratings)
++            if r["episode"] not in metadata: continue
++            r["end"] = metadata[r["episode"]]["endTime"]
++            d = replay(p); r["us"] = d["info"]["TeamNames"].index(TEAM)
++            rows.append(r)
++        if len(rows) != len(metadata): raise RuntimeError(f"{name}: {len(rows)} replays for {len(metadata)} episodes")
++        with mp.Pool(a.workers) as pool:
++            wheat = list(pool.imap_unordered(own_wheat, rows))
++        all_wheat_rows.extend(wheat)
++        out["submissions"][name] = {"episodes": rows, "wheat": sorted(wheat, key=lambda x: x["episode"]),
++                                    "aggregate": aggregate(rows, wheat), "time_buckets": time_bucket(rows),
++                                    "rating_buckets": rating_buckets(rows)}
++    dest = Path(a.out)
++    if not dest.suffix:
++        dest = dest.with_suffix(".json")
++    if dest.exists() or dest.with_suffix(".md").exists(): raise FileExistsError(dest)
++    dest.parent.mkdir(parents=True, exist_ok=True)
++    dest.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
++    dest.with_suffix(".md").write_text(md(out) + "\n")
++    print(dest.with_suffix(".md"))
++
++
++if __name__ == "__main__":
++    T031 = None
++    spec = importlib.util.spec_from_file_location("t031", Path(__file__).with_name("t031_wheat_arbitrage.py"))
++    T031 = importlib.util.module_from_spec(spec); spec.loader.exec_module(T031)
++    main()
+
+codex
+Готово: только read-only Kaggle, без отправок.
+
+| сабмит | W-L | средняя маржа | tape-clone | reactive |
+|---|---:|---:|---:|---:|
+| es7_wm | 36–18 | +$140 | 36–15, +$686 (n=51; ср. рейтинг 2081) | 0–3, −$9,141 (ср. 2224) |
+| es6_c4g15 | 26–25 | −$1,506 | 26–17, −$210 (n=43; ср. 2417) | 0–8, −$8,473 (ср. 2593) |
+
+es7 сейчас 2058.4 (было 1969), но API не отдаёт рейтинговую траекторию. По 2-часовым W-L: 9–1, 8–4, 8–5, 4–4, 7–2, 0–2 — рост есть, но поздняя форма ослабла.
+
+WHEAT не выглядит причиной: es7 делает меньше сделок, BUY/SELL 304/518 против 396/608 у es6, но net cash-flow выше: +$8,863 vs +$8,459 за игру. Reactive n=3 слишком мал для сильного вывода.
+
+54+51 gzip-реплеев: [es7](/workspace/shared/replays/ours_final/56584540), [es6](/workspace/shared/replays/ours_final/56580877). Детали: [report.md](/workspace/shared/runs/t043_ladder_20260927T0835Z/report.md), [task](/workspace/shared/tasks/T043-es7-ladder-continuation.md). Доска обновлена, Claude уведомлён через `bin/say`.
+diff --git a//workspace/shared/BOARD.md b//workspace/shared/BOARD.md
+index 8417437342a58a96d491b2c240d2d51605cc852b..90ca432407afb09ab61dc3b139193dfe3bb8aeb5
+--- a//workspace/shared/BOARD.md
++++ b//workspace/shared/BOARD.md
+@@ -12,6 +12,7 @@
+ - Biggest unknown: **what the 2900–3060 agents do differently** and how Horizon loses to them.
+ 
+ ## Key findings (newest first; one line each, link the task)
++- 2026-09-27 — T043 read-only post-22Z continuation: es7 is **2058.4** (was 1969) after 54 games, 36–18 / +$140; es6 is 2458.8 after 51, 26–25 / −$1,506. es7 clones 36–15 (+$686), but reactive 0–3 (−$9.14k); es6 clones 26–17 (−$210), reactive 0–8 (−$8.47k). No API rating history: 2h W-L buckets soften late. Official-hook WHEAT is lower-volume for es7 (BUY/SELL 304/518 vs es6 396/608) but has +$404 higher net cash/game ($8,863 vs $8,459), so no evident layer misbehaviour; reactive n=3 is small. 105 gzip replays and raw report: `tasks/T043-es7-ladder-continuation.md` [codex]
+ - 2026-09-26 — T042 complete: `plan_mpc2` is a bundle-selectable one-day FM/value-MPC (`TOPRE_PLAN=plan_mpc2`, model path `TOPRE_MODEL`), scoring 12 tomorrow samples by E[final margin] minus normalised trust penalty — no long learned rollouts. Tiny supplied-model official-engine smoke is DONE/DONE; max call 16.9 ms and max day total 47.8 ms (<0.3 s). Plumbing only, never submit. `tasks/T042-mpc2-value-plan.md` [codex]
+ - 2026-09-26 — T040 read-only post-18:30Z ladder snapshot: `es7_wm` 1968.6 has tape-clones 32–12, +$726 (n=44) and reactive 1–0, +$5,882 (n=1); `es6_c4g15` 2458.5 has clones 8–6, +$66 (n=14) and reactive 1–2, +$173 (n=3). 62 gzip replays at `replays/ours_final/{es7_wm,es6_c4g15}/`; reactive n is too small. 16-game (8 seed × both seat) `TOPRE_PLAN=plan_fm` audit is 16/16 DONE but 0–16 / −$104.7k vs es7; land#2 has 25–29 empties, 3.69 seed-qualified plant targets yet no immediate PLANT, and 25–40-empty states average 8.55 plant targets but .382 PLANT/turn. Targets exist but are starved by global service/navigation; move share 42.51%. `tasks/T040-ladder-topre-audit.md` [codex]
+ - 2026-09-26 — T039 original headless deliverable complete: `candidates_wip/t039/wrapper_template.py` is an append-only default-off final `es7_wm` SELL-hold hook (after RACE/V92 queue/FD/WHEAT); it can remove only advisor-held STRAWBERRY/MILK/WOOL/MELON/EGG/CARROT/TOMATO SELL rows, never BUY/HIRE/LAND/WHEAT or unit commands, and fails open at `step>=696`/free shed <12. Enabled `sell` stub is **0 action diffs** on two official DONE worlds (2×721); forced-hold smoke has zero protected-order/unit/final-day violations. Per the T039 redirect, this is handoff-only, never submit. `tasks/T039-flow-market-wrapper.md` [codex]
+@@ -153,3 +154,4 @@
+ | T041 | codex | closed ✗ — bounded PLANT reservation harms service | Fresh 8-seed×both-seat screen: 32/32 DONE, own cash −$4.34k; PLANT in the 25–40-empty band falls .351→.263/turn and FEED falls 31/game. Reverted; no candidate/Kaggle action. `tasks/T041-plant-throughput.md` |
+ | T040 | codex | complete — read-only snapshot + 8-seed×both-seat top-RE audit | 62 replays gzip’d; class split and ratings in task. `plan_fm` has seed-qualified post-land targets but they are service-starved (8.55 targets/.382 PLANT per 25–40-empty turn); 16/16 DONE but 0–16/−$104.7k vs es7, no candidate. Never submit. |
+ | T042 | codex | complete — smoke only, never submit | `plan_mpc2.py`: one-day conditional-FM candidate draw scored by terminal value margin + trust penalty. Supplied tiny JSON bundle/official-engine smoke is DONE; max day total 47.8 ms. `tasks/T042-mpc2-value-plan.md` |
++| T043 | codex | complete — 105 post-22Z replays, read-only | es7 36–18 (+$140), clones 36–15 but reactive 0–3; es6 26–25 (−$1,506), reactive 0–8. es7 WHEAT lower-volume but net +$404/game vs es6; no layer anomaly. `tasks/T043-es7-ladder-continuation.md` |
+diff --git a//workspace/shared/tasks/T043-es7-ladder-continuation.md b//workspace/shared/tasks/T043-es7-ladder-continuation.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..35f1723efccdb75ec79628fdda7d98981ef4d6c4
+--- /dev/null
++++ b//workspace/shared/tasks/T043-es7-ladder-continuation.md
+@@ -0,0 +1,56 @@
++# T043 — es7_wm ladder continuation
++
++Owner: codex. Status: complete. **Kaggle read-only; never submit.**
++
++## Scope
++
++For submissions `es7_wm` (56584540) and `es6_c4g15` (56580877), fetch every
++COMPLETED episode ending at or after `2026-09-26T22:00:00Z`, gzip the replay to
++`/workspace/shared/replays/ours_final/<submission-id>/`, and report W-D-L,
++mean own margin, and the position-based tape-clone/reactive split defined in
++`research/ladder_two_classes.md`. Establish whether es7 is climbing from an
++API rating trajectory if available, otherwise time buckets. Replay the games
++through official-engine hooks to compare own WHEAT `BUY_PRODUCT`/`SELL` volumes
++and cash-flow, using the T031 accounting definition.
++
++## Method
++
++Read-only Kaggle CLI/API only; no submission command or mutation. Preserve raw
++gzip replays and write a timestamped JSON/Markdown result under
++`/workspace/shared/runs/`.
++
++## Result (2026-09-27 08:37Z)
++
++The read-only API returned 54 completed public episodes for `es7_wm` ending
++22:07--08:12Z and 51 for `es6_c4g15` ending 22:11--08:18Z. All were fetched
++and gzip-preserved in `replays/ours_final/56584540/` and
++`replays/ours_final/56580877/` (the directories also retain older snapshots).
++Exact included IDs/outcomes, 2-hour buckets, positional-match shares, current
++leaderboard rating joins, and accepted official-engine WHEAT commits are in
++`runs/t043_ladder_20260927T0835Z/report.json` and `report.md`.
++
++At API time, submissions reported es7 **2058.4** (up from the caller's 1969)
++and es6 **2458.8**. The endpoint exposes only the current submission rating,
++not a per-episode rating history, so no monotonic rating trajectory is claimed.
++
++| submission | class | n | W-D-L | mean margin | mean current opponent rating |
++|---|---|---:|---:|---:|---:|
++| es7_wm | all | 54 | 36-0-18 | +$140 | 2089 |
++| es7_wm | tape-clone | 51 | 36-0-15 | +$686 | 2081 |
++| es7_wm | reactive | 3 | 0-0-3 | −$9,141 | 2224 |
++| es6_c4g15 | all | 51 | 26-0-25 | −$1,506 | 2445 |
++| es6_c4g15 | tape-clone | 43 | 26-0-17 | −$210 | 2417 |
++| es6_c4g15 | reactive | 8 | 0-0-8 | −$8,473 | 2593 |
++
++The 2-hour es7 W-L buckets are 9-1, 8-4, 8-5, 4-4, 7-2, then 0-2 (the last
++bucket has only two games). Thus the +89-point current-rating change is upward,
++but the observed later record is not evidence of a clean continuing climb.
++
++Replay-exact accepted own WHEAT trade means per game are es7 BUY **303.6** /
++$12,025, SELL **518.1** / $20,887, net **+$8,863**; es6 BUY **395.9** /
++$15,771, SELL **607.7** / $24,231, net **+$8,459**. So es7 trades about 92
++fewer buys and 90 fewer sales but nets **+$404/game** more. Its losses still
++have positive WHEAT net cash (+$8,312 versus +$9,138 in wins); all three
++reactive losses are +$11,765. This rejects a simple "WHEAT layer is
++overtrading/losing cash" explanation, but is not a causal counterfactual and
++reactive `n=3` is far too small to clear the barrier.
+diff --git a/lab/tools/t031_wheat_arbitrage.py b/lab/tools/t031_wheat_arbitrage.py
+index cc5a396329a28ca77e16320aa9febb0b6d6870aa..d11ab1bd6c718a83fe3ddf7b3c2a67c574df10b3
+--- a/lab/tools/t031_wheat_arbitrage.py
++++ b/lab/tools/t031_wheat_arbitrage.py
+@@ -15,6 +15,7 @@
+ 
+ import argparse
+ import glob
++import gzip
+ import json
+ import multiprocessing as mp
+ from collections import defaultdict, deque
+@@ -28,10 +29,17 @@
+ ITEM = "WHEAT"
+ 
+ 
++def load_replay(path):
++    """Read either the Kaggle-native gzip archive or an unpacked replay."""
++    opener = gzip.open if str(path).endswith(".gz") else open
++    with opener(path, "rt") as f:
++        return json.load(f)
++
++
+ def rows(replays, outcome="loss", expected=None):
+     ans = []
+-    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
+-        d = json.loads(Path(raw).read_text())
++    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json*"))):
++        d = load_replay(raw)
+         names, rewards = d["info"]["TeamNames"], d["rewards"]
+         if TEAM not in names:
+             continue
+@@ -51,7 +59,7 @@
+ 
+ def mine(row):
+     path, us, episode, opponent = row
+-    d = json.loads(Path(path).read_text())
++    d = load_replay(path)
+     cfg = dict(d["configuration"]); cfg["seed"] = d["info"]["seed"]
+     steps = d["steps"]
+     cur = {"step": 0, "day": 0, "seq": 0}
+diff --git a/lab/tools/t043_ladder_audit.py b/lab/tools/t043_ladder_audit.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..bb4bd97828619b01f23432a3c31050912f711b9d
+--- /dev/null
++++ b/lab/tools/t043_ladder_audit.py
+@@ -0,0 +1,177 @@
++#!/usr/bin/env python3
++"""T043 read-only ladder report: positions, outcomes and own WHEAT trades."""
++from __future__ import annotations
++
++import argparse
++import csv
++import gzip
++import importlib.util
++import io
++import json
++import multiprocessing as mp
++import zipfile
++from collections import defaultdict
++from datetime import datetime, timezone
++from pathlib import Path
++
++TEAM = "misis biznessmenlb"
++START = "2026-09-26T22:00:00"
++
++
++def replay(path):
++    with gzip.open(path, "rt") as f:
++        return json.load(f)
++
++
++def positions(farm):
++    return (tuple(farm["farmer"]), *(tuple(x) for x in farm["hands"]))
++
++
++def record(path, ratings):
++    d = replay(path)
++    names, rewards = d["info"]["TeamNames"], d["rewards"]
++    us = names.index(TEAM)
++    opponent = names[1-us]
++    observed = []
++    for state in d["steps"]:
++        obs = state[0].get("observation") or {}
++        if 9 <= obs.get("day", -1) <= 29:
++            farms = obs["farms"]
++            observed.append(positions(farms[us]) == positions(farms[1-us]))
++    share = sum(observed) / len(observed) if observed else 0.0
++    margin = rewards[us] - rewards[1-us]
++    return {
++        "path": str(path), "episode": d["info"]["EpisodeId"], "end": None,
++        "opponent": opponent, "opponent_rating": ratings.get(opponent),
++        "margin": margin, "outcome": "W" if margin > 0 else "L" if margin < 0 else "D",
++        "position_match_share": share, "position_turns": len(observed),
++        "class": "tape-clone" if share >= .5 else "reactive",
++    }
++
++
++def own_wheat(row):
++    # t031 records accepted official-engine commits for both sides.  Its normal
++    # report calls the non-team side "opponent"; flip us here to focus on ours.
++    g = T031.mine((row["path"], row["us"], row["episode"], row["opponent"]))
++    g["us"] = 1 - g["us"]
++    s = T031.game_summary(g)
++    return {
++        "episode": row["episode"],
++        "buy_units": s["opp_buy_units"], "buy_cost": s["opp_buy_cost"],
++        "sell_units": s["opp_sell_units"], "sell_revenue": s["opp_sell_revenue"],
++        "net_cashflow": s["cashflow_wheat"],
++        "buy_mean_day": s["buy_mean_day"], "sell_mean_day": s["sell_mean_day"],
++    }
++
++
++def wdl(rows):
++    return {x: sum(r["outcome"] == x for r in rows) for x in ("W", "D", "L")}
++
++
++def avg(rows, key):
++    return sum(r[key] for r in rows) / len(rows) if rows else None
++
++
++def aggregate(rows, wheat):
++    by_ep = {x["episode"]: x for x in wheat}
++    ans = {}
++    for key, subset in {"all": rows, **{c: [r for r in rows if r["class"] == c]
++                                      for c in ("tape-clone", "reactive")}}.items():
++        ws = [by_ep[x["episode"]] for x in subset]
++        ans[key] = {
++            "n": len(subset), "wdl": wdl(subset), "mean_margin": avg(subset, "margin"),
++            "mean_opponent_rating_known": avg([x for x in subset if x["opponent_rating"] is not None], "opponent_rating"),
++            "wheat_per_game": {k: avg(ws, k) for k in ("buy_units", "buy_cost", "sell_units", "sell_revenue", "net_cashflow")},
++        }
++    return ans
++
++
++def time_bucket(rows):
++    buckets = defaultdict(list)
++    for r in rows:
++        dt = datetime.fromisoformat(r["end"].replace("Z", "+00:00"))
++        hour = dt.hour - dt.hour % 2
++        stamp = dt.replace(hour=hour, minute=0, second=0, microsecond=0).isoformat()
++        buckets[stamp].append(r)
++    return [{"start": k, "n": len(v), "wdl": wdl(v), "mean_margin": avg(v, "margin")}
++            for k, v in sorted(buckets.items())]
++
++
++def rating_buckets(rows):
++    cuts = (("unknown", None, None), ("<2000", None, 2000), ("2000-2499", 2000, 2500),
++            ("2500-2799", 2500, 2800), ("2800+", 2800, None))
++    out = []
++    for name, lo, hi in cuts:
++        xs = [r for r in rows if (r["opponent_rating"] is None if name == "unknown" else
++              r["opponent_rating"] is not None and (lo is None or r["opponent_rating"] >= lo) and (hi is None or r["opponent_rating"] < hi))]
++        if xs:
++            out.append({"rating_band": name, "n": len(xs), "wdl": wdl(xs), "mean_margin": avg(xs, "margin"),
++                        "classes": {c: len([x for x in xs if x["class"] == c]) for c in ("tape-clone", "reactive")}})
++    return out
++
++
++def md(data):
++    lines = ["# T043 — ladder continuation (read-only)", "",
++             "Position class: d9–29 farmer+hands positions equal on ≥50% of observed turns = tape-clone.", ""]
++    for sub, x in data["submissions"].items():
++        a = x["aggregate"]
++        lines += [f"## {sub}", "", "| class | n | W-D-L | mean margin | mean current opponent rating | WHEAT buy / sell / net cash per game |",
++                  "|---|---:|---:|---:|---:|---:|"]
++        for c in ("all", "tape-clone", "reactive"):
++            z, q = a[c], a[c]["wheat_per_game"]
++            rating = z["mean_opponent_rating_known"]
++            rating_text = f"{rating:.0f}" if rating is not None else "n/a"
++            lines.append(f"| {c} | {z['n']} | {z['wdl']['W']}-{z['wdl']['D']}-{z['wdl']['L']} | ${z['mean_margin']:+,.0f} | {rating_text} | {q['buy_units']:.1f}/${q['buy_cost']:,.0f} / {q['sell_units']:.1f}/${q['sell_revenue']:,.0f} / ${q['net_cashflow']:+,.0f} |")
++        lines += ["", "2-hour outcome buckets:", "", "| start UTC | n | W-D-L | mean margin |", "|---|---:|---:|---:|"]
++        lines += [f"| {b['start']} | {b['n']} | {b['wdl']['W']}-{b['wdl']['D']}-{b['wdl']['L']} | ${b['mean_margin']:+,.0f} |" for b in x["time_buckets"]]
++        lines += ["", "Opponent current-rating × class:", "", "| rating | n | W-D-L | mean margin | clones / reactive |", "|---|---:|---:|---:|---:|"]
++        lines += [f"| {b['rating_band']} | {b['n']} | {b['wdl']['W']}-{b['wdl']['D']}-{b['wdl']['L']} | ${b['mean_margin']:+,.0f} | {b['classes']['tape-clone']} / {b['classes']['reactive']} |" for b in x["rating_buckets"]]
++        lines.append("")
++    return "\n".join(lines)
++
++
++def main():
++    ap = argparse.ArgumentParser()
++    ap.add_argument("--es7", required=True); ap.add_argument("--es6", required=True)
++    ap.add_argument("--episodes7", required=True); ap.add_argument("--episodes6", required=True)
++    ap.add_argument("--leaderboard", required=True); ap.add_argument("--out", required=True)
++    ap.add_argument("--workers", type=int, default=8)
++    a = ap.parse_args()
++    if not 1 <= a.workers <= 8: ap.error("workers must be 1..8")
++    with zipfile.ZipFile(a.leaderboard) as z:
++        name = z.namelist()[0]
++        ratings = {r["TeamName"]: float(r["Score"]) for r in csv.DictReader(io.TextIOWrapper(z.open(name), "utf-8-sig")) if r.get("Score")}
++    subs = {"es7_wm": (Path(a.es7), a.episodes7), "es6_c4g15": (Path(a.es6), a.episodes6)}
++    out = {"task": "T043", "start": START, "generated_at": datetime.now(timezone.utc).isoformat(), "submissions": {}}
++    all_wheat_rows = []
++    for name, (root, episode_file) in subs.items():
++        metadata = {x["id"]: x for x in json.JSONDecoder().raw_decode(Path(episode_file).read_text().lstrip())[0] if x["endTime"] >= START}
++        rows = []
++        for p in sorted(root.glob("episode-*-replay.json.gz")):
++            r = record(p, ratings)
++            if r["episode"] not in metadata: continue
++            r["end"] = metadata[r["episode"]]["endTime"]
++            d = replay(p); r["us"] = d["info"]["TeamNames"].index(TEAM)
++            rows.append(r)
++        if len(rows) != len(metadata): raise RuntimeError(f"{name}: {len(rows)} replays for {len(metadata)} episodes")
++        with mp.Pool(a.workers) as pool:
++            wheat = list(pool.imap_unordered(own_wheat, rows))
++        all_wheat_rows.extend(wheat)
++        out["submissions"][name] = {"episodes": rows, "wheat": sorted(wheat, key=lambda x: x["episode"]),
++                                    "aggregate": aggregate(rows, wheat), "time_buckets": time_bucket(rows),
++                                    "rating_buckets": rating_buckets(rows)}
++    dest = Path(a.out)
++    if not dest.suffix:
++        dest = dest.with_suffix(".json")
++    if dest.exists() or dest.with_suffix(".md").exists(): raise FileExistsError(dest)
++    dest.parent.mkdir(parents=True, exist_ok=True)
++    dest.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
++    dest.with_suffix(".md").write_text(md(out) + "\n")
++    print(dest.with_suffix(".md"))
++
++
++if __name__ == "__main__":
++    T031 = None
++    spec = importlib.util.spec_from_file_location("t031", Path(__file__).with_name("t031_wheat_arbitrage.py"))
++    T031 = importlib.util.module_from_spec(spec); spec.loader.exec_module(T031)
++    main()
+
+tokens used
+132,506
+Готово: только read-only Kaggle, без отправок.
+
+| сабмит | W-L | средняя маржа | tape-clone | reactive |
+|---|---:|---:|---:|---:|
+| es7_wm | 36–18 | +$140 | 36–15, +$686 (n=51; ср. рейтинг 2081) | 0–3, −$9,141 (ср. 2224) |
+| es6_c4g15 | 26–25 | −$1,506 | 26–17, −$210 (n=43; ср. 2417) | 0–8, −$8,473 (ср. 2593) |
+
+es7 сейчас 2058.4 (было 1969), но API не отдаёт рейтинговую траекторию. По 2-часовым W-L: 9–1, 8–4, 8–5, 4–4, 7–2, 0–2 — рост есть, но поздняя форма ослабла.
+
+WHEAT не выглядит причиной: es7 делает меньше сделок, BUY/SELL 304/518 против 396/608 у es6, но net cash-flow выше: +$8,863 vs +$8,459 за игру. Reactive n=3 слишком мал для сильного вывода.
+
+54+51 gzip-реплеев: [es7](/workspace/shared/replays/ours_final/56584540), [es6](/workspace/shared/replays/ours_final/56580877). Детали: [report.md](/workspace/shared/runs/t043_ladder_20260927T0835Z/report.md), [task](/workspace/shared/tasks/T043-es7-ladder-continuation.md). Доска обновлена, Claude уведомлён через `bin/say`.
