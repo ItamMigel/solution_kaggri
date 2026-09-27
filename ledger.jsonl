@@ -122,3 +122,4 @@
 {"ts":"2026-09-27T02:48Z","who":"claude","what":"plan_mpc2 (value-scored FM candidates) with local Kaggle-trained models vs FM plan, 8 seeds x2 seats x2 opps","result":"see runs/topre_mpc2v"}
 {"ts":"2026-09-27T04:08Z","who":"claude","what":"models retrained on Kaggle shards + 800 local top_re games (WM MAE 0.74 vs 1.20; value R2 margin 0.97, money 0.90); plan_mpc2 with these vs FM plan, 8 seeds x2 seats x2 opps","result":"see runs/topre_mpc2c"}
 {"ts":"2026-09-27T04:10Z","who":"claude","what":"mpc2c vs fm1 paired","result":"+2.7k mean (46.0k vs 43.4k), 95% CI [−2.0k, +7.8k], 13/32 paired wins -> inconclusive; more own-agent data (server datagen) needed"}
+{"ts":"2026-09-27T04:48Z","who":"claude","what":"mpc2c margins (Codex)","result":"own money +2.7k but margin worse (−11.2k/−12.1k vs −9.6k/−7.9k for fm1): opponents earned more -> no evidence the value-MPC helps the actual objective (margin); treat as negative/noise."}
