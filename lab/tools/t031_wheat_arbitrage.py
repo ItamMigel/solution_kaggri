@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import gzip
 import json
 import multiprocessing as mp
 from collections import defaultdict, deque
@@ -28,10 +29,17 @@ TEAM = "misis biznessmenlb"
 ITEM = "WHEAT"
 
 
+def load_replay(path):
+    """Read either the Kaggle-native gzip archive or an unpacked replay."""
+    opener = gzip.open if str(path).endswith(".gz") else open
+    with opener(path, "rt") as f:
+        return json.load(f)
+
+
 def rows(replays, outcome="loss", expected=None):
     ans = []
-    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json"))):
-        d = json.loads(Path(raw).read_text())
+    for raw in sorted(glob.glob(str(Path(replays) / "episode-*-replay.json*"))):
+        d = load_replay(raw)
         names, rewards = d["info"]["TeamNames"], d["rewards"]
         if TEAM not in names:
             continue
@@ -51,7 +59,7 @@ def _price(item, inv, market):
 
 def mine(row):
     path, us, episode, opponent = row
-    d = json.loads(Path(path).read_text())
+    d = load_replay(path)
     cfg = dict(d["configuration"]); cfg["seed"] = d["info"]["seed"]
     steps = d["steps"]
     cur = {"step": 0, "day": 0, "seq": 0}
