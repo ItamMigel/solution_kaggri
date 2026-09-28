@@ -21,12 +21,28 @@ OPPONENTS = {
     "fukami": os.path.join(POOL, "fukami_v48", "main.py"),
 }
 BASELINES = ["v5_market", "v4_12turn"]
+CAND = os.path.join(ROOT, "adil-board", "candidates"); PUB = os.path.join(ROOT, "research", "public", "agents")
+# "field" panel (2026-09-28): the current Horizon-lineage field — strongest public agent, our ladder candidates, old and new
+# public clones, a weak non-clone and a BC agent as a stand-in for reactive (own-route) top agents
+FIELD = {
+    "tetsu": os.path.join(ROOT, "research", "public_tmp", "tetsu1009", "main.py"),
+    "es7": os.path.join(CAND, "es7_wm", "pkg", "main.py"), "es3": os.path.join(CAND, "es3_g5", "pkg", "main.py"),
+    "es6": os.path.join(CAND, "es6_c4g15", "pkg", "main.py"), "es1g1": os.path.join(CAND, "es1_g1", "pkg", "main.py"),
+    "metav4": os.path.join(POOL, "tschinkel_metav4_v13", "main.py"), "parthenos": os.path.join(POOL, "parthenos_robust", "main.py"),
+    "yhay0913": os.path.join(POOL, "yhay_router0913", "main.py"),
+    "harvest": os.path.join(PUB, "haodou092__kaggriculture-harvest-ledger", "main.py"),
+    "ozer55": os.path.join(PUB, "ahmedberatozer__kaggriculture-v55-one-turn-market-race-edge", "main.py"),
+    "v57": os.path.join(PUB, "nihilisticneuralnet__kaggriculture-population-robust-economy", "main.py"),
+    "fukami": os.path.join(POOL, "fukami_v48", "main.py"),
+    "bc_m15s0": os.path.join(ROOT, "runs", "agents", "np_m15s0_mg", "main.py"),
+}
 
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--agent", action="append", required=True)
     ap.add_argument("--worlds", type=int, default=64); ap.add_argument("--workers", type=int, default=40)
     ap.add_argument("--out", required=True); ap.add_argument("--skip", default="", help="comma list of opponents to skip")
+    ap.add_argument("--panel", default="bc", choices=["bc", "field"], help="bc: 2026-09-25 BC gate; field: current Horizon-lineage field")
     a = ap.parse_args()
     conf = json.load(open(os.path.join(SOL, "seeds", "confirmation.json")))
     sf = os.path.join(ROOT, "runs", "compare", f"conf{a.worlds}.json")
@@ -36,7 +52,7 @@ def main():
     for ag in a.agent:
         cmd += ["--agent", ag]
     cmd += ["--baselines", *[b for b in BASELINES if b not in skip]]
-    for name, path in OPPONENTS.items():
+    for name, path in (FIELD if a.panel == "field" else OPPONENTS).items():
         if name not in skip:
             cmd += ["--opponent", f"{name}={path}"]
     cmd += ["--seeds-file", sf, "--workers", str(a.workers), "--out", os.path.abspath(a.out)]
@@ -52,6 +68,10 @@ def main():
             rows.append(m["score_rate"])
             print(f"  {opp:10} W/D/L {m['wins']:3}/{m['draws']}/{m['losses']:3}  score {m['score_rate']:.3f}  margin {m['mean_margin']:+8.0f}  errors {m['errors']}")
         print(f"  PANEL MEAN score {sum(rows) / len(rows):.3f} over {len(rows)} opponents")
+        bc = res["by_opponent"].get("bc_m15s0", {}).get("score_rate")
+        clones = [m["score_rate"] for o, m in res["by_opponent"].items() if "score_rate" in m and o not in ("bc_m15s0", "fukami")]
+        if clones:
+            print(f"  clone-field mean {sum(clones) / len(clones):.3f} over {len(clones)}; reactive stand-in (bc_m15s0) {bc}")
 
 
 if __name__ == "__main__":
