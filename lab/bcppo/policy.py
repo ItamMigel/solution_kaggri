@@ -108,6 +108,8 @@ def tile_masks(st, p, ux, uy, umask):
 PLANT_IDS = [IDX["PLANT:" + c] for c in feat.CROPS]
 PICK_IDS = [IDX["PICKUP:" + i] for i in feat.ITEMS]
 MOVE_T = torch.tensor(MOVE_IDS)
+PLANT_T = torch.tensor(PLANT_IDS)
+PICK_T = torch.tensor(PICK_IDS)
 
 
 def act(net, st, p, so, team_vec, greedy=False):
@@ -125,10 +127,12 @@ def act(net, st, p, so, team_vec, greedy=False):
     used = torch.zeros((B, U, NOP), dtype=torch.bool, device=dev); o = torch.zeros((B, U), dtype=torch.long, device=dev)
     qty = torch.zeros((B, U), dtype=torch.long, device=dev)
     U_eff = int(umask.any(0).sum())  # slots beyond the largest hand count in the batch are PASS
+    plant_ids = PLANT_T.to(dev); pick_ids = PICK_T.to(dev)
     for u in range(U_eff):
         mu = base[:, u].clone()
-        for c, pid in enumerate(PLANT_IDS): mu[:, pid] = aux["empty"][:, u] & (seeds_left[:, c] > 0) & umask[:, u]
-        for it, pid in enumerate(PICK_IDS): mu[:, pid] = aux["adj"][:, u] & (shed_left[:, it] > 0) & umask[:, u]
+        um = umask[:, u:u + 1]
+        mu[:, plant_ids] = aux["empty"][:, u:u + 1] & (seeds_left > 0) & um          # PLANT c needs empty tile + seeds left
+        mu[:, pick_ids] = aux["adj"][:, u:u + 1] & (shed_left > 0) & um              # PICKUP i needs shed-adjacent + stock left
         mv = want[:, u] & mu
         off = (t[:, u] != cur[:, u]) & mv.any(-1)
         nonmove = mu.clone(); nonmove[:, MOVE_T.to(dev)] = False
@@ -136,20 +140,20 @@ def act(net, st, p, so, team_vec, greedy=False):
         lg = ul[:, u].masked_fill(~mask, -1e9)
         ou = lg.argmax(-1) if greedy else torch.distributions.Categorical(logits=lg).sample()
         used[:, u] = mask; o[:, u] = ou
-        for c, pid in enumerate(PLANT_IDS): seeds_left[:, c] -= (ou == pid).long()
+        seeds_left -= (ou[:, None] == plant_ids[None, :]).long()
         it_ = ARG1.to(dev)[ou].clamp(0, 11); is_pick = OPT.to(dev)[ou] == O.OP_PICKUP
         n = torch.where(it_ >= 9, torch.ones_like(it_), torch.where(it_ == O.ITEM_FERTILIZER, 4, 3))
         n = torch.minimum(n, shed_left.gather(1, it_[:, None]).squeeze(1)).clamp(min=1)
         qty[:, u] = torch.where(is_pick, n, 0)
         shed_left.scatter_add_(1, it_[:, None], -(n * is_pick.long())[:, None])
-    # market: hire / land caps as bucket masks
+    # market (P0/P1 fix): sequential over keys in emission order; each key's bucket is capped by the remaining order slots
+    # (and hire/land limits) BEFORE sampling, so the recorded bucket is exactly what the engine receives.
     hire_max = (O.MAX_HANDS - st.n_hands[:, p].long()).clamp(min=0, max=feat.MKT_MAX)
     land_max = (3 - st.land[:, p].long()).clamp(min=0)
-    mlm = market_mask(ml, hire_max, land_max)
-    mb = mlm.argmax(-1) if greedy else torch.distributions.Categorical(logits=mlm).sample()
-    orders, inc = build_market(mb)
+    mb, mcap = sample_market(ml, hire_max, land_max, greedy)
+    orders = build_market(mb)
     rec = dict(board=board, G=G, uv=uv, ux=ux.to(torch.int8), uy=uy.to(torch.int8), umask=umask, opm=used,
-               t=t.to(torch.int8), o=o.to(torch.int8), mb=mb.to(torch.int8), hire_max=hire_max.to(torch.int8), land_max=land_max.to(torch.int8), minc=inc)
+               t=t.to(torch.int8), o=o.to(torch.int8), mb=mb.to(torch.int8), mcap=mcap.to(torch.int8))
     logp, ent = logprob(ul, tl, ml, rec)
     farmer, hands = unit_triples(o, qty, st, p, umask)
     return (farmer, hands, orders), logp, v, ent, rec
@@ -159,12 +163,34 @@ def _masked(logits, mask):
     return logits.masked_fill(~mask, -1e9)
 
 
-def market_mask(ml, hire_max, land_max):
+MKT_REP = torch.tensor([k.split(":")[0] in ("HIRE", "BUY_LAND", "BUY_ANIMAL") for k in feat.MKT_KEYS])
+
+
+def market_mask(ml, mcap):
+    """Mask market bucket logits above each key's cap: ml [N,NK,NB], mcap [N,NK] int."""
     b = torch.arange(NB, device=ml.device)
-    ml = ml.clone()
-    ml[:, feat.MKT_IDX["HIRE"]] = ml[:, feat.MKT_IDX["HIRE"]].masked_fill(b[None, :] > hire_max[:, None], -1e9)
-    ml[:, feat.MKT_IDX["BUY_LAND"]] = ml[:, feat.MKT_IDX["BUY_LAND"]].masked_fill(b[None, :] > land_max[:, None], -1e9)
-    return ml
+    return ml.masked_fill(b[None, None, :] > mcap.long()[..., None], -1e9)
+
+
+def sample_market(ml, hire_max, land_max, greedy):
+    """Sequential capped sampling in emission order (MKT_ORDER). Returns buckets [B,NK] and caps [B,NK]."""
+    B = ml.shape[0]; dev = ml.device
+    remaining = torch.full((B,), O.MAX_ORDERS, dtype=torch.long, device=dev)
+    mb = torch.zeros((B, NK), dtype=torch.long, device=dev); mcap = torch.zeros((B, NK), dtype=torch.long, device=dev)
+    rep = MKT_REP.to(dev)
+    for k in MORDER.tolist():
+        key = feat.MKT_KEYS[k]
+        if rep[k]:
+            cap = remaining.clamp(max=feat.MKT_MAX)
+            if key == "HIRE": cap = torch.minimum(cap, hire_max)
+            if key == "BUY_LAND": cap = torch.minimum(cap, land_max)
+        else:
+            cap = torch.where(remaining > 0, torch.full_like(remaining, feat.MKT_MAX), torch.zeros_like(remaining))
+        lg = market_mask(ml[:, k:k + 1], cap[:, None])[:, 0]
+        q = lg.argmax(-1) if greedy else torch.distributions.Categorical(logits=lg).sample()
+        mb[:, k] = q; mcap[:, k] = cap
+        remaining = remaining - torch.where(rep[k], q, (q > 0).long())
+    return mb, mcap
 
 
 def logprob(ul, tl, ml, rec):
@@ -174,8 +200,8 @@ def logprob(ul, tl, ml, rec):
     tlp = F.log_softmax(tl, -1); lp_t = tlp.gather(-1, t[..., None]).squeeze(-1)
     olp = F.log_softmax(ul.masked_fill(~rec["opm"], -1e9), -1); lp_o = olp.gather(-1, o[..., None]).squeeze(-1)
     unit_lp = ((lp_t + lp_o) * umask).sum(-1)
-    mlp = F.log_softmax(market_mask(ml, rec["hire_max"].long(), rec["land_max"].long()), -1)
-    lp_m = (mlp.gather(-1, rec["mb"].long()[..., None]).squeeze(-1) * rec["minc"]).sum(-1)
+    mlp = F.log_softmax(market_mask(ml, rec["mcap"]), -1)
+    lp_m = mlp.gather(-1, rec["mb"].long()[..., None]).squeeze(-1).sum(-1)
     ent_t = (-(tlp.exp() * tlp).sum(-1) * umask).sum(-1)
     ent_o = (-(olp.exp() * olp.clamp(min=-30)).sum(-1) * umask).sum(-1)
     ent_m = -(mlp.exp() * mlp.clamp(min=-30)).sum(-1).sum(-1)
@@ -195,9 +221,7 @@ def unit_triples(o, qty, st, p, umask):
 
 
 def build_market(mb):
-    """Fixed key order; HIRE/LAND/ANIMAL one unit per order; others one order with qty; first MAX_ORDERS kept.
-    No client-side affordability: the engine fills partially / funds buys from earlier sells exactly.
-    Returns orders [B,10,3] and inc [B,NK] = key is decision-relevant (bucket 0, or >=1 order emitted)."""
+    """Fixed key order; HIRE/LAND/ANIMAL one unit per order; others one order with qty. Caps guarantee <= MAX_ORDERS."""
     dev = mb.device; B = mb.shape[0]; q = mb.long()
     R = O.MAX_ORDERS; mop = MOP.to(dev); mit = MIT.to(dev); order = MORDER.to(dev)
     kop = mop[order]; kit = mit[order]; K = len(order)
@@ -210,10 +234,7 @@ def build_market(mb):
     dst = torch.where(ok, rank, torch.full_like(rank, O.MAX_ORDERS))
     buf = torch.zeros((B, O.MAX_ORDERS + 1, 3), dtype=torch.long, device=dev)
     buf.scatter_(1, dst[..., None].expand(-1, -1, 3), val * ok[..., None])
-    emitted_o = ok.view(B, K, R).any(-1)                      # per key in emission order
-    inc_o = (qo == 0) | emitted_o
-    inc = torch.zeros((B, NK), dtype=torch.bool, device=dev); inc[:, order] = inc_o
-    return buf[:, :O.MAX_ORDERS], inc
+    return buf[:, :O.MAX_ORDERS]
 
 
 def combine(a0, a1):

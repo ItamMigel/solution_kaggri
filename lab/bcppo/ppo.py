@@ -24,8 +24,9 @@ from gpuenv import ops as O
 from gpuenv import _consts as C
 from gpuenv.env import VecKaggriculture
 from gpuenv._state import Actions
+from gpuenv._units import plant_blocked
 
-REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "hire_max", "land_max", "minc")
+REC_KEYS = ("board", "G", "uv", "ux", "uy", "umask", "opm", "t", "o", "mb", "mcap")
 STEPS = 719
 
 
@@ -48,6 +49,11 @@ def _entropy_total(parts):
     # policy.logprob v2 exposes both the individual heads and their already
     # aggregated total.  Using every mapping value would count entropy twice.
     return parts["total"] if "total" in parts else sum(parts.values())
+
+
+def _nonnegative_approx_kl(log_ratio):
+    """Per-sample non-negative estimator of KL(old rollout policy || new)."""
+    return (torch.exp(log_ratio) - 1.0 - log_ratio).mean().clamp_min(0.0)
 
 
 def _set_value_warmup_trainable(net, value_only):
@@ -144,6 +150,41 @@ def _merge_actions(outputs, labels, names):
     return chosen
 
 
+def _shop_order_subset(shop_order, rows):
+    """Carry the per-world shop history into an opponent's selected rows."""
+    sub = gpufeat.ShopOrder(int(rows.numel()), shop_order.first.device)
+    sub.first.copy_(shop_order.first.index_select(0, rows))
+    sub.prev.copy_(shop_order.prev.index_select(0, rows))
+    return sub
+
+
+def _league_subset_actions(league, state, shop_order, labels, names, greedy):
+    """Evaluate each league policy only for the worlds assigned to it.
+
+    Every row belongs to exactly one label.  The state and ShopOrder are both
+    indexed by that label and the resulting player-one actions are scattered
+    back into the original world order.  In evaluation/greedy mode this is
+    byte-identical to evaluating every opponent on the whole batch.
+    """
+    actions = None
+    batch = state.batch_size
+    for label, name in enumerate(names):
+        rows = (labels == label).nonzero(as_tuple=False).flatten()
+        if not rows.numel():
+            continue
+        out = policy.act(league[name][0], state.index(rows), 1,
+                         _shop_order_subset(shop_order, rows), league[name][2],
+                         greedy=greedy)[0]
+        if actions is None:
+            actions = tuple(torch.zeros((batch, *part.shape[1:]), dtype=part.dtype,
+                                        device=part.device) for part in out)
+        for full, part in zip(actions, out):
+            full.index_copy_(0, rows, part)
+    if actions is None:
+        raise RuntimeError("league has no selected opponents")
+    return actions
+
+
 def _league_labels(batch, dev, seed, names, probs):
     generator = torch.Generator(device=dev)
     generator.manual_seed(seed)
@@ -207,6 +248,11 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
         "active_units": torch.zeros((), dtype=torch.int64, device=dev),
         "unit_noop": torch.zeros((), dtype=torch.int64, device=dev),
         "market_noop": torch.zeros((), dtype=torch.int64, device=dev),
+        "unit_requested": torch.zeros((), dtype=torch.int64, device=dev),
+        "plant_requested": torch.zeros((), dtype=torch.int64, device=dev),
+        "plant_rejected": torch.zeros((), dtype=torch.int64, device=dev),
+        "market_orders_emitted": torch.zeros((), dtype=torch.int64, device=dev),
+        "hire_overflow": torch.zeros((), dtype=torch.int64, device=dev),
         "league_counts": torch.bincount(labels, minlength=len(names)),
         "learner_seat_one": seat_one.sum(),
     }
@@ -215,21 +261,31 @@ def rollout(net, ve, batch, dev, team, seed_base, league, greedy=False):
             so.update(st)
             learner_state = _learner_view(st, seat_one)
             out0 = policy.act(net, learner_state, 0, so, team, greedy=greedy)
-            # Calling each opponent on the full batch keeps ShopOrder state
-            # aligned and avoids host-side batch slicing in the hot loop.
-            opponent_out = {name: policy.act(league[name][0], learner_state, 1, so, league[name][2], greedy=False)
-                            for name in names}
-            out1 = _merge_actions(opponent_out, labels, names)
-            st, _, _, _ = ve.step(st, _world_actions(policy.combine(out0[0], out1), seat_one))
+            out1 = _league_subset_actions(league, learner_state, so, labels, names, greedy=False)
+            _, logp, value, _, rec = out0
+            farmer, hands, market = out0[0]
+            unit_ops = torch.cat((farmer[:, None, 0], hands[..., 0]), 1).long()
+            unit_items = torch.cat((farmer[:, None, 1], hands[..., 1]), 1).long()
+            active = rec["umask"]
+            is_plant = unit_ops == O.OP_PLANT
+            actions = _world_actions(policy.combine(out0[0], out1), seat_one)
+            # The environment atomically rejects every same-crop PLANT in a
+            # turn when their combined demand exceeds seeds.  This is an exact
+            # engine rejection signal, unlike an inferred state delta.
+            blocked = _swap_player_tensor(plant_blocked(actions.unit_actions(), st.seeds), seat_one)[:, 0]
+            plant_rejected = is_plant & active & blocked.gather(1, unit_items.clamp(0, O.N_CROPS - 1))
+            before_overflow = _learner_value(st.overflow, seat_one)
+            st, _, _, _ = ve.step(st, actions)
+            metric["unit_requested"] += ((unit_ops != O.OP_PASS) & active).sum()
+            metric["plant_requested"] += (is_plant & active).sum()
+            metric["plant_rejected"] += plant_rejected.sum()
+            metric["market_orders_emitted"] += (market[..., 0] != O.MKT_NONE).sum()
+            metric["hire_overflow"] += (_learner_value(st.overflow, seat_one) - before_overflow).sum()
             eq = conservative_equity(st)
             equity_margin = _learner_margin(eq, seat_one)
             reward = (equity_margin - eq_prev) / 1e4
             eq_prev = equity_margin
-            _, logp, value, _, rec = out0
             buf.put(rec, logp, value, reward)
-            farmer, hands, market = out0[0]
-            unit_ops = torch.cat((farmer[:, None, 0], hands[..., 0]), 1).long()
-            active = rec["umask"]
             metric["unit_hist"] += torch.bincount(unit_ops[active], minlength=O.N_UNIT_OPS)
             metric["active_units"] += active.sum()
             metric["unit_noop"] += (unit_ops[active] == O.OP_PASS).sum()
@@ -313,23 +369,24 @@ def _save(path, net, opt, source_ck, teams, iteration):
     }
     if torch.cuda.is_available():
         payload["rng_cuda"] = torch.cuda.get_rng_state_all()
-    torch.save(payload, path)
+    torch.save(payload, path + ".tmp")
+    os.replace(path + ".tmp", path)  # atomic: other runs/PBT read these files while we train
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--init", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--envs", type=int, default=256)
+    ap.add_argument("--envs", type=int, default=2048)
     ap.add_argument("--iters", type=int, default=50)
-    ap.add_argument("--lr", type=float, default=3e-5)
-    ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--mb", type=int, default=8192)
+    ap.add_argument("--lr", type=float, default=5e-6)
+    ap.add_argument("--epochs", type=int, default=1)
+    ap.add_argument("--mb", type=int, default=65536)
     ap.add_argument("--gamma", type=float, default=1.0)
-    ap.add_argument("--lam", type=float, default=.995)
-    ap.add_argument("--clip", type=float, default=.2)
+    ap.add_argument("--lam", type=float, default=.99)
+    ap.add_argument("--clip", type=float, default=.12)
     ap.add_argument("--ent", type=float, default=.001)
-    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
+    ap.add_argument("--kl", type=float, default=.05); ap.add_argument("--target-kl", type=float, default=.015, help="stop PPO updates when rollout-policy KL exceeds 1.5x this value"); ap.add_argument("--stop-at", type=int, default=0, help="stop after this iteration index (rounds keep one KL horizon = --iters)"); ap.add_argument("--run-iters", type=int, default=0, help="stop after this many iterations from the resume point (PBT rounds)"); ap.add_argument("--kl-floor", type=float, default=0.0, help="minimum KL-to-BC coefficient (style preservation for team doubles)")
     ap.add_argument("--team", default="dsm")
     ap.add_argument("--vf", type=float, default=.5)
     ap.add_argument("--value-warmup", type=int, default=0, help="value-only iterations before policy updates")
@@ -341,8 +398,8 @@ def main():
     ap.add_argument("--league-double", action="append", default=[], metavar="CKPT")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
-    if not 0 < a.gamma <= 1 or not 0 <= a.lam <= 1:
-        ap.error("gamma must be in (0,1] and lambda in [0,1]")
+    if not 0 < a.gamma <= 1 or not 0 <= a.lam <= 1 or a.target_kl < 0:
+        ap.error("gamma must be in (0,1], lambda in [0,1], and target-kl non-negative")
     dev = a.device
     torch.manual_seed(a.seed)
     if a.amp == "bf16":
@@ -362,13 +419,18 @@ def main():
     last = f"{a.out}/last.pt"
     if a.resume and os.path.exists(last):
         start = _restore_resume(last, net, opt, dev)
+        for group in opt.param_groups:
+            group["lr"] = a.lr  # optimizer state keeps the old lr; PBT mutates it between rounds
         print("resumed at iter", start, flush=True)
     league = _league_from_args(a, source_ck, net, bc, dev)
     ve = VecKaggriculture(a.envs, device=dev)
     with open(f"{a.out}/args.json", "w") as fh:
         json.dump({**vars(a), "league_effective": {k: v[1] for k, v in league.items()}}, fh, indent=1)
     log = open(f"{a.out}/log.jsonl", "a")
-    for it in range(start, min(a.iters, a.stop_at) if a.stop_at else a.iters):
+    end = min(a.iters, a.stop_at) if a.stop_at else a.iters
+    if a.run_iters:
+        end = min(end, start + a.run_iters)
+    for it in range(start, end):
         t0 = time.time()
         net.eval()
         buf, final, action_metric, league_counts = rollout(
@@ -392,6 +454,8 @@ def main():
         net.train()
         value_only = it < a.value_warmup
         _set_value_warmup_trainable(net, value_only)
+        early_stop = False
+        max_approx_kl = 0.0
         for epoch in range(a.epochs):
             permutation = torch.randperm(samples, device=dev)
             for offset in range(0, samples, a.mb):
@@ -404,6 +468,12 @@ def main():
                 ent_total = _entropy_total(entropy)
                 log_ratio = logp - data["logp"][idx]
                 ratio = torch.exp(log_ratio)
+                approx_kl = _nonnegative_approx_kl(log_ratio)
+                max_approx_kl = max(max_approx_kl, float(approx_kl))
+                if (not value_only and a.target_kl > 0
+                        and approx_kl > 1.5 * a.target_kl):
+                    early_stop = True
+                    break
                 advantage = data["adv"][idx]
                 policy_loss = -torch.min(ratio * advantage, ratio.clamp(1 - a.clip, 1 + a.clip) * advantage).mean()
                 value_loss = F.smooth_l1_loss(value, data["ret"][idx])
@@ -414,7 +484,7 @@ def main():
                     lp, lq = F.log_softmax(p_logits, -1), F.log_softmax(q_logits, -1)
                     val = (lp.exp() * (lp - lq)).sum(-1)
                     return (val * mask).sum() / mask.sum().clamp(min=1) if mask is not None else val.mean()
-                mm = lambda x: policy.market_mask(x, rec["hire_max"].long(), rec["land_max"].long())
+                mm = lambda x: policy.market_mask(x, rec["mcap"].long())
                 kl_bc = (kl(btl, tl, unit_mask) +
                          kl(policy._masked(bul, rec["opm"]), policy._masked(ul, rec["opm"]), unit_mask) + kl(mm(bml), mm(ml)))
                 kl_coef = max(a.kl_floor, a.kl * max(0.0, 1 - it / max(1, a.iters)))
@@ -427,11 +497,13 @@ def main():
                     stats["pg"] += float(policy_loss)
                     stats["vloss"] += float(value_loss)
                     stats["kl_bc"] += float(kl_bc)
-                    stats["approx_kl"] += float((data["logp"][idx] - logp).mean())
+                    stats["approx_kl"] += float(approx_kl)
                     stats["clipfrac"] += float(((ratio - 1).abs() > a.clip).float().mean())
                     for key, val in entropy.items():
                         stats[f"entropy_{key}"] += float(val.mean())
                 n_updates += 1
+            if early_stop:
+                break
         unit_hist = action_metric["unit_hist"].tolist()
         market_hist = action_metric["market_hist"].tolist()
         active_units = max(1, int(action_metric["active_units"]))
@@ -447,21 +519,32 @@ def main():
             "secs_roll": round(roll_seconds),
             "secs": round(time.time() - t0),
             "samples": samples,
+            "ppo_updates": n_updates,
+            "updates": n_updates,
+            "approx_kl_max": max_approx_kl,
+            "target_kl": a.target_kl,
+            "target_kl_early_stop": early_stop,
+            "early_stopped": early_stop,
             "league_envs": league_counts,
             "unit_op_distribution": [x / active_units for x in unit_hist],
             "market_op_distribution": [x / market_slots for x in market_hist],
             "unit_noop_fraction": int(action_metric["unit_noop"]) / active_units,
             "market_noop_fraction": int(action_metric["market_noop"]) / market_slots,
-            # The gpuenv currently exposes no per-action rejection bit.  F11
-            # will add it; until then this is explicitly an honest placeholder.
-            "rejected_actions": None,
+            "unit_requested": int(action_metric["unit_requested"]),
+            "plant_requested": int(action_metric["plant_requested"]),
+            "plant_rejected_engine": int(action_metric["plant_rejected"]),
+            "blocked_plant": int(action_metric["plant_rejected"]),
+            "plant_rejected_fraction": int(action_metric["plant_rejected"]) / max(1, int(action_metric["plant_requested"])),
+            "market_orders_emitted": int(action_metric["market_orders_emitted"]),
+            "hire_overflow_engine": int(action_metric["hire_overflow"]),
+            "hire_overflow": int(action_metric["hire_overflow"]),
         }
         record.update({key: value / max(1, n_updates) for key, value in stats.items()})
         print(json.dumps(record), flush=True)
         log.write(json.dumps(record) + "\n")
         log.flush()
         _save(last, net, opt, source_ck, teams, it)
-        if it % 5 == 4:
+        if it % 5 == 4 or (a.run_iters and it == end - 1):
             _save(f"{a.out}/it{it:03d}.pt", net, opt, source_ck, teams, it)
 
 

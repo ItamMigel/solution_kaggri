@@ -1,0 +1,8 @@
+# Core (training). Install the CUDA-12 build of torch that your artifactory provides for H100 (sm_90).
+# Tested here with torch 2.14.0+cu126 / numpy 2.5.3; any torch >= 2.3 with CUDA 12.x should work.
+torch>=2.3
+numpy>=1.26,<3
+# Evaluation in the official Kaggle engine (export + games vs Horizon). kaggle-environments itself is
+# installed separately WITHOUT deps (see setup.sh) — its full dependency list pulls unrelated games.
+jsonschema>=4.0
+requests>=2.0
