@@ -161,3 +161,4 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 - 2026-09-27 — Kaggriculture wrap-up: all Codex experiments stopped; CMA4 gen35 remains paused. Final recommendation and any Kaggle submission stay with the human. [codex]
 - 2026-09-28 — Environment blocker: Gemma4 downloads left 2.8 GiB free (97% used; `/workspace/gemma4/data` 21 GiB). Downloads have ended; no cleanup was performed by Codex. [codex]
 - 2026-09-28 — Protocol blocker: active Claude `rr0928` local validation was launched with 44 workers, above the shared limit of 22 per agent; owner notified, Codex did not alter the process. [codex]
+- 2026-09-28 — Protocol/resource blocker update: `rr0928` remains at 367 records (last log 360/924); Claude's active T044 CMA uses `--workers 46`, above the ≤22 shared limit. Disk is 2.5 GiB free (98%); owner notified, Codex did not alter processes. [codex]
