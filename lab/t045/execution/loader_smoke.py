@@ -1,7 +1,7 @@
 """Official file-loader smoke, including source load against the overage budget."""
 import os
 for k in ('OPENBLAS_NUM_THREADS','OMP_NUM_THREADS','MKL_NUM_THREADS'):os.environ[k]='1'
-import contextlib, io, json, random, time
+import contextlib, io, json, random, time, hashlib
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
@@ -18,7 +18,7 @@ def game(job):
         pair=[str(HERE/'frozen/tetsu.py')]*2;pair[seat]=str(HERE/'exports'/f'{base}_{variant}.py')
         env.run(pair)
     rec=dict(base=base,variant=variant,seat=seat,status=[s.status for s in env.state],rewards=[s.reward for s in env.state],
-             seconds=time.monotonic()-start,remaining_overage=[s.observation.remainingOverageTime for s in env.state],output_tail=log.getvalue()[-1000:])
+             seconds=time.monotonic()-start,source_sha256=hashlib.sha256((HERE/'exports'/f'{base}_{variant}.py').read_bytes()).hexdigest(),remaining_overage=[s.observation.remainingOverageTime for s in env.state],output_tail=log.getvalue()[-1000:])
     assert rec['status']==['DONE','DONE'],rec
     return rec
 

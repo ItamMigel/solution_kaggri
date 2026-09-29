@@ -38,6 +38,7 @@ def main():
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
         shutil.copyfile(HERE/'fixtures.json',out/'fixtures.json')
+        shutil.copyfile('/workspace/shared/runs/t045_execution_loader_smoke.json',out/'loader_smoke.json')
         shutil.copyfile(run/'manifest.json',out/'gate_manifest.json')
         shutil.copyfile(run/'identity_source_hashes.json',out/'identity_source_hashes.json')
         shutil.copyfile(HERE/'terminal.py',out/'terminal_source.txt')
@@ -48,7 +49,7 @@ def main():
         lines=[f'# {name}', '', '**Экспериментальный frozen archive. Никаких отправок в Kaggle.**', '',kind,
                'Граница HG d0–13 сохранена. Флаги обёртки по умолчанию выключены в template; в этом архиве включён только именованный вариант. Исключения BC/HG/terminal пробрасываются, не скрываются под PASS.',
                '',f"Решение: **{manifest['recommendation']}**. Независимый review: pending Claude.",
-               '', '32 новых мира 929452001–929452032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
+               '', '32 новых мира 929453001–929453032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
                f"W/D/L: {evidence['wins']}/{evidence['draws']}/{evidence['losses']}; score {evidence['score']:.4f}, база {evidence['baseline_score']:.4f}.",
                f"Парное изменение score: {100*evidence['delta_score']:+.3f} п.п., 95% whole-world CI [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}].",
                f"Изменение margin: ${evidence['delta_margin']:+.2f}, CI [{mc[0]:+.2f}, {mc[1]:+.2f}].",

@@ -58,6 +58,8 @@ def main():
     rows=[json.loads(x) for x in (root/'games.jsonl').read_text().splitlines()]
     result={'records':len(rows),'valid':sum(r['valid'] for r in rows),'errors':sum(not r['valid'] for r in rows),
             'counts':dict(Counter(f"{r['base']}_{r['variant']}" for r in rows)),
+            'evaluation_methods':dict(Counter(r.get('evaluation','full_game') for r in rows)),
+            'error_counters':dict(sum((Counter(r.get('errors',{})) for r in rows),Counter())),
             'results':{f'{b}_{v}':summary(rows,b,v) for b in ('m15ens','mix4') for v in ('terminal','a1','a2')}}
     (root/'summary.json').write_text(json.dumps(result,indent=2))
     print(json.dumps({**{k:v for k,v in result.items() if k!='results'},'results':{k:{x:y for x,y in v.items() if x not in ('families','opponents','note')} for k,v in result['results'].items()}},indent=2))
