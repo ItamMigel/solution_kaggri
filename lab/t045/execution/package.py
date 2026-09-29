@@ -48,7 +48,7 @@ def main():
                   'exception_policy':'fail-fast: BC/HG/terminal exceptions are re-raised, never silently converted to PASS',
                   'exception_risk':'An unseen exception forfeits the whole episode instead of losing a single turn; this experimental archive intentionally keeps observable errors. Zero observed errors does not prove none will occur.',
                   'formal_suite_gate_passed':evidence['recommendation_gate'],
-                  'recommendation':('observed margin gain and no losing flips in this sample; score gain outside own mirror is unproven; no automatic replacement' if a.variant=='terminal' else 'do not replace active pair on this evidence'),
+                  'recommendation':('В выборке выросла margin без проигрышных флипов; прирост score вне собственного зеркала не доказан; автоматическая замена не рекомендуется' if a.variant=='terminal' else 'Не заменять активную пару на основании этого результата'),
                   'source_manifest':json.loads((HERE/'manifest.json').read_text())['sources'][base],
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
@@ -73,7 +73,7 @@ def main():
                'Граница HG d0–13 сохранена. Флаги обёртки по умолчанию выключены в template; в этом архиве включён только именованный вариант. Исключения BC/HG/terminal пробрасываются, не скрываются под PASS.',
                'Риск исполнения: непредвиденное исключение приведёт к ERROR и проигрышу всего эпизода, тогда как исходный BC мог пропустить один ход. Это сознательный fail-fast вариант без скрытого PASS; ноль наблюдавшихся сбоев не гарантирует их отсутствие в новых мирах.',
                'Terminal не гарантирует неубывание cash или margin при любом сопернике: дополнительные продажи меняют общий рынок. Он сохраняет количества ранних повторных SELL и пополняет только последний SELL товара после последней траты.',
-               '',f"Решение: **{manifest['recommendation']}**. Независимый code/method review: Claude PASS; результаты: {review['performance']}.",
+               '',f"Решение: **{manifest['recommendation']}**. Независимый code/method review: Claude PASS; результаты: {review['performance'].rstrip('.') }.",
                '', '32 новых мира 929454001–929454032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
                'Методы оценки: ' + json.dumps(evidence['evaluation_methods'],ensure_ascii=False) + '.',
                f"Полных HG-игр без изменений действия от фикса: {evidence['full_games_without_action_changes']} (база ещё не была доступна для сертификата; это не эффект исправления).",
@@ -84,6 +84,8 @@ def main():
                f'Ресурсы: первые 780 валидных игр сохранены; исключено {attempt_count} неполных инфраструктурных попыток. У двух исходных300s попыток причина SIGALRM установлена косвенно по времени/неполному эпизоду; у последующих600s есть явная телеметрия host_alarm_fired. Все попытки сохранены. Каждый затронутый ключ получает ровно один повтор с guard3600s независимо от исхода; неуспех повтора блокирует доставку. Байты агентов/лимиты движка неизменны. Основной пул10 + повторы2 воркера. Ноль ошибок относится только к принятым завершённым результатам; время соперников отдельно не профилируется. Детали resource_continuation.json.',
                '', 'Гейт: положительная нижняя граница score CI; нижняя граница каждого семейства не ниже −3 п.п.; ноль ошибок/timeouts/скрытых BC PASS. Эмпирический [0,0] при отсутствии flips не доказывает глобальную эквивалентность.',
                '', '| Семейство | Δscore, п.п. | 95% CI |', '|---|---:|---|']
+        if not evidence['full_games_without_action_changes']:
+            lines=[line for line in lines if not line.startswith('Полных HG-игр без изменений')]
         if a.variant=='terminal':
             nm=evidence['without_own_mirror'];nc=nm['delta_score_ci95']
             lines[lines.index('')+1:lines.index('')+1]=[f"**Оговорка о зеркале:** формальный гейт фиксированного пула пройден, но score вне собственного зеркала не доказан. Без bc_{base}: Δscore {100*nm['delta_score']:+.3f} п.п., CI [{100*nc[0]:+.3f}, {100*nc[1]:+.3f}], {nm['win_flips']} положительных/{nm['loss_flips']} отрицательных изменений исхода. Прибавка margin и отсутствие проигрышных флипов относятся к этой выборке; универсальная безопасность не заявляется. Автоматически заменять активную пару на этом основании не следует.",'']
