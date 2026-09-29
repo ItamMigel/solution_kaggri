@@ -7,9 +7,9 @@
   "final_seeds": "929454001..929454032",
   "workers": 10,
   "main_session": 30269,
-  "delivery_session": 42356,
-  "review_session": 75581,
-  "review_output": "/workspace/shared/runs/t045_claude_execution_review_final.md",
+  "delivery_session": 83726,
+  "review_session": 33925,
+  "review_output": "/workspace/shared/runs/t045_claude_results_review.md",
   "watcher": "lab/t045/execution/watch_delivery.py",
   "delivery_log": "/workspace/shared/runs/t045_execution_delivery.log",
   "candidate_names": [
@@ -53,5 +53,6 @@
   "delivery_pid": null,
   "retry_session": 43608,
   "delivery_finalizer": "lab/t045/execution/finalize_resource.py",
-  "retry_status": "2/2 valid,719calls,zeroBC/HG/overage; first3600s outcomes frozen"
+  "retry_status": "2/2 valid,719calls,zeroBC/HG/overage; first3600s outcomes frozen",
+  "review_trigger": "evaluation_audit.json BEFORE any archive publication; after PASS manually run watch_delivery then verify_delivery"
 }
