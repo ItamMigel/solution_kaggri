@@ -26,11 +26,18 @@ def main():
         source=HERE/'exports'/f'{base}_{a.variant}.py'
         archive=out/(name+'.tar.gz')
         if not archive.exists():
-            with archive.open('wb') as raw,gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as gz,tarfile.open(fileobj=gz,mode='w|',format=tarfile.GNU_FORMAT) as tar:
+            temporary = archive.with_suffix('.tmp')
+            with temporary.open('wb') as raw,gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as gz,tarfile.open(fileobj=gz,mode='w|',format=tarfile.GNU_FORMAT) as tar:
                 data=source.read_bytes();info=tarfile.TarInfo('main.py');info.size=len(data);info.mode=0o644;info.mtime=0
                 tar.addfile(info,io.BytesIO(data))
+                license_path = Path('/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/kaggle_environments-1.32.7.dist-info/licenses/LICENSE')
+                notice = b'Contains deterministic unit execution functions from Kaggle Environments 1.32.7, Apache-2.0. Original BC/Pavel notices retained in main.py. Engine source SHA256 is recorded in manifest.json accompanying this archive.\n'
+                for filename, content in (('ENGINE_LICENSE',license_path.read_bytes()),('NOTICE',notice)):
+                    info=tarfile.TarInfo(filename);info.size=len(content);info.mode=0o644;info.mtime=0
+                    tar.addfile(info,io.BytesIO(content))
+            temporary.replace(archive)
         with tarfile.open(archive,'r:gz') as tar:
-            assert tar.getnames()==['main.py'];assert hashlib.sha256(tar.extractfile('main.py').read()).hexdigest()==sha(source)
+            assert tar.getnames()==['main.py','ENGINE_LICENSE','NOTICE'];assert hashlib.sha256(tar.extractfile('main.py').read()).hexdigest()==sha(source)
         manifest={'name':name,'variant':a.variant,'base':base,'source_export':str(source),'main_sha256':sha(source),
                   'archive_sha256':sha(archive),'evidence_run':str(run),'review':'pending independent Claude review',
                   'recommendation':'local gate passed; independent review required' if evidence['recommendation_gate'] else 'do not replace active pair on this evidence',
@@ -38,6 +45,7 @@ def main():
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
         shutil.copyfile(HERE/'fixtures.json',out/'fixtures.json')
+        shutil.copyfile(HERE/'error_probe.json',out/'error_probe.json')
         shutil.copyfile('/workspace/shared/runs/t045_execution_loader_smoke.json',out/'loader_smoke.json')
         shutil.copyfile(run/'manifest.json',out/'gate_manifest.json')
         shutil.copyfile(run/'identity_source_hashes.json',out/'identity_source_hashes.json')
