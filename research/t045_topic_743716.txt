@@ -1,0 +1,58 @@
+Topic #743716: My RL Won, But Also Failed: Two Days of Training on a 196-Core Server
+  Author: dzjiann
+  Posted: 2026-09-26 15:01:09.556000
+  Votes: 15  Comments: 14
+
+I spent the last three days running reinforcement learning on a 196-core server.
+
+In one sense, it worked surprisingly well.
+
+After RL training, the agent could beat the public scripts with nearly a 90% win rate. Compared with the initial policy, the improvement was very obvious, and for a while I thought RL might be the key to pushing much further.
+
+But then the improvement basically stopped.
+
+Even after adding self-play, the agent quickly reached a plateau. More training did not seem to produce meaningfully stronger strategies.
+
+The more interesting problem was that its performance against strong players barely improved.
+
+Despite being extremely good at beating the public scripts, the RL agent could only reach around the top 100 at best. More surprisingly, against high-scoring players, it was actually weaker than several of my earlier approaches that were based purely on mathematical reasoning and dynamic programming.
+
+I still think RL has potential here, but simply throwing more compute and more self-play at the problem does not seem to be enough.
+
+Maybe the real challenge is not optimizing the policy harder, but creating a training population and objective that actually force the agent to discover more general strategies.
+
+Would be very interested to hear how others would approach this.
+
+Comments:
+├─ Khánh Vũ (2026-09-28 03:07:20.793000) [+2]
+│  Our team uses a single RTX3090 with 8 CPU cores… 🫪
+├─ Aaweg Bhaladhare (2026-09-26 19:51:34.163000) [+1]
+│  bro how did you get 196-Core Server….I'm so slowed by compute on 64cores🥲
+  ├─ dzjiann (2026-09-26 19:57:33.203000) [+1]
+  │  That’s really impressive—you achieved such a high ranking with so little compute.
+├─ DECEM (2026-09-26 17:34:07.930000) [+0]
+│  Getting Better and Better
+  ├─ OmerZalman (2026-09-27 12:36:45.027000) [+-2]
+  │  what RL did you use?
+├─ Gerardo Del Toro (2026-09-26 19:26:09.063000) [+0]
+│  Did RL approach went for a step by step micro level decisions or at a higher level policy RL? Sparse win/loss reward was enough?
+  ├─ dzjiann (2026-09-26 19:48:23.283000) [+0]
+  │  a higher level policy.spare reward is enough.
+    ├─ shiba-inu (2026-09-27 07:24:17.633000) [+0]
+    │  Wow, so you're training with sparse…
+    │
+    │  Are you using self-play, or are you training against publicly available agents?
+    │
+    │  In my case, I've been using self-play against the current policy and its past ...
+    ├─ dzjiann (2026-09-27 08:02:22.103000) [+0]
+    │  I mix with self-play and public agents
+    ├─ HyperNeonByte (2026-09-27 21:33:18.097000) [+0]
+    │  Thanks for sharing your experience! Curious have you ever tried RL at micro level?
+├─ OmerZalman (2026-09-26 16:16:48.110000) [+0]
+│  did you use PPO?
+  ├─ dzjiann (2026-09-26 17:05:07.157000) [+1]
+  │  Yes, but during training I found that not reusing old trajectories from the previous rollout actually made training more stable, and the policy improved faster as well.
+    ├─ OmerZalman (2026-09-26 19:24:12.150000) [+0]
+    │  how many games did you do?
+    ├─ dzjiann (2026-09-26 19:46:47.583000) [+0]
+    │  About one million of games

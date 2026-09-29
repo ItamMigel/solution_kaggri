@@ -1,0 +1,75 @@
+{
+  "variant": "target_prob",
+  "opp": "tetsu",
+  "seed": 92645012,
+  "seat": 0,
+  "rewards": [
+    111788.0,
+    97595.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 40.54709574091248,
+  "import_and_load_seconds": 2.3667802889831364,
+  "counts": {
+    "calls": 719,
+    "market_changes": 5,
+    "max_hands": 13,
+    "full_market": 11,
+    "unit_changes": 4,
+    "valid_native_feed_overwritten": 1
+  },
+  "examples": [
+    {
+      "step": 187,
+      "unit": 0,
+      "before": [
+        "FEED"
+      ],
+      "after": [
+        "SOUTH"
+      ],
+      "pos": [
+        6,
+        3
+      ],
+      "wheat": 1,
+      "tile": {
+        "kind": "PASTURE",
+        "animal": "SHEEP",
+        "placed_day": 6,
+        "yield_units": 0,
+        "consecutive_unfed": 0,
+        "fed_today": false,
+        "cared_today": false,
+        "fertilizer_available": false,
+        "pending_care_bonus": 1
+      }
+    }
+  ],
+  "hg_stats": {
+    "overrides": 4,
+    "buy_turns": 5,
+    "buy_units": 10,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7511,
+    "pass": 478,
+    "pass_forced": 173,
+    "at_tgt_wants_move": 303,
+    "top_masked": 546,
+    "filled": 170
+  },
+  "latency": {
+    "p50": 0.024331171065568924,
+    "p95": 0.05850220487918705,
+    "p99": 0.06631825635675345,
+    "max": 0.0806767139583826,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": ""
+}

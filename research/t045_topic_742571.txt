@@ -1,0 +1,14 @@
+Topic #742571: Tournament Question
+  Author: Trip Meiners
+  Posted: 2026-09-22 15:36:50.481000
+  Votes: 1  Comments: 1
+
+Following up on the two unanswered questions above about the final tournament.
+
+Is the Bradley-Terry fit computed over all episodes a submission has ever played, or only over episodes played during the two weeks after the September 30 deadline?
+
+It matters for planning. If it uses full history, episodes banked now count toward the final rating. If it uses post-deadline episodes only, current ladder position is informational and only the frozen agent matters.
+
+Comments:
+├─ Addison Howard (2026-09-22 15:54:43.240000) [+0]
+│  It will run over all episodes ever played between submissions that are still active. So if your agent had played 1000 matches at the end of two weeks, but only 637 of those were against submissions...

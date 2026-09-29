@@ -1,0 +1,91 @@
+{
+  "native_feed_overwrite": {
+    "before": {
+      "farmer": [
+        "FEED"
+      ],
+      "hands": [],
+      "market": []
+    },
+    "after": {
+      "farmer": [
+        "EAST"
+      ],
+      "hands": [],
+      "market": []
+    },
+    "hour": 23
+  },
+  "unreachable_override": {
+    "before": {
+      "farmer": [
+        "HARVEST"
+      ],
+      "hands": [],
+      "market": []
+    },
+    "after": {
+      "farmer": [
+        "EAST"
+      ],
+      "hands": [],
+      "market": []
+    }
+  },
+  "sale_funded_wheat_missing": {
+    "before": {
+      "farmer": [
+        "PASS"
+      ],
+      "hands": [],
+      "market": [
+        [
+          "SELL",
+          "MILK",
+          10
+        ]
+      ]
+    },
+    "after": {
+      "farmer": [
+        "PASS"
+      ],
+      "hands": [],
+      "market": [
+        [
+          "SELL",
+          "MILK",
+          10
+        ]
+      ]
+    }
+  },
+  "reserve_sold_away": {
+    "before": {
+      "farmer": [
+        "PASS"
+      ],
+      "hands": [],
+      "market": [
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ]
+      ]
+    },
+    "after": {
+      "farmer": [
+        "PASS"
+      ],
+      "hands": [],
+      "market": [
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ]
+      ]
+    }
+  }
+}

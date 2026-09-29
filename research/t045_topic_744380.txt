@@ -1,0 +1,16 @@
+Topic #744380: Do you use RL to train the executors, or the agents as a whole?
+  Author: assssstnuar
+  Posted: 2026-09-29 16:32:42.438000
+  Votes: 0  Comments: 3
+
+Did anyone try setting a fixed tree of decisions based on what shop appears, and make the RL do the labor in the best way that would not conflict with future decisions?
+
+Or do you make the agent be like a monolith RL model that decides everything down to each move and strategies?
+
+Comments:
+├─ Russell Kirk (2026-09-29 16:37:40.890000) [+0]
+│  I'd guess fixing the shops per seed is important in RL if you're trying to do paired comparisons -- otherwise your agents may learn the casual (but I'm guessing unintended) affect that weeds have o...
+  ├─ assssstnuar (2026-09-29 16:50:12.053000) [+1]
+  │  Thank you for this answer! In the discussions, I have read many posts that say Kaggriculture is a very hard competition in comparison to other RL-implying (as if the leaderboard, rules and replays ...
+    ├─ Russell Kirk (2026-09-29 17:08:48.193000) [+0]
+    │  I think more qualified people will weigh in with the struggles during the write ups!

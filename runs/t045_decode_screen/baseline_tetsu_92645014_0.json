@@ -1,0 +1,47 @@
+{
+  "variant": "baseline",
+  "opp": "tetsu",
+  "seed": 92645014,
+  "seat": 0,
+  "rewards": [
+    134646.0,
+    120466.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 45.101360630011186,
+  "import_and_load_seconds": 2.937185082002543,
+  "counts": {
+    "calls": 719,
+    "market_changes": 9,
+    "max_hands": 12,
+    "full_market": 12,
+    "unit_changes": 2
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 2,
+    "buy_turns": 9,
+    "buy_units": 23,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7305,
+    "pass": 599,
+    "pass_forced": 236,
+    "at_tgt_wants_move": 359,
+    "top_masked": 601,
+    "filled": 195
+  },
+  "latency": {
+    "p50": 0.025356219965033233,
+    "p95": 0.0643044064170681,
+    "p99": 0.07313387941336276,
+    "max": 0.08750788797624409,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": "Loading environment open_spiel_env failed: No module named 'pyspiel'\n"
+}

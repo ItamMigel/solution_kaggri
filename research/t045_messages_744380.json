@@ -1,0 +1,30 @@
+[
+  {
+    "id": 3530139,
+    "authorName": "",
+    "postDate": "2026-09-29T16:32:42.437000",
+    "votes": 0,
+    "content": "<p>Did anyone try setting a fixed tree of decisions based on what shop appears, and make the RL do the labor in the best way that would not conflict with future decisions?</p>\n<p>Or do you make the agent be like a monolith RL model that decides everything down to each move and strategies?</p>"
+  },
+  {
+    "id": 3530142,
+    "authorName": "",
+    "postDate": "2026-09-29T16:37:40.890000",
+    "votes": 0,
+    "content": "<p>I'd guess fixing the shops per seed is important in RL if you're trying to do paired comparisons -- otherwise your agents may learn the casual (but I'm guessing unintended) affect that weeds have on the shop!  (E.g. you can have situations where letting your own plant die is best because in a paired world, future shop rolls turn out better cause they share the same RNG seed list)</p>"
+  },
+  {
+    "id": 3530148,
+    "authorName": "",
+    "postDate": "2026-09-29T16:50:12.053000",
+    "votes": 1,
+    "content": "<p>Thank you for this answer! In the discussions, I have read many posts that say Kaggriculture is a very hard competition in comparison to other RL-implying (as if the leaderboard, rules and replays suggest using it) competitions. Would you agree with that?</p>"
+  },
+  {
+    "id": 3530156,
+    "authorName": "",
+    "postDate": "2026-09-29T17:08:48.193000",
+    "votes": 0,
+    "content": "<p>I think more qualified people will weigh in with the struggles during the write ups! </p>"
+  }
+]

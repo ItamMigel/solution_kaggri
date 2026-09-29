@@ -1,0 +1,28 @@
+Topic #739410: Final Bradley-Terry scoring: three clarifications (team score, ties, play rate)
+  Author: aisamhottman
+  Posted: 2026-09-04 01:02:15.199000
+  Votes: 4  Comments: 1
+
+Thanks to the Kaggle team for confirming earlier that the final leaderboard will be a single Bradley-Terry tournament over episodes between agents that are both still active at the deadline (topic 732931). Three follow-up questions so teams can plan their last two submissions correctly:
+
+
+
+
+Team score. Each team keeps two active submissions. In the final BT ranking, is the team placed by the better of its two submissions, by each submission separately (so a team could occupy two ranks), or by some combination? Put differently: is the second slot a hedge with no downside, or does a weaker second submission pull the team's final score down?
+
+
+Ties. Kaggriculture produces exact ties fairly often (identical-lineage mirror matches). In the final BT fit, are ties counted as half a win for each side, dropped, or handled with a tie-aware variant (Davidson / Rao-Kupper)?
+
+
+Play rate after the deadline. Will the episode rate be increased during the ~2-week post-deadline window, as it was in Halite IV and Orbit Wars, and roughly how many episodes should each active submission expect to play in that window?
+
+
+A precise answer to (1) in particular changes how teams should use their last submission slot in the final days. Thank you!
+
+Comments:
+├─ Addison Howard (2026-09-04 16:57:42.303000) [+2]
+│  Hi there,
+│
+│  The team score is based on the better of its two submissions (a team can't occupy two ranks). The second slot can be viewed as a hedge with no downside.
+│
+│  Ties are counted as half wins fo...

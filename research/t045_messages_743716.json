@@ -1,0 +1,107 @@
+[
+  {
+    "id": 3528807,
+    "authorName": "",
+    "postDate": "2026-09-26T15:01:09.557000",
+    "votes": 15,
+    "content": "<p>I spent the last three days running reinforcement learning on a 196-core server.</p>\n<p>In one sense, it worked surprisingly well.</p>\n<p>After RL training, the agent could beat the public scripts with nearly a <strong>90% win rate</strong>. Compared with the initial policy, the improvement was very obvious, and for a while I thought RL might be the key to pushing much further.</p>\n<p>But then the improvement basically stopped.</p>\n<p>Even after adding <strong>self-play</strong>, the agent quickly reached a plateau. More training did not seem to produce meaningfully stronger strategies.</p>\n<p>The more interesting problem was that its performance against strong players barely improved.</p>\n<p>Despite being extremely good at beating the public scripts, the RL agent could only reach around the <strong>top 100</strong> at best. More surprisingly, against high-scoring players, it was actually weaker than several of my earlier approaches that were based purely on <strong>mathematical reasoning and dynamic programming</strong>.</p>\n<p>I still think RL has potential here, but simply throwing more compute and more self-play at the problem does not seem to be enough.</p>\n<p>Maybe the real challenge is not optimizing the policy harder, but creating a training population and objective that actually force the agent to discover more general strategies.</p>\n<p>Would be very interested to hear how others would approach this.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F21247430%2Fec4bb3f494b47e54cb1bd68e22fe9605%2F1790434584722_d.png?generation=1790434794359867&amp;alt=media\" alt=\"\"></p>"
+  },
+  {
+    "id": 3528831,
+    "authorName": "",
+    "postDate": "2026-09-26T16:16:48.110000",
+    "votes": 0,
+    "content": "<p>did you use PPO? </p>"
+  },
+  {
+    "id": 3528845,
+    "authorName": "",
+    "postDate": "2026-09-26T17:05:07.157000",
+    "votes": 1,
+    "content": "<p>Yes, but during training I found that not reusing old trajectories from the previous rollout actually made training more stable, and the policy improved faster as well.</p>"
+  },
+  {
+    "id": 3528889,
+    "authorName": "",
+    "postDate": "2026-09-26T19:24:12.150000",
+    "votes": 0,
+    "content": "<p>how many games did you do?</p>"
+  },
+  {
+    "id": 3528899,
+    "authorName": "",
+    "postDate": "2026-09-26T19:46:47.583000",
+    "votes": 0,
+    "content": "<p>About one million of games</p>"
+  },
+  {
+    "id": 3528854,
+    "authorName": "",
+    "postDate": "2026-09-26T17:34:07.930000",
+    "votes": 0,
+    "content": "<p>Getting Better and Better</p>"
+  },
+  {
+    "id": 3529138,
+    "authorName": "",
+    "postDate": "2026-09-27T12:36:45.027000",
+    "votes": -2,
+    "content": "<p>what RL did you use?</p>"
+  },
+  {
+    "id": 3528891,
+    "authorName": "",
+    "postDate": "2026-09-26T19:26:09.063000",
+    "votes": 0,
+    "content": "<p>Did RL approach went for a step by step micro level decisions or at a higher level policy RL? Sparse win/loss reward was enough?</p>"
+  },
+  {
+    "id": 3528901,
+    "authorName": "",
+    "postDate": "2026-09-26T19:48:23.283000",
+    "votes": 0,
+    "content": "<p>a higher level policy.spare reward is enough.</p>"
+  },
+  {
+    "id": 3529030,
+    "authorName": "",
+    "postDate": "2026-09-27T07:24:17.633000",
+    "votes": 0,
+    "content": "<p>Wow, so you're training with sparse\u2026</p>\n<p>Are you using self-play, or are you training against publicly available agents?</p>\n<p>In my case, I've been using self-play against the current policy and its past checkpoints. My agent can reach scores close to 100k in self-play, but it still can't beat the public agents at all\u2026</p>"
+  },
+  {
+    "id": 3529042,
+    "authorName": "",
+    "postDate": "2026-09-27T08:02:22.103000",
+    "votes": 0,
+    "content": "<p>I mix with self-play and public agents</p>"
+  },
+  {
+    "id": 3529292,
+    "authorName": "",
+    "postDate": "2026-09-27T21:33:18.097000",
+    "votes": 0,
+    "content": "<p>Thanks for sharing your experience! Curious have you ever tried RL at micro level?</p>"
+  },
+  {
+    "id": 3528902,
+    "authorName": "",
+    "postDate": "2026-09-26T19:51:34.163000",
+    "votes": 1,
+    "content": "<p>bro how did you get 196-Core Server\u2026.I'm so slowed by compute on 64cores\ud83e\udd72</p>"
+  },
+  {
+    "id": 3528903,
+    "authorName": "",
+    "postDate": "2026-09-26T19:57:33.203000",
+    "votes": 1,
+    "content": "<p>That\u2019s really impressive\u2014you achieved such a high ranking with so little compute.</p>"
+  },
+  {
+    "id": 3529363,
+    "authorName": "",
+    "postDate": "2026-09-28T03:07:20.793000",
+    "votes": 2,
+    "content": "<p>Our team uses a single RTX3090 with 8 CPU cores\u2026 \ud83e\udeea</p>"
+  }
+]

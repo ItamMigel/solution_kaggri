@@ -1,0 +1,46 @@
+{
+  "variant": "terminal_sell",
+  "opp": "yaxon5",
+  "seed": 92645013,
+  "seat": 1,
+  "rewards": [
+    126418.0,
+    137244.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 25.597883307025768,
+  "import_and_load_seconds": 1.9451257269829512,
+  "counts": {
+    "calls": 719,
+    "market_changes": 4,
+    "max_hands": 12,
+    "full_market": 20
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 0,
+    "buy_turns": 3,
+    "buy_units": 4,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7556,
+    "pass": 617,
+    "pass_forced": 179,
+    "at_tgt_wants_move": 277,
+    "top_masked": 458,
+    "filled": 175
+  },
+  "latency": {
+    "p50": 0.02209562703501433,
+    "p95": 0.023625418741721662,
+    "p99": 0.025457235686481006,
+    "max": 0.042801607050932944,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": ""
+}

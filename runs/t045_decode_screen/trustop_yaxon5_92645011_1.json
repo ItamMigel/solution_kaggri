@@ -1,0 +1,47 @@
+{
+  "variant": "trustop",
+  "opp": "yaxon5",
+  "seed": 92645011,
+  "seat": 1,
+  "rewards": [
+    68091.0,
+    94421.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 40.997834541951306,
+  "import_and_load_seconds": 2.478522785939276,
+  "counts": {
+    "calls": 719,
+    "market_changes": 4,
+    "max_hands": 15,
+    "full_market": 19,
+    "unit_changes": 1
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 1,
+    "buy_turns": 3,
+    "buy_units": 12,
+    "dropped_sells": 1,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7470,
+    "pass": 452,
+    "pass_forced": 4,
+    "at_tgt_wants_move": 262,
+    "top_masked": 193,
+    "filled": 4
+  },
+  "latency": {
+    "p50": 0.024927182937972248,
+    "p95": 0.06289696946041659,
+    "p99": 0.06628298672614621,
+    "max": 0.07979631307534873,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": ""
+}

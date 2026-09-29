@@ -1,0 +1,46 @@
+{
+  "variant": "trustop",
+  "opp": "tetsu",
+  "seed": 92645011,
+  "seat": 1,
+  "rewards": [
+    83128.0,
+    100910.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 43.713117582025006,
+  "import_and_load_seconds": 2.40496112103574,
+  "counts": {
+    "calls": 719,
+    "market_changes": 2,
+    "max_hands": 14,
+    "full_market": 16
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 0,
+    "buy_turns": 2,
+    "buy_units": 5,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7503,
+    "pass": 325,
+    "pass_forced": 3,
+    "at_tgt_wants_move": 284,
+    "top_masked": 190,
+    "filled": 3
+  },
+  "latency": {
+    "p50": 0.025658651953563094,
+    "p95": 0.06658248244784774,
+    "p99": 0.07440176484407858,
+    "max": 0.08204255101736635,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": ""
+}

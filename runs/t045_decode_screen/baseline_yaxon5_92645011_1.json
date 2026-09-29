@@ -1,0 +1,46 @@
+{
+  "variant": "baseline",
+  "opp": "yaxon5",
+  "seed": 92645011,
+  "seat": 1,
+  "rewards": [
+    87449.0,
+    101905.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 40.44470402400475,
+  "import_and_load_seconds": 2.9291175099788234,
+  "counts": {
+    "calls": 719,
+    "market_changes": 2,
+    "max_hands": 14,
+    "full_market": 19
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 0,
+    "buy_turns": 2,
+    "buy_units": 9,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7577,
+    "pass": 678,
+    "pass_forced": 236,
+    "at_tgt_wants_move": 345,
+    "top_masked": 529,
+    "filled": 229
+  },
+  "latency": {
+    "p50": 0.02549820893909782,
+    "p95": 0.06332483275327833,
+    "p99": 0.07207599396817388,
+    "max": 0.08232562197372317,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": "Loading environment open_spiel_env failed: No module named 'pyspiel'\n"
+}

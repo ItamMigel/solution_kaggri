@@ -1,0 +1,46 @@
+{
+  "variant": "all_prob",
+  "opp": "tetsu",
+  "seed": 92645011,
+  "seat": 0,
+  "rewards": [
+    112027.0,
+    82512.0
+  ],
+  "status": [
+    "DONE",
+    "DONE"
+  ],
+  "seconds": 40.47014684509486,
+  "import_and_load_seconds": 2.3320892580086365,
+  "counts": {
+    "calls": 719,
+    "market_changes": 3,
+    "max_hands": 15,
+    "full_market": 15
+  },
+  "examples": [],
+  "hg_stats": {
+    "overrides": 0,
+    "buy_turns": 3,
+    "buy_units": 11,
+    "dropped_sells": 0,
+    "errors": 0
+  },
+  "bc_stats": {
+    "n": 7393,
+    "pass": 521,
+    "pass_forced": 164,
+    "at_tgt_wants_move": 270,
+    "top_masked": 449,
+    "filled": 161
+  },
+  "latency": {
+    "p50": 0.0248580010375008,
+    "p95": 0.05973101406125352,
+    "p99": 0.06568295669741929,
+    "max": 0.09787960001267493,
+    "over_one_second_total": 0
+  },
+  "swallowed_output_tail": ""
+}
