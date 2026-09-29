@@ -40,6 +40,8 @@ def main():
             assert tar.getnames()==['main.py','ENGINE_LICENSE','NOTICE'];assert hashlib.sha256(tar.extractfile('main.py').read()).hexdigest()==sha(source)
         manifest={'name':name,'variant':a.variant,'base':base,'source_export':str(source),'main_sha256':sha(source),
                   'archive_sha256':sha(archive),'evidence_run':str(run),'review':'pending independent Claude review',
+                  'exception_policy':'fail-fast: BC/HG/terminal exceptions are re-raised, never silently converted to PASS',
+                  'exception_risk':'An unseen exception forfeits the whole episode instead of losing a single turn; this experimental archive intentionally keeps observable errors. Zero observed errors does not prove none will occur.',
                   'recommendation':'local gate passed; independent review required' if evidence['recommendation_gate'] else 'do not replace active pair on this evidence',
                   'source_manifest':json.loads((HERE/'manifest.json').read_text())['sources'][base],
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
@@ -56,8 +58,11 @@ def main():
         ci=evidence['delta_score_ci95'];mc=evidence['delta_margin_ci95']
         lines=[f'# {name}', '', '**Экспериментальный frozen archive. Никаких отправок в Kaggle.**', '',kind,
                'Граница HG d0–13 сохранена. Флаги обёртки по умолчанию выключены в template; в этом архиве включён только именованный вариант. Исключения BC/HG/terminal пробрасываются, не скрываются под PASS.',
+               'Риск исполнения: непредвиденное исключение приведёт к ERROR и проигрышу всего эпизода, тогда как исходный BC мог пропустить один ход. Это сознательный fail-fast вариант без скрытого PASS; ноль наблюдавшихся сбоев не гарантирует их отсутствие в новых мирах.',
+               'Terminal не гарантирует неубывание cash или margin при любом сопернике: дополнительные продажи меняют общий рынок. Он сохраняет количества ранних повторных SELL и пополняет только последний SELL товара после последней траты.',
                '',f"Решение: **{manifest['recommendation']}**. Независимый review: pending Claude.",
-               '', '32 новых мира 929453001–929453032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
+               '', '32 новых мира 929454001–929454032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
+               'Методы оценки: ' + json.dumps(evidence['evaluation_methods'],ensure_ascii=False) + '.',
                f"W/D/L: {evidence['wins']}/{evidence['draws']}/{evidence['losses']}; score {evidence['score']:.4f}, база {evidence['baseline_score']:.4f}.",
                f"Парное изменение score: {100*evidence['delta_score']:+.3f} п.п., 95% whole-world CI [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}].",
                f"Изменение margin: ${evidence['delta_margin']:+.2f}, CI [{mc[0]:+.2f}, {mc[1]:+.2f}].",

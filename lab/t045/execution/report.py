@@ -44,6 +44,8 @@ def summary(rows,base,variant):
                     loss_flips=sum(x['delta_score']<0 for x in pp))
     result=stats(pairs)
     if not result:return {}
+    result['evaluation_methods'] = ({'exact_terminal_branch':len(pairs)} if variant=='terminal' else
+                                    dict(Counter(lookup[variant,x['opp'],x['seed'],x['seat']].get('evaluation','full_game') for x in pairs)))
     result['opponents']={o:stats([x for x in pairs if x['opp']==o]) for o in sorted({x['opp'] for x in pairs})}
     result['families']={f:stats([x for x in pairs if x['opp'] in ops]) for f,ops in FAMILIES.items()}
     result['positive_score_ci']=result['delta_score_ci95'][0]>0

@@ -214,7 +214,7 @@ def main():
     import re
     normalized = {}
     for b in a.bases.split(','):
-        for v in ('off','a1','a2'):
+        for v in ('off','terminal','a1','a2'):
             src = (HERE/'exports'/f'{b}_{v}.py').read_text()
             canon = re.sub(r'^_T045_FLAGS = .*$', '_T045_FLAGS = FLAGS', src, flags=re.M)
             h = hashlib.sha256(canon.encode()).hexdigest()

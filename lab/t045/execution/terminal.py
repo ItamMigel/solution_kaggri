@@ -43,6 +43,11 @@ def liquidate(obs, action, config, engine, enabled=False):
     for i, order in enumerate(orders):
         if not (isinstance(order, list) and order and order[0] in ('SELL', 'NOOP')):
             boundary = i
+    # Preserve earlier native sales when the policy schedules the same product
+    # again later. Liquidate only by enlarging its final suffix sale.
+    last_sell = {o[1]: i for i, o in enumerate(orders)
+                 if i > boundary and isinstance(o, list) and len(o) >= 3
+                 and o[0] == 'SELL' and o[1] in PRODUCTS and int(o[2]) > 0}
     left = {it: int(shed.get(it, 0)) for it in PRODUCTS}
     for i, order in enumerate(orders):
         if not isinstance(order, list) or len(order) < 3:
@@ -56,7 +61,7 @@ def liquidate(obs, action, config, engine, enabled=False):
             # simultaneous prices. Saturating SELL is safe for any actual fill.
             left[it] = min(cap, left[it] + q)
         elif op == 'SELL':
-            if i > boundary and q > 0:
+            if i == last_sell.get(it) and q > 0:
                 order[2] = max(q, left[it])
             left[it] = max(0, left[it] - max(0, int(order[2])))
     prices = obs.get('market', {}).get('prices', {})

@@ -44,6 +44,15 @@ def main():
     assert r['market'][:3] == a['market'][:3]
     assert r['market'][3] == ['SELL','WHEAT',10]
     assert r['market'][4] == ['SELL','MILK',2]
+    # Do not accelerate stock already assigned to a later native sale. Opponent
+    # BUY at the intervening slot can make that later sale more valuable.
+    obs['private']['shed'] = {'WHEAT':2}
+    dup = {'farmer':['PASS'],'hands':[], 'market':[['SELL','WHEAT',1],['NOOP'],['SELL','WHEAT',1]]}
+    assert liquidate(obs,dup,config,vendor,True) == dup
+    obs['private']['shed'] = {'WHEAT':5}
+    got = liquidate(obs,dup,config,vendor,True)
+    assert got['market'] == [['SELL','WHEAT',1],['NOOP'],['SELL','WHEAT',4]]
+    obs['private']['shed'] = {'WHEAT':5,'MILK':2}
     # Capacity/running cash can reduce a buy fill: upper-bound SELL stays legal.
     for cash in (0, 10, 100000):
         for variant in (a,r):
@@ -108,7 +117,7 @@ def main():
         assert '_T045_TERM' in selected.__code__.co_names, 'loader selected parent alias'
     report={'status':'PASS','unit_engine_random_fixtures':100,'identity_steps':719,
             'fixtures':['prefix BUY/SELL/NOOP','partial buy','full 10 slots','DROP overflow',
-                        'farmer/hands sequential PLACE','A1 native urgent FEED','A2 unreachable and exact deadline','d13 unchanged','official last-callable entrypoint']}
+                        'farmer/hands sequential PLACE','A1 native urgent FEED','A2 unreachable and exact deadline','d13 unchanged','official last-callable entrypoint','duplicate SELL preserves earlier native quantities']}
     (build.HERE/'fixtures.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
 
 if __name__=='__main__':main()

@@ -23,8 +23,8 @@ broader resource reservation, overwritten non-urgent service, or day-boundary po
 ```
 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/build.py
 OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/fixtures.py
-/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_v3 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929453001
-OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32_v3
+/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_v4 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929454001
+OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32_v4
 ```
 
 Freeze opponents before the gate; their source paths and SHA256s are in
