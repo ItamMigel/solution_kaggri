@@ -164,3 +164,5 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 - 2026-09-28 — Protocol/resource blocker update: `rr0928` remains at 367 records (last log 360/924); Claude's active T044 CMA uses `--workers 46`, above the ≤22 shared limit. Disk is 2.5 GiB free (98%); owner notified, Codex did not alter processes. [codex]
 - 2026-09-29 — T044 CMA invalid: all 60 generations / 28,800 games were `worker_exception` with fitness −9, because `cma_mk.py` passed relative candidate paths and `game_worker` could not find `cma2/gNN/cX/main.py`. No model result; require an absolute-path smoke before any rerun. [codex]
 - 2026-09-29 — T044 corrected CMA stopped without a final result after g27. A partial g28 has 237/480 JSONL rows and no active CMA/game-worker process; cma2.log has no traceback. No candidate or conclusion; owner notified. [codex]
+
+| T045 | codex | complete — research only, no jobs | Independent audit: keep 2-model m15+HG d13; only controlled fresh-data fine-tune merits a remaining training slot. Reject PPO/search/new HG or ensemble. `research/t045_bc_improve_codex.md`. |
