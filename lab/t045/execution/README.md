@@ -47,3 +47,9 @@ The final run adopts 780 valid v4 rows byte-for-byte. Two host SIGALRM attempts
 are retained in resource_continuation.json and repeated with 10 workers and a
 600-second host guard. The container CPU quota is 11.52 CPUs. Agent bytes,
 worlds, and official engine action/overage limits remain unchanged.
+
+Two 600s retries also hit the host SIGALRM under concurrent external scan/canon
+pools; all four failed attempts are retained. Two final isolated-key retries
+use a 3600s host guard and two workers alongside the main ten. Official engine
+time limits and candidate bytes stay identical. Accepted records are consolidated
+only after the main writer exits; original attempt records remain available.
