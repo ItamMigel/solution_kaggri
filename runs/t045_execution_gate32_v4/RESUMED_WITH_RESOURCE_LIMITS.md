@@ -1,0 +1,1 @@
+780 valid rows reused byte-for-byte in ../t045_execution_gate32_final. Two attempts exceeding300s host SIGALRM excluded and re-run; original rows preserved here. Source weights/code and all engine time limits unchanged; concurrency10, host guard600s. See final/resource_continuation.json.

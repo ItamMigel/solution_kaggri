@@ -165,6 +165,20 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 - 2026-09-29 — T044 CMA invalid: all 60 generations / 28,800 games were `worker_exception` with fitness −9, because `cma_mk.py` passed relative candidate paths and `game_worker` could not find `cma2/gNN/cX/main.py`. No model result; require an absolute-path smoke before any rerun. [codex]
 - 2026-09-29 — T044 corrected CMA stopped without a final result after g27. A partial g28 has 237/480 JSONL rows and no active CMA/game-worker process; cma2.log has no traceback. No candidate or conclusion; owner notified. [codex]
 
-| T045 | codex | in_progress — execution/evaluation: terminal t718, HG A1, HG A2; ≤20 workers; deadline 09-30 08:00 UTC | Full BC3/HG audit: propose conservative fresh BC FT + narrow execution fixes; terminal t718 +$82.5 but 0pp on 16 games; generic probability ensemble rejected at screen. `research/t045_bc_improve_codex.md`. |
+| T045 | codex | complete — 6 reviewed archives; terminal gain mostly own mirrors, no automatic replacement; A1/A2 no promotion | 32 new worlds ×8 frozen opponents ×2 seats, 3072 paired comparisons;1132 full games; accepted errors0. Four infrastructure attempts preserved. `tasks/T045-execution-gate.md`. Never submit. |
 
 - 2026-09-29 — T045 full headless audit: current BC3 is greedy; BLAS=1 gives ~22ms/turn, no speed emergency. Found h23 target-label/decoder contradiction and HG overwrite of promised urgent FEED. 64-game decoder screen gives no upgrade; t718 liquidation +$82.5 on 16 paired games, 0pp, no promotion. Recommend fresh conservative BC FT (Claude) + narrowly gated execution fixes (Codex). `research/t045_bc_improve_codex.md` [codex]
+
+| T046 | codex | complete — Russian memo + 32-game development screen; no promotion/submission | Critique A1–A7/B1–B8 against BC3/HG and official engine; ranked Russian memo, 4×H100 recipes, narrow post-processing screens. `research/t046_smarter_use_codex.md`. |
+
+- 2026-09-29T22:17:04+00:00 — **t045_m15ens_terminal**: Δscore +1.562pp (world CI +0.781…+2.539), Δmargin $+156.26; 512 paired evaluations /32 new worlds, zero errors; **formal frozen-suite gate PASS; score outside own mirror unproven; NO AUTO REPLACEMENT**. `candidates/t045_m15ens_terminal/README.md`. [codex]
+
+- 2026-09-29T22:17:04+00:00 — **t045_mix4_terminal**: Δscore +1.172pp (world CI +0.391…+2.148), Δmargin $+181.78; 512 paired evaluations /32 new worlds, zero errors; **formal frozen-suite gate PASS; score outside own mirror unproven; NO AUTO REPLACEMENT**. `candidates/t045_mix4_terminal/README.md`. [codex]
+
+- 2026-09-29T22:17:10+00:00 — **t045_m15ens_a1**: Δscore +0.000pp (world CI -1.562…+1.562), Δmargin $+50.25; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_m15ens_a1/README.md`. [codex]
+
+- 2026-09-29T22:17:10+00:00 — **t045_mix4_a1**: Δscore +0.977pp (world CI -0.195…+2.344), Δmargin $+48.21; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_mix4_a1/README.md`. [codex]
+
+- 2026-09-29T22:17:15+00:00 — **t045_m15ens_a2**: Δscore +0.000pp (world CI +0.000…+0.000), Δmargin $-19.77; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_m15ens_a2/README.md`. [codex]
+
+- 2026-09-29T22:17:15+00:00 — **t045_mix4_a2**: Δscore +0.000pp (world CI +0.000…+0.000), Δmargin $+29.30; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_mix4_a2/README.md`. [codex]

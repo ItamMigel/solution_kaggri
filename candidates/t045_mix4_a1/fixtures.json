@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "unit_engine_random_fixtures": 100,
+  "identity_steps": 719,
+  "fixtures": [
+    "prefix BUY/SELL/NOOP",
+    "partial buy",
+    "full 10 slots",
+    "DROP overflow",
+    "farmer/hands sequential PLACE",
+    "A1 native urgent FEED",
+    "A2 unreachable and exact deadline",
+    "d13 unchanged",
+    "official last-callable entrypoint",
+    "duplicate SELL preserves earlier native quantities"
+  ]
+}

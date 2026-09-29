@@ -1,0 +1,391 @@
+{
+  "games": 512,
+  "worlds": 32,
+  "games_per_world": [
+    16
+  ],
+  "wins": 420,
+  "draws": 6,
+  "losses": 86,
+  "baseline_score": 0.826171875,
+  "score": 0.826171875,
+  "mean_margin": 8006.400390625,
+  "delta_score": 0.0,
+  "delta_score_ci95": [
+    0.0,
+    0.0
+  ],
+  "delta_margin": -19.771484375,
+  "delta_margin_ci95": [
+    -61.791015625,
+    4.953125
+  ],
+  "changed_games": 8,
+  "changed_turns": 12,
+  "win_flips": 0,
+  "loss_flips": 0,
+  "evaluation_methods": {
+    "exact_identity_from_baseline": 504,
+    "full_game": 8
+  },
+  "opponents": {
+    "bc_m15ens": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 29,
+      "draws": 6,
+      "losses": 29,
+      "baseline_score": 0.5,
+      "score": 0.5,
+      "mean_margin": 0.0,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "bc_mix4": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 46,
+      "draws": 0,
+      "losses": 18,
+      "baseline_score": 0.71875,
+      "score": 0.71875,
+      "mean_margin": 1571.90625,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": -158.171875,
+      "delta_margin_ci95": [
+        -494.328125,
+        39.625
+      ],
+      "changed_games": 8,
+      "changed_turns": 12,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "jaxa2802": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 57,
+      "draws": 0,
+      "losses": 7,
+      "baseline_score": 0.890625,
+      "score": 0.890625,
+      "mean_margin": 9853.296875,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "ozer44": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 56,
+      "draws": 0,
+      "losses": 8,
+      "baseline_score": 0.875,
+      "score": 0.875,
+      "mean_margin": 9660.046875,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "parthenos": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 58,
+      "draws": 0,
+      "losses": 6,
+      "baseline_score": 0.90625,
+      "score": 0.90625,
+      "mean_margin": 10571.765625,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "qA": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 62,
+      "draws": 0,
+      "losses": 2,
+      "baseline_score": 0.96875,
+      "score": 0.96875,
+      "mean_margin": 11911.171875,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "tetsu": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 54,
+      "draws": 0,
+      "losses": 10,
+      "baseline_score": 0.84375,
+      "score": 0.84375,
+      "mean_margin": 9636.984375,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "yaxon5": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 58,
+      "draws": 0,
+      "losses": 6,
+      "baseline_score": 0.90625,
+      "score": 0.90625,
+      "mean_margin": 10846.03125,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    }
+  },
+  "without_own_mirror": {
+    "games": 448,
+    "worlds": 32,
+    "games_per_world": [
+      14
+    ],
+    "wins": 391,
+    "draws": 0,
+    "losses": 57,
+    "baseline_score": 0.8727678571428571,
+    "score": 0.8727678571428571,
+    "mean_margin": 9150.171875,
+    "delta_score": 0.0,
+    "delta_score_ci95": [
+      0.0,
+      0.0
+    ],
+    "delta_margin": -22.595982142857142,
+    "delta_margin_ci95": [
+      -70.61830357142857,
+      5.660714285714286
+    ],
+    "changed_games": 8,
+    "changed_turns": 12,
+    "win_flips": 0,
+    "loss_flips": 0
+  },
+  "full_games_without_action_changes": 0,
+  "families": {
+    "tetsu": {
+      "games": 128,
+      "worlds": 32,
+      "games_per_world": [
+        4
+      ],
+      "wins": 116,
+      "draws": 0,
+      "losses": 12,
+      "baseline_score": 0.90625,
+      "score": 0.90625,
+      "mean_margin": 10774.078125,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "v44": {
+      "games": 192,
+      "worlds": 32,
+      "games_per_world": [
+        6
+      ],
+      "wins": 171,
+      "draws": 0,
+      "losses": 21,
+      "baseline_score": 0.890625,
+      "score": 0.890625,
+      "mean_margin": 10119.791666666666,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "parthenos": {
+      "games": 64,
+      "worlds": 32,
+      "games_per_world": [
+        2
+      ],
+      "wins": 58,
+      "draws": 0,
+      "losses": 6,
+      "baseline_score": 0.90625,
+      "score": 0.90625,
+      "mean_margin": 10571.765625,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 0.0,
+      "delta_margin_ci95": [
+        0.0,
+        0.0
+      ],
+      "changed_games": 0,
+      "changed_turns": 0,
+      "win_flips": 0,
+      "loss_flips": 0
+    },
+    "bc": {
+      "games": 128,
+      "worlds": 32,
+      "games_per_world": [
+        4
+      ],
+      "wins": 75,
+      "draws": 6,
+      "losses": 47,
+      "baseline_score": 0.609375,
+      "score": 0.609375,
+      "mean_margin": 785.953125,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": -79.0859375,
+      "delta_margin_ci95": [
+        -247.1640625,
+        19.8125
+      ],
+      "changed_games": 8,
+      "changed_turns": 12,
+      "win_flips": 0,
+      "loss_flips": 0
+    }
+  },
+  "positive_score_ci": false,
+  "family_ni_minus3pp": true,
+  "recommendation_gate": false,
+  "note": "Conditional on frozen suite. Empirical bootstrap [0,0] from no flips is not proof of universal equivalence. Independent review required."
+}

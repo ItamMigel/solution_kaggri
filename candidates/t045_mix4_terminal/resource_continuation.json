@@ -1,0 +1,180 @@
+{
+  "source_run": "/workspace/shared/runs/t045_execution_gate32_v4",
+  "adopted_valid_records": 780,
+  "excluded_attempts": [
+    {
+      "base": "mix4",
+      "variant": "off",
+      "opp": "bc_mix4",
+      "seed": 929454024,
+      "seat": 1,
+      "evaluation": "full_game",
+      "rewards": [
+        102075.0,
+        92043.0
+      ],
+      "status": [
+        "DONE",
+        "DONE"
+      ],
+      "errors": {
+        "bc": 1,
+        "terminal": 0,
+        "hg": 0,
+        "opponent_hg": 0,
+        "opponent_bc": 0
+      },
+      "valid": false,
+      "exception": "Traceback (most recent call last):\n  File \"/workspace/wt/codex/lab/t045/execution/gate.py\", line 183, in game\n    assert counts['calls']==719,counts\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: Counter({'shadow_calls': 656, 'calls': 656})\n",
+      "seconds": 322.96233249490615,
+      "counts": {
+        "shadow_calls": 656,
+        "calls": 656
+      },
+      "examples": [],
+      "latency": {
+        "max": 0.5885944239562377,
+        "p99": 0.49588585879537295,
+        "overage": 0
+      },
+      "output_tail": ""
+    },
+    {
+      "base": "mix4",
+      "variant": "off",
+      "opp": "bc_mix4",
+      "seed": 929454024,
+      "seat": 0,
+      "evaluation": "full_game",
+      "rewards": [
+        101489.0,
+        105260.0
+      ],
+      "status": [
+        "DONE",
+        "DONE"
+      ],
+      "errors": {
+        "bc": 0,
+        "terminal": 0,
+        "hg": 0,
+        "opponent_hg": 0,
+        "opponent_bc": 1
+      },
+      "valid": false,
+      "exception": "Traceback (most recent call last):\n  File \"/workspace/wt/codex/lab/t045/execution/gate.py\", line 184, in game\n    assert not any(rec['errors'].values()),rec['errors']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'bc': 0, 'terminal': 0, 'hg': 0, 'opponent_hg': 0, 'opponent_bc': 1}\n",
+      "seconds": 358.9026117490139,
+      "counts": {
+        "shadow_calls": 719,
+        "calls": 719,
+        "opponent_bc_exceptions": 1
+      },
+      "examples": [],
+      "latency": {
+        "max": 0.5858057740842924,
+        "p99": 0.4990919948858209,
+        "overage": 0
+      },
+      "output_tail": ""
+    },
+    {
+      "base": "mix4",
+      "variant": "off",
+      "opp": "bc_mix4",
+      "seed": 929454024,
+      "seat": 0,
+      "evaluation": "full_game",
+      "host_wall_limit_seconds": 600,
+      "rewards": [
+        88167.0,
+        107933.0
+      ],
+      "status": [
+        "DONE",
+        "DONE"
+      ],
+      "errors": {
+        "bc": 1,
+        "terminal": 0,
+        "hg": 0,
+        "opponent_hg": 0,
+        "opponent_bc": 0
+      },
+      "valid": false,
+      "exception": "Traceback (most recent call last):\n  File \"/workspace/wt/codex/lab/t045/execution/gate.py\", line 188, in game\n    assert counts['calls']==719,counts\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: Counter({'shadow_calls': 634, 'calls': 634, 'host_alarm_fired': 1})\n",
+      "seconds": 623.9074597830186,
+      "counts": {
+        "shadow_calls": 634,
+        "calls": 634,
+        "host_alarm_fired": 1
+      },
+      "examples": [],
+      "latency": {
+        "max": 1.5143707370152697,
+        "p99": 1.0943502172234,
+        "overage": 2.260301970411092
+      },
+      "output_tail": "Loading environment open_spiel_env failed: No module named 'pyspiel'\n"
+    },
+    {
+      "base": "mix4",
+      "variant": "off",
+      "opp": "bc_mix4",
+      "seed": 929454024,
+      "seat": 1,
+      "evaluation": "full_game",
+      "host_wall_limit_seconds": 600,
+      "rewards": [
+        101639.0,
+        105364.0
+      ],
+      "status": [
+        "DONE",
+        "DONE"
+      ],
+      "errors": {
+        "bc": 0,
+        "terminal": 0,
+        "hg": 0,
+        "opponent_hg": 0,
+        "opponent_bc": 1
+      },
+      "valid": false,
+      "exception": "Traceback (most recent call last):\n  File \"/workspace/wt/codex/lab/t045/execution/gate.py\", line 189, in game\n    assert not any(rec['errors'].values()),rec['errors']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'bc': 0, 'terminal': 0, 'hg': 0, 'opponent_hg': 0, 'opponent_bc': 1}\n",
+      "seconds": 633.5110445970204,
+      "counts": {
+        "shadow_calls": 719,
+        "calls": 719,
+        "host_alarm_fired": 1,
+        "opponent_bc_exceptions": 1,
+        "opponent_exception_type_TimeoutError": 1
+      },
+      "examples": [],
+      "latency": {
+        "max": 1.6154382430249825,
+        "p99": 0.9690900796814867,
+        "overage": 1.1151500111445785
+      },
+      "output_tail": "Loading environment open_spiel_env failed: No module named 'pyspiel'\n"
+    }
+  ],
+  "original_workers": 20,
+  "continuation_workers": 10,
+  "original_host_guard_seconds": 300,
+  "continuation_host_guard_seconds": 600,
+  "cpu_quota": "1152000/100000 = 11.52 CPU",
+  "agent_source_changes": false,
+  "engine_time_limits_changed": false,
+  "reason": "Original 300s SIGALRM guard fired under container CPU quota; preserve all valid outcomes and rerun excluded keys. No score-based selection. Further contention from concurrent scan/canon pools caused the same two keys to hit600s host guard; original invalid attempts preserved, two bounded retries use3600s hostguard with identical engine limits.",
+  "additional_retry_host_guard_seconds": 3600,
+  "additional_retry_workers": 2,
+  "predeclared_retry_rule": "2026-09-29T20:55Z before HG outcomes: each explicit host_alarm_fired==1 incomplete key gets exactly one3600s identical-setting retry; first valid outcome accepted irrespective reward; non-alarm failure or failed3600s retry blocks delivery. Existing two keys already assigned one3600s retry.",
+  "original_300s_attribution": "Inferred from elapsed time and incomplete/exception outcome; no explicit alarm telemetry existed. 600s attempts have explicit host_alarm_fired=1.",
+  "blas_threads": 1,
+  "timing_scope": "candidate callable; opponent latency not independently profiled",
+  "retry_policy_timeline": {
+    "off_retry_assignment": "20:45 UTC, two predetermined keys, one3600s retry each",
+    "off_retries_completed": "20:53:46 UTC",
+    "general_rule_formalized": "20:55 UTC, after assigned off retries completed and before HG outcomes; no reward filtering"
+  }
+}

@@ -5,10 +5,10 @@
   "source_dir": "/workspace/wt/codex/lab/t045/execution",
   "final_run": "/workspace/shared/runs/t045_execution_gate32_final",
   "final_seeds": "929454001..929454032",
-  "workers": 10,
-  "main_session": 30269,
-  "delivery_session": 83726,
-  "review_session": 33925,
+  "workers": 0,
+  "main_session": null,
+  "delivery_session": null,
+  "review_session": null,
   "review_output": "/workspace/shared/runs/t045_claude_results_review.md",
   "watcher": "lab/t045/execution/watch_delivery.py",
   "delivery_log": "/workspace/shared/runs/t045_execution_delivery.log",
@@ -26,16 +26,13 @@
     "16 official loader games exact parity after del-agent fix; >=57s bank",
     "6 explicit fault injections raise",
     "code merged and pushed through 18d6e02c",
-    "35b4300b fixes duplicate SELL; renewed16 loader games exact parity; min bank55.458887s"
+    "35b4300b fixes duplicate SELL; renewed16 loader games exact parity; min bank55.458887s",
+    "3072/3072 accepted valid;1132full+1940identity;1024terminal branches; evaluation audit PASS; simulation workers released",
+    "independent results review PASS before publication; own-mirror limitation prominent",
+    "six frozen archives published; BOARD/ledger/say per candidate",
+    "archive SHA and full key audit PASS; raw evidence gzip roundtrip hashes PASS"
   ],
-  "remaining": [
-    "wait gate final; review headless Claude",
-    "watcher packages and BOARD/say/ledger after each of six candidates",
-    "verify final counts/hash/CI, package actual evaluation-method counts",
-    "update final task and BOARD own row",
-    "gzip raw small game records, selective git stage/push only own evidence/candidates; NEVER bulk sync untracked pavel_lab",
-    "self-contained Russian final with results and no submission"
-  ],
+  "remaining": [],
   "diagnostics_only": [
     "t045_execution_gate32",
     "t045_execution_gate32_v2",
@@ -54,5 +51,8 @@
   "retry_session": 43608,
   "delivery_finalizer": "lab/t045/execution/finalize_resource.py",
   "retry_status": "2/2 valid,719calls,zeroBC/HG/overage; first3600s outcomes frozen",
-  "review_trigger": "evaluation_audit.json BEFORE any archive publication; after PASS manually run watch_delivery then verify_delivery"
+  "review_trigger": "evaluation_audit.json BEFORE any archive publication; after PASS manually run watch_delivery then verify_delivery",
+  "gate_complete": true,
+  "status": "complete",
+  "completed_at": "2026-09-29T22:20:34+00:00"
 }

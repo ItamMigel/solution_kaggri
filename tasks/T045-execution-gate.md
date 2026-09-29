@@ -1,3 +1,37 @@
+# T045 — execution/evaluation: завершено
+
+Codex, 2026-09-29T22:20:34+00:00. **Шесть экспериментальных архивов готовы; независимое ревью и проверка хешей пройдены. Отправок в Kaggle не было.**
+
+Автоматически менять активную пару на этих данных не рекомендуется. t718 формально проходит гейт фиксированного пула, увеличивая margin на $156/$182, но прирост score почти полностью обусловлен собственными зеркалами. A1/A2 гейт улучшения не проходят.
+
+| Кандидат / README | Δscore, п.п. [95% world CI] | Δmargin | Решение | Архив |
+|---|---:|---:|---|---|
+| [m15ens terminal](/workspace/shared/candidates/t045_m15ens_terminal/README.md) | +1.562 [+0.781, +2.539] | $+156.26 | Формальный PASS; вне зеркала score не доказан | [tar.gz](/workspace/shared/candidates/t045_m15ens_terminal/t045_m15ens_terminal.tar.gz) |
+| [mix4 terminal](/workspace/shared/candidates/t045_mix4_terminal/README.md) | +1.172 [+0.391, +2.148] | $+181.78 | Формальный PASS; вне зеркала score не доказан | [tar.gz](/workspace/shared/candidates/t045_mix4_terminal/t045_mix4_terminal.tar.gz) |
+| [m15ens a1](/workspace/shared/candidates/t045_m15ens_a1/README.md) | +0.000 [-1.562, +1.562] | $+50.25 | NO PROMOTION | [tar.gz](/workspace/shared/candidates/t045_m15ens_a1/t045_m15ens_a1.tar.gz) |
+| [mix4 a1](/workspace/shared/candidates/t045_mix4_a1/README.md) | +0.977 [-0.195, +2.344] | $+48.21 | NO PROMOTION | [tar.gz](/workspace/shared/candidates/t045_mix4_a1/t045_mix4_a1.tar.gz) |
+| [m15ens a2](/workspace/shared/candidates/t045_m15ens_a2/README.md) | +0.000 [+0.000, +0.000] | $-19.77 | NO PROMOTION | [tar.gz](/workspace/shared/candidates/t045_m15ens_a2/t045_m15ens_a2.tar.gz) |
+| [mix4 a2](/workspace/shared/candidates/t045_mix4_a2/README.md) | +0.000 [+0.000, +0.000] | $+29.30 | NO PROMOTION | [tar.gz](/workspace/shared/candidates/t045_mix4_a2/t045_mix4_a2.tar.gz) |
+
+Без собственного зеркала: m15ens t718 — 0 п.п. [0,0], 0 положительных/отрицательных изменений исхода; mix4 t718 — +0.223 п.п. [0,+0.670], один положительный флип. Все 10 положительных флипов m15ens и 6 из 7 у mix4 пришлись на собственное зеркало. Эффект нельзя переносить на пару, в которой terminal включён у обоих игроков. Нули bootstrap CI при отсутствии флипов не доказывают эквивалентность.
+
+Гейт: 32 новых мира 929454001–929454032 × оба места × 8 frozen-соперников (tetsu, qA, ozer44/V44, yaxon5, jaxa2802, parthenos, оба текущих BC). Каждый кандидат имеет 512 парных сравнений к собственной базе. Критерий: положительная нижняя граница whole-world score CI и нижняя граница каждого семейства ≥ −3 п.п.
+
+Фактически выполнено **1132 полных валидных игры** (1024 базовые +108 HG), **1940 точных сертификатов совпадения 719 действий** и **1024 точных terminal-ветки** последнего хода. Это 3072 парных сравнения, а не 3072 полные игры. Четыре полные HG-игры не меняют действий: два ключа mix4 в A1/A2 считались полностью из-за недоступной на тот момент базы для сертификата; rewards совпали с базой.
+
+В принятом наборе: **0 ошибок, таймаутов и скрытых exception→PASS**, все статусы DONE/DONE, 719 вызовов, максимальный расход overage 3.06с при пороге55с. Время соперников отдельно не профилировалось. Сохранены четыре невалидные инфраструктурные попытки двух зеркальных ключей: два300s прерывания диагностированы косвенно; два600s имеют явный host_alarm_fired. Первые780 валидных результатов сохранены побайтно. Два заранее назначенных3600s повтора приняты по первым валидным исходам, без отбора по награде. Лимиты движка и байты агентов неизменны; CPU-квота контейнера11.52, основной пул10, отдельные повторы2 (исходный пул20).
+
+Проверки: prefix/partial BUY, overflow,10 slots,719 identity-step fixtures;100 сравнений unit executor с официальным движком;5748 совпадений действий с исходными BC; четыре полных terminal игры с точным совпадением веток;16 официальных file-loader игр на финальных байтах;6 внедрённых исключений всегда пробрасываются. Граница HG d13 сохранена. A1 и A2 изолированы, комбинации не оценивались. A2 использует унаследованную модель стоимости HG.
+
+Оба default-off wrapper-шаблона и сборщик находятся в `/workspace/wt/codex/lab/t045/execution/`; архивы включают только именованный флаг. Fail-fast риск явно раскрыт: непредвиденное исключение может проиграть весь эпизод. Универсальная монотонность cash/margin не заявляется.
+
+Независимое [ревью результатов](/workspace/shared/runs/t045_claude_results_review.md) выполнено **до публикации**. Условие о зеркалах внесено в README/manifest/BOARD и сообщения. [Аудит архивов](/workspace/shared/runs/t045_execution_gate32_final/delivery_audit.json) подтверждает SHA256 каждого main.py и tar.gz, весь декартов набор ключей и происхождение повторов. [Summary](/workspace/shared/runs/t045_execution_gate32_final/summary.json), [сырые принятые записи gzip](/workspace/shared/runs/t045_execution_gate32_final/games.jsonl.gz), [ресурсные попытки](/workspace/shared/runs/t045_execution_gate32_final/resource_continuation.json). Все шесть результатов опубликованы в BOARD/ledger и отправлены через bin/say claude после каждого архива.
+
+Воспроизведение: `build.py` → `fixtures.py` → `gate.py --out /workspace/shared/runs/t045_execution_gate32_final --workers 10 --wall-limit 600 --variants off,a1,a2 --worlds 32 --seed-start 929454001` → `report.py <run>` → независимое ревью → `watch_delivery.py` → `verify_delivery.py <run>`. Исторические повторы и точные хеши/пути зафиксированы в run manifest/resource_continuation; исходные JSONL сохранены gzip без потерь. Никаких Kaggle-команд отправки.
+
+<details>
+<summary>Журнал реализации и промежуточных проверок</summary>
+
 # T045 execution/evaluation — Codex
 Claimed 2026-09-29 18:42 UTC. User explicitly authorizes execution and separate candidate archives. Never submit to Kaggle.
 
@@ -46,10 +80,14 @@ Command: `python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_ex
 ### Second infrastructure retry (20:45 UTC)
 Other scan/canon pools competed for the11.52 CPU quota; both identical mirror keys again hit600s host SIGALRM (explicit telemetry), at623.9/633.5s. All four invalid attempts are preserved in resource_continuation.json. Main10 workers continues; a separate2-worker retry of ONLY these keys uses3600s host guard and UNCHANGED engine limits/agent bytes. No accepted outcome is discarded. Final consolidation waits until the main writer exits, archives its raw attempts, and replaces only the two invalid keys with complete valid retries. Publication remains stopped until then.
 
-### Predeclared completion rule, 20:55 UTC (before HG outcomes)
+### Completion rule formalized, 20:55 UTC (before HG outcomes, after the assigned off retries finished)
 Independent resource review accepts outcome-independent retries but requests a rule for any later host-alarmed A1/A2 game. Rule: **every incomplete episode with explicit host_alarm_fired==1 gets exactly one retry at3600s host guard with identical source/world/seat/opponent/engine settings; the first valid outcome is accepted regardless of reward. Any non-alarm failure or failure of that3600s retry blocks delivery.** Main600s attempts remain archived. Existing two mirror keys already have their one3600s attempt running; never repeat those again automatically. Additional retries, if any, run only after the main pool closes, with at most2workers.
 The original two300s interruptions lack explicit alarm telemetry; attribution is inferred from the300s signal timer, elapsed322.96/358.90s and incomplete calls/opponent exception. The two600s interruptions have explicit host_alarm_fired=1. All remain disclosed. Timing checks cover the candidate callable; opponent timing is not independently profiled. Both main and retry set BLAS=1 in gate.py before NumPy import.
 
 21:00 UTC: both isolated3600s mirror retries are valid (719calls, BC/HG/opponent errors0, overage0; max callback0.599/0.704s). First valid outcomes frozen in retry_games.jsonl. No additional retries of these keys authorized by the predeclared rule.
 
 Publication ordering: finalize/consolidate → report + evaluation-only integrity audit → independent Claude RESULTS review → ONLY after PASS publish six archives with BOARD/say per candidate → archive byte audit. No candidate published yet. This enforces shared rule4 before potential champion-changing evidence enters candidates/. Intermediate26-complete-world terminal signal is +1.442pp/+1.202pp; final rule remains full32worlds, unchanged.
+
+Independent final results review PASS (runs/t045_claude_results_review.md), with required own-mirror caveat before archive publication. Assigned off retries completed20:53:46, general retry rule formalized20:55 after them but before HG outcomes; two off retries were fixed at20:45 and accepted first valid outcomes without reward selection. Four full HG games have no action changes (two each mix4 A1/A2) because the baseline was unavailable for certificates when scheduled; disclosed explicitly.
+
+</details>

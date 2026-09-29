@@ -1,0 +1,65 @@
+{
+  "seeds": [
+    929451010
+  ],
+  "variants": [
+    "off",
+    "terminal"
+  ],
+  "workers": 8,
+  "both_seats": true,
+  "opponents": {
+    "tetsu": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/tetsu.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8"
+    }
+  },
+  "exports": {
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "sources": {
+      "m15ens": {
+        "path": "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_m15ens_d13/main.py",
+        "sha256": "1b1261f65cc365fbff76578965de712e7398b7819d80fe6ef3113c272ea0bfe6"
+      },
+      "mix4": {
+        "path": "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_mix4_d13/main.py",
+        "sha256": "3c5d687dc9cf0abf594513a69d646ab255b0ede864bb21e53ca0e78dda433881"
+      }
+    },
+    "exports": {
+      "m15ens_off": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_off.py",
+        "sha256": "40d57f30e07d11d4e245a4e822f4458c97a74fb657f41a22f13420cd71e9dc10"
+      },
+      "m15ens_terminal": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_terminal.py",
+        "sha256": "54faa57f2b06f8b27ac5c2c5f5bbc52431f8074a6bbcf932198a9d814069c389"
+      },
+      "m15ens_a1": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_a1.py",
+        "sha256": "05be221fa46c366bc474725e70c04a6a4f0d9afa457e33edd0627f546de316c4"
+      },
+      "m15ens_a2": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_a2.py",
+        "sha256": "325d7b6bce78b3af73702b20ff33a9f00885d1ca313506b0048989dc1fe3ce53"
+      },
+      "mix4_off": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_off.py",
+        "sha256": "9c1b4da17329d2133c08eb062c60ab7b6b721551549b64a7b1d845966924051b"
+      },
+      "mix4_terminal": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_terminal.py",
+        "sha256": "0a1e1603130c9298c01ad1dfbaa9da0106289fb8073da5574e08e5bf94b7efa7"
+      },
+      "mix4_a1": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_a1.py",
+        "sha256": "7c720b5cbe772a477cdf673bee7755bf13562604449fef2e51698cc5dd7f218f"
+      },
+      "mix4_a2": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_a2.py",
+        "sha256": "700eab55bc8ed73939eb642e00eecd5c24074ba0ef536cf8104e49aa314c5114"
+      }
+    }
+  },
+  "identity": true
+}
