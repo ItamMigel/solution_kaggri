@@ -24,6 +24,10 @@ def main():
         evidence=summary['results'][f'{base}_{a.variant}'];assert evidence['games']==512
         out=OUT/name;out.mkdir(exist_ok=True)
         source=HERE/'exports'/f'{base}_{a.variant}.py'
+        frozen=json.loads((run/'manifest.json').read_text())['exports']['exports'][f'{base}_{a.variant}']
+        assert sha(source)==frozen['sha256'], 'candidate bytes differ from frozen gate'
+        assert evidence['worlds']==32 and evidence['games_per_world']==[16]
+        assert len(evidence['opponents'])==8 and all(v['games']==64 and v['games_per_world']==[2] for v in evidence['opponents'].values())
         archive=out/(name+'.tar.gz')
         if not archive.exists():
             temporary = archive.with_suffix('.tmp')
