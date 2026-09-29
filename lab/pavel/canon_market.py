@@ -53,7 +53,7 @@ def canon_one(args):
     dst = os.path.join(out, os.path.basename(path).replace("-replay.json.gz", ".json"))
     if os.path.exists(dst):
         return "skip"
-    d = json.load(gzip.open(path, "rt"))
+    d = json.load(gzip.open(path, "rt") if path.endswith(".gz") else open(path))
     env, tapes, log = simulate(d, instrument=True)
     rec = d["rewards"]
     if [s.reward for s in env.state] != rec:
