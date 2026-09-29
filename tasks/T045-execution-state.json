@@ -7,7 +7,7 @@
   "final_seeds": "929454001..929454032",
   "workers": 10,
   "main_session": 30269,
-  "delivery_session": 70761,
+  "delivery_session": 42356,
   "review_session": 75581,
   "review_output": "/workspace/shared/runs/t045_claude_execution_review_final.md",
   "watcher": "lab/t045/execution/watch_delivery.py",
@@ -52,5 +52,6 @@
   ],
   "delivery_pid": null,
   "retry_session": 43608,
-  "delivery_finalizer": "lab/t045/execution/finalize_resource.py"
+  "delivery_finalizer": "lab/t045/execution/finalize_resource.py",
+  "retry_status": "2/2 valid,719calls,zeroBC/HG/overage; first3600s outcomes frozen"
 }
