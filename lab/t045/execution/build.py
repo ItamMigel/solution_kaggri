@@ -61,6 +61,7 @@ def build_source(source, variant):
     suffix += '_T045_TERM = {}\nexec(' + repr(terminal) + ', _T045_TERM)\n'
     suffix += '''
 _T045_PARENT = agent
+del agent  # Kaggle file loader chooses the last inserted callable.
 def agent(obs, config=None):
     action = _T045_PARENT(obs, config)
     try:

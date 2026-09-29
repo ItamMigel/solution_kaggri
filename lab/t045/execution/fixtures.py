@@ -99,9 +99,16 @@ def main():
     assert new['_hg_apply'](o,copy.deepcopy(a))['farmer']==['FEED']
     o['step']=14*24+23
     assert new['_hg_apply'](o,copy.deepcopy(a))==a
+    # Loader searches insertion order, so a saved parent alias must not be last.
+    from kaggle_environments.agent import get_last_callable
+    for variant in ('off', 'terminal', 'a1', 'a2'):
+        full = build.build_source(source, variant)
+        suffix = full[full.index('\n_T045_FLAGS ='):]
+        selected = get_last_callable('def agent(obs, config=None): return {}\n' + suffix)
+        assert '_T045_TERM' in selected.__code__.co_names, 'loader selected parent alias'
     report={'status':'PASS','unit_engine_random_fixtures':100,'identity_steps':719,
             'fixtures':['prefix BUY/SELL/NOOP','partial buy','full 10 slots','DROP overflow',
-                        'farmer/hands sequential PLACE','A1 native urgent FEED','A2 unreachable and exact deadline','d13 unchanged']}
+                        'farmer/hands sequential PLACE','A1 native urgent FEED','A2 unreachable and exact deadline','d13 unchanged','official last-callable entrypoint']}
     (build.HERE/'fixtures.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
 
 if __name__=='__main__':main()
