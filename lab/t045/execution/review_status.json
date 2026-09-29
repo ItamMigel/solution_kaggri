@@ -1,9 +1,12 @@
 {
-  "code_method": "PASS \u2014 independent Claude review, including final duplicate-SELL correction",
-  "performance": "pending completed gate/results review",
+  "code_method": "PASS — independent Claude review, including final duplicate-SELL correction",
+  "performance": "Claude подтвердил расчёты и выводы: terminal проходит формальный гейт пула, но score вне собственного зеркала не доказан; A1/A2 не рекомендованы.",
   "initial_review": "/workspace/shared/runs/t045_claude_execution_review.md",
   "final_review": "/workspace/shared/runs/t045_claude_execution_review_final.md",
   "reviewed_commit": "35b4300b",
   "exception_policy_disclosure": "P1 closed by explicit whole-episode ERROR risk disclosure; fail-fast retained",
-  "loader_validation": "16/16 official-loader exact reward and source-hash parity; minimum overage55.458887s"
+  "loader_validation": "16/16 official-loader exact reward and source-hash parity; minimum overage55.458887s",
+  "performance_review_passed": true,
+  "performance_review_path": "/workspace/shared/runs/t045_claude_results_review.md",
+  "publication_condition": "Own-mirror caveat inserted prominently in README, manifest recommendation and BOARD/say message; no automatic champion replacement"
 }

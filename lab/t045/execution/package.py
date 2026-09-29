@@ -47,7 +47,8 @@ def main():
                   'archive_sha256':sha(archive),'evidence_run':str(run),'review':review,
                   'exception_policy':'fail-fast: BC/HG/terminal exceptions are re-raised, never silently converted to PASS',
                   'exception_risk':'An unseen exception forfeits the whole episode instead of losing a single turn; this experimental archive intentionally keeps observable errors. Zero observed errors does not prove none will occur.',
-                  'recommendation':(('local gate passed and independently reviewed; human decision required' if review.get('performance_review_passed') else 'local gate passed; independent review required') if evidence['recommendation_gate'] else 'do not replace active pair on this evidence'),
+                  'formal_suite_gate_passed':evidence['recommendation_gate'],
+                  'recommendation':('observed margin gain and no losing flips in this sample; score gain outside own mirror is unproven; no automatic replacement' if a.variant=='terminal' else 'do not replace active pair on this evidence'),
                   'source_manifest':json.loads((HERE/'manifest.json').read_text())['sources'][base],
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
@@ -75,6 +76,7 @@ def main():
                '',f"Решение: **{manifest['recommendation']}**. Независимый code/method review: Claude PASS; результаты: {review['performance']}.",
                '', '32 новых мира 929454001–929454032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
                'Методы оценки: ' + json.dumps(evidence['evaluation_methods'],ensure_ascii=False) + '.',
+               f"Полных HG-игр без изменений действия от фикса: {evidence['full_games_without_action_changes']} (база ещё не была доступна для сертификата; это не эффект исправления).",
                f"W/D/L: {evidence['wins']}/{evidence['draws']}/{evidence['losses']}; score {evidence['score']:.4f}, база {evidence['baseline_score']:.4f}.",
                f"Парное изменение score: {100*evidence['delta_score']:+.3f} п.п., 95% whole-world CI [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}].",
                f"Изменение margin: ${evidence['delta_margin']:+.2f}, CI [{mc[0]:+.2f}, {mc[1]:+.2f}].",
@@ -82,6 +84,9 @@ def main():
                f'Ресурсы: первые 780 валидных игр сохранены; исключено {attempt_count} неполных инфраструктурных попыток. У двух исходных300s попыток причина SIGALRM установлена косвенно по времени/неполному эпизоду; у последующих600s есть явная телеметрия host_alarm_fired. Все попытки сохранены. Каждый затронутый ключ получает ровно один повтор с guard3600s независимо от исхода; неуспех повтора блокирует доставку. Байты агентов/лимиты движка неизменны. Основной пул10 + повторы2 воркера. Ноль ошибок относится только к принятым завершённым результатам; время соперников отдельно не профилируется. Детали resource_continuation.json.',
                '', 'Гейт: положительная нижняя граница score CI; нижняя граница каждого семейства не ниже −3 п.п.; ноль ошибок/timeouts/скрытых BC PASS. Эмпирический [0,0] при отсутствии flips не доказывает глобальную эквивалентность.',
                '', '| Семейство | Δscore, п.п. | 95% CI |', '|---|---:|---|']
+        if a.variant=='terminal':
+            nm=evidence['without_own_mirror'];nc=nm['delta_score_ci95']
+            lines[lines.index('')+1:lines.index('')+1]=[f"**Оговорка о зеркале:** формальный гейт фиксированного пула пройден, но score вне собственного зеркала не доказан. Без bc_{base}: Δscore {100*nm['delta_score']:+.3f} п.п., CI [{100*nc[0]:+.3f}, {100*nc[1]:+.3f}], {nm['win_flips']} положительных/{nm['loss_flips']} отрицательных изменений исхода. Прибавка margin и отсутствие проигрышных флипов относятся к этой выборке; универсальная безопасность не заявляется. Автоматически заменять активную пару на этом основании не следует.",'']
         for family,v in evidence['families'].items():
             ci=v['delta_score_ci95'];lines.append(f"| {family} | {100*v['delta_score']:+.3f} | [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}] |")
         lines += ['', 'Terminal использует точное ответвление последнего хода официального движка на каждой базовой игре; неизменённый reward воспроизводится точно. Метод проверен против четырёх полных enabled игр. A1/A2: полные игры при изменении действия; иначе точный сертификат 719/719 совпадающих действий HG при идентичном коде, отличающемся только флагами. Все предыдущие ходы terminal идентичны базе по построению.',

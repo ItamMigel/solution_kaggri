@@ -38,11 +38,11 @@ def main():
                 if name in delivered:continue
                 e=summary['results'][f'{base}_{variant}'];out=SHARED/'candidates'/name
                 manifest=json.loads((out/'manifest.json').read_text())
-                ci=e['delta_score_ci95'];verdict='local gate PASS; independently reviewed' if e['recommendation_gate'] else 'NO PROMOTION'
+                ci=e['delta_score_ci95'];verdict='formal frozen-suite gate PASS; score outside own mirror unproven; NO AUTO REPLACEMENT' if e['recommendation_gate'] else 'NO PROMOTION'
                 message=(f"T045 candidate {name}: 32 NEW worlds x8 frozen opponents x2 seats, 512 paired evaluations. "
                          f"W/D/L {e['wins']}/{e['draws']}/{e['losses']}; delta score {100*e['delta_score']:+.3f}pp "
                          f"CI[{100*ci[0]:+.3f},{100*ci[1]:+.3f}], margin {e['delta_margin']:+.2f}; {verdict}. "
-                         f"Zero gate errors/timeouts. README+archive: {out}. Independent results review completed; human decision. No Kaggle submission.")
+                         f"Zero errors in accepted evaluations; 4 historical infrastructure attempts disclosed. README+archive: {out}. Independent results review completed; human decision. No Kaggle submission.")
                 stamp=datetime.now(timezone.utc).isoformat(timespec='seconds')
                 # Only append a Codex finding; do not rewrite the other owner's task rows.
                 with (SHARED/'BOARD.md').open('a') as f:

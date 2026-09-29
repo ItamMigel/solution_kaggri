@@ -47,6 +47,8 @@ def summary(rows,base,variant):
     result['evaluation_methods'] = ({'exact_terminal_branch':len(pairs)} if variant=='terminal' else
                                     dict(Counter(lookup[variant,x['opp'],x['seed'],x['seat']].get('evaluation','full_game') for x in pairs)))
     result['opponents']={o:stats([x for x in pairs if x['opp']==o]) for o in sorted({x['opp'] for x in pairs})}
+    result['without_own_mirror']=stats([x for x in pairs if x['opp'] != 'bc_'+base])
+    result['full_games_without_action_changes']=(0 if variant=='terminal' else sum(lookup[variant,x['opp'],x['seed'],x['seat']].get('evaluation','full_game')=='full_game' and x['changed']==0 for x in pairs))
     result['families']={f:stats([x for x in pairs if x['opp'] in ops]) for f,ops in FAMILIES.items()}
     result['positive_score_ci']=result['delta_score_ci95'][0]>0
     result['family_ni_minus3pp']=all(v and v['delta_score_ci95'][0]>=-.03 for v in result['families'].values())
