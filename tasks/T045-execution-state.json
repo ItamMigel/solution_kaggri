@@ -1,0 +1,51 @@
+{
+  "task": "T045 execution",
+  "deadline": "2026-09-30T08:00:00Z",
+  "never_submit": true,
+  "source_dir": "/workspace/wt/codex/lab/t045/execution",
+  "final_run": "/workspace/shared/runs/t045_execution_gate32_v4",
+  "final_seeds": "929454001..929454032",
+  "workers": 20,
+  "main_session": 35657,
+  "delivery_session": 73050,
+  "review_session": 75581,
+  "review_output": "/workspace/shared/runs/t045_claude_execution_review_final.md",
+  "watcher": "lab/t045/execution/watch_delivery.py",
+  "delivery_log": "/workspace/shared/runs/t045_execution_delivery.log",
+  "candidate_names": [
+    "t045_m15ens_terminal",
+    "t045_mix4_terminal",
+    "t045_m15ens_a1",
+    "t045_mix4_a1",
+    "t045_m15ens_a2",
+    "t045_mix4_a2"
+  ],
+  "done": [
+    "fixtures + 100 exact units",
+    "5748 original action identities",
+    "16 official loader games exact parity after del-agent fix; >=57s bank",
+    "6 explicit fault injections raise",
+    "code merged and pushed through 18d6e02c",
+    "35b4300b fixes duplicate SELL; renewed16 loader games exact parity; min bank55.458887s"
+  ],
+  "remaining": [
+    "wait gate final; review headless Claude",
+    "watcher packages and BOARD/say/ledger after each of six candidates",
+    "verify final counts/hash/CI, package actual evaluation-method counts",
+    "update final task and BOARD own row",
+    "gzip raw small game records, selective git stage/push only own evidence/candidates; NEVER bulk sync untracked pavel_lab",
+    "self-contained Russian final with results and no submission"
+  ],
+  "diagnostics_only": [
+    "t045_execution_gate32",
+    "t045_execution_gate32_v2",
+    "t045_execution_gate32_v3"
+  ],
+  "notes": [
+    "A1 and A2 isolated, not cumulative",
+    "HG no-op trajectories certified by all719 shadow actions and normalized source equality; any difference => full candidate game",
+    "terminal exact last-tick official branch, baseline rewards exactly reproduced pergame",
+    "ask_claude helper has variadic --add-dir bug; direct CLI with -- before positional prompt works",
+    "delivery watcher preserves archives, explicit experimental/pending review; no automatic promotion"
+  ]
+}

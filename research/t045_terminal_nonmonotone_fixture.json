@@ -1,0 +1,53 @@
+{
+  "fixture": "duplicate SELL separated by opponent BUY",
+  "before": {
+    "farmer": [
+      "PASS"
+    ],
+    "hands": [],
+    "market": [
+      [
+        "SELL",
+        "WHEAT",
+        1
+      ],
+      [
+        "NOOP"
+      ],
+      [
+        "SELL",
+        "WHEAT",
+        1
+      ]
+    ]
+  },
+  "after": {
+    "farmer": [
+      "PASS"
+    ],
+    "hands": [],
+    "market": [
+      [
+        "SELL",
+        "WHEAT",
+        2
+      ],
+      [
+        "NOOP"
+      ],
+      [
+        "SELL",
+        "WHEAT",
+        1
+      ]
+    ]
+  },
+  "baseline": [
+    10056,
+    98836
+  ],
+  "candidate": [
+    10049,
+    98843
+  ]
+}
