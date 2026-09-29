@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 
 run = Path(sys.argv[1])
+evaluation_only = '--evaluation-only' in sys.argv
 manifest = json.loads((run / 'manifest.json').read_text())
 rows = [json.loads(line) for line in (run / 'games.jsonl').read_text().splitlines()]
 key = lambda r: tuple(r[k] for k in ('base', 'variant', 'opp', 'seed', 'seat'))
@@ -36,8 +37,12 @@ for failed in resource['excluded_attempts']:
     replacement = lookup[key(failed)]
     assert replacement['valid'] and replacement['host_wall_limit_seconds'] == 3600
     assert not replacement['counts'].get('host_alarm_fired', 0)
+for entry in manifest['exports']['exports'].values():
+    assert hashlib.sha256(Path(entry['path']).read_bytes()).hexdigest()==entry['sha256']
+for entry in manifest['opponents'].values():
+    assert hashlib.sha256(Path(entry['path']).read_bytes()).hexdigest()==entry['sha256']
 archives = {}
-for base, variant in product(('m15ens', 'mix4'), ('terminal', 'a1', 'a2')):
+for base, variant in ([] if evaluation_only else product(('m15ens', 'mix4'), ('terminal', 'a1', 'a2'))):
     name = f't045_{base}_{variant}'
     folder = Path('/workspace/shared/candidates') / name
     meta = json.loads((folder / 'manifest.json').read_text())
@@ -54,5 +59,5 @@ for base, variant in product(('m15ens', 'mix4'), ('terminal', 'a1', 'a2')):
 result = dict(records=len(rows), errors=0, actual_methods=dict(Counter(r.get('evaluation', 'full_game') for r in rows)),
               terminal_branches=1024, paired_candidate_comparisons=3072, retained_valid_rows=len(old_valid),
               historical_infrastructure_attempts=len(resource['excluded_attempts']), all_retries_valid=True, archives=archives)
-(run / 'delivery_audit.json').write_text(json.dumps(result, indent=2))
+(run / ('evaluation_audit.json' if evaluation_only else 'delivery_audit.json')).write_text(json.dumps(result, indent=2))
 print(json.dumps(result, indent=2))

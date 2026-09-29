@@ -13,6 +13,8 @@ SHARED=Path('/workspace/shared')
 
 
 def main():
+    review=json.loads((HERE/'review_status.json').read_text())
+    assert review.get('performance_review_passed'), 'independent results review required before publication'
     status=RUN/'delivered.json'
     delivered=set(json.loads(status.read_text()) if status.exists() else [])
     while len(delivered)<6:
@@ -36,11 +38,11 @@ def main():
                 if name in delivered:continue
                 e=summary['results'][f'{base}_{variant}'];out=SHARED/'candidates'/name
                 manifest=json.loads((out/'manifest.json').read_text())
-                ci=e['delta_score_ci95'];verdict='local gate PASS; independent review pending' if e['recommendation_gate'] else 'NO PROMOTION'
+                ci=e['delta_score_ci95'];verdict='local gate PASS; independently reviewed' if e['recommendation_gate'] else 'NO PROMOTION'
                 message=(f"T045 candidate {name}: 32 NEW worlds x8 frozen opponents x2 seats, 512 paired evaluations. "
                          f"W/D/L {e['wins']}/{e['draws']}/{e['losses']}; delta score {100*e['delta_score']:+.3f}pp "
                          f"CI[{100*ci[0]:+.3f},{100*ci[1]:+.3f}], margin {e['delta_margin']:+.2f}; {verdict}. "
-                         f"Zero gate errors/timeouts. README+archive: {out}. Please review independently. No Kaggle submission.")
+                         f"Zero gate errors/timeouts. README+archive: {out}. Independent results review completed; human decision. No Kaggle submission.")
                 stamp=datetime.now(timezone.utc).isoformat(timespec='seconds')
                 # Only append a Codex finding; do not rewrite the other owner's task rows.
                 with (SHARED/'BOARD.md').open('a') as f:

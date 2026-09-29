@@ -44,7 +44,8 @@ def main():
     replacement={key(r):r for r in retries}
     (RUN/'games.jsonl').write_text(''.join((line if r['valid'] else json.dumps(replacement[key(r)]))+'\n' for line,r in zip(original_lines,rows)))
     print(f'CONSOLIDATED: 3072 valid unique records; {len(invalid)} main-run invalid attempts preserved separately',flush=True)
-    subprocess.run([sys.executable,str(HERE/'watch_delivery.py')],check=True)
-    subprocess.run([sys.executable,str(HERE/'verify_delivery.py'),str(RUN)],check=True)
+    subprocess.run([sys.executable,str(HERE/'report.py'),str(RUN)],check=True)
+    subprocess.run([sys.executable,str(HERE/'verify_delivery.py'),str(RUN),'--evaluation-only'],check=True)
+    print('EVALUATION READY: independent results review required before archives',flush=True)
 
 if __name__=='__main__':main()
