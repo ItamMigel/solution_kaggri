@@ -23,8 +23,8 @@ broader resource reservation, overwritten non-urgent service, or day-boundary po
 ```
 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/build.py
 OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/fixtures.py
-/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_v4 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929454001
-OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32_v4
+/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_final --workers 10 --wall-limit 600 --variants off,a1,a2 --worlds 32 --seed-start 929454001
+OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32_final
 ```
 
 Freeze opponents before the gate; their source paths and SHA256s are in
@@ -42,3 +42,8 @@ trajectories use separate complete closed-loop episodes on the same worlds. The
 records explicitly distinguish full games and identity certificates. Whole-world bootstrap confidence intervals are conditional on the fixed
 opponent suite. Zero flips in a finite sample are not proof of global equivalence.
 Large exports, frozen models, and replay logs are not committed.
+
+The final run adopts 780 valid v4 rows byte-for-byte. Two host SIGALRM attempts
+are retained in resource_continuation.json and repeated with 10 workers and a
+600-second host guard. The container CPU quota is 11.52 CPUs. Agent bytes,
+worlds, and official engine action/overage limits remain unchanged.

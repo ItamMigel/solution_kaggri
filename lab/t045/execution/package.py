@@ -56,6 +56,8 @@ def main():
         shutil.copyfile('/workspace/shared/runs/t045_execution_loader_smoke.json',out/'loader_smoke.json')
         shutil.copyfile(run/'manifest.json',out/'gate_manifest.json')
         shutil.copyfile(run/'identity_source_hashes.json',out/'identity_source_hashes.json')
+        if (run/'resource_continuation.json').exists():
+            shutil.copyfile(run/'resource_continuation.json',out/'resource_continuation.json')
         shutil.copyfile(HERE/'terminal.py',out/'terminal_source.txt')
         kind={'terminal':'Только t718: распродажа остатка после последнего расходного ордера; исходные позиции рынка и все unit actions сохранены.',
               'a1':'Только HG A1: работник, чьё валидное urgent FEED уже зачтено, исключается из свободных назначений.',
@@ -72,6 +74,7 @@ def main():
                f"Парное изменение score: {100*evidence['delta_score']:+.3f} п.п., 95% whole-world CI [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}].",
                f"Изменение margin: ${evidence['delta_margin']:+.2f}, CI [{mc[0]:+.2f}, {mc[1]:+.2f}].",
                f"Win/loss flips: {evidence['win_flips']}/{evidence['loss_flips']}; затронуто игр {evidence['changed_games']}.",
+               'Ресурсы: первые 780 валидных игр сохранены; две попытки, прерванные 300-секундным host SIGALRM, оставлены в диагностике и повторены на тех же байтах/мирах. Продолжение: 10 воркеров при квоте контейнера11.52 CPU, host guard600s. Лимиты действий/банка движка не менялись. В итог входят только полные валидные результаты всех заданных ключей; детали resource_continuation.json.',
                '', 'Гейт: положительная нижняя граница score CI; нижняя граница каждого семейства не ниже −3 п.п.; ноль ошибок/timeouts/скрытых BC PASS. Эмпирический [0,0] при отсутствии flips не доказывает глобальную эквивалентность.',
                '', '| Семейство | Δscore, п.п. | 95% CI |', '|---|---:|---|']
         for family,v in evidence['families'].items():

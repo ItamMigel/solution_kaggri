@@ -106,8 +106,12 @@ def game(job):
         return certificate
     rec=dict(base=base,variant=variant,opp=opp,seed=seed,seat=seat,evaluation='full_game')
     t0=time.monotonic();log=io.StringIO();counts=Counter();timings=[];examples=[]
-    def alarm(signum,frame):raise TimeoutError('game exceeded 300s')
-    signal.signal(signal.SIGALRM,alarm);signal.alarm(300)
+    wall_limit=int(os.environ.get('T045_WALL_LIMIT','600'))
+    rec['host_wall_limit_seconds']=wall_limit
+    def alarm(signum,frame):
+        counts['host_alarm_fired']+=1
+        raise TimeoutError(f'host game guard exceeded {wall_limit}s')
+    signal.signal(signal.SIGALRM,alarm);signal.alarm(wall_limit)
     try:
         with contextlib.redirect_stdout(log),contextlib.redirect_stderr(log):
             import numpy as np
@@ -124,6 +128,7 @@ def game(job):
                     try:return core(*args,**kw)
                     except Exception:
                         counts['opponent_bc_exceptions']+=1
+                        counts['opponent_exception_type_'+sys.exc_info()[0].__name__]+=1
                         raise
                 opponent._AG=guarded
             hg=mod._hg_apply
@@ -196,15 +201,16 @@ def game(job):
 
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--out',required=True);ap.add_argument('--workers',type=int,default=20)
+    ap=argparse.ArgumentParser();ap.add_argument('--out',required=True);ap.add_argument('--workers',type=int,default=20);ap.add_argument('--wall-limit',type=int,default=600)
     ap.add_argument('--variants',default='off,a1,a2');ap.add_argument('--worlds',type=int,default=32)
     ap.add_argument('--opponents',default=','.join(OPPS));ap.add_argument('--identity',action='store_true')
     ap.add_argument('--seed-start',type=int,default=929452001);ap.add_argument('--bases',default='m15ens,mix4')
     a=ap.parse_args();assert 1<=a.workers<=20
+    os.environ['T045_WALL_LIMIT']=str(a.wall_limit)
     out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     seeds=list(range(a.seed_start,a.seed_start+a.worlds))
     opponents=a.opponents.split(',');variants=a.variants.split(',')
-    manifest={'seeds':seeds,'variants':variants,'workers':a.workers,'both_seats':True,
+    manifest={'seeds':seeds,'variants':variants,'workers':a.workers,'wall_limit_seconds':a.wall_limit,'both_seats':True,
               'opponents':{k:{'path':str(OPPS[k]),'sha256':hashlib.sha256(OPPS[k].read_bytes()).hexdigest()} for k in opponents},
               'exports':json.loads((HERE/'manifest.json').read_text()),'identity':a.identity}
     mf=out/'manifest.json'
