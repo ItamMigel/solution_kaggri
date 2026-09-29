@@ -37,6 +37,8 @@ for failed in resource['excluded_attempts']:
     replacement = lookup[key(failed)]
     assert replacement['valid'] and replacement['host_wall_limit_seconds'] == 3600
     assert not replacement['counts'].get('host_alarm_fired', 0)
+engine=Path('/workspace/solution_kaggri/.venv/lib/python3.12/site-packages/kaggle_environments/envs/kaggriculture/kaggriculture.py')
+assert hashlib.sha256(engine.read_bytes()).hexdigest()==manifest['exports']['engine_sha256']
 for entry in manifest['exports']['exports'].values():
     assert hashlib.sha256(Path(entry['path']).read_bytes()).hexdigest()==entry['sha256']
 for entry in manifest['opponents'].values():
