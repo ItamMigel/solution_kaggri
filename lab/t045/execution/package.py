@@ -42,11 +42,12 @@ def main():
             temporary.replace(archive)
         with tarfile.open(archive,'r:gz') as tar:
             assert tar.getnames()==['main.py','ENGINE_LICENSE','NOTICE'];assert hashlib.sha256(tar.extractfile('main.py').read()).hexdigest()==sha(source)
+        review=json.loads((HERE/'review_status.json').read_text())
         manifest={'name':name,'variant':a.variant,'base':base,'source_export':str(source),'main_sha256':sha(source),
-                  'archive_sha256':sha(archive),'evidence_run':str(run),'review':json.loads((HERE/'review_status.json').read_text()),
+                  'archive_sha256':sha(archive),'evidence_run':str(run),'review':review,
                   'exception_policy':'fail-fast: BC/HG/terminal exceptions are re-raised, never silently converted to PASS',
                   'exception_risk':'An unseen exception forfeits the whole episode instead of losing a single turn; this experimental archive intentionally keeps observable errors. Zero observed errors does not prove none will occur.',
-                  'recommendation':'local gate passed; independent review required' if evidence['recommendation_gate'] else 'do not replace active pair on this evidence',
+                  'recommendation':(('local gate passed and independently reviewed; human decision required' if review.get('performance_review_passed') else 'local gate passed; independent review required') if evidence['recommendation_gate'] else 'do not replace active pair on this evidence'),
                   'source_manifest':json.loads((HERE/'manifest.json').read_text())['sources'][base],
                   'engine_sha256':json.loads((HERE/'manifest.json').read_text())['engine_sha256']}
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
@@ -59,6 +60,8 @@ def main():
         if (run/'resource_continuation.json').exists():
             shutil.copyfile(run/'resource_continuation.json',out/'resource_continuation.json')
         shutil.copyfile(HERE/'terminal.py',out/'terminal_source.txt')
+        if review.get('performance_review_passed'):
+            shutil.copyfile(review['performance_review_path'],out/'RESULTS_REVIEW.md')
         resource=json.loads((run/'resource_continuation.json').read_text())
         attempt_count=len(resource['excluded_attempts'])
         kind={'terminal':'Только t718: распродажа остатка после последнего расходного ордера; исходные позиции рынка и все unit actions сохранены.',
@@ -69,7 +72,7 @@ def main():
                'Граница HG d0–13 сохранена. Флаги обёртки по умолчанию выключены в template; в этом архиве включён только именованный вариант. Исключения BC/HG/terminal пробрасываются, не скрываются под PASS.',
                'Риск исполнения: непредвиденное исключение приведёт к ERROR и проигрышу всего эпизода, тогда как исходный BC мог пропустить один ход. Это сознательный fail-fast вариант без скрытого PASS; ноль наблюдавшихся сбоев не гарантирует их отсутствие в новых мирах.',
                'Terminal не гарантирует неубывание cash или margin при любом сопернике: дополнительные продажи меняют общий рынок. Он сохраняет количества ранних повторных SELL и пополняет только последний SELL товара после последней траты.',
-               '',f"Решение: **{manifest['recommendation']}**. Независимый code/method review: Claude PASS; review результатов силы пока pending.",
+               '',f"Решение: **{manifest['recommendation']}**. Независимый code/method review: Claude PASS; результаты: {review['performance']}.",
                '', '32 новых мира 929454001–929454032 × оба места × 8 замороженных соперников = 512 сравнений к собственной исходной базе.',
                'Методы оценки: ' + json.dumps(evidence['evaluation_methods'],ensure_ascii=False) + '.',
                f"W/D/L: {evidence['wins']}/{evidence['draws']}/{evidence['losses']}; score {evidence['score']:.4f}, база {evidence['baseline_score']:.4f}.",
