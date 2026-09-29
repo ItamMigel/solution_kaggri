@@ -33,3 +33,15 @@ Gate v3 remains diagnostic only; no archives were delivered. FINAL v4 will use n
 All corrected fixtures PASS, including duplicate SELL. New 8 full off/terminal identity games PASS (5748 action identities); four official terminal branches match full enabled outcomes. All16 file-loader games match callable rewards and exact FINAL export hashes; minimum remaining overage55.458887/60s under16-worker smoke. Six fault injections rechecked.
 
 Final command: `/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_v4 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929454001`. All previous gate32/v2/v3 runs are diagnostic, excluded. Automatic per-candidate archive/README + BOARD/ledger/bin-say delivery watches v4 only.
+
+Midpoint audit: 522/1024 baseline games valid, zero invalid records, max candidate callback0.406s and zero callback overage. A1 shadow changes30 baseline trajectories, A2 changes2. No interim performance-based decisions. Packaging additionally verifies candidate bytes against frozen gate SHA256 and full32-world/both-seat/opponent balance before any archive delivery.
+
+## Resource continuation, same frozen candidates/worlds (20:33 UTC)
+Actual cgroup CPU quota is **11.52 CPU** (`cpu.max=1152000 100000`), despite host core count. 20 workers each averaged~55% CPU. Two mix4-vs-mix4 baseline attempts on929454024 (both seats) crossed the artificial300s SIGALRM host guard (322.96/358.90s), with incomplete calls/opponent swallowed exception caught by strict audit. They are invalid, retained in v4 raw outputs, never used in score.
+
+780 valid rows are adopted byte-for-byte into **runs/t045_execution_gate32_final**, with all weights/agent source hashes/worlds unchanged. Both failed keys and all outstanding keys are re-run at10 workers with600s host guard. Actual engine per-action timeout and overage budget are UNCHANGED. No score-dependent exclusion or parameter tuning. resource_continuation.json includes complete failed records; final package requires full32-world/both-seat/opponent balance and exact gated SHA. Gate now records explicit host_alarm_fired and opponent exception type.
+
+Command: `python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_final --workers 10 --wall-limit 600 --variants off,a1,a2 --worlds 32 --seed-start 929454001`.
+
+### Second infrastructure retry (20:45 UTC)
+Other scan/canon pools competed for the11.52 CPU quota; both identical mirror keys again hit600s host SIGALRM (explicit telemetry), at623.9/633.5s. All four invalid attempts are preserved in resource_continuation.json. Main10 workers continues; a separate2-worker retry of ONLY these keys uses3600s host guard and UNCHANGED engine limits/agent bytes. No accepted outcome is discarded. Final consolidation waits until the main writer exits, archives its raw attempts, and replaces only the two invalid keys with complete valid retries. Publication remains stopped until then.

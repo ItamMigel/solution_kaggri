@@ -3,11 +3,11 @@
   "deadline": "2026-09-30T08:00:00Z",
   "never_submit": true,
   "source_dir": "/workspace/wt/codex/lab/t045/execution",
-  "final_run": "/workspace/shared/runs/t045_execution_gate32_v4",
+  "final_run": "/workspace/shared/runs/t045_execution_gate32_final",
   "final_seeds": "929454001..929454032",
-  "workers": 20,
-  "main_session": 35657,
-  "delivery_session": 73050,
+  "workers": 10,
+  "main_session": 30269,
+  "delivery_session": 70761,
   "review_session": 75581,
   "review_output": "/workspace/shared/runs/t045_claude_execution_review_final.md",
   "watcher": "lab/t045/execution/watch_delivery.py",
@@ -46,6 +46,11 @@
     "HG no-op trajectories certified by all719 shadow actions and normalized source equality; any difference => full candidate game",
     "terminal exact last-tick official branch, baseline rewards exactly reproduced pergame",
     "ask_claude helper has variadic --add-dir bug; direct CLI with -- before positional prompt works",
-    "delivery watcher preserves archives, explicit experimental/pending review; no automatic promotion"
-  ]
+    "delivery watcher preserves archives, explicit experimental/pending review; no automatic promotion",
+    "780 valid v4 rows reused exactly;2 artificial300s host timeout attempts retained in resource_continuation and rerun; actual cgroup quota11.52 CPU; host guard600s, engine limits unchanged",
+    "Two600s host retries failed under scan/canon contention, four total invalid attempts retained. Extra2-worker retry with3600s hostguard; consolidate only after main exits; original raw attempts preserved."
+  ],
+  "delivery_pid": null,
+  "retry_session": 43608,
+  "delivery_finalizer": "lab/t045/execution/finalize_resource.py"
 }
