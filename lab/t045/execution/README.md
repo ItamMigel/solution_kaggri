@@ -23,8 +23,8 @@ broader resource reservation, overwritten non-urgent service, or day-boundary po
 ```
 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/build.py
 OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/fixtures.py
-/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929452001
-OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32
+/workspace/solution_kaggri/.venv/bin/python lab/t045/execution/gate.py --out /workspace/shared/runs/t045_execution_gate32_v2 --workers 20 --variants off,a1,a2 --worlds 32 --seed-start 929452001
+OPENBLAS_NUM_THREADS=1 /workspace/solution_kaggri/.venv/bin/python lab/t045/execution/report.py /workspace/shared/runs/t045_execution_gate32_v2
 ```
 
 Freeze opponents before the gate; their source paths and SHA256s are in
@@ -35,7 +35,10 @@ notebook packaging, upload, or submission cells were run.
 The gate runs both seats on fresh worlds, with BLAS=1 and at most twenty workers.
 Terminal evaluation branches only the official final step; original rewards are
 reproduced before each counterfactual. Full enabled-game smoke verifies equivalence.
-A1 and A2 use separate complete closed-loop episodes, compared to the same baseline
-worlds. Whole-world bootstrap confidence intervals are conditional on the fixed
+A1 and A2 are shadow-evaluated on all 719 baseline native actions. The normalized
+export code must match exactly after replacing only the constant flags. Zero action
+differences certify the identical deterministic trajectory by induction; changed
+trajectories use separate complete closed-loop episodes on the same worlds. The
+records explicitly distinguish full games and identity certificates. Whole-world bootstrap confidence intervals are conditional on the fixed
 opponent suite. Zero flips in a finite sample are not proof of global equivalence.
 Large exports, frozen models, and replay logs are not committed.

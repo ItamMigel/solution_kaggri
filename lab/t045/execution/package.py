@@ -39,6 +39,7 @@ def main():
         (out/'manifest.json').write_text(json.dumps(manifest,indent=2));(out/'evidence.json').write_text(json.dumps(evidence,indent=2))
         shutil.copyfile(HERE/'fixtures.json',out/'fixtures.json')
         shutil.copyfile(run/'manifest.json',out/'gate_manifest.json')
+        shutil.copyfile(run/'identity_source_hashes.json',out/'identity_source_hashes.json')
         shutil.copyfile(HERE/'terminal.py',out/'terminal_source.txt')
         kind={'terminal':'Только t718: распродажа остатка после последнего расходного ордера; исходные позиции рынка и все unit actions сохранены.',
               'a1':'Только HG A1: работник, чьё валидное urgent FEED уже зачтено, исключается из свободных назначений.',
@@ -56,7 +57,7 @@ def main():
                '', '| Семейство | Δscore, п.п. | 95% CI |', '|---|---:|---|']
         for family,v in evidence['families'].items():
             ci=v['delta_score_ci95'];lines.append(f"| {family} | {100*v['delta_score']:+.3f} | [{100*ci[0]:+.3f}, {100*ci[1]:+.3f}] |")
-        lines += ['', 'Terminal использует точное ответвление последнего хода официального движка на каждой базовой игре; неизменённый reward воспроизводится точно. Метод проверен против четырёх полных enabled игр. A1/A2 — отдельные полные игры. Все предыдущие ходы terminal идентичны базе по построению.',
+        lines += ['', 'Terminal использует точное ответвление последнего хода официального движка на каждой базовой игре; неизменённый reward воспроизводится точно. Метод проверен против четырёх полных enabled игр. A1/A2: полные игры при изменении действия; иначе точный сертификат 719/719 совпадающих действий HG при идентичном коде, отличающемся только флагами. Все предыдущие ходы terminal идентичны базе по построению.',
                   '',f"Исходные записи и команды: `{run}`; инструменты `/workspace/wt/codex/lab/t045/execution/`.",
                   f"main.py SHA256: `{sha(source)}`",f"archive SHA256: `{sha(archive)}`",'',
                   'Сохранены исходные notices BC/Pavel. Минимальная функция исполнения units с зависимостями извлечена без изменений из kaggle-environments 1.32.7 (Apache-2.0); source hash в manifest.']

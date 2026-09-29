@@ -70,9 +70,41 @@ def terminal_replay(env, module, seat):
     return dict(rewards=finish(changed),changed=changed!=actions[seat],before=actions[seat]['market'],after=changed['market'],exact_baseline=True)
 
 
+_BASE_CACHE = {}
+
+
+def identity_certificate(base, variant, opp, seed, seat):
+    path = os.environ.get('T045_BASELINE_RESULTS')
+    if not path or variant not in ('a1', 'a2'):
+        return None
+    key = (base, opp, seed, seat)
+    if key not in _BASE_CACHE:
+        try:
+            lines = Path(path).read_text().splitlines()
+        except FileNotFoundError:
+            return None
+        for line in lines:
+            try: r = json.loads(line)
+            except json.JSONDecodeError: continue  # writer may be between chunks
+            if r['variant'] == 'off' and r['valid']:
+                _BASE_CACHE[(r['base'], r['opp'], r['seed'], r['seat'])] = r
+    r = _BASE_CACHE.get(key)
+    if r is None or r['counts'].get('shadow_calls') != 719 or r['counts'].get('shadow_' + variant + '_changed_turns', 0):
+        return None
+    result = copy.deepcopy(r)
+    result.pop('terminal', None)
+    result.update(variant=variant, seconds=0.0, evaluation='exact_identity_from_baseline',
+                  identity_from={'base':base, 'opp':opp, 'seed':seed, 'seat':seat, 'variant':'off'},
+                  proof='Identical source except flags; enabled HG invoked on all 719 native actions with zero action differences; deterministic full trajectory identical by induction.')
+    return result
+
+
 def game(job):
     base,variant,opp,seed,seat,identity=job
-    rec=dict(base=base,variant=variant,opp=opp,seed=seed,seat=seat)
+    certificate = identity_certificate(base,variant,opp,seed,seat)
+    if certificate is not None:
+        return certificate
+    rec=dict(base=base,variant=variant,opp=opp,seed=seed,seat=seat,evaluation='full_game')
     t0=time.monotonic();log=io.StringIO();counts=Counter();timings=[];examples=[]
     def alarm(signum,frame):raise TimeoutError('game exceeded 300s')
     signal.signal(signal.SIGALRM,alarm);signal.alarm(300)
@@ -108,6 +140,18 @@ def game(job):
                             if isinstance(tile,dict) and tile.get('animal') and not tile.get('fed_today'):
                                 counts['native_feed_overwritten']+=1
                                 if tile.get('consecutive_unfed',0)>=1:counts['urgent_native_feed_overwritten']+=1
+                if variant == 'off':
+                    flags = mod._T045_FLAGS.copy(); stats = mod._HG_STATS.copy()
+                    for fix in ('a1', 'a2'):
+                        mod._T045_FLAGS.update(a1=fix=='a1', a2=fix=='a2')
+                        shadow = hg(obs,copy.deepcopy(before))
+                        if shadow != result:
+                            counts['shadow_' + fix + '_changed_turns'] += 1
+                            if len(examples) < 2:
+                                examples.append({'fix':fix,'step':obs['step'],'before':before,'old_hg':result,
+                                                 'new_hg':shadow,'farm':copy.deepcopy(farm),'private':copy.deepcopy(obs['private'])})
+                    counts['shadow_calls'] += 1
+                    mod._T045_FLAGS.update(flags); mod._HG_STATS.clear(); mod._HG_STATS.update(stats)
                 if int(obs['step'])<336:
                     flags=mod._T045_FLAGS.copy();stats=mod._HG_STATS.copy()
                     mod._T045_FLAGS.update(a1=False,a2=False)
@@ -166,7 +210,19 @@ def main():
     mf=out/'manifest.json'
     if mf.exists():assert json.loads(mf.read_text())==manifest,'manifest changed'
     else:mf.write_text(json.dumps(manifest,indent=2))
+    # All exports use byte-identical code apart from their constant feature flags.
+    import re
+    normalized = {}
+    for b in a.bases.split(','):
+        for v in ('off','a1','a2'):
+            src = (HERE/'exports'/f'{b}_{v}.py').read_text()
+            canon = re.sub(r'^_T045_FLAGS = .*$', '_T045_FLAGS = FLAGS', src, flags=re.M)
+            h = hashlib.sha256(canon.encode()).hexdigest()
+            if b in normalized: assert normalized[b] == h
+            normalized[b] = h
+    (out/'identity_source_hashes.json').write_text(json.dumps(normalized,indent=2))
     results=out/'games.jsonl'
+    os.environ['T045_BASELINE_RESULTS'] = str(results)
     done=set()
     if results.exists():
         for line in results.read_text().splitlines():
