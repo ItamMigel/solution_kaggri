@@ -1,0 +1,50 @@
+== selfplay Tue Sep 29 11:56:37 PM UTC 2026
+['DONE', 'DONE'] [88305.0, 88305.0] calls [719, 719] max_ms [1937, 1962] invalid [] None
+['DONE', 'DONE'] [88305.0, 88305.0] calls [719, 719] max_ms [1943, 1950] invalid [] None
+== league32 Tue Sep 29 11:57:20 PM UTC 2026
+cha22       0.938   +15740
+es7         0.938   +15883
+fieldcraft  0.938   +18590
+harvest     0.984   +16622
+jaxa2802    0.969   +18725
+leo3141     1.000   +16912
+m15ens_d13  0.922    +7406
+m26mg       0.875    +6985
+mix4_d13    0.906    +8847
+ozer44      0.969   +20337
+ozer45      0.953   +15658
+ozer55      0.969   +14258
+parthenos   0.969   +15926
+qA_ref      0.875   +14942
+qB          1.000   +16890
+soil        0.969   +13015
+tetsu       1.000   +16238
+v57         0.938   +13642
+yaxon5      0.969   +20348
+field mean over 16: 0.961
+errors 0 <70k 0 median 115049.0
+== replay on ladder worlds Wed Sep 30 12:11:42 AM UTC 2026
+56677106 candidate           n  err fail   win%      cand$       opp$     margin      ±se   cand-rec invalid   exc  none exact    sec
+56677106 (recorded)         96             71.9     104688      97030       7658     1437
+56677106 expert             96    0    0   71.9     104688      97030       7658     1437          0       0     0     0    96      8
+56677106 m26dsm             96    0    0  100.0     116690      86850      29840     1767      12001       0     0     0     0     29
+56678587 candidate           n  err fail   win%      cand$       opp$     margin      ±se   cand-rec invalid   exc  none exact    sec
+56678587 (recorded)         89             88.8     110793      97038      13756     2138
+56678587 expert             89    0    0   88.8     110793      97038      13756     2138          0       0     0     0    89      8
+56678587 m26dsm             89    0    0   97.8     114229      84287      29942     2445       3435       0     0     0     0     29
+56653430 candidate           n  err fail   win%      cand$       opp$     margin      ±se   cand-rec invalid   exc  none exact    sec
+56653430 (recorded)        110             51.8      97333      96029       1304      819
+56653430 expert            110    0    0   51.8      97333      96029       1304      819          0       0     0     0   110      8
+56653430 m26dsm            110    0    0  100.0     114763      88266      26497     1862      17430       0     0     0     0     29
+56653426 candidate           n  err fail   win%      cand$       opp$     margin      ±se   cand-rec invalid   exc  none exact    sec
+56653426 (recorded)         86             81.4      97586      92534       5053     1589
+56653426 expert             86    0    0   81.4      97586      92534       5053     1589          0       0     0     0    86      8
+56653426 m26dsm             86    0    0  100.0     114547      87426      27121     1467      16961       0     0     0     0     29
+== vs top teams Wed Sep 30 12:18:41 AM UTC 2026
+280 jobs
+errors 0
+m26dsm     n=140 win 0.986  money 132684 vs top 78739
+    {'Artem The Fa': '9/10', 'Boey': '10/10', 'DECEM': '10/10', 'Densike': '10/10', 'Fourth Quadr': '10/10', 'Kaggledew Va': '10/10', 'M & M & P & ': '10/10', 'Majkel1337': '10/10', 'Smackaveli': '10/10', 'THIRD FARM C': '10/10', 'Unknown Moth': '10/10', 'Vadim Vasile': '10/10', 'mtmr_s1': '10/10', '吃白饭的大肥鱼': '9/10'}
+m15ens     n=140 win 0.921  money 126800 vs top 75993
+    {'Artem The Fa': '10/10', 'Boey': '4/10', 'DECEM': '10/10', 'Densike': '10/10', 'Fourth Quadr': '10/10', 'Kaggledew Va': '9/10', 'M & M & P & ': '9/10', 'Majkel1337': '10/10', 'Smackaveli': '10/10', 'THIRD FARM C': '10/10', 'Unknown Moth': '8/10', 'Vadim Vasile': '10/10', 'mtmr_s1': '10/10', '吃白饭的大肥鱼': '9/10'}
+confirm done Wed Sep 30 12:22:38 AM UTC 2026
