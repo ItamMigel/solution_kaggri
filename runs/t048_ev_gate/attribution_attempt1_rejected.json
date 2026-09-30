@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "reason": "Diagnostic script imported numpy before gate set BLAS limits; observed48threads in each of2workers. Own diagnostic processes terminated after~35s, before any result; immutable160-game gate unaffected. Re-run with BLAS=1 before numpy import.",
+  "pids": [
+    2325692,
+    2325740,
+    2325741
+  ]
+}

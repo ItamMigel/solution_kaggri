@@ -1,0 +1,348 @@
+{
+  "records": 160,
+  "expected": 160,
+  "complete": true,
+  "errors": 0,
+  "variants": {
+    "sale_beam": {
+      "opponents": {
+        "base": {
+          "n": 32,
+          "valid": 32,
+          "worlds": 16,
+          "world_margins": [
+            27.0,
+            24.0,
+            35.0,
+            20.0,
+            0.0,
+            52.0,
+            125.0,
+            5.0,
+            95.0,
+            68.0,
+            25.0,
+            31.0,
+            1944.0,
+            7.0,
+            23.5,
+            40.0
+          ],
+          "points": 28.0,
+          "wins": 27,
+          "draws": 2,
+          "losses": 3,
+          "mean_margin": 157.59375,
+          "margin_world95": [
+            26.84375,
+            403.0
+          ],
+          "points_world95": [
+            0.75,
+            0.96875
+          ]
+        },
+        "tetsu": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "world_margins": [
+            14894.0,
+            18563.0,
+            13060.0,
+            24071.0,
+            19601.0,
+            22499.0,
+            16736.0,
+            19549.0
+          ],
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 18621.625,
+          "margin_world95": [
+            16205.75,
+            21011.25
+          ],
+          "points_world95": [
+            1.0,
+            1.0
+          ],
+          "paired_control": {
+            "n": 16,
+            "worlds": 8,
+            "delta_points": 0.0,
+            "delta_score": 0.0,
+            "score_world95": [
+              0.0,
+              0.0
+            ],
+            "delta_margin": 3.0,
+            "margin_world95": [
+              0.0,
+              8.0
+            ]
+          }
+        },
+        "ozer44": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "world_margins": [
+            18773.0,
+            24114.5,
+            44380.0,
+            17077.0,
+            -1430.0,
+            33636.5,
+            9786.0,
+            25369.0
+          ],
+          "points": 14.0,
+          "wins": 14,
+          "draws": 0,
+          "losses": 2,
+          "mean_margin": 21463.25,
+          "margin_world95": [
+            12421.8734375,
+            30485.139062499984
+          ],
+          "points_world95": [
+            0.625,
+            1.0
+          ],
+          "paired_control": {
+            "n": 16,
+            "worlds": 8,
+            "delta_points": 0.0,
+            "delta_score": 0.0,
+            "score_world95": [
+              0.0,
+              0.0
+            ],
+            "delta_margin": 7.75,
+            "margin_world95": [
+              0.375,
+              17.875
+            ]
+          }
+        }
+      },
+      "h2h_pass": true,
+      "sanity_pass": true,
+      "passed": true,
+      "telemetry": {
+        "errors": 0.0,
+        "changed": 254.0,
+        "searched": 2818.0,
+        "scored": 7187.0,
+        "added": 0.0,
+        "held": 0.0,
+        "released": 0.0,
+        "expected_gain": 2735.0
+      },
+      "max_call": 0.2556151159806177,
+      "overage": 0
+    },
+    "late_ev": {
+      "opponents": {
+        "base": {
+          "n": 32,
+          "valid": 32,
+          "worlds": 16,
+          "world_margins": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "points": 16.0,
+          "wins": 5,
+          "draws": 22,
+          "losses": 5,
+          "mean_margin": 0.0,
+          "margin_world95": [
+            0.0,
+            0.0
+          ],
+          "points_world95": [
+            0.5,
+            0.5
+          ]
+        },
+        "tetsu": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "world_margins": [
+            14894.0,
+            18502.5,
+            13056.0,
+            24071.0,
+            19581.0,
+            22446.0,
+            16736.0,
+            19549.0
+          ],
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 18604.4375,
+          "margin_world95": [
+            16195.125,
+            20988.875
+          ],
+          "points_world95": [
+            1.0,
+            1.0
+          ],
+          "paired_control": {
+            "n": 16,
+            "worlds": 8,
+            "delta_points": 0.0,
+            "delta_score": 0.0,
+            "score_world95": [
+              0.0,
+              0.0
+            ],
+            "delta_margin": -14.1875,
+            "margin_world95": [
+              -34.0625,
+              0.0
+            ]
+          }
+        },
+        "ozer44": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "world_margins": [
+            18745.0,
+            24114.5,
+            44349.0,
+            17074.0,
+            -1430.0,
+            33636.5,
+            9786.0,
+            25369.0
+          ],
+          "points": 14.0,
+          "wins": 14,
+          "draws": 0,
+          "losses": 2,
+          "mean_margin": 21455.5,
+          "margin_world95": [
+            12417.6109375,
+            30468.898437499978
+          ],
+          "points_world95": [
+            0.625,
+            1.0
+          ],
+          "paired_control": {
+            "n": 16,
+            "worlds": 8,
+            "delta_points": 0.0,
+            "delta_score": 0.0,
+            "score_world95": [
+              0.0,
+              0.0
+            ],
+            "delta_margin": 0.0,
+            "margin_world95": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "h2h_pass": false,
+      "sanity_pass": false,
+      "passed": false,
+      "telemetry": {
+        "errors": 0.0,
+        "changed": 3.0,
+        "searched": 0.0,
+        "scored": 0.0,
+        "added": 20.0,
+        "held": 0.0,
+        "released": 0.0,
+        "expected_gain": 33.523809523809526
+      },
+      "max_call": 0.18599069002084434,
+      "overage": 0
+    }
+  },
+  "control": {
+    "tetsu": {
+      "n": 16,
+      "valid": 16,
+      "worlds": 8,
+      "world_margins": [
+        14894.0,
+        18563.0,
+        13056.0,
+        24071.0,
+        19581.0,
+        22499.0,
+        16736.0,
+        19549.0
+      ],
+      "points": 16.0,
+      "wins": 16,
+      "draws": 0,
+      "losses": 0,
+      "mean_margin": 18618.625,
+      "margin_world95": [
+        16201.75,
+        21006.25
+      ],
+      "points_world95": [
+        1.0,
+        1.0
+      ]
+    },
+    "ozer44": {
+      "n": 16,
+      "valid": 16,
+      "worlds": 8,
+      "world_margins": [
+        18745.0,
+        24114.5,
+        44349.0,
+        17074.0,
+        -1430.0,
+        33636.5,
+        9786.0,
+        25369.0
+      ],
+      "points": 14.0,
+      "wins": 14,
+      "draws": 0,
+      "losses": 2,
+      "mean_margin": 21455.5,
+      "margin_world95": [
+        12417.6109375,
+        30468.898437499978
+      ],
+      "points_world95": [
+        0.625,
+        1.0
+      ]
+    }
+  }
+}

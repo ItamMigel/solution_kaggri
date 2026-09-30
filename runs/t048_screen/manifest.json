@@ -1,0 +1,186 @@
+{
+  "build": {
+    "base": {
+      "path": "/workspace/shared/candidates/t047_m26_terminal/pkg/main.py",
+      "sha256": "e933f11707c6506c922b19b807cef6e4490acf430390890380d3fa4f52029839"
+    },
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "exports": {
+      "off": {
+        "path": "/workspace/wt/codex/lab/t048/exports/off/main.py",
+        "sha256": "a396f4da15022739c7064c71c0014d173f9032ff3a8166367ef6a6ec11381f50"
+      },
+      "sale_beam": {
+        "path": "/workspace/wt/codex/lab/t048/exports/sale_beam/main.py",
+        "sha256": "02b9269fce865178629da74435662774b88037efc8c0fc0a4326c86a155686ce"
+      },
+      "late_ev": {
+        "path": "/workspace/wt/codex/lab/t048/exports/late_ev/main.py",
+        "sha256": "aefecc9af95af06cc94d56f3b839808f03aade757eadbaf170825894e4e90b2b"
+      }
+    }
+  },
+  "jobs": [
+    [
+      "sale_beam",
+      "base",
+      93048203,
+      0
+    ],
+    [
+      "sale_beam",
+      "base",
+      93048203,
+      1
+    ],
+    [
+      "late_ev",
+      "base",
+      93048203,
+      0
+    ],
+    [
+      "late_ev",
+      "base",
+      93048203,
+      1
+    ],
+    [
+      "sale_beam",
+      "tetsu",
+      93048203,
+      0
+    ],
+    [
+      "sale_beam",
+      "tetsu",
+      93048203,
+      1
+    ],
+    [
+      "late_ev",
+      "tetsu",
+      93048203,
+      0
+    ],
+    [
+      "late_ev",
+      "tetsu",
+      93048203,
+      1
+    ],
+    [
+      "sale_beam",
+      "ozer44",
+      93048203,
+      0
+    ],
+    [
+      "sale_beam",
+      "ozer44",
+      93048203,
+      1
+    ],
+    [
+      "late_ev",
+      "ozer44",
+      93048203,
+      0
+    ],
+    [
+      "late_ev",
+      "ozer44",
+      93048203,
+      1
+    ],
+    [
+      "sale_beam",
+      "base",
+      93048204,
+      0
+    ],
+    [
+      "sale_beam",
+      "base",
+      93048204,
+      1
+    ],
+    [
+      "late_ev",
+      "base",
+      93048204,
+      0
+    ],
+    [
+      "late_ev",
+      "base",
+      93048204,
+      1
+    ],
+    [
+      "sale_beam",
+      "tetsu",
+      93048204,
+      0
+    ],
+    [
+      "sale_beam",
+      "tetsu",
+      93048204,
+      1
+    ],
+    [
+      "late_ev",
+      "tetsu",
+      93048204,
+      0
+    ],
+    [
+      "late_ev",
+      "tetsu",
+      93048204,
+      1
+    ],
+    [
+      "sale_beam",
+      "ozer44",
+      93048204,
+      0
+    ],
+    [
+      "sale_beam",
+      "ozer44",
+      93048204,
+      1
+    ],
+    [
+      "late_ev",
+      "ozer44",
+      93048204,
+      0
+    ],
+    [
+      "late_ev",
+      "ozer44",
+      93048204,
+      1
+    ]
+  ],
+  "stage": "screen",
+  "workers": 6,
+  "opponents": {
+    "base": {
+      "path": "/workspace/shared/candidates/t047_m26_terminal/pkg/main.py",
+      "sha256": "e933f11707c6506c922b19b807cef6e4490acf430390890380d3fa4f52029839"
+    },
+    "tetsu": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/tetsu.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8"
+    },
+    "ozer44": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/ozer44.py",
+      "sha256": "797d9bca309d481e18cdbb675ce6d6de9967d266cbafb4c2352c68fb10264e2f"
+    }
+  },
+  "rule": "Each: 16 NEW worlds both seats h2h points>=.65 AND two-sided95 whole-world-bootstrap margin lower>0; 8 different worlds both seats each tetsu/ozer44 with paired unchanged-base control, no points regression and mean margin no worse than -$500 on either sanity opponent; all errors/timeouts0. No variant tuning after gate starts. Bootstrap100000,RNG48020260930. The sanity rule is a finite-panel screen, not a proof of non-inferiority."
+}

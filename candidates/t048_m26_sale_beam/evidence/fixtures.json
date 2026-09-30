@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "120 randomized official/extracted complete market transitions exact",
+    "default-off returns identical object without mutation",
+    "beam preserves units, funding prefix, suffix multiset; inputs immutable",
+    "price floor and duplicate-town/boundary consumption exact",
+    "one-turn hold preserves slot, next-turn release explicitly executes",
+    "holds fail open under cash/space pressure",
+    "negative-flow EV appends at most8 after protected prefix"
+  ]
+}

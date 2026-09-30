@@ -184,3 +184,7 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 - 2026-09-29T22:17:15+00:00 — **t045_mix4_a2**: Δscore +0.000pp (world CI +0.000…+0.000), Δmargin $+29.30; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_mix4_a2/README.md`. [codex]
 
 | T047 | codex | complete — terminal PASS, A1/mix FAIL; 230/230 DONE, no submit | m26 terminal h2h24/32, +$190.22 world95[+$96.81,+$299.44]; sanity tetsu16/16, ozer44 14/16 = unchanged parent. Claude independent review + loader6/6. Archive candidates/t047_m26_terminal; research/t047_m26_post.md. |
+
+| T048-B | codex | complete — sale_beam PASS; late_ev FAIL; never submit | 160/160 gate DONE: sale_beam28/32points, +$157.59 world95[26.84,403], median+$29; sanity16/16tetsu,14/16ozer44 =base, paired+$3/+$7.75. Loader6/6,off1438/1438,independent reviews. Frozen candidates/t048_m26_sale_beam. `research/t048_ev_postprocess_codex.md` |
+
+- 2026-09-30 — T048-B: frozen `t048_m26_sale_beam` passes h2h16new worlds and paired external sanity, but median gain is only+$29 vs mirror and field points unchanged; no automatic replacement. `late_ev` rejected (inert h2h, tetsu−$14.19).206full games completed,0accepted errors/timeouts; one aborted BLAS-only diagnostic attempt excluded. Final memo `research/t048_ev_postprocess_codex.md`. [codex]
