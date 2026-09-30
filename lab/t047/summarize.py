@@ -39,6 +39,24 @@ def main():
         passed = (h['n']==h['valid']==32 and h['worlds']==16 and h['points']/32>=.65 and h['mean_margin']>0 and h['world95'][0]>0
                   and all(groups[o]['n']==groups[o]['valid']==16 and groups[o]['worlds']==8 for o in ('tetsu','ozer44')))
         result['variants'][variant] = {'opponents':groups, 'pass':bool(passed)}
+    control_path=OUT/'sanity_control.jsonl'
+    if control_path.exists():
+        control=[json.loads(x) for x in control_path.read_text().splitlines()]
+        if len(control)==32:
+            assert all(r['valid'] for r in control)
+            lookup={(r['opp'],r['seed'],r['seat']):r for r in control}
+            assert len(lookup)==32
+            result['sanity_control']={}
+            for opp in ('tetsu','ozer44'):
+                cr=[r for r in control if r['opp']==opp]
+                assert len(cr)==16
+                result['sanity_control'][opp]={'n':16,'points':sum(r['points'] for r in cr),
+                                              'mean_margin':float(np.mean([r['margin'] for r in cr]))}
+                for variant,stats in result['variants'].items():
+                    rr=[r for r in rows if r['variant']==variant and r['opp']==opp and r['valid']]
+                    delta=[r['margin']-lookup[(opp,r['seed'],r['seat'])]['margin'] for r in rr]
+                    stats['opponents'][opp]['delta_vs_parent_margin']=float(np.mean(delta))
+                    stats['opponents'][opp]['delta_vs_parent_points']=sum(r['points']-lookup[(opp,r['seed'],r['seat'])]['points'] for r in rr)
     (OUT/'summary.json').write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2))
 

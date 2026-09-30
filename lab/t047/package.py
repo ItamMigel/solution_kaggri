@@ -23,6 +23,8 @@ def main():
     assert a.review.is_file()
     summary=json.loads((OUT/'summary.json').read_text())
     assert summary['complete'] and summary['errors']==0
+    control=[json.loads(x) for x in (OUT/'sanity_control.jsonl').read_text().splitlines()]
+    assert len(control)==32 and all(r['valid'] for r in control)
     smoke=json.loads((OUT/'loader_smoke.json').read_text())
     assert len(smoke)==6 and all(r['parity'] for r in smoke)
     manifest=json.loads((HERE/'manifest.json').read_text())
@@ -38,7 +40,7 @@ def main():
         (target/'pkg').mkdir(parents=True)
         shutil.copyfile(source,target/'pkg/main.py')
         (target/'evidence').mkdir()
-        for path in (OUT/'manifest.json',OUT/'provenance.json',OUT/'summary.json',OUT/'games.jsonl',OUT/'loader_smoke.json',HERE/'fixtures.json',a.review):
+        for path in (OUT/'manifest.json',OUT/'provenance.json',OUT/'summary.json',OUT/'games.jsonl',OUT/'sanity_control.jsonl',OUT/'loader_smoke.json',HERE/'fixtures.json',a.review):
             shutil.copyfile(path,target/'evidence'/path.name)
         code_review=Path('/workspace/shared/research/t047_code_review_claude.md')
         if code_review.is_file() and code_review!=a.review:
@@ -68,7 +70,7 @@ def main():
 
 Против неизменённого m26: {h['wins']}/{h['draws']}/{h['losses']} W/D/L, {h['points']}/32 points, средний margin ${h['mean_margin']:+.2f}, whole-world 95% CI [{h['world95'][0]:+.2f}, {h['world95'][1]:+.2f}]. Миры 93047001–93047016, оба места; 100000 фиксированных bootstrap resamples.
 
-Sanity, миры 93047101–93047108, оба места: tetsu {stats['opponents']['tetsu']['points']}/16 points; ozer44 {stats['opponents']['ozer44']['points']}/16. В полном гейте 192/192 игр без ошибок/таймаутов; 6/6 повторов через официальный file loader совпадают с callable rewards. Независимый review: evidence/{a.review.name}.
+Sanity, миры 93047101–93047108, оба места: tetsu {stats['opponents']['tetsu']['points']}/16 points; ozer44 {stats['opponents']['ozer44']['points']}/16. Производительность sanity не входила в формальный порог; контроль неизменённого m26 на тех же мирах: tetsu {summary['sanity_control']['tetsu']['points']}/16, ozer44 {summary['sanity_control']['ozer44']['points']}/16. В полном гейте 192/192 и в дополнительных 32/32 контрольных играх нет ошибок/таймаутов; 6/6 повторов через официальный file loader совпадают с callable rewards. Независимый review: evidence/{a.review.name}.
 
 Размер эффекта указан в долларах выше. Высокая доля побед в зеркале не доказывает большой прирост рейтинга или побед против всего поля.
 

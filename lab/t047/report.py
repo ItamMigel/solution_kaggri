@@ -28,11 +28,15 @@ def main():
     if smoke.exists():
         r=json.loads(smoke.read_text())
         rows += ['',f"Официальный file loader: {sum(x['parity'] for x in r)}/{len(r)} повторов точно совпали по rewards с callable-гейтом, все DONE/DONE. Фикстуры terminal/A1, метки/веса смеси и выбор entrypoint пройдены."]
+    if 'sanity_control' in s:
+        c=s['sanity_control']
+        t=s['variants']['terminal']['opponents']
+        rows += ['',f"Дополнительный контроль неизменённого m26 на тех же sanity-мирах: tetsu {c['tetsu']['points']:g}/16, ozer44 {c['ozer44']['points']:g}/16; 32/32 без ошибок. Terminal относительно контроля: Δpoints {t['tetsu']['delta_vs_parent_points']:+g}/{t['ozer44']['delta_vs_parent_points']:+g}, Δmargin ${t['tetsu']['delta_vs_parent_margin']:+.2f}/${t['ozer44']['delta_vs_parent_margin']:+.2f} (tetsu/ozer44). Контроль добавлен после двух поражений terminal против ozer44, чтобы проверить их происхождение; варианты не менялись."]
     packages=OUT/'packages.json'
     if packages.exists():
         for v,p in json.loads(packages.read_text()).items():
             rows += ['',f"Замороженный прошедший вариант: `{p['path']}`; архив `{Path(p['archive']).name}`, SHA256 `{p['sha256']}`."]
-    rows += ['', 'V1 даёт небольшой денежный выигрыш в зеркале; высокая доля побед не доказывает большой прирост рейтинга против поля. V2/V3, если FAIL, не рекомендованы. Вес смеси зафиксирован до старта, по этим мирам ничего не подбиралось.', '',
+    rows += ['', 'V1 даёт небольшой денежный выигрыш в зеркале; высокая доля побед не доказывает большой прирост рейтинга против поля. A1 и смесь не рекомендованы. Вес смеси зафиксирован до старта, по этим мирам ничего не подбиралось.', '',
              f'Исходники/сборка: `{HERE}`. Полные игры, manifest с SHA256, summary и loader parity: `{OUT}`. Независимый review: `/workspace/shared/research/t047_code_review_claude.md` и, если создан, `t047_result_review_claude.md`. Никаких отправок в Kaggle.']
     (SHARED/'research/t047_m26_post.md').write_text('\n'.join(rows)+'\n')
     if a.ledger:
