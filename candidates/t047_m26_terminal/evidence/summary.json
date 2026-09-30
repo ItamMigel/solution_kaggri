@@ -1,0 +1,172 @@
+{
+  "records": 192,
+  "complete": true,
+  "errors": 0,
+  "variants": {
+    "terminal": {
+      "opponents": {
+        "m26": {
+          "n": 32,
+          "valid": 32,
+          "worlds": 16,
+          "points": 24.0,
+          "wins": 24,
+          "draws": 0,
+          "losses": 8,
+          "mean_margin": 190.21875,
+          "world95": [
+            96.8125,
+            299.4375
+          ]
+        },
+        "tetsu": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 23137.625,
+          "world95": [
+            15499.875,
+            32180.75
+          ],
+          "delta_vs_parent_margin": 176.375,
+          "delta_vs_parent_points": 0.0
+        },
+        "ozer44": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 14.0,
+          "wins": 14,
+          "draws": 0,
+          "losses": 2,
+          "mean_margin": 19987.375,
+          "world95": [
+            12869.125,
+            25630.024999999994
+          ],
+          "delta_vs_parent_margin": 352.0,
+          "delta_vs_parent_points": 0.0
+        }
+      },
+      "pass": true
+    },
+    "a1": {
+      "opponents": {
+        "m26": {
+          "n": 32,
+          "valid": 32,
+          "worlds": 16,
+          "points": 16.0,
+          "wins": 8,
+          "draws": 16,
+          "losses": 8,
+          "mean_margin": 0.0,
+          "world95": [
+            0.0,
+            0.0
+          ]
+        },
+        "tetsu": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 23268.875,
+          "world95": [
+            15931.875,
+            32186.25
+          ],
+          "delta_vs_parent_margin": 307.625,
+          "delta_vs_parent_points": 0.0
+        },
+        "ozer44": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 14.0,
+          "wins": 14,
+          "draws": 0,
+          "losses": 2,
+          "mean_margin": 19954.125,
+          "world95": [
+            12606.5,
+            25895.375
+          ],
+          "delta_vs_parent_margin": 318.75,
+          "delta_vs_parent_points": 0.0
+        }
+      },
+      "pass": false
+    },
+    "dsm75_mg25": {
+      "opponents": {
+        "m26": {
+          "n": 32,
+          "valid": 32,
+          "worlds": 16,
+          "points": 15.0,
+          "wins": 15,
+          "draws": 0,
+          "losses": 17,
+          "mean_margin": -1922.5625,
+          "world95": [
+            -3956.28671875,
+            64.21875
+          ]
+        },
+        "tetsu": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 13297.125,
+          "world95": [
+            9762.5,
+            16785.5
+          ],
+          "delta_vs_parent_margin": -9664.125,
+          "delta_vs_parent_points": 0.0
+        },
+        "ozer44": {
+          "n": 16,
+          "valid": 16,
+          "worlds": 8,
+          "points": 16.0,
+          "wins": 16,
+          "draws": 0,
+          "losses": 0,
+          "mean_margin": 16945.4375,
+          "world95": [
+            11399.625,
+            22500.3125
+          ],
+          "delta_vs_parent_margin": -2689.9375,
+          "delta_vs_parent_points": 2.0
+        }
+      },
+      "pass": false
+    }
+  },
+  "sanity_control": {
+    "tetsu": {
+      "n": 16,
+      "points": 16.0,
+      "mean_margin": 22961.25
+    },
+    "ozer44": {
+      "n": 16,
+      "points": 14.0,
+      "mean_margin": 19635.375
+    }
+  }
+}

@@ -182,3 +182,5 @@ _2026-09-23 23:45: human set two directions. T001–T005 folded into T011; T006 
 - 2026-09-29T22:17:15+00:00 — **t045_m15ens_a2**: Δscore +0.000pp (world CI +0.000…+0.000), Δmargin $-19.77; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_m15ens_a2/README.md`. [codex]
 
 - 2026-09-29T22:17:15+00:00 — **t045_mix4_a2**: Δscore +0.000pp (world CI +0.000…+0.000), Δmargin $+29.30; 512 paired evaluations /32 new worlds, zero errors; **NO PROMOTION**. `candidates/t045_mix4_a2/README.md`. [codex]
+
+| T047 | codex | complete — terminal PASS, A1/mix FAIL; 230/230 DONE, no submit | m26 terminal h2h24/32, +$190.22 world95[+$96.81,+$299.44]; sanity tetsu16/16, ozer44 14/16 = unchanged parent. Claude independent review + loader6/6. Archive candidates/t047_m26_terminal; research/t047_m26_post.md. |
