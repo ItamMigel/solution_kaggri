@@ -3,6 +3,9 @@
 These local deltas are not a decomposition of an alternative full trajectory.
 No policy parameters are selected using these diagnostics.
 """
+import os
+for key in ('OPENBLAS_NUM_THREADS','OMP_NUM_THREADS','MKL_NUM_THREADS','NUMEXPR_NUM_THREADS'):
+    os.environ[key]='1'
 import contextlib
 import copy
 import io
