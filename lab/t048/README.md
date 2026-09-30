@@ -39,3 +39,14 @@ sanity93048601–608. Bootstrap100000 resamples,RNG48020260930. No parameter
 tuning on gate worlds. Candidate packaging also requires independent Claude
 review and official file-loader parity. Reproduction should use a new output
 directory or the exact original manifests; never overwrite frozen evidence.
+
+Independent review found two limitations in the rejected `late_ev` prototype:
+an oversized native SELL request can remain oversized after the hold decrement
+(the pending count then overstates the actual hold), and the append estimate does
+not price same-turn rival flow in its immediate branch. It is retained as frozen
+negative research, not a reusable scheduling library or a candidate to deploy.
+Do not tune its thresholds on these gate worlds.
+
+For `sale_beam`, expected_gain is a synthetic-scenario prediction, not observed
+cash profit. Own ending stock is unchanged, but rival BUY affordability can change
+even away from the price floor; future shared-state value need not cancel.
