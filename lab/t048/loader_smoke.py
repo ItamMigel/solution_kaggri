@@ -3,6 +3,7 @@ import os
 for k in ('OPENBLAS_NUM_THREADS','OMP_NUM_THREADS','MKL_NUM_THREADS'):
     os.environ[k]='1'
 import contextlib
+import argparse
 import copy
 import hashlib
 import io
@@ -53,10 +54,12 @@ def game(job):
     return r
 
 if __name__=='__main__':
+    ap=argparse.ArgumentParser();ap.add_argument('--workers',type=int,default=4)
+    args=ap.parse_args();assert 1<=args.workers<=6
     manifest=json.loads((OUT/'manifest.json').read_text())['build']
     for rec in [manifest['base'],*manifest['exports'].values()]:
         assert hashlib.sha256(Path(rec['path']).read_bytes()).hexdigest()==rec['sha256']
-    with ProcessPoolExecutor(max_workers=6) as pool:
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
         rows=list(pool.map(game,[(v,p) for v in ('off','sale_beam','late_ev') for p in (0,1)]))
     (OUT/'loader_smoke.json').write_text(json.dumps(rows,indent=2));print(json.dumps(rows,indent=2))
     assert all(r['parity'] for r in rows)
