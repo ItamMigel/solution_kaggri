@@ -1,0 +1,250 @@
+"""Default-off EV overlays. Only live own-private / public state is consumed.
+
+sale_beam searches permutations of existing suffix SELL slots using exact
+official market execution against explicit, uncalibrated opponent scenarios.
+late_ev trades at most eight units per item around the next known town tick.
+"""
+import copy
+import itertools
+from types import SimpleNamespace
+
+SALE_PRODUCTS = ('CARROT', 'TOMATO', 'STRAWBERRY', 'MELON', 'EGG', 'MILK', 'WOOL')
+
+
+class Postprocessor:
+    def __init__(self, engine, unit_engine, terminal, mode='off'):
+        assert mode in ('off', 'sale_beam', 'late_ev')
+        self.engine, self.unit_engine, self.terminal = engine, unit_engine, terminal
+        self.mode = mode
+        self.stats = dict(errors=0, changed=0, searched=0, scored=0, added=0,
+                          held=0, released=0, expected_gain=0.0)
+        self.last_step = None
+        self.previous = None
+        self.flow = {it: [] for it in SALE_PRODUCTS}
+        self.pending = {}
+
+    def post_units(self, obs, action, config):
+        # Official unit rules, including the atomic PLANT guard.
+        return self.terminal['post_unit_shed'](obs, action, config, self.unit_engine)
+
+    @staticmethod
+    def boundary(orders):
+        return max((i for i, o in enumerate(orders)
+                    if not (isinstance(o, list) and o and o[0] in ('SELL', 'NOOP'))), default=-1)
+
+    def sale_beam(self, obs, action, config):
+        if int(obs['step']) < 336:
+            return action
+        orders = action.get('market', [])
+        if not isinstance(orders, list) or len(orders) > int(config.get('maxMarketOrdersPerTurn', 10)):
+            return action
+        bound = self.boundary(orders)
+        slots = [i for i, o in enumerate(orders) if i > bound and isinstance(o, list)
+                 and len(o) >= 3 and o[0] == 'SELL' and int(o[2]) > 0]
+        if len(slots) < 2:
+            return action
+        # Duplicate-item rows have deliberate interleaving semantics; retain them.
+        items = [orders[i][1] for i in slots]
+        if len(set(items)) != len(items):
+            return action
+        shed = self.post_units(obs, action, config)
+        base_farm = copy.deepcopy(obs['farms'][obs['player']])
+        own_private = copy.deepcopy(obs['private'])
+        own_private['shed'] = shed
+        # Scenario assumptions are explicit: a mirror-like sale queue, quantities
+        # at 0.5 / 1 / 1.5 times ours. No rival private state or second NN forward.
+        # Purchases in the rival prefix remain fixed; its money starts at public cash.
+        scenarios = []
+        for scale, weight in ((0.5, .25), (1.0, .5), (1.5, .25)):
+            rival = copy.deepcopy(orders)
+            stocked = {it: max(0, int(round(n*scale))) for it,n in shed.items()}
+            for o in rival:
+                if len(o) >= 3 and o[0] == 'SELL':
+                    o[2] = max(1, int(round(int(o[2]) * scale)))
+            # Match capacity: proportional synthetic stock would otherwise invent
+            # an impossible shed. All quantities still clip in the exact scorer.
+            cap = int(config.get('shedCapacity', 100))
+            excess = max(0, sum(stocked.values())-cap)
+            for it in sorted(stocked, key=lambda x: (-stocked[x], x)):
+                take = min(excess, stocked[it]); stocked[it] -= take; excess -= take
+            rf = copy.deepcopy(obs['farms'][1-int(obs['player'])])
+            rp = {'shed': stocked, 'seeds': {}, 'inventories': [{}] * (1+len(rf.get('hands', [])))}
+            scenarios.append((rival, rf, rp, weight))
+
+        def score(candidate):
+            value = 0.0
+            for rival, rf, rp, weight in scenarios:
+                # Canonical player order is retained for exact atomic/capacity rules.
+                seat = int(obs['player'])
+                farms = [None, None]; privates = [None, None]; queues = [None, None]
+                farms[seat] = copy.deepcopy(base_farm); farms[1-seat] = copy.deepcopy(rf)
+                privates[seat] = copy.deepcopy(own_private); privates[1-seat] = copy.deepcopy(rp)
+                queues[seat] = candidate; queues[1-seat] = rival
+                market = copy.deepcopy(obs['market'])
+                state = [SimpleNamespace(observation=SimpleNamespace(market=market, farms=farms, private=privates[i]),
+                                         action={'market': queues[i]}) for i in (0,1)]
+                self.engine['_process_market'](state, SimpleNamespace(configuration=config))
+                value += weight * (farms[seat]['money'] - farms[1-seat]['money'])
+            self.stats['scored'] += 1
+            return value
+
+        native = tuple(slots)
+        # A bounded permutation beam: all permutations for <=3 sells; otherwise
+        # base plus single swaps, capped deterministically at 16 candidates.
+        if len(slots) <= 3:
+            perms = list(itertools.permutations(slots))
+        else:
+            perms = [native]
+            for i in range(len(slots)):
+                for j in range(i+1, len(slots)):
+                    p = list(slots); p[i], p[j] = p[j], p[i]; perms.append(tuple(p))
+            perms = perms[:16]
+        baseline = score(orders)
+        best, best_value = orders, baseline
+        self.stats['searched'] += 1
+        for perm in perms:
+            if perm == native:
+                continue
+            candidate = list(orders)
+            for i, j in zip(slots, perm):
+                candidate[i] = orders[j]
+            value = score(candidate) - .25 * sum(i != j for i, j in zip(slots, perm))
+            if value > best_value + 2.0:
+                best, best_value = candidate, value
+        if best is orders:
+            return action
+        self.stats['expected_gain'] += best_value-baseline
+        return {**action, 'market': best}
+
+    def demand(self, obs, config, start, stop, item):
+        shop_int = max(1, int(config.get('townShopSellInterval', 4)))
+        center_int = max(1, int(config.get('townCenterSellInterval', 24)))
+        shops = obs.get('town', {}).get('unlocked_shops', [])
+        per_tick = sum((2 if len(self.engine['SHOPS'][s]) == 1 else 1)
+                       for s in shops if item in self.engine['SHOPS'][s])
+        return sum(per_tick*(t % shop_int == 0) + (t % center_int == 0)
+                   for t in range(start, stop))
+
+    def batch_value(self, obs, item, inv, quantity):
+        value = 0.0
+        for _ in range(quantity):
+            p = self.engine['market_price'](item, inv, obs['market'].get('params'))
+            value += p
+            if p > 1:
+                inv += 1
+        return value
+
+    def late_ev(self, obs, action, config):
+        step = int(obs['step'])
+        if step < 624 or step > 717:
+            return action
+        orders = action.get('market', [])
+        if not isinstance(orders, list) or len(orders) > int(config.get('maxMarketOrdersPerTurn',10)):
+            return action
+        inv = obs['market']['inventory']
+        prices = obs['market']['prices']
+        if self.previous is not None and self.previous['step'] == step-1:
+            prev = self.previous
+            for it in SALE_PRODUCTS:
+                # Away from the floor, own sales have an exact public footprint.
+                # At $1 sales stop adding inventory; do not infer gross volume there.
+                consumed = self.demand(prev['obs'], config, step-1, step, it)
+                post_market_price = self.engine['market_price'](it,inv[it]+consumed,obs['market'].get('params'))
+                if prices[it] > 10 and prev['prices'][it] > 10 and post_market_price > 1:
+                    q = inv[it] - prev['inv'][it] + consumed - prev['own'][it]
+                    self.flow[it].append(max(0, int(q)))
+                else:
+                    self.flow[it].append(None)
+                self.flow[it] = self.flow[it][-48:]
+        shed = self.post_units(obs, action, config)
+        result = action
+        if step >= 672:
+            result = self.schedule(obs, action, config, shed)
+        own = {it: 0 for it in SALE_PRODUCTS}
+        for o in result.get('market', []):
+            if isinstance(o, list) and len(o) >= 3 and o[0] == 'SELL' and o[1] in own:
+                own[o[1]] = min(int(shed.get(o[1], 0)), own[o[1]]+max(0,int(o[2])))
+        self.previous = dict(step=step, inv=dict(inv), prices=dict(prices), own=own,
+                             obs={'town': copy.deepcopy(obs.get('town', {}))})
+        return result
+
+    def schedule(self, obs, action, config, shed):
+        step = int(obs['step']); orders = copy.deepcopy(action.get('market', []))
+        limit = int(config.get('maxMarketOrdersPerTurn', 10))
+        boundary = self.boundary(orders)
+        left = {it: int(shed.get(it, 0)) for it in SALE_PRODUCTS}
+        sold = {it: 0 for it in SALE_PRODUCTS}
+        for o in orders:
+            if len(o) >= 3 and o[0] == 'SELL' and o[1] in left:
+                q = min(left[o[1]], max(0,int(o[2]))); left[o[1]] -= q; sold[o[1]] += q
+        # A postponed sale is explicitly released next turn, even if BC omits it.
+        released = set()
+        for it, (due, q) in list(self.pending.items()):
+            if step < due:
+                continue
+            q = min(max(0, q-sold[it]), left[it])
+            if q and len(orders) < limit:
+                orders.append(['SELL', it, q]); left[it] -= q
+                self.stats['released'] += q
+                q = 0
+            if not q:
+                del self.pending[it]
+            else:
+                self.pending[it] = (due,q)
+            released.add(it)
+        if step >= 717:
+            return {**action, 'market': orders} if orders != action.get('market', []) else action
+        capacity = int(config.get('shedCapacity', 100))
+        safe_hold = sum(shed.values()) <= capacity-24 and float(obs['farms'][obs['player']]['money']) >= 2000
+        for it in SALE_PRODUCTS:
+            if it in released or it in self.pending or obs['market']['prices'][it] <= 10:
+                continue
+            history = self.flow[it][-24:]
+            if len(history) < 16 or any(x is None for x in history):
+                continue
+            shop_int = max(1,int(config.get('townShopSellInterval',4)))
+            horizon = min(718-step, 1+(-step) % shop_int)
+            demand = self.demand(obs, config, step, step+horizon, it)
+            # Empirical contiguous flow blocks preserve bursts; future town demand
+            # is known exactly. This is a local scenario estimate, not calibrated V.
+            flows = [sum(history[i:i+horizon]) for i in range(len(history)-horizon+1)]
+            inv = obs['market']['inventory'][it]
+            slots = [i for i,o in enumerate(orders) if i>boundary and len(o)>=3 and o[:2]==['SELL',it] and int(o[2])>0]
+            # Holding is only one turn immediately before deterministic town demand.
+            if safe_hold and horizon == 1 and demand > 0 and slots:
+                i = slots[-1]; q = min(8, int(orders[i][2]), sold[it])
+                now = self.batch_value(obs,it,inv,q)
+                deltas = [self.batch_value(obs,it,inv+flow-demand,q)-now for flow in flows]
+                mean = sum(deltas)/len(deltas)
+                if q and mean > max(8., .02*now) and min(deltas) >= 0:
+                    orders[i][2] -= q
+                    if orders[i][2] == 0:
+                        orders[i] = ['NOOP']
+                    self.pending[it] = (step+1,q)
+                    self.stats['held'] += q; self.stats['expected_gain'] += mean
+                    continue
+            # Additional sales occur after every original order, preserving funding.
+            q = min(8, left[it])
+            if q <= 0 or len(orders) >= limit:
+                continue
+            # Native own sales happen first and depress the extra units' quote.
+            inv += sold[it]
+            now = self.batch_value(obs,it,inv,q)
+            deltas = [now-self.batch_value(obs,it,inv+flow-demand,q) for flow in flows]
+            mean = sum(deltas)/len(deltas)
+            if mean > max(8., .02*now):
+                orders.append(['SELL',it,q]); left[it] -= q
+                self.stats['added'] += q; self.stats['expected_gain'] += mean
+        return {**action, 'market': orders} if orders != action.get('market', []) else action
+
+    def apply(self, obs, action, config=None):
+        if self.mode == 'off':
+            return action
+        step = int(obs['step'])
+        if self.last_step is None or step <= self.last_step:
+            self.previous = None; self.pending = {}; self.flow = {it: [] for it in SALE_PRODUCTS}
+        self.last_step = step
+        result = getattr(self, self.mode)(obs, action, config or {})
+        if result != action:
+            self.stats['changed'] += 1
+        return result
