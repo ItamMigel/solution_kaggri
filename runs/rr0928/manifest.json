@@ -1,0 +1,87 @@
+{
+  "created_utc": "2026-09-28T21:30:57.587998+00:00",
+  "candidates": {
+    "pub_tetsu": "/workspace/shared/opponents/new0928/demand-preserving-turn-sale-timing/pkg/main.py",
+    "pub_evg31": "/workspace/shared/opponents/new0928/kaggriculture-version-31-26-09-bronze-going-up/pkg/main.py",
+    "pub_guru53": "/workspace/shared/opponents/new0928/kaggriculture-master-engine-v53e01d74d8f/pkg/main.py",
+    "pub_shep": "/workspace/shared/opponents/new0928/the-shepherds-ledger-herd-safe-sovereign/pkg/main.py",
+    "pub_mshock": "/workspace/shared/opponents/new0928/a-song-of-ice-and-fire-fixed-flexible/pkg/main.py",
+    "pub_multi": "/workspace/shared/opponents/new0928/kaggriculture-multi-route-farming-agent/pkg/main.py",
+    "es1_g1": "/workspace/shared/candidates/es1_g1/pkg/main.py",
+    "es7_wm": "/workspace/shared/candidates/es7_wm/pkg/main.py",
+    "es6_c4g15": "/workspace/shared/candidates/es6_c4g15/pkg/main.py",
+    "es3_g5": "/workspace/shared/candidates/es3_g5/pkg/main.py",
+    "es5_c3g15": "/workspace/shared/candidates/es5_c3g15/pkg/main.py"
+  },
+  "opponents": {
+    "o_tetsu": "/workspace/shared/opponents/new0928/demand-preserving-turn-sale-timing/pkg/main.py",
+    "o_evg31": "/workspace/shared/opponents/new0928/kaggriculture-version-31-26-09-bronze-going-up/pkg/main.py",
+    "o_guru53": "/workspace/shared/opponents/new0928/kaggriculture-master-engine-v53e01d74d8f/pkg/main.py",
+    "o_shep": "/workspace/shared/opponents/new0928/the-shepherds-ledger-herd-safe-sovereign/pkg/main.py",
+    "o_mshock": "/workspace/shared/opponents/new0928/a-song-of-ice-and-fire-fixed-flexible/pkg/main.py",
+    "o_es1_g1": "/workspace/shared/candidates/es1_g1/pkg/main.py",
+    "o_es7_wm": "/workspace/shared/candidates/es7_wm/pkg/main.py"
+  },
+  "seeds": [
+    11,
+    22,
+    33,
+    44,
+    55,
+    66
+  ],
+  "expected_games": 924,
+  "input_sha256": {
+    "/workspace/shared/candidates/es1_g1/pkg/main.py": "2a73b821add3b47aa930d70ba68187374b94a82d55ca9ca7bc9a8398ccc45937",
+    "/workspace/shared/candidates/es3_g5/pkg/main.py": "fb194f51d3227472afbb9f4169b30e1706f46636cbe0232f0fa17e988cb231b1",
+    "/workspace/shared/candidates/es5_c3g15/pkg/main.py": "c2f147814791c30c3754a3772086e5591d92afebfde3d711c026a12f8186680d",
+    "/workspace/shared/candidates/es6_c4g15/pkg/main.py": "53c93a2b3abc9997577ed53fa6ec9cae86f17303c88d670de6fa14561c2fc03a",
+    "/workspace/shared/candidates/es7_wm/pkg/main.py": "d1220b7aa6ed80b44f49971805881be916f0b4e5f58455bbbce7f5120a75dca6",
+    "/workspace/shared/opponents/new0928/a-song-of-ice-and-fire-fixed-flexible/pkg/main.py": "12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693",
+    "/workspace/shared/opponents/new0928/demand-preserving-turn-sale-timing/pkg/main.py": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+    "/workspace/shared/opponents/new0928/kaggriculture-master-engine-v53e01d74d8f/pkg/main.py": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8",
+    "/workspace/shared/opponents/new0928/kaggriculture-multi-route-farming-agent/pkg/main.py": "489f5d197527f107027626cce79d850fd2ca90edd43d94384b849b6511e27bdb",
+    "/workspace/shared/opponents/new0928/kaggriculture-version-31-26-09-bronze-going-up/pkg/main.py": "a2047ebd8ca5720221e1421529655d9c67a7b2fedb74e874c7d3c55a8970ac7e",
+    "/workspace/shared/opponents/new0928/the-shepherds-ledger-herd-safe-sovereign/pkg/main.py": "1eb0938d1a032e6189f5c08963cb2114ce71166942dd97727cccd405a002d2ee",
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 180,
+  "workers": 44,
+  "decision_note": "RR 09-28 ours vs new publics; no submission",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "pub_tetsu",
+      "o_tetsu"
+    ],
+    [
+      "pub_evg31",
+      "o_evg31"
+    ],
+    [
+      "pub_guru53",
+      "o_guru53"
+    ],
+    [
+      "pub_shep",
+      "o_shep"
+    ],
+    [
+      "pub_mshock",
+      "o_mshock"
+    ],
+    [
+      "es1_g1",
+      "o_es1_g1"
+    ],
+    [
+      "es7_wm",
+      "o_es7_wm"
+    ]
+  ]
+}

@@ -1,0 +1,6741 @@
+{
+  "games": 32,
+  "flow": [
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "games": 32,
+      "final_mean": 109187.6875,
+      "buy:BUY_PRODUCT:WHEAT": -4809.59375,
+      "sale:WHEAT": 12866.875,
+      "buy:BUY_SEED:WHEAT": -1466.5625,
+      "hire": -4993.125,
+      "buy:BUY_ANIMAL:COW": -3262.5,
+      "buy:BUY_ANIMAL:SHEEP": -3703.125,
+      "buy:BUY_SEED:MELON": -960.0,
+      "sale:FERTILIZER": 14727.0,
+      "buy:BUY_SEED:STRAWBERRY": -3296.875,
+      "sale:WOOL": 17935.90625,
+      "land": -3500.0,
+      "buy:BUY_PRODUCT:FERTILIZER": -2154.5,
+      "sale:MILK": 30159.90625,
+      "buy:BUY_ANIMAL:GOOSE": -543.75,
+      "sale:MELON": 14267.0,
+      "sale:EGG": 2779.25,
+      "sale:STRAWBERRY": 35618.6875,
+      "buy:BUY_SEED:CARROT": -975.625,
+      "sale:CARROT": 6887.40625,
+      "buy:BUY_SEED:TOMATO": -31.25,
+      "sale:TOMATO": 642.5625
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "games": 32,
+      "final_mean": 109212.5625,
+      "buy:BUY_PRODUCT:WHEAT": -4998.71875,
+      "sale:WHEAT": 13070.625,
+      "buy:BUY_SEED:WHEAT": -1466.5625,
+      "hire": -4993.125,
+      "buy:BUY_ANIMAL:COW": -3262.5,
+      "buy:BUY_ANIMAL:SHEEP": -3703.125,
+      "buy:BUY_SEED:MELON": -960.0,
+      "sale:FERTILIZER": 14723.9375,
+      "buy:BUY_SEED:STRAWBERRY": -3296.875,
+      "sale:WOOL": 17935.90625,
+      "land": -3500.0,
+      "buy:BUY_PRODUCT:FERTILIZER": -2154.5,
+      "sale:MILK": 30159.90625,
+      "buy:BUY_ANIMAL:GOOSE": -543.75,
+      "sale:MELON": 14267.0,
+      "sale:EGG": 2792.5625,
+      "sale:STRAWBERRY": 35618.6875,
+      "buy:BUY_SEED:CARROT": -975.625,
+      "sale:CARROT": 6887.40625,
+      "buy:BUY_SEED:TOMATO": -31.25,
+      "sale:TOMATO": 642.5625
+    }
+  ],
+  "events": [
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 2.0,
+      "cash_per_game": -800.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 2.0,
+      "cash_per_game": -1000.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -222.0,
+      "price_mean": 27.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "BUY_SEED",
+      "item": "MELON",
+      "units_per_game": 12.0,
+      "cash_per_game": -960.0,
+      "price_mean": 80.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 0,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": 86.0,
+      "price_mean": 28.666666666666668
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 1,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -206.0,
+      "price_mean": 29.428571428571427
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 1,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 3.0,
+      "cash_per_game": 299.0,
+      "price_mean": 99.66666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 2,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.0,
+      "cash_per_game": -400.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 2,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": -30.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 2,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.0,
+      "cash_per_game": 490.0,
+      "price_mean": 98.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 2,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 60.0,
+      "price_mean": 30.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 3,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.0,
+      "cash_per_game": -400.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 3,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": -40.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 3,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 3.9375,
+      "cash_per_game": 379.0,
+      "price_mean": 96.25396825396825
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 3,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": 119.0,
+      "price_mean": 29.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 4,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 6.0,
+      "cash_per_game": -179.5,
+      "price_mean": 29.916666666666668
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 4,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": -30.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 4,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.9375,
+      "cash_per_game": 559.3125,
+      "price_mean": 94.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 4,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 59.0,
+      "price_mean": 29.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 5,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 4.0,
+      "cash_per_game": -400.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 5,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.0,
+      "cash_per_game": 460.25,
+      "price_mean": 92.05
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 5,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 61.0,
+      "price_mean": 30.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.375,
+      "cash_per_game": -550.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 0.125,
+      "cash_per_game": -37.5,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.5,
+      "cash_per_game": -250.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 1.4375,
+      "cash_per_game": -129.5,
+      "price_mean": 90.08695652173913
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 7.75,
+      "cash_per_game": -244.75,
+      "price_mean": 31.580645161290324
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.21875,
+      "cash_per_game": -24.375,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 8.0,
+      "cash_per_game": -800.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.78125,
+      "cash_per_game": -47.8125,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 8.09375,
+      "cash_per_game": 726.46875,
+      "price_mean": 89.75675675675676
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 8.5,
+      "cash_per_game": 268.0,
+      "price_mean": 31.529411764705884
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 6,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 12.0,
+      "cash_per_game": 2445.4375,
+      "price_mean": 203.78645833333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 2.0,
+      "cash_per_game": -800.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.6875,
+      "cash_per_game": -59.875,
+      "price_mean": 87.0909090909091
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 1.71875,
+      "cash_per_game": -53.40625,
+      "price_mean": 31.072727272727274
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 3.96875,
+      "cash_per_game": -396.875,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.90625,
+      "cash_per_game": -39.0625,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 7,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 8.375,
+      "cash_per_game": 727.40625,
+      "price_mean": 86.8544776119403
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 2.0,
+      "cash_per_game": -1000.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -63.8125,
+      "price_mean": 85.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 20.25,
+      "cash_per_game": -675.125,
+      "price_mean": 33.339506172839506
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.0625,
+      "cash_per_game": -1.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 4.0,
+      "cash_per_game": -400.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 1.0,
+      "cash_per_game": -10.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 9.96875,
+      "cash_per_game": 833.53125,
+      "price_mean": 83.61442006269593
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.0,
+      "cash_per_game": 2334.125,
+      "price_mean": 194.51041666666666
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 8,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 3.75,
+      "cash_per_game": 129.09375,
+      "price_mean": 34.425
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.40625,
+      "cash_per_game": -162.5,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 1.34375,
+      "cash_per_game": -671.875,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -60.8125,
+      "price_mean": 81.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 13.5625,
+      "cash_per_game": -483.25,
+      "price_mean": 35.63133640552996
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": -40.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 0.5625,
+      "cash_per_game": 23.0,
+      "price_mean": 40.888888888888886
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.9375,
+      "cash_per_game": 1102.21875,
+      "price_mean": 79.0829596412556
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 4.59375,
+      "cash_per_game": 163.15625,
+      "price_mean": 35.51700680272109
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 9,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 8.0,
+      "cash_per_game": 1498.5625,
+      "price_mean": 187.3203125
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.25,
+      "cash_per_game": -100.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 1.125,
+      "cash_per_game": -337.5,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.875,
+      "cash_per_game": -437.5,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 6.0,
+      "cash_per_game": -459.6875,
+      "price_mean": 76.61458333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 24.6875,
+      "cash_per_game": -918.3125,
+      "price_mean": 37.19746835443038
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 6.71875,
+      "cash_per_game": 515.09375,
+      "price_mean": 76.66511627906976
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "SELL",
+      "item": "MELON",
+      "units_per_game": 60.0,
+      "cash_per_game": 13000.0,
+      "price_mean": 216.66666666666666
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 11.28125,
+      "cash_per_game": 2130.09375,
+      "price_mean": 188.81717451523545
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 10,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 4.5,
+      "cash_per_game": 174.0,
+      "price_mean": 38.666666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.125,
+      "cash_per_game": -50.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 0.5625,
+      "cash_per_game": -168.75,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.3125,
+      "cash_per_game": -156.25,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -53.3125,
+      "price_mean": 71.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 19.5,
+      "cash_per_game": -755.5625,
+      "price_mean": 38.74679487179487
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 13.0,
+      "cash_per_game": -1300.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 11.0,
+      "cash_per_game": -110.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.125,
+      "cash_per_game": 6.6875,
+      "price_mean": 53.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.625,
+      "cash_per_game": 999.6875,
+      "price_mean": 73.37155963302752
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "SELL",
+      "item": "MELON",
+      "units_per_game": 12.0,
+      "cash_per_game": 1267.0,
+      "price_mean": 105.58333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.96875,
+      "cash_per_game": 1017.96875,
+      "price_mean": 170.5497382198953
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 11,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 13.5,
+      "cash_per_game": 532.875,
+      "price_mean": 39.47222222222222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.375,
+      "cash_per_game": -187.5,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 5.375,
+      "cash_per_game": -206.0,
+      "price_mean": 38.325581395348834
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.9375,
+      "cash_per_game": 1079.0625,
+      "price_mean": 67.70588235294117
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.9375,
+      "cash_per_game": 998.3125,
+      "price_mean": 168.13684210526316
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 13.5,
+      "cash_per_game": 521.125,
+      "price_mean": 38.601851851851855
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 12,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 9.9375,
+      "cash_per_game": 1744.15625,
+      "price_mean": 175.51257861635222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 2.3125,
+      "cash_per_game": -90.1875,
+      "price_mean": 39.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 6.0,
+      "cash_per_game": -60.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.125,
+      "cash_per_game": 6.75,
+      "price_mean": 54.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 17.0,
+      "cash_per_game": 1039.40625,
+      "price_mean": 61.14154411764706
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.8125,
+      "cash_per_game": 960.0,
+      "price_mean": 165.16129032258064
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 0.03125,
+      "cash_per_game": 1.15625,
+      "price_mean": 37.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 13,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 1.0,
+      "cash_per_game": 229.5625,
+      "price_mean": 229.5625
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.5,
+      "cash_per_game": -190.1875,
+      "price_mean": 54.339285714285715
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 1.09375,
+      "cash_per_game": -43.3125,
+      "price_mean": 39.6
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.75,
+      "cash_per_game": 40.375,
+      "price_mean": 53.833333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.71875,
+      "cash_per_game": 812.03125,
+      "price_mean": 55.169851380042466
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.46875,
+      "cash_per_game": 2120.375,
+      "price_mean": 170.05513784461152
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 0.5,
+      "cash_per_game": 19.875,
+      "price_mean": 39.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 14,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 11.71875,
+      "cash_per_game": 1159.65625,
+      "price_mean": 98.95733333333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.75,
+      "cash_per_game": -188.875,
+      "price_mean": 50.36666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.0625,
+      "price_mean": 40.166666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.5,
+      "cash_per_game": 235.5625,
+      "price_mean": 52.34722222222222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.53125,
+      "cash_per_game": 787.75,
+      "price_mean": 50.72032193158954
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 17.34375,
+      "cash_per_game": 2448.28125,
+      "price_mean": 141.16216216216216
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 5.96875,
+      "cash_per_game": 1362.53125,
+      "price_mean": 228.27748691099475
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 7.34375,
+      "cash_per_game": 290.5,
+      "price_mean": 39.55744680851064
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 15,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.71875,
+      "cash_per_game": 1045.34375,
+      "price_mean": 221.52980132450332
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -33.1875,
+      "price_mean": 44.25
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.25,
+      "price_mean": 40.666666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.75,
+      "cash_per_game": -77.5,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 3.875,
+      "cash_per_game": 198.5625,
+      "price_mean": 51.24193548387097
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 11.4375,
+      "cash_per_game": 529.3125,
+      "price_mean": 46.278688524590166
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.53125,
+      "cash_per_game": 1305.96875,
+      "price_mean": 124.00890207715133
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.9375,
+      "cash_per_game": 3847.75,
+      "price_mean": 214.50871080139373
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.53125,
+      "cash_per_game": 260.28125,
+      "price_mean": 39.85167464114833
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 16,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 14.40625,
+      "cash_per_game": 1114.875,
+      "price_mean": 77.3882863340564
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.5,
+      "cash_per_game": -10.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.125,
+      "cash_per_game": 203.8125,
+      "price_mean": 49.40909090909091
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 10.9375,
+      "cash_per_game": 458.78125,
+      "price_mean": 41.94571428571429
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 4.03125,
+      "cash_per_game": 403.625,
+      "price_mean": 100.12403100775194
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 15.90625,
+      "cash_per_game": 3337.46875,
+      "price_mean": 209.8212180746562
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.40625,
+      "cash_per_game": 256.0,
+      "price_mean": 39.9609756097561
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 17,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 7.65625,
+      "cash_per_game": 1001.75,
+      "price_mean": 130.84081632653061
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -26.5,
+      "price_mean": 35.333333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.5625,
+      "cash_per_game": -11.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "TOMATO",
+      "units_per_game": 0.625,
+      "cash_per_game": -31.25,
+      "price_mean": 50.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.3125,
+      "cash_per_game": 117.25,
+      "price_mean": 50.7027027027027
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.875,
+      "cash_per_game": 513.5625,
+      "price_mean": 37.013513513513516
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 13.3125,
+      "cash_per_game": 1659.3125,
+      "price_mean": 124.64319248826291
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.9375,
+      "cash_per_game": 3450.625,
+      "price_mean": 192.36933797909407
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 11.59375,
+      "cash_per_game": 466.21875,
+      "price_mean": 40.21293800539083
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 18,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.5,
+      "cash_per_game": 870.6875,
+      "price_mean": 133.95192307692307
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 1.3125,
+      "cash_per_game": -42.1875,
+      "price_mean": 32.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.1875,
+      "price_mean": 40.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.5,
+      "cash_per_game": -30.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 5.9375,
+      "cash_per_game": -59.375,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.5,
+      "cash_per_game": 124.4375,
+      "price_mean": 49.775
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 7.4375,
+      "cash_per_game": 244.9375,
+      "price_mean": 32.9327731092437
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.59375,
+      "cash_per_game": 1635.84375,
+      "price_mean": 129.89330024813896
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.4375,
+      "cash_per_game": 3279.25,
+      "price_mean": 188.0573476702509
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.375,
+      "cash_per_game": 255.5,
+      "price_mean": 40.07843137254902
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 19,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.84375,
+      "cash_per_game": 294.46875,
+      "price_mean": 60.79354838709678
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.75,
+      "cash_per_game": -123.0625,
+      "price_mean": 32.81666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.8125,
+      "cash_per_game": -36.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 5.1875,
+      "cash_per_game": -51.875,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 5.625,
+      "cash_per_game": 277.3125,
+      "price_mean": 49.3
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 7.625,
+      "cash_per_game": 238.0625,
+      "price_mean": 31.221311475409838
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.6875,
+      "cash_per_game": 1284.3125,
+      "price_mean": 120.16959064327486
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 25.46875,
+      "cash_per_game": 4419.5,
+      "price_mean": 173.52638036809816
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 11.96875,
+      "cash_per_game": 480.78125,
+      "price_mean": 40.16971279373368
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 20,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.6875,
+      "cash_per_game": 329.875,
+      "price_mean": 70.37333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 2.625,
+      "cash_per_game": -105.375,
+      "price_mean": 40.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 3.125,
+      "cash_per_game": -62.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.875,
+      "cash_per_game": -78.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.75,
+      "cash_per_game": 135.3125,
+      "price_mean": 49.20454545454545
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.78125,
+      "cash_per_game": 375.0625,
+      "price_mean": 27.215419501133788
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 6.34375,
+      "cash_per_game": 768.40625,
+      "price_mean": 121.12807881773399
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 27.0,
+      "cash_per_game": 4120.0625,
+      "price_mean": 152.59490740740742
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 13.4375,
+      "cash_per_game": 541.3125,
+      "price_mean": 40.283720930232555
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 21,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 8.25,
+      "cash_per_game": 612.0,
+      "price_mean": 74.18181818181819
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 7.5,
+      "cash_per_game": -159.0,
+      "price_mean": 21.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 2.625,
+      "cash_per_game": -52.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 6.8125,
+      "cash_per_game": -68.125,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 0.1875,
+      "cash_per_game": 9.25,
+      "price_mean": 49.333333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.25,
+      "cash_per_game": 109.9375,
+      "price_mean": 48.861111111111114
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.34375,
+      "cash_per_game": 339.8125,
+      "price_mean": 22.14663951120163
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.3125,
+      "cash_per_game": 1330.3125,
+      "price_mean": 108.04568527918782
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 23.625,
+      "cash_per_game": 2714.09375,
+      "price_mean": 114.88227513227513
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 22.875,
+      "cash_per_game": 923.15625,
+      "price_mean": 40.35655737704918
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 22,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.625,
+      "cash_per_game": 463.8125,
+      "price_mean": 70.00943396226415
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.75,
+      "cash_per_game": -146.875,
+      "price_mean": 16.785714285714285
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 4.375,
+      "cash_per_game": -176.0625,
+      "price_mean": 40.24285714285714
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 4.9375,
+      "cash_per_game": -98.75,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 9.875,
+      "cash_per_game": -98.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 5.625,
+      "cash_per_game": 272.25,
+      "price_mean": 48.4
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 16.5,
+      "cash_per_game": 306.96875,
+      "price_mean": 18.604166666666668
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.53125,
+      "cash_per_game": 1295.5,
+      "price_mean": 123.01483679525222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 18.21875,
+      "cash_per_game": 1952.125,
+      "price_mean": 107.1492281303602
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 17.375,
+      "cash_per_game": 698.4375,
+      "price_mean": 40.197841726618705
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 23,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 7.0625,
+      "cash_per_game": 382.0625,
+      "price_mean": 54.097345132743364
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.5,
+      "cash_per_game": -156.625,
+      "price_mean": 18.426470588235293
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.1875,
+      "price_mean": 40.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 4.125,
+      "cash_per_game": -82.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.5,
+      "cash_per_game": -75.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 1.8125,
+      "cash_per_game": 105.6875,
+      "price_mean": 58.310344827586206
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.625,
+      "cash_per_game": 127.5625,
+      "price_mean": 48.595238095238095
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 10.3125,
+      "cash_per_game": 170.0625,
+      "price_mean": 16.490909090909092
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 8.5625,
+      "cash_per_game": 968.25,
+      "price_mean": 113.08029197080292
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.96875,
+      "cash_per_game": 1914.90625,
+      "price_mean": 91.32190760059612
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 20.40625,
+      "cash_per_game": 815.5,
+      "price_mean": 39.963246554364474
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 24,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 12.375,
+      "cash_per_game": 847.25,
+      "price_mean": 68.46464646464646
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 5.5,
+      "cash_per_game": -78.0625,
+      "price_mean": 14.193181818181818
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 3.0625,
+      "cash_per_game": -122.9375,
+      "price_mean": 40.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 14.5,
+      "cash_per_game": -290.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 9.8125,
+      "cash_per_game": 560.3125,
+      "price_mean": 57.10191082802548
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.75,
+      "cash_per_game": 228.3125,
+      "price_mean": 48.06578947368421
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.8125,
+      "cash_per_game": 236.8125,
+      "price_mean": 15.987341772151899
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 14.5625,
+      "cash_per_game": 1596.53125,
+      "price_mean": 109.63304721030043
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 10.28125,
+      "cash_per_game": 834.96875,
+      "price_mean": 81.2127659574468
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 21.78125,
+      "cash_per_game": 871.375,
+      "price_mean": 40.00573888091822
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 25,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 5.53125,
+      "cash_per_game": 513.46875,
+      "price_mean": 92.83050847457628
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.0,
+      "cash_per_game": -106.9375,
+      "price_mean": 13.3671875
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 4.375,
+      "cash_per_game": -174.4375,
+      "price_mean": 39.871428571428574
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 11.6875,
+      "cash_per_game": -233.75,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -3.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 6.375,
+      "cash_per_game": 365.0625,
+      "price_mean": 57.26470588235294
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.0,
+      "cash_per_game": 96.0,
+      "price_mean": 48.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.5,
+      "cash_per_game": 195.0,
+      "price_mean": 13.448275862068966
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 8.0625,
+      "cash_per_game": 895.75,
+      "price_mean": 111.10077519379846
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.21875,
+      "cash_per_game": 1823.40625,
+      "price_mean": 90.1839258114374
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 0.75,
+      "cash_per_game": 123.4375,
+      "price_mean": 164.58333333333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 26.78125,
+      "cash_per_game": 1036.9375,
+      "price_mean": 38.718786464410734
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 26,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.4375,
+      "cash_per_game": 630.9375,
+      "price_mean": 98.00970873786407
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 9.125,
+      "cash_per_game": -71.5625,
+      "price_mean": 7.842465753424658
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.75,
+      "price_mean": 42.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 2.125,
+      "cash_per_game": -42.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 2.65625,
+      "cash_per_game": -26.5625,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 16.21875,
+      "cash_per_game": 907.09375,
+      "price_mean": 55.92870905587669
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 1.5,
+      "cash_per_game": 72.3125,
+      "price_mean": 48.208333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 19.96875,
+      "cash_per_game": 186.4375,
+      "price_mean": 9.336463223787167
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.09375,
+      "cash_per_game": 1401.53125,
+      "price_mean": 115.88888888888889
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 6.0,
+      "cash_per_game": 688.625,
+      "price_mean": 114.77083333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.75,
+      "cash_per_game": 245.875,
+      "price_mean": 140.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 25.71875,
+      "cash_per_game": 978.875,
+      "price_mean": 38.06075334143378
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 27,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.75,
+      "cash_per_game": 429.8125,
+      "price_mean": 90.48684210526316
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.8125,
+      "cash_per_game": -4.4375,
+      "price_mean": 5.461538461538462
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.4375,
+      "price_mean": 41.166666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 21.4375,
+      "cash_per_game": 1072.875,
+      "price_mean": 50.0466472303207
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.5,
+      "cash_per_game": 223.5625,
+      "price_mean": 49.68055555555556
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 12.8125,
+      "cash_per_game": 81.84375,
+      "price_mean": 6.38780487804878
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 13.96875,
+      "cash_per_game": 1736.90625,
+      "price_mean": 124.34228187919463
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.0,
+      "cash_per_game": 1873.375,
+      "price_mean": 93.66875
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.25,
+      "cash_per_game": 147.75,
+      "price_mean": 118.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 32.625,
+      "cash_per_game": 1223.65625,
+      "price_mean": 37.50670498084291
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 28,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 13.0625,
+      "cash_per_game": 1476.75,
+      "price_mean": 113.05263157894737
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 89.625,
+      "cash_per_game": 3844.125,
+      "price_mean": 42.89121338912134
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 6.25,
+      "cash_per_game": 303.25,
+      "price_mean": 48.52
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 16.125,
+      "cash_per_game": 40.125,
+      "price_mean": 2.488372093023256
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 15.875,
+      "cash_per_game": 1868.5,
+      "price_mean": 117.7007874015748
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.25,
+      "cash_per_game": 125.5,
+      "price_mean": 100.4
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 46.1875,
+      "cash_per_game": 1574.0625,
+      "price_mean": 34.079837618403246
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "tetsu",
+      "day": 29,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.4375,
+      "cash_per_game": 845.4375,
+      "price_mean": 131.33009708737865
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 2.0,
+      "cash_per_game": -800.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 2.0,
+      "cash_per_game": -1000.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -222.0,
+      "price_mean": 27.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "BUY_SEED",
+      "item": "MELON",
+      "units_per_game": 12.0,
+      "cash_per_game": -960.0,
+      "price_mean": 80.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 0,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": 86.0,
+      "price_mean": 28.666666666666668
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 1,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -206.0,
+      "price_mean": 29.428571428571427
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 1,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 3.0,
+      "cash_per_game": 299.0,
+      "price_mean": 99.66666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 2,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.0,
+      "cash_per_game": -400.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 2,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": -30.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 2,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.0,
+      "cash_per_game": 490.0,
+      "price_mean": 98.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 2,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 60.0,
+      "price_mean": 30.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 3,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.0,
+      "cash_per_game": -400.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 3,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": -40.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 3,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 3.9375,
+      "cash_per_game": 379.0,
+      "price_mean": 96.25396825396825
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 3,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": 119.0,
+      "price_mean": 29.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 4,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 6.0,
+      "cash_per_game": -179.5,
+      "price_mean": 29.916666666666668
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 4,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.0,
+      "cash_per_game": -30.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 4,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.9375,
+      "cash_per_game": 559.3125,
+      "price_mean": 94.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 4,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 59.0,
+      "price_mean": 29.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 5,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 4.0,
+      "cash_per_game": -400.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 5,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 5.0,
+      "cash_per_game": 460.25,
+      "price_mean": 92.05
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 5,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 2.0,
+      "cash_per_game": 61.0,
+      "price_mean": 30.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 1.375,
+      "cash_per_game": -550.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 0.125,
+      "cash_per_game": -37.5,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.5,
+      "cash_per_game": -250.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 1.4375,
+      "cash_per_game": -129.5,
+      "price_mean": 90.08695652173913
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 7.75,
+      "cash_per_game": -244.75,
+      "price_mean": 31.580645161290324
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.21875,
+      "cash_per_game": -24.375,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 8.0,
+      "cash_per_game": -800.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.78125,
+      "cash_per_game": -47.8125,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 8.09375,
+      "cash_per_game": 726.46875,
+      "price_mean": 89.75675675675676
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 8.5,
+      "cash_per_game": 268.0,
+      "price_mean": 31.529411764705884
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 6,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 12.0,
+      "cash_per_game": 2445.4375,
+      "price_mean": 203.78645833333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 2.0,
+      "cash_per_game": -800.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.6875,
+      "cash_per_game": -59.875,
+      "price_mean": 87.0909090909091
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 1.71875,
+      "cash_per_game": -53.40625,
+      "price_mean": 31.072727272727274
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 3.96875,
+      "cash_per_game": -396.875,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 3.90625,
+      "cash_per_game": -39.0625,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 7,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 8.375,
+      "cash_per_game": 727.40625,
+      "price_mean": 86.8544776119403
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 2.0,
+      "cash_per_game": -1000.0,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -63.8125,
+      "price_mean": 85.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 20.25,
+      "cash_per_game": -675.125,
+      "price_mean": 33.339506172839506
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.0625,
+      "cash_per_game": -1.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 4.0,
+      "cash_per_game": -400.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 1.0,
+      "cash_per_game": -10.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 9.96875,
+      "cash_per_game": 833.53125,
+      "price_mean": 83.61442006269593
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.0,
+      "cash_per_game": 2334.125,
+      "price_mean": 194.51041666666666
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 8,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 3.75,
+      "cash_per_game": 129.09375,
+      "price_mean": 34.425
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.40625,
+      "cash_per_game": -162.5,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 1.34375,
+      "cash_per_game": -671.875,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -60.8125,
+      "price_mean": 81.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 13.5625,
+      "cash_per_game": -483.25,
+      "price_mean": 35.63133640552996
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 4.0,
+      "cash_per_game": -40.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 0.5625,
+      "cash_per_game": 23.0,
+      "price_mean": 40.888888888888886
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.9375,
+      "cash_per_game": 1102.21875,
+      "price_mean": 79.0829596412556
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 4.59375,
+      "cash_per_game": 163.15625,
+      "price_mean": 35.51700680272109
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 9,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 8.0,
+      "cash_per_game": 1498.5625,
+      "price_mean": 187.3203125
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.25,
+      "cash_per_game": -100.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 1.125,
+      "cash_per_game": -337.5,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.875,
+      "cash_per_game": -437.5,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 6.0,
+      "cash_per_game": -459.6875,
+      "price_mean": 76.61458333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 27.6875,
+      "cash_per_game": -1037.9375,
+      "price_mean": 37.487584650112865
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 6.71875,
+      "cash_per_game": 515.09375,
+      "price_mean": 76.66511627906976
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "SELL",
+      "item": "MELON",
+      "units_per_game": 60.0,
+      "cash_per_game": 13000.0,
+      "price_mean": 216.66666666666666
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 11.28125,
+      "cash_per_game": 2130.09375,
+      "price_mean": 188.81717451523545
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 10,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 9.9375,
+      "cash_per_game": 390.8125,
+      "price_mean": 39.327044025157235
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "COW",
+      "units_per_game": 0.125,
+      "cash_per_game": -50.0,
+      "price_mean": 400.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "GOOSE",
+      "units_per_game": 0.5625,
+      "cash_per_game": -168.75,
+      "price_mean": 300.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.3125,
+      "cash_per_game": -156.25,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -53.3125,
+      "price_mean": 71.08333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 19.5,
+      "cash_per_game": -755.5625,
+      "price_mean": 38.74679487179487
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_SEED",
+      "item": "STRAWBERRY",
+      "units_per_game": 13.0,
+      "cash_per_game": -1300.0,
+      "price_mean": 100.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 11.0,
+      "cash_per_game": -110.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.125,
+      "cash_per_game": 6.6875,
+      "price_mean": 53.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.625,
+      "cash_per_game": 999.6875,
+      "price_mean": 73.37155963302752
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "SELL",
+      "item": "MELON",
+      "units_per_game": 12.0,
+      "cash_per_game": 1267.0,
+      "price_mean": 105.58333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.96875,
+      "cash_per_game": 1017.96875,
+      "price_mean": 170.5497382198953
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 11,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 16.3125,
+      "cash_per_game": 645.5,
+      "price_mean": 39.57088122605364
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "BUY_ANIMAL",
+      "item": "SHEEP",
+      "units_per_game": 0.375,
+      "cash_per_game": -187.5,
+      "price_mean": 500.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 5.375,
+      "cash_per_game": -206.0,
+      "price_mean": 38.325581395348834
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.9375,
+      "cash_per_game": 1079.0625,
+      "price_mean": 67.70588235294117
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.9375,
+      "cash_per_game": 998.3125,
+      "price_mean": 168.13684210526316
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 10.0,
+      "cash_per_game": 383.75,
+      "price_mean": 38.375
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 12,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 9.9375,
+      "cash_per_game": 1744.15625,
+      "price_mean": 175.51257861635222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 4.0625,
+      "cash_per_game": -159.6875,
+      "price_mean": 39.30769230769231
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 6.0,
+      "cash_per_game": -60.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.125,
+      "cash_per_game": 6.75,
+      "price_mean": 54.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 17.0,
+      "cash_per_game": 1039.40625,
+      "price_mean": 61.14154411764706
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 5.8125,
+      "cash_per_game": 960.0,
+      "price_mean": 165.16129032258064
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 0.03125,
+      "cash_per_game": 1.15625,
+      "price_mean": 37.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 13,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 1.0,
+      "cash_per_game": 229.5625,
+      "price_mean": 229.5625
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.5,
+      "cash_per_game": -190.1875,
+      "price_mean": 54.339285714285715
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 1.09375,
+      "cash_per_game": -43.3125,
+      "price_mean": 39.6
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 0.75,
+      "cash_per_game": 40.375,
+      "price_mean": 53.833333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.71875,
+      "cash_per_game": 812.03125,
+      "price_mean": 55.169851380042466
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.46875,
+      "cash_per_game": 2120.375,
+      "price_mean": 170.05513784461152
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 0.5,
+      "cash_per_game": 19.875,
+      "price_mean": 39.75
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 14,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 11.71875,
+      "cash_per_game": 1159.65625,
+      "price_mean": 98.95733333333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.75,
+      "cash_per_game": -188.875,
+      "price_mean": 50.36666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.0625,
+      "price_mean": 40.166666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 8.0,
+      "cash_per_game": -80.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.5,
+      "cash_per_game": 235.5625,
+      "price_mean": 52.34722222222222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.53125,
+      "cash_per_game": 787.75,
+      "price_mean": 50.72032193158954
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 17.34375,
+      "cash_per_game": 2448.28125,
+      "price_mean": 141.16216216216216
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 5.96875,
+      "cash_per_game": 1362.53125,
+      "price_mean": 228.27748691099475
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 7.34375,
+      "cash_per_game": 290.5,
+      "price_mean": 39.55744680851064
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 15,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.71875,
+      "cash_per_game": 1045.34375,
+      "price_mean": 221.52980132450332
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -33.1875,
+      "price_mean": 44.25
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.25,
+      "price_mean": 40.666666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.75,
+      "cash_per_game": -77.5,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 3.875,
+      "cash_per_game": 198.5625,
+      "price_mean": 51.24193548387097
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 11.4375,
+      "cash_per_game": 529.3125,
+      "price_mean": 46.278688524590166
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.53125,
+      "cash_per_game": 1305.96875,
+      "price_mean": 124.00890207715133
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.9375,
+      "cash_per_game": 3847.75,
+      "price_mean": 214.50871080139373
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.53125,
+      "cash_per_game": 260.28125,
+      "price_mean": 39.85167464114833
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 16,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 14.40625,
+      "cash_per_game": 1114.875,
+      "price_mean": 77.3882863340564
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.5,
+      "cash_per_game": -10.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.125,
+      "cash_per_game": 203.8125,
+      "price_mean": 49.40909090909091
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 10.9375,
+      "cash_per_game": 458.78125,
+      "price_mean": 41.94571428571429
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 4.03125,
+      "cash_per_game": 403.625,
+      "price_mean": 100.12403100775194
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 15.90625,
+      "cash_per_game": 3337.46875,
+      "price_mean": 209.8212180746562
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.90625,
+      "cash_per_game": 276.625,
+      "price_mean": 40.05429864253394
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 17,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 7.65625,
+      "cash_per_game": 1001.75,
+      "price_mean": 130.84081632653061
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.75,
+      "cash_per_game": -26.5,
+      "price_mean": 35.333333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 0.5625,
+      "cash_per_game": -11.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "TOMATO",
+      "units_per_game": 0.625,
+      "cash_per_game": -31.25,
+      "price_mean": 50.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.0,
+      "cash_per_game": -70.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.3125,
+      "cash_per_game": 117.25,
+      "price_mean": 50.7027027027027
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.875,
+      "cash_per_game": 513.5625,
+      "price_mean": 37.013513513513516
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 13.3125,
+      "cash_per_game": 1659.3125,
+      "price_mean": 124.64319248826291
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.9375,
+      "cash_per_game": 3450.625,
+      "price_mean": 192.36933797909407
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 11.84375,
+      "cash_per_game": 476.59375,
+      "price_mean": 40.2401055408971
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 18,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.5,
+      "cash_per_game": 870.6875,
+      "price_mean": 133.95192307692307
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 1.3125,
+      "cash_per_game": -42.1875,
+      "price_mean": 32.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.1875,
+      "price_mean": 40.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.5,
+      "cash_per_game": -30.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 5.9375,
+      "cash_per_game": -59.375,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.5,
+      "cash_per_game": 124.4375,
+      "price_mean": 49.775
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 7.4375,
+      "cash_per_game": 244.9375,
+      "price_mean": 32.9327731092437
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.59375,
+      "cash_per_game": 1635.84375,
+      "price_mean": 129.89330024813896
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 17.4375,
+      "cash_per_game": 3279.25,
+      "price_mean": 188.0573476702509
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 6.8125,
+      "cash_per_game": 273.9375,
+      "price_mean": 40.211009174311926
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 19,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.84375,
+      "cash_per_game": 294.46875,
+      "price_mean": 60.79354838709678
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 3.75,
+      "cash_per_game": -123.0625,
+      "price_mean": 32.81666666666667
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 1.8125,
+      "cash_per_game": -36.25,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 5.1875,
+      "cash_per_game": -51.875,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 5.625,
+      "cash_per_game": 277.3125,
+      "price_mean": 49.3
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 7.625,
+      "cash_per_game": 238.0625,
+      "price_mean": 31.221311475409838
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.6875,
+      "cash_per_game": 1284.3125,
+      "price_mean": 120.16959064327486
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 25.46875,
+      "cash_per_game": 4419.5,
+      "price_mean": 173.52638036809816
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 11.40625,
+      "cash_per_game": 457.40625,
+      "price_mean": 40.1013698630137
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 20,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.6875,
+      "cash_per_game": 329.875,
+      "price_mean": 70.37333333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 2.625,
+      "cash_per_game": -105.375,
+      "price_mean": 40.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 3.125,
+      "cash_per_game": -62.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.875,
+      "cash_per_game": -78.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.75,
+      "cash_per_game": 135.3125,
+      "price_mean": 49.20454545454545
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 13.78125,
+      "cash_per_game": 375.0625,
+      "price_mean": 27.215419501133788
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 6.34375,
+      "cash_per_game": 768.40625,
+      "price_mean": 121.12807881773399
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 27.0,
+      "cash_per_game": 4120.0625,
+      "price_mean": 152.59490740740742
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 14.375,
+      "cash_per_game": 581.9375,
+      "price_mean": 40.482608695652175
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 21,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 8.25,
+      "cash_per_game": 612.0,
+      "price_mean": 74.18181818181819
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 7.5,
+      "cash_per_game": -159.0,
+      "price_mean": 21.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.375,
+      "price_mean": 41.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 2.625,
+      "cash_per_game": -52.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 6.8125,
+      "cash_per_game": -68.125,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 0.1875,
+      "cash_per_game": 9.25,
+      "price_mean": 49.333333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.5,
+      "cash_per_game": 123.25,
+      "price_mean": 49.3
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 15.28125,
+      "cash_per_game": 338.25,
+      "price_mean": 22.134969325153374
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.3125,
+      "cash_per_game": 1330.3125,
+      "price_mean": 108.04568527918782
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 23.625,
+      "cash_per_game": 2714.09375,
+      "price_mean": 114.88227513227513
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 23.4375,
+      "cash_per_game": 949.84375,
+      "price_mean": 40.526666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 22,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.625,
+      "cash_per_game": 463.8125,
+      "price_mean": 70.00943396226415
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.75,
+      "cash_per_game": -146.875,
+      "price_mean": 16.785714285714285
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 4.375,
+      "cash_per_game": -176.0625,
+      "price_mean": 40.24285714285714
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 4.9375,
+      "cash_per_game": -98.75,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 9.875,
+      "cash_per_game": -98.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 5.75,
+      "cash_per_game": 278.875,
+      "price_mean": 48.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 16.4375,
+      "cash_per_game": 305.46875,
+      "price_mean": 18.583650190114067
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 10.53125,
+      "cash_per_game": 1295.5,
+      "price_mean": 123.01483679525222
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 18.21875,
+      "cash_per_game": 1952.125,
+      "price_mean": 107.1492281303602
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 16.5625,
+      "cash_per_game": 665.125,
+      "price_mean": 40.158490566037734
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 23,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 7.0625,
+      "cash_per_game": 382.0625,
+      "price_mean": 54.097345132743364
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.5,
+      "cash_per_game": -156.625,
+      "price_mean": 18.426470588235293
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.1875,
+      "price_mean": 40.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 4.125,
+      "cash_per_game": -82.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 7.5,
+      "cash_per_game": -75.0,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 1.8125,
+      "cash_per_game": 105.6875,
+      "price_mean": 58.310344827586206
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.5,
+      "cash_per_game": 120.9375,
+      "price_mean": 48.375
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 10.3125,
+      "cash_per_game": 170.0625,
+      "price_mean": 16.490909090909092
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 8.5625,
+      "cash_per_game": 968.25,
+      "price_mean": 113.08029197080292
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.96875,
+      "cash_per_game": 1914.90625,
+      "price_mean": 91.32190760059612
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 19.34375,
+      "cash_per_game": 769.9375,
+      "price_mean": 39.802907915993536
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 24,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 12.375,
+      "cash_per_game": 847.25,
+      "price_mean": 68.46464646464646
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 5.5,
+      "cash_per_game": -78.0625,
+      "price_mean": 14.193181818181818
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 3.0625,
+      "cash_per_game": -122.9375,
+      "price_mean": 40.142857142857146
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 14.5,
+      "cash_per_game": -290.0,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 9.8125,
+      "cash_per_game": 560.3125,
+      "price_mean": 57.10191082802548
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.75,
+      "cash_per_game": 228.3125,
+      "price_mean": 48.06578947368421
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.8125,
+      "cash_per_game": 236.8125,
+      "price_mean": 15.987341772151899
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 14.5625,
+      "cash_per_game": 1596.53125,
+      "price_mean": 109.63304721030043
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 10.28125,
+      "cash_per_game": 834.96875,
+      "price_mean": 81.2127659574468
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 21.53125,
+      "cash_per_game": 864.8125,
+      "price_mean": 40.165457184325106
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 25,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 5.53125,
+      "cash_per_game": 513.46875,
+      "price_mean": 92.83050847457628
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 8.0,
+      "cash_per_game": -106.9375,
+      "price_mean": 13.3671875
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 4.375,
+      "cash_per_game": -174.4375,
+      "price_mean": 39.871428571428574
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 11.6875,
+      "cash_per_game": -233.75,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -3.75,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 6.375,
+      "cash_per_game": 365.0625,
+      "price_mean": 57.26470588235294
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 2.0,
+      "cash_per_game": 96.0,
+      "price_mean": 48.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 14.5,
+      "cash_per_game": 195.0,
+      "price_mean": 13.448275862068966
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 8.0625,
+      "cash_per_game": 895.75,
+      "price_mean": 111.10077519379846
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.21875,
+      "cash_per_game": 1823.40625,
+      "price_mean": 90.1839258114374
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 0.75,
+      "cash_per_game": 123.4375,
+      "price_mean": 164.58333333333334
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 26.78125,
+      "cash_per_game": 1039.4375,
+      "price_mean": 38.81213535589265
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 26,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.4375,
+      "cash_per_game": 630.9375,
+      "price_mean": 98.00970873786407
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 9.125,
+      "cash_per_game": -71.5625,
+      "price_mean": 7.842465753424658
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.75,
+      "price_mean": 42.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "BUY_SEED",
+      "item": "CARROT",
+      "units_per_game": 2.125,
+      "cash_per_game": -42.5,
+      "price_mean": 20.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "BUY_SEED",
+      "item": "WHEAT",
+      "units_per_game": 2.65625,
+      "cash_per_game": -26.5625,
+      "price_mean": 10.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 16.21875,
+      "cash_per_game": 907.09375,
+      "price_mean": 55.92870905587669
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 1.5,
+      "cash_per_game": 72.3125,
+      "price_mean": 48.208333333333336
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 19.96875,
+      "cash_per_game": 186.4375,
+      "price_mean": 9.336463223787167
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 12.09375,
+      "cash_per_game": 1401.53125,
+      "price_mean": 115.88888888888889
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 6.0,
+      "cash_per_game": 688.625,
+      "price_mean": 114.77083333333333
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.75,
+      "cash_per_game": 245.875,
+      "price_mean": 140.5
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 26.59375,
+      "cash_per_game": 1017.0,
+      "price_mean": 38.24206815511163
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 27,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 4.75,
+      "cash_per_game": 429.8125,
+      "price_mean": 90.48684210526316
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "BUY_PRODUCT",
+      "item": "FERTILIZER",
+      "units_per_game": 0.8125,
+      "cash_per_game": -4.4375,
+      "price_mean": 5.461538461538462
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "BUY_PRODUCT",
+      "item": "WHEAT",
+      "units_per_game": 0.375,
+      "cash_per_game": -15.4375,
+      "price_mean": 41.166666666666664
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 21.4375,
+      "cash_per_game": 1072.875,
+      "price_mean": 50.0466472303207
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 4.5,
+      "cash_per_game": 223.5625,
+      "price_mean": 49.68055555555556
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 12.8125,
+      "cash_per_game": 81.84375,
+      "price_mean": 6.38780487804878
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 13.96875,
+      "cash_per_game": 1736.90625,
+      "price_mean": 124.34228187919463
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "STRAWBERRY",
+      "units_per_game": 20.0,
+      "cash_per_game": 1873.375,
+      "price_mean": 93.66875
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.25,
+      "cash_per_game": 147.75,
+      "price_mean": 118.2
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 31.75,
+      "cash_per_game": 1186.78125,
+      "price_mean": 37.378937007874015
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 28,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 13.0625,
+      "cash_per_game": 1476.75,
+      "price_mean": 113.05263157894737
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "CARROT",
+      "units_per_game": 89.625,
+      "cash_per_game": 3844.125,
+      "price_mean": 42.89121338912134
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "EGG",
+      "units_per_game": 6.25,
+      "cash_per_game": 303.25,
+      "price_mean": 48.52
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "FERTILIZER",
+      "units_per_game": 16.125,
+      "cash_per_game": 40.125,
+      "price_mean": 2.488372093023256
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "MILK",
+      "units_per_game": 15.875,
+      "cash_per_game": 1868.5,
+      "price_mean": 117.7007874015748
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "TOMATO",
+      "units_per_game": 1.25,
+      "cash_per_game": 125.5,
+      "price_mean": 100.4
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "WHEAT",
+      "units_per_game": 46.1875,
+      "cash_per_game": 1574.0625,
+      "price_mean": 34.079837618403246
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "player": "wm",
+      "day": 29,
+      "op": "SELL",
+      "item": "WOOL",
+      "units_per_game": 6.4375,
+      "cash_per_game": 845.4375,
+      "price_mean": 131.33009708737865
+    }
+  ],
+  "contest": [
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "CARROT",
+      "same_day_game_events": 286,
+      "both_sell_events": 138,
+      "sell_price_gap_mean": 0.05361628709454798
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "COW",
+      "same_day_game_events": 170,
+      "both_sell_events": 0,
+      "sell_price_gap_mean": 0.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "EGG",
+      "same_day_game_events": 274,
+      "both_sell_events": 274,
+      "sell_price_gap_mean": 0.002676399026763942
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "FERTILIZER",
+      "same_day_game_events": 920,
+      "both_sell_events": 920,
+      "sell_price_gap_mean": 0.014607896244808969
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "GOOSE",
+      "same_day_game_events": 38,
+      "both_sell_events": 0,
+      "sell_price_gap_mean": 0.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "MELON",
+      "same_day_game_events": 96,
+      "both_sell_events": 64,
+      "sell_price_gap_mean": 0.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "MILK",
+      "same_day_game_events": 670,
+      "both_sell_events": 670,
+      "sell_price_gap_mean": 0.1584400508281104
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "SHEEP",
+      "same_day_game_events": 126,
+      "both_sell_events": 0,
+      "sell_price_gap_mean": 0.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "STRAWBERRY",
+      "same_day_game_events": 600,
+      "both_sell_events": 440,
+      "sell_price_gap_mean": 0.067341858062974
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "TOMATO",
+      "same_day_game_events": 10,
+      "both_sell_events": 8,
+      "sell_price_gap_mean": 0.0
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "WHEAT",
+      "same_day_game_events": 960,
+      "both_sell_events": 816,
+      "sell_price_gap_mean": 0.023712759816970644
+    },
+    {
+      "matchup": [
+        "tetsu",
+        "wm"
+      ],
+      "item": "WOOL",
+      "same_day_game_events": 582,
+      "both_sell_events": 582,
+      "sell_price_gap_mean": 0.031812806503209064
+    }
+  ]
+}

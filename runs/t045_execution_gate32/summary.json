@@ -1,0 +1,709 @@
+{
+  "records": 37,
+  "valid": 37,
+  "errors": 0,
+  "counts": {
+    "m15ens_off": 23,
+    "mix4_off": 14
+  },
+  "results": {
+    "m15ens_terminal": {
+      "games": 23,
+      "worlds": 2,
+      "games_per_world": [
+        7,
+        16
+      ],
+      "wins": 20,
+      "draws": 0,
+      "losses": 3,
+      "baseline_score": 0.8695652173913043,
+      "score": 0.8695652173913043,
+      "mean_margin": 13703.95652173913,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 142.60714285714286,
+      "delta_margin_ci95": [
+        138.71428571428572,
+        146.5
+      ],
+      "changed_games": 22,
+      "changed_turns": 22.0,
+      "win_flips": 0,
+      "loss_flips": 0,
+      "opponents": {
+        "bc_m15ens": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 1,
+          "draws": 0,
+          "losses": 1,
+          "baseline_score": 0.5,
+          "score": 0.5,
+          "mean_margin": 329.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 329.0,
+          "delta_margin_ci95": [
+            329.0,
+            329.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "bc_mix4": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 1476.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 251.0,
+          "delta_margin_ci95": [
+            251.0,
+            251.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "jaxa2802": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 19053.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 154.0,
+          "delta_margin_ci95": [
+            154.0,
+            154.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "ozer44": {
+          "games": 4,
+          "worlds": 2,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.5,
+          "score": 0.5,
+          "mean_margin": 10100.5,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 133.5,
+          "delta_margin_ci95": [
+            37.0,
+            230.0
+          ],
+          "changed_games": 4,
+          "changed_turns": 4.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "parthenos": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 14759.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 1.0,
+          "delta_margin_ci95": [
+            1.0,
+            1.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "qA": {
+          "games": 4,
+          "worlds": 2,
+          "games_per_world": [
+            2
+          ],
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 17792.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 155.5,
+          "delta_margin_ci95": [
+            69.0,
+            242.0
+          ],
+          "changed_games": 4,
+          "changed_turns": 4.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "tetsu": {
+          "games": 4,
+          "worlds": 2,
+          "games_per_world": [
+            2
+          ],
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 20023.75,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 148.75,
+          "delta_margin_ci95": [
+            111.0,
+            186.5
+          ],
+          "changed_games": 4,
+          "changed_turns": 4.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "yaxon5": {
+          "games": 3,
+          "worlds": 2,
+          "games_per_world": [
+            1,
+            2
+          ],
+          "wins": 3,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 17430.666666666668,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 23.5,
+          "delta_margin_ci95": [
+            0.0,
+            47.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        }
+      },
+      "families": {
+        "tetsu": {
+          "games": 8,
+          "worlds": 2,
+          "games_per_world": [
+            4
+          ],
+          "wins": 8,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 18907.875,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 152.125,
+          "delta_margin_ci95": [
+            127.75,
+            176.5
+          ],
+          "changed_games": 8,
+          "changed_turns": 8.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "v44": {
+          "games": 9,
+          "worlds": 2,
+          "games_per_world": [
+            3,
+            6
+          ],
+          "wins": 7,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.7777777777777778,
+          "score": 0.7777777777777778,
+          "mean_margin": 14533.333333333334,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 116.33333333333334,
+          "delta_margin_ci95": [
+            79.33333333333333,
+            153.33333333333334
+          ],
+          "changed_games": 8,
+          "changed_turns": 8.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "parthenos": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 14759.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 1.0,
+          "delta_margin_ci95": [
+            1.0,
+            1.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "bc": {
+          "games": 4,
+          "worlds": 1,
+          "games_per_world": [
+            4
+          ],
+          "wins": 3,
+          "draws": 0,
+          "losses": 1,
+          "baseline_score": 0.75,
+          "score": 0.75,
+          "mean_margin": 902.5,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 290.0,
+          "delta_margin_ci95": [
+            290.0,
+            290.0
+          ],
+          "changed_games": 4,
+          "changed_turns": 4.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        }
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": false,
+      "note": "Conditional on frozen suite. Empirical bootstrap [0,0] from no flips is not proof of universal equivalence. Independent review required."
+    },
+    "m15ens_a1": {},
+    "m15ens_a2": {},
+    "mix4_terminal": {
+      "games": 14,
+      "worlds": 1,
+      "games_per_world": [
+        14
+      ],
+      "wins": 8,
+      "draws": 0,
+      "losses": 6,
+      "baseline_score": 0.5714285714285714,
+      "score": 0.5714285714285714,
+      "mean_margin": 5138.214285714285,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 453.2142857142857,
+      "delta_margin_ci95": [
+        453.2142857142857,
+        453.2142857142857
+      ],
+      "changed_games": 14,
+      "changed_turns": 14.0,
+      "win_flips": 0,
+      "loss_flips": 0,
+      "opponents": {
+        "bc_m15ens": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.0,
+          "score": 0.0,
+          "mean_margin": -1115.5,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 109.5,
+          "delta_margin_ci95": [
+            109.5,
+            109.5
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "jaxa2802": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 16511.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 156.0,
+          "delta_margin_ci95": [
+            156.0,
+            156.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "ozer44": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 16499.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 156.0,
+          "delta_margin_ci95": [
+            156.0,
+            156.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "parthenos": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.0,
+          "score": 0.0,
+          "mean_margin": -9812.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 142.0,
+          "delta_margin_ci95": [
+            142.0,
+            142.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "qA": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 6574.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 42.0,
+          "delta_margin_ci95": [
+            42.0,
+            42.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "tetsu": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.0,
+          "score": 0.0,
+          "mean_margin": -4779.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 2566.0,
+          "delta_margin_ci95": [
+            2566.0,
+            2566.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "yaxon5": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 12090.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 1.0,
+          "delta_margin_ci95": [
+            1.0,
+            1.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        }
+      },
+      "families": {
+        "tetsu": {
+          "games": 4,
+          "worlds": 1,
+          "games_per_world": [
+            4
+          ],
+          "wins": 2,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.5,
+          "score": 0.5,
+          "mean_margin": 897.5,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 1304.0,
+          "delta_margin_ci95": [
+            1304.0,
+            1304.0
+          ],
+          "changed_games": 4,
+          "changed_turns": 4.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "v44": {
+          "games": 6,
+          "worlds": 1,
+          "games_per_world": [
+            6
+          ],
+          "wins": 6,
+          "draws": 0,
+          "losses": 0,
+          "baseline_score": 1.0,
+          "score": 1.0,
+          "mean_margin": 15033.333333333334,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 104.33333333333333,
+          "delta_margin_ci95": [
+            104.33333333333333,
+            104.33333333333333
+          ],
+          "changed_games": 6,
+          "changed_turns": 6.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "parthenos": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.0,
+          "score": 0.0,
+          "mean_margin": -9812.0,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 142.0,
+          "delta_margin_ci95": [
+            142.0,
+            142.0
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        },
+        "bc": {
+          "games": 2,
+          "worlds": 1,
+          "games_per_world": [
+            2
+          ],
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "baseline_score": 0.0,
+          "score": 0.0,
+          "mean_margin": -1115.5,
+          "delta_score": 0.0,
+          "delta_score_ci95": [
+            0.0,
+            0.0
+          ],
+          "delta_margin": 109.5,
+          "delta_margin_ci95": [
+            109.5,
+            109.5
+          ],
+          "changed_games": 2,
+          "changed_turns": 2.0,
+          "win_flips": 0,
+          "loss_flips": 0
+        }
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": false,
+      "note": "Conditional on frozen suite. Empirical bootstrap [0,0] from no flips is not proof of universal equivalence. Independent review required."
+    },
+    "mix4_a1": {},
+    "mix4_a2": {}
+  }
+}

@@ -1,0 +1,238 @@
+CONSOLIDATED: 3072 valid unique records; 2 main-run invalid attempts preserved separately
+{
+  "records": 3072,
+  "valid": 3072,
+  "errors": 0,
+  "counts": {
+    "m15ens_off": 512,
+    "mix4_off": 512,
+    "m15ens_a1": 512,
+    "mix4_a1": 512,
+    "m15ens_a2": 512,
+    "mix4_a2": 512
+  },
+  "evaluation_methods": {
+    "full_game": 1132,
+    "exact_identity_from_baseline": 1940
+  },
+  "error_counters": {},
+  "results": {
+    "m15ens_terminal": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 430,
+      "draws": 2,
+      "losses": 80,
+      "baseline_score": 0.826171875,
+      "score": 0.841796875,
+      "mean_margin": 8182.4296875,
+      "delta_score": 0.015625,
+      "delta_score_ci95": [
+        0.0078125,
+        0.025390625
+      ],
+      "delta_margin": 156.2578125,
+      "delta_margin_ci95": [
+        120.296875,
+        195.04350585937496
+      ],
+      "changed_games": 363,
+      "changed_turns": 363.0,
+      "win_flips": 10,
+      "loss_flips": 0,
+      "evaluation_methods": {
+        "exact_terminal_branch": 512
+      },
+      "positive_score_ci": true,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": true
+    },
+    "m15ens_a1": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 420,
+      "draws": 6,
+      "losses": 86,
+      "baseline_score": 0.826171875,
+      "score": 0.826171875,
+      "mean_margin": 8076.41796875,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        -0.015625,
+        0.015625
+      ],
+      "delta_margin": 50.24609375,
+      "delta_margin_ci95": [
+        -74.47275390625,
+        205.20864257812485
+      ],
+      "changed_games": 32,
+      "changed_turns": 38,
+      "win_flips": 8,
+      "loss_flips": 8,
+      "evaluation_methods": {
+        "exact_identity_from_baseline": 480,
+        "full_game": 32
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": false,
+      "recommendation_gate": false
+    },
+    "m15ens_a2": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 420,
+      "draws": 6,
+      "losses": 86,
+      "baseline_score": 0.826171875,
+      "score": 0.826171875,
+      "mean_margin": 8006.400390625,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": -19.771484375,
+      "delta_margin_ci95": [
+        -61.791015625,
+        4.953125
+      ],
+      "changed_games": 8,
+      "changed_turns": 12,
+      "win_flips": 0,
+      "loss_flips": 0,
+      "evaluation_methods": {
+        "exact_identity_from_baseline": 504,
+        "full_game": 8
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": false
+    },
+    "mix4_terminal": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 352,
+      "draws": 4,
+      "losses": 156,
+      "baseline_score": 0.6796875,
+      "score": 0.69140625,
+      "mean_margin": 6138.921875,
+      "delta_score": 0.01171875,
+      "delta_score_ci95": [
+        0.00390625,
+        0.021484375
+      ],
+      "delta_margin": 181.783203125,
+      "delta_margin_ci95": [
+        147.491015625,
+        217.4833007812499
+      ],
+      "changed_games": 440,
+      "changed_turns": 440.0,
+      "win_flips": 7,
+      "loss_flips": 0,
+      "evaluation_methods": {
+        "exact_terminal_branch": 512
+      },
+      "positive_score_ci": true,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": true
+    },
+    "mix4_a1": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 350,
+      "draws": 6,
+      "losses": 156,
+      "baseline_score": 0.6796875,
+      "score": 0.689453125,
+      "mean_margin": 6005.34375,
+      "delta_score": 0.009765625,
+      "delta_score_ci95": [
+        -0.001953125,
+        0.0234375
+      ],
+      "delta_margin": 48.205078125,
+      "delta_margin_ci95": [
+        -187.260693359375,
+        277.0883300781246
+      ],
+      "changed_games": 48,
+      "changed_turns": 48,
+      "win_flips": 8,
+      "loss_flips": 3,
+      "evaluation_methods": {
+        "exact_identity_from_baseline": 462,
+        "full_game": 50
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": false
+    },
+    "mix4_a2": {
+      "games": 512,
+      "worlds": 32,
+      "games_per_world": [
+        16
+      ],
+      "wins": 345,
+      "draws": 6,
+      "losses": 161,
+      "baseline_score": 0.6796875,
+      "score": 0.6796875,
+      "mean_margin": 5986.435546875,
+      "delta_score": 0.0,
+      "delta_score_ci95": [
+        0.0,
+        0.0
+      ],
+      "delta_margin": 29.296875,
+      "delta_margin_ci95": [
+        -2.59375,
+        76.84375
+      ],
+      "changed_games": 16,
+      "changed_turns": 22,
+      "win_flips": 0,
+      "loss_flips": 0,
+      "evaluation_methods": {
+        "exact_identity_from_baseline": 494,
+        "full_game": 18
+      },
+      "positive_score_ci": false,
+      "family_ni_minus3pp": true,
+      "recommendation_gate": false
+    }
+  }
+}
+{
+  "records": 3072,
+  "errors": 0,
+  "actual_methods": {
+    "full_game": 1132,
+    "exact_identity_from_baseline": 1940
+  },
+  "terminal_branches": 1024,
+  "paired_candidate_comparisons": 3072,
+  "retained_valid_rows": 780,
+  "historical_infrastructure_attempts": 4,
+  "all_retries_valid": true,
+  "archives": {}
+}
+EVALUATION READY: independent results review required before archives

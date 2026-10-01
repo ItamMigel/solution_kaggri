@@ -1,0 +1,531 @@
+[{"stream_name":"stderr","time":9.583741924,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.583949357,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.583959934,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.583964947,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.445519604,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.445584655,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.445591918,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.445597049,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":13.11002015,"data":"\u003cclass 'dict'\u003e\n"}
+,{"stream_name":"stdout","time":13.110088306,"data":"['configuration', 'description', 'id', 'info', 'module_version', 'name', 'rewards', 'schema_version', 'specification', 'statuses', 'steps', 'title', 'version']\n"}
+,{"stream_name":"stdout","time":15.888546036,"data":"{\n"}
+,{"stream_name":"stdout","time":15.888611126,"data":"  \"configuration\": {\n"}
+,{"stream_name":"stdout","time":15.888712423,"data":"    \"actTimeout\": 1,\n"}
+,{"stream_name":"stdout","time":15.888721867,"data":"    \"boardSize\": 10,\n"}
+,{"stream_name":"stdout","time":15.88872707,"data":"    \"episodeSteps\": 720,\n"}
+,{"stream_name":"stdout","time":15.888732643,"data":"    \"farmHandCostMult\": 1,\n"}
+,{"stream_name":"stdout","time":15.888737683,"data":"    \"marketParams\": {},\n"}
+,{"stream_name":"stdout","time":15.888774636,"data":"    \"maxMarketOrdersPerTurn\": 10,\n"}
+,{"stream_name":"stdout","time":15.888782882,"data":"    \"runTimeout\": 1200,\n"}
+,{"stream_name":"stdout","time":15.888788773,"data":"    \"seed\": null,\n"}
+,{"stream_name":"stdout","time":15.888794486,"data":"    \"shedCapacity\": 100,\n"}
+,{"stream_name":"stdout","time":15.888800462,"data":"    \"startingMoney\": 3000,\n"}
+,{"stream_name":"stdout","time":15.888806333,"data":"    \"townCenterSellInterval\": 24,\n"}
+,{"stream_name":"stdout","time":15.88881229,"data":"    \"townShopSellInterval\": 4,\n"}
+,{"stream_name":"stdout","time":15.888833143,"data":"    \"townShopUnlockInterval\": 3,\n"}
+,{"stream_name":"stdout","time":15.88884063,"data":"    \"turnsPerDay\": 24,\n"}
+,{"stream_name":"stdout","time":15.888845678,"data":"    \"weedSpawnChance\": 0.005\n"}
+,{"stream_name":"stdout","time":15.88885103,"data":"  },\n"}
+,{"stream_name":"stdout","time":15.888858063,"data":"  \"description\": \"Advanced farming simulation: two players each tend a 10x10 farm of four 5x5 quadrants, growing crops, raising animals, hiring help, and trading with a dynamic market over one season.\",\n"}
+,{"stream_name":"stdout","time":15.888870802,"data":"  \"id\": \"db759ee4-b767-11f1-9cb5-0242ac130202\",\n"}
+,{"stream_name":"stdout","time":15.888877113,"data":"  \"info\": {\n"}
+,{"stream_name":"stdout","time":15.888883373,"data":"    \"Agents\": [\n"}
+,{"stream_name":"stdout","time":15.888889269,"data":"      {\n"}
+,{"stream_name":"stdout","time":15.888894758,"data":"        \"Name\": \"Boey\",\n"}
+,{"stream_name":"stdout","time":15.888900286,"data":"        \"ThumbnailUrl\": null\n"}
+,{"stream_name":"stdout","time":15.888905988,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.888929355,"data":"      {\n"}
+,{"stream_name":"stdout","time":15.888934208,"data":"        \"Name\": \"M \u0026 M \u0026 P \u0026 Q\",\n"}
+,{"stream_name":"stdout","time":15.888938291,"data":"        \"ThumbnailUrl\": null\n"}
+,{"stream_name":"stdout","time":15.888941588,"data":"      }\n"}
+,{"stream_name":"stdout","time":15.888944422,"data":"    ],\n"}
+,{"stream_name":"stdout","time":15.888947319,"data":"    \"EpisodeId\": 112509185,\n"}
+,{"stream_name":"stdout","time":15.888950425,"data":"    \"LiveVideoPath\": null,\n"}
+,{"stream_name":"stdout","time":15.888953399,"data":"    \"TeamNames\": [\n"}
+,{"stream_name":"stdout","time":15.888956268,"data":"      \"Boey\",\n"}
+,{"stream_name":"stdout","time":15.88895925,"data":"      \"M \u0026 M \u0026 P \u0026 Q\"\n"}
+,{"stream_name":"stdout","time":15.888973613,"data":"    ],\n"}
+,{"stream_name":"stdout","time":15.888976578,"data":"    \"seed\": 543862255\n"}
+,{"stream_name":"stdout","time":15.888979805,"data":"  },\n"}
+,{"stream_name":"stdout","time":15.888984953,"data":"  \"module_version\": \"1.32.7\",\n"}
+,{"stream_name":"stdout","time":15.888989523,"data":"  \"name\": \"kaggriculture\",\n"}
+,{"stream_name":"stdout","time":15.888994293,"data":"  \"rewards\": [\n"}
+,{"stream_name":"stdout","time":15.888998701,"data":"    87492.0,\n"}
+,{"stream_name":"stdout","time":15.889002951,"data":"    82589.0\n"}
+,{"stream_name":"stdout","time":15.889007341,"data":"  ],\n"}
+,{"stream_name":"stdout","time":15.889011713,"data":"  \"schema_version\": 1,\n"}
+,{"stream_name":"stdout","time":15.889016151,"data":"  \"specification\": {\n"}
+,{"stream_name":"stdout","time":15.889020703,"data":"    \"action\": {\n"}
+,{"stream_name":"stdout","time":15.889024863,"data":"      \"default\": {\n"}
+,{"stream_name":"stdout","time":15.889029133,"data":"        \"farmer\": [\n"}
+,{"stream_name":"stdout","time":15.889033948,"data":"          \"PASS\"\n"}
+,{"stream_name":"stdout","time":15.889038735,"data":"        ],\n"}
+,{"stream_name":"stdout","time":15.889043145,"data":"        \"hands\": [],\n"}
+,{"stream_name":"stdout","time":15.889047845,"data":"        \"market\": []\n"}
+,{"stream_name":"stdout","time":15.889052453,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.889057662999999,"data":"      \"description\": \"Per-turn action of the form {\\\"farmer\\\": [op, ...args], \\\"hands\\\": [[op, ...args], ...], \\\"market\\\": [[op, ...args], ...]}. Farmer/hand ops: NORTH, SOUTH, EAST, WEST, PASS, PICKUP \u003citem\u003e [n], PLANT \u003ccrop\u003e, WATER, HARVEST, FERTILIZE, BUILD_COOP, BUILD_PASTURE, DIG, PLACE \u003citem\u003e [n], FEED, COLLECT_FERTILIZER, CARE. Market ops: BUY_SEED \u003ccrop\u003e \u003cn\u003e, BUY_PRODUCT \u003citem\u003e \u003cn\u003e, BUY_ANIMAL \u003canimal\u003e \u003cn\u003e, SELL \u003citem\u003e \u003cn\u003e, HIRE, BUY_LAND.\",\n"}
+,{"stream_name":"stdout","time":15.889068402,"data":"      \"type\": \"object\"\n"}
+,{"stream_name":"stdout","time":15.889072978,"data":"    },\n"}
+,{"stream_name":"stdout","time":15.889077625,"data":"    \"agents\": [\n"}
+,{"stream_name":"stdout","time":15.889082145,"data":"      2\n"}
+,{"stream_name":"stdout","time":15.889086623,"data":"    ],\n"}
+,{"stream_name":"stdout","time":15.889091078,"data":"    \"configuration\": {\n"}
+,{"stream_name":"stdout","time":15.88909561,"data":"      \"actTimeout\": {\n"}
+,{"stream_name":"stdout","time":15.889099956,"data":"        \"default\": 1,\n"}
+,{"stream_name":"stdout","time":15.889104933,"data":"        \"description\": \"Maximum runtime (seconds) to obtain an action from an agent.\",\n"}
+,{"stream_name":"stdout","time":15.889115706,"data":"        \"minimum\": 0,\n"}
+,{"stream_name":"stdout","time":15.889120191,"data":"        \"type\": \"number\"\n"}
+,{"stream_name":"stdout","time":15.889125153,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.889129935,"data":"      \"boardSize\": {\n"}
+,{"stream_name":"stdout","time":15.889138676,"data":"        \"default\": 10,\n"}
+,{"stream_name":"stdout","time":15.88914398,"data":"        \"description\": \"Width and height (in tiles) of each player's square farm. Advanced game expects 10 (four 5x5 quadrants).\",\n"}
+,{"stream_name":"stdout","time":15.889149563,"data":"        \"minimum\": 4,\n"}
+,{"stream_name":"stdout","time":15.889154596000001,"data":"        \"type\": \"integer\"\n"}
+,{"stream_name":"stdout","time":15.88915929,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.889163606,"data":"      \"episodeSteps\": {\n"}
+,{"stream_name":"stdout","time":15.889168181,"data":"        \"default\": 720,\n"}
+,{"stream_name":"stdout","time":15.889172963,"data":"        \"description\": \"Maximum number of steps in the episode.\",\n"}
+,{"stream_name":"stdout","time":15.889178093,"data":"        \"minimum\": 1,\n"}
+,{"stream_name":"stdout","time":15.889182926,"data":"        \"type\": \"integer\"\n"}
+,{"stream_name":"stdout","time":15.889187856,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.889192355,"data":"      \"farmHandCostMult\": {\n"}
+,{"stream_name":"stdout","time":15.889196824999999,"data":"        \"default\": 1,\n"}
+,{"stream_name":"stdout","time":15.889201442,"data":"        \"description\": \"Multiplier applied to the Fibonacci hire-cost sequence (1, 1, 2, 3, 5, 8, 13, ...). The n-th hire of the day costs this value times fib(n).\",\n"}
+,{"stream_name":"stdout","time":15.88920733,"data":"        \"minimum\": 0,\n"}
+,{"stream_name":"stdout","time":15.88921186,"data":"        \"type\": \"integer\"\n"}
+,{"stream_name":"stdout","time":15.889216422,"data":"      },\n"}
+,{"stream_name":"stdout","time":15.889220792,"data":"      \"marketParams\": {\n"}
+,{"stream_name":"stdout","time":15.889225106,"data":"        \"default\": {},\n"}
+,{"stream_name":"stdout","time":15.889230006,"data":"        \"description\": \"Per-resource market price-curve overrides. Sparse: keyed by product name; each entry may set any subset of {base, I0, T, below_func, below_target, above_func, above_target}. Missing keys (and missing products) inherit from MARKET_PARAMS defaults \n"}
+,{"stream_name":"stdout","time":16.52276959,"data":"len steps: 720\n"}
+,{"stream_name":"stdout","time":16.522839207,"data":"len steps[0]: 2\n"}
+,{"stream_name":"stdout","time":16.522847726,"data":"keys steps[0][0]: ['action', 'info', 'observation', 'reward', 'status']\n"}
+,{"stream_name":"stdout","time":16.52285397,"data":"[\n"}
+,{"stream_name":"stdout","time":16.522858487,"data":"  {\n"}
+,{"stream_name":"stdout","time":16.522863153,"data":"    \"action\": {\n"}
+,{"stream_name":"stdout","time":16.522867917,"data":"      \"farmer\": [\n"}
+,{"stream_name":"stdout","time":16.52287241,"data":"        \"DROP\"\n"}
+,{"stream_name":"stdout","time":16.52287729,"data":"      ],\n"}
+,{"stream_name":"stdout","time":16.522881677,"data":"      \"hands\": [\n"}
+,{"stream_name":"stdout","time":16.522886455,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.522891171,"data":"          \"COLLECT_FERTILIZER\"\n"}
+,{"stream_name":"stdout","time":16.522896011,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.522900472,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.52290493,"data":"          \"CARE\"\n"}
+,{"stream_name":"stdout","time":16.522925387,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.522930217,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.522934487,"data":"          \"CARE\"\n"}
+,{"stream_name":"stdout","time":16.522939047,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.522943284,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.522947337,"data":"          \"NORTH\"\n"}
+,{"stream_name":"stdout","time":16.522951965,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.522956507,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.522960824,"data":"          \"WEST\"\n"}
+,{"stream_name":"stdout","time":16.522965849,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.522970184,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.522974987,"data":"          \"WEST\"\n"}
+,{"stream_name":"stdout","time":16.522979425,"data":"        ]\n"}
+,{"stream_name":"stdout","time":16.52298431,"data":"      ],\n"}
+,{"stream_name":"stdout","time":16.522988704,"data":"      \"market\": [\n"}
+,{"stream_name":"stdout","time":16.522993337,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.52300849,"data":"          \"BUY_PRODUCT\",\n"}
+,{"stream_name":"stdout","time":16.523013147,"data":"          \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523017897,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523022351,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523026825,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523031492,"data":"          \"SELL\",\n"}
+,{"stream_name":"stdout","time":16.523035822,"data":"          \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523040417,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523045037,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523049599,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523054381,"data":"          \"SELL\",\n"}
+,{"stream_name":"stdout","time":16.523059057,"data":"          \"FERTILIZER\",\n"}
+,{"stream_name":"stdout","time":16.523063593,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523068073,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523072145,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523076392,"data":"          \"BUY_PRODUCT\",\n"}
+,{"stream_name":"stdout","time":16.523081154,"data":"          \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523085582,"data":"          2\n"}
+,{"stream_name":"stdout","time":16.523089772,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523093974,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523098427,"data":"          \"BUY_PRODUCT\",\n"}
+,{"stream_name":"stdout","time":16.523102934,"data":"          \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523107375,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523111504,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523115656999998,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523119967,"data":"          \"SELL\",\n"}
+,{"stream_name":"stdout","time":16.52312444,"data":"          \"FERTILIZER\",\n"}
+,{"stream_name":"stdout","time":16.52312892,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523133159,"data":"        ],\n"}
+,{"stream_name":"stdout","time":16.523137377,"data":"        [\n"}
+,{"stream_name":"stdout","time":16.523141648,"data":"          \"SELL\",\n"}
+,{"stream_name":"stdout","time":16.523146179,"data":"          \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523156517,"data":"          1\n"}
+,{"stream_name":"stdout","time":16.523161193,"data":"        ]\n"}
+,{"stream_name":"stdout","time":16.523165787,"data":"      ]\n"}
+,{"stream_name":"stdout","time":16.523170177,"data":"    },\n"}
+,{"stream_name":"stdout","time":16.523174674,"data":"    \"info\": {},\n"}
+,{"stream_name":"stdout","time":16.523178989,"data":"    \"observation\": {\n"}
+,{"stream_name":"stdout","time":16.523183855,"data":"      \"day\": 4,\n"}
+,{"stream_name":"stdout","time":16.523188491,"data":"      \"farms\": [\n"}
+,{"stream_name":"stdout","time":16.523193015,"data":"        {\n"}
+,{"stream_name":"stdout","time":16.523197492,"data":"          \"farmer\": [\n"}
+,{"stream_name":"stdout","time":16.523202211,"data":"            4,\n"}
+,{"stream_name":"stdout","time":16.523207193,"data":"            4\n"}
+,{"stream_name":"stdout","time":16.523211804,"data":"          ],\n"}
+,{"stream_name":"stdout","time":16.523216244,"data":"          \"hands\": [\n"}
+,{"stream_name":"stdout","time":16.523220208,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523224473,"data":"              2,\n"}
+,{"stream_name":"stdout","time":16.523229077,"data":"              4\n"}
+,{"stream_name":"stdout","time":16.523233547,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.523238275,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.52324311,"data":"              4,\n"}
+,{"stream_name":"stdout","time":16.523248055,"data":"              4\n"}
+,{"stream_name":"stdout","time":16.523252714,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.523257318,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523261732,"data":"              4,\n"}
+,{"stream_name":"stdout","time":16.523266454,"data":"              3\n"}
+,{"stream_name":"stdout","time":16.523271414,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.523276395,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523280821,"data":"              4,\n"}
+,{"stream_name":"stdout","time":16.523284967,"data":"              3\n"}
+,{"stream_name":"stdout","time":16.523289297,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.523293878,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523298292,"data":"              1,\n"}
+,{"stream_name":"stdout","time":16.523302874,"data":"              4\n"}
+,{"stream_name":"stdout","time":16.523307271,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.5233117,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523316292,"data":"              3,\n"}
+,{"stream_name":"stdout","time":16.523320848,"data":"              4\n"}
+,{"stream_name":"stdout","time":16.523324957,"data":"            ]\n"}
+,{"stream_name":"stdout","time":16.523329544,"data":"          ],\n"}
+,{"stream_name":"stdout","time":16.523334112,"data":"          \"hires_today\": 6,\n"}
+,{"stream_name":"stdout","time":16.523338612,"data":"          \"money\": 78.0,\n"}
+,{"stream_name":"stdout","time":16.523343314999998,"data":"          \"tiles\": [\n"}
+,{"stream_name":"stdout","time":16.523347737,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523351917,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523356634,"data":"                \"consecutive_unwatered\": 1,\n"}
+,{"stream_name":"stdout","time":16.523362037,"data":"                \"crop\": \"MELON\",\n"}
+,{"stream_name":"stdout","time":16.523367399,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523377115,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523382012,"data":"                \"max_lifespan_step\": 360,\n"}
+,{"stream_name":"stdout","time":16.523386462,"data":"                \"planted_day\": 2,\n"}
+,{"stream_name":"stdout","time":16.523390765,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523395578,"data":"                \"yield_units\": 1\n"}
+,{"stream_name":"stdout","time":16.523400325,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.52340494,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523409867,"data":"                \"consecutive_unwatered\": 1,\n"}
+,{"stream_name":"stdout","time":16.523416864,"data":"                \"crop\": \"MELON\",\n"}
+,{"stream_name":"stdout","time":16.523421974,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523426273,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523430827,"data":"                \"max_lifespan_step\": 360,\n"}
+,{"stream_name":"stdout","time":16.5234358,"data":"                \"planted_day\": 2,\n"}
+,{"stream_name":"stdout","time":16.523440617,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523445431,"data":"                \"yield_units\": 1\n"}
+,{"stream_name":"stdout","time":16.523450385,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.523455169,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523459921,"data":"                \"consecutive_unwatered\": 1,\n"}
+,{"stream_name":"stdout","time":16.523464802,"data":"                \"crop\": \"MELON\",\n"}
+,{"stream_name":"stdout","time":16.523469931,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523474375,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523479137,"data":"                \"max_lifespan_step\": 360,\n"}
+,{"stream_name":"stdout","time":16.523483774,"data":"                \"planted_day\": 2,\n"}
+,{"stream_name":"stdout","time":16.523488641,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523493655,"data":"                \"yield_units\": 1\n"}
+,{"stream_name":"stdout","time":16.523498305,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.523502878,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523507231,"data":"                \"consecutive_unwatered\": 1,\n"}
+,{"stream_name":"stdout","time":16.523512385,"data":"                \"crop\": \"MELON\",\n"}
+,{"stream_name":"stdout","time":16.523517448,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523522077,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523526807,"data":"                \"max_lifespan_step\": 312,\n"}
+,{"stream_name":"stdout","time":16.523531375,"data":"                \"planted_day\": 0,\n"}
+,{"stream_name":"stdout","time":16.523535839,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523540815,"data":"                \"yield_units\": 1\n"}
+,{"stream_name":"stdout","time":16.523545338,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.523549356,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523553807,"data":"                \"consecutive_unwatered\": 1,\n"}
+,{"stream_name":"stdout","time":16.523558015,"data":"                \"crop\": \"MELON\",\n"}
+,{"stream_name":"stdout","time":16.523567399,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523572099,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523576492,"data":"                \"max_lifespan_step\": 312,\n"}
+,{"stream_name":"stdout","time":16.523581285,"data":"                \"planted_day\": 0,\n"}
+,{"stream_name":"stdout","time":16.523586294,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523591142,"data":"                \"yield_units\": 1\n"}
+,{"stream_name":"stdout","time":16.523595807,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.523600248,"data":"              \"LOCKED\",\n"}
+,{"stream_name":"stdout","time":16.523604484,"data":"              \"LOCKED\",\n"}
+,{"stream_name":"stdout","time":16.523608742,"data":"              \"LOCKED\",\n"}
+,{"stream_name":"stdout","time":16.523613425,"data":"              \"LOCKED\",\n"}
+,{"stream_name":"stdout","time":16.523618075,"data":"              \"LOCKED\"\n"}
+,{"stream_name":"stdout","time":16.523622673,"data":"            ],\n"}
+,{"stream_name":"stdout","time":16.523626879,"data":"            [\n"}
+,{"stream_name":"stdout","time":16.523631527,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.523636109,"data":"                \"consecutive_unwatered\": 0,\n"}
+,{"stream_name":"stdout","time":16.523640449,"data":"                \"crop\": \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523645381,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523650019,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523654828,"data":"                \"max_lifespan_step\": 120,\n"}
+,{"stream_name":"stdout","time":16.523659611,"data":"                \"planted_day\": 0,\n"}
+,{"stream_name":"stdout","time":16.523664535,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523668987,"data":"                \"yield_units\": 3\n"}
+,{"stream_name":"stdout","time":16.523673358,"data":"              },\n"}
+,{"stream_name":"stdout","time":16.523677365,"data":"              {\n"}
+,{"stream_name":"stdout","time":16.52368165,"data":"                \"consecutive_unwatered\": 0,\n"}
+,{"stream_name":"stdout","time":16.523686264,"data":"                \"crop\": \"WHEAT\",\n"}
+,{"stream_name":"stdout","time":16.523691279,"data":"                \"fertilized_until_day\": -1,\n"}
+,{"stream_name":"stdout","time":16.523695405,"data":"                \"kind\": \"PLANT\",\n"}
+,{"stream_name":"stdout","time":16.523699904,"data":"                \"max_lifespan_step\": 192,\n"}
+,{"stream_name":"stdout","time":16.523704268,"data":"                \"planted_day\": 3,\n"}
+,{"stream_name":"stdout","time":16.523708759,"data":"                \"watered_today\": false,\n"}
+,{"stream_name":"stdout","time":16.523713898,"data":"                \"yield_units\n"}
+,{"stream_name":"stdout","time":18.469289432,"data":"(1440, 11)\n"}
+,{"stream_name":"stdout","time":18.469338748,"data":"   step  day  hour  player   money  rival_money              farmer  \\\n"}
+,{"stream_name":"stdout","time":18.469345638,"data":"0     0    0     0       0  3000.0       3000.0              [PASS]   \n"}
+,{"stream_name":"stdout","time":18.469357921,"data":"1     0    0     0       1  3000.0       3000.0              [PASS]   \n"}
+,{"stream_name":"stdout","time":18.469363416,"data":"2     1    0     1       0  2339.0       1463.0              [PASS]   \n"}
+,{"stream_name":"stdout","time":18.469384649,"data":"3     1    0     1       1  1463.0       2339.0              [PASS]   \n"}
+,{"stream_name":"stdout","time":18.469389859,"data":"4     2    0     2       0  1478.0        656.0  [PICKUP, SHEEP, 1]   \n"}
+,{"stream_name":"stdout","time":18.469394621,"data":"\n"}
+,{"stream_name":"stdout","time":18.469399072,"data":"                                               hands  \\\n"}
+,{"stream_name":"stdout","time":18.469403795,"data":"0                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469413328999998,"data":"1                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469418393,"data":"2                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469423402,"data":"3                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469428469,"data":"4  [[WEST], [PICKUP, SHEEP, 1], [PICKUP, SHEEP, 1...   \n"}
+,{"stream_name":"stdout","time":18.469433479,"data":"\n"}
+,{"stream_name":"stdout","time":18.469437911,"data":"                                              market  \\\n"}
+,{"stream_name":"stdout","time":18.469442864,"data":"0                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469447451,"data":"1                                                 []   \n"}
+,{"stream_name":"stdout","time":18.469452217,"data":"2  [[BUY_PRODUCT, WHEAT, 3], [HIRE], [HIRE], [HIR...   \n"}
+,{"stream_name":"stdout","time":18.469456761,"data":"3  [[BUY_ANIMAL, COW, 1], [BUY_PRODUCT, WHEAT, 5]...   \n"}
+,{"stream_name":"stdout","time":18.469461252,"data":"4  [[SELL, WHEAT, 3], [BUY_SEED, WHEAT, 1], [BUY_...   \n"}
+,{"stream_name":"stdout","time":18.469465822,"data":"\n"}
+,{"stream_name":"stdout","time":18.469470342,"data":"                                              prices shops  \n"}
+,{"stream_name":"stdout","time":18.469474906,"data":"0  {'CARROT': 35, 'EGG': 50, 'FERTILIZER': 100, '...    []  \n"}
+,{"stream_name":"stdout","time":18.469479122,"data":"1  {'CARROT': 35, 'EGG': 50, 'FERTILIZER': 100, '...    []  \n"}
+,{"stream_name":"stdout","time":18.469483236,"data":"2  {'CARROT': 35, 'EGG': 50, 'FERTILIZER': 100, '...    []  \n"}
+,{"stream_name":"stdout","time":18.469487541,"data":"3  {'CARROT': 35, 'EGG': 50, 'FERTILIZER': 100, '...    []  \n"}
+,{"stream_name":"stdout","time":18.469492244,"data":"4  {'CARROT': 35, 'EGG': 50, 'FERTILIZER': 100, '...    []  \n"}
+,{"stream_name":"stdout","time":19.327353459,"data":"\n"}
+,{"stream_name":"stdout","time":19.32740175,"data":"=== 112509185.json ===\n"}
+,{"stream_name":"stdout","time":19.32740791,"data":"Winner: player 0, money: 87492\n"}
+,{"stream_name":"stdout","time":19.327412607,"data":"Loser:  player 1, money: 82589\n"}
+,{"stream_name":"stdout","time":19.327417146,"data":"\n"}
+,{"stream_name":"stdout","time":19.327421372,"data":"Money by day (winner vs loser):\n"}
+,{"stream_name":"stdout","time":19.327426004,"data":"player        0        1\n"}
+,{"stream_name":"stdout","time":19.327430427,"data":"day                     \n"}
+,{"stream_name":"stdout","time":19.327437363,"data":"0        3000.0   3000.0\n"}
+,{"stream_name":"stdout","time":19.327442115,"data":"1          35.0      2.0\n"}
+,{"stream_name":"stdout","time":19.3274468,"data":"2         216.0     70.0\n"}
+,{"stream_name":"stdout","time":19.327451704,"data":"3           7.0     39.0\n"}
+,{"stream_name":"stdout","time":19.32745629,"data":"4           2.0     11.0\n"}
+,{"stream_name":"stdout","time":19.327460859,"data":"5           1.0    528.0\n"}
+,{"stream_name":"stdout","time":19.327480151,"data":"6          18.0     22.0\n"}
+,{"stream_name":"stdout","time":19.327485,"data":"7           2.0    117.0\n"}
+,{"stream_name":"stdout","time":19.327489458,"data":"8          16.0     52.0\n"}
+,{"stream_name":"stdout","time":19.327494138,"data":"9          32.0    135.0\n"}
+,{"stream_name":"stdout","time":19.327498778,"data":"10          0.0    237.0\n"}
+,{"stream_name":"stdout","time":19.327502951,"data":"11       6645.0   9775.0\n"}
+,{"stream_name":"stdout","time":19.327507196,"data":"12      12690.0  12636.0\n"}
+,{"stream_name":"stdout","time":19.327511209,"data":"13      16541.0  15729.0\n"}
+,{"stream_name":"stdout","time":19.327515315,"data":"14      23889.0  20301.0\n"}
+,{"stream_name":"stdout","time":19.327519324,"data":"15      26609.0  25739.0\n"}
+,{"stream_name":"stdout","time":19.327523066,"data":"16      31997.0  34084.0\n"}
+,{"stream_name":"stdout","time":19.327527148,"data":"17      43926.0  44140.0\n"}
+,{"stream_name":"stdout","time":19.327531196,"data":"18      46302.0  48539.0\n"}
+,{"stream_name":"stdout","time":19.327535156,"data":"19      57498.0  59575.0\n"}
+,{"stream_name":"stdout","time":19.32753961,"data":"20      62434.0  61764.0\n"}
+,{"stream_name":"stdout","time":19.327543789,"data":"21      64335.0  63674.0\n"}
+,{"stream_name":"stdout","time":19.32754797,"data":"22      66534.0  65571.0\n"}
+,{"stream_name":"stdout","time":19.327552019,"data":"23      68410.0  66891.0\n"}
+,{"stream_name":"stdout","time":19.32755574,"data":"24      70454.0  68264.0\n"}
+,{"stream_name":"stdout","time":19.327559847,"data":"25      73372.0  70025.0\n"}
+,{"stream_name":"stdout","time":19.327564057,"data":"26      75634.0  72154.0\n"}
+,{"stream_name":"stdout","time":19.32756824,"data":"27      78113.0  74060.0\n"}
+,{"stream_name":"stdout","time":19.327572398,"data":"28      80638.0  76048.0\n"}
+,{"stream_name":"stdout","time":19.327576488,"data":"29      83582.0  79397.0\n"}
+,{"stream_name":"stdout","time":19.327580778,"data":"\n"}
+,{"stream_name":"stdout","time":19.327584848,"data":"Winner PLANT actions:\n"}
+,{"stream_name":"stdout","time":19.327589473,"data":"farmer_full\n"}
+,{"stream_name":"stdout","time":19.327593902,"data":"['PLANT', 'WHEAT']         27\n"}
+,{"stream_name":"stdout","time":19.327598549,"data":"['PLANT', 'MELON']          5\n"}
+,{"stream_name":"stdout","time":19.327603206,"data":"['PLANT', 'CARROT']         5\n"}
+,{"stream_name":"stdout","time":19.32764345,"data":"['PLANT', 'STRAWBERRY']     1\n"}
+,{"stream_name":"stdout","time":19.327648629,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":19.327653751,"data":"\n"}
+,{"stream_name":"stdout","time":19.327658708,"data":"Winner market ops (top):\n"}
+,{"stream_name":"stdout","time":19.327663635,"data":"market_ops\n"}
+,{"stream_name":"stdout","time":19.327668681,"data":"[['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1]]                                                                                                                                                                                                                             9\n"}
+,{"stream_name":"stdout","time":19.327675265,"data":"[['SELL', 'FERTILIZER', 1]]                                                                                                                                                                                                                                                     5\n"}
+,{"stream_name":"stdout","time":19.327681404,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 1]]                                                                                                                                                                                                4\n"}
+,{"stream_name":"stdout","time":19.327695093,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'CARROT', 3], ['SELL', 'FERTILIZER', 1], ['SELL', 'EGG', 2], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]                                      3\n"}
+,{"stream_name":"stdout","time":19.327701506,"data":"[['SELL', 'FERTILIZER', 10], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                                                          3\n"}
+,{"stream_name":"stdout","time":19.327707336,"data":"[['SELL', 'FERTILIZER', 1], ['BUY_SEED', 'MELON', 1]]                                                                                                                                                                                                                           3\n"}
+,{"stream_name":"stdout","time":19.32771371,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 3], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                    2\n"}
+,{"stream_name":"stdout","time":19.327720174,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 1], ['SELL', 'EGG', 4], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]                                       2\n"}
+,{"stream_name":"stdout","time":19.327726203,"data":"[['SELL', 'FERTILIZER', 1], ['BUY_ANIMAL', 'GOOSE', 1]]                                                                                                                                                                                                                         2\n"}
+,{"stream_name":"stdout","time":19.327732435,"data":"[['SELL', 'FERTILIZER', 6], ['BUY_ANIMAL', 'SHEEP', 1]]                                                                                                                                                                                                                         2\n"}
+,{"stream_name":"stdout","time":19.327739118,"data":"[['SELL', 'FERTILIZER', 4], ['BUY_ANIMAL', 'COW', 1]]                                                                                                                                                                                                                           2\n"}
+,{"stream_name":"stdout","time":19.327745343,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 1], ['SELL', 'EGG', 2], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]                                       2\n"}
+,{"stream_name":"stdout","time":19.32775138,"data":"[['SELL', 'WHEAT', 2], ['BUY_PRODUCT', 'WHEAT', 2]]                                                                                                                                                                                                                             2\n"}
+,{"stream_name":"stdout","time":19.327757366,"data":"[['SELL', 'WHEAT', 2], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['BUY_PRODUCT', 'WHEAT', 1]]                                                                                                                                                                           2\n"}
+,{"stream_name":"stdout","time":19.327763535,"data":"[['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                                                                                                                                                                             2\n"}
+,{"stream_name":"stdout","time":19.327773214,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 2], ['SELL', 'EGG', 4]]                                                                                                                                                                                                      2\n"}
+,{"stream_name":"stdout","time":19.327779441,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 1], ['SELL', 'EGG', 4]]                                                                                                                                                                                                      2\n"}
+,{"stream_name":"stdout","time":19.327785328,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 3], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                                                                                                                          2\n"}
+,{"stream_name":"stdout","time":19.327791854,"data":"[['SELL', 'WHEAT', 1]]                                                                                                                                                                                                                                                          2\n"}
+,{"stream_name":"stdout","time":19.327797048,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 1], ['BUY_PRODUCT', 'FERTILIZER', 1], ['BUY_PRODUCT', 'WHEAT', 4], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4], ['SELL', 'WHEAT', 4], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4]]    1\n"}
+,{"stream_name":"stdout","time":19.327802852,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":20.094540308,"data":"\n"}
+,{"stream_name":"stdout","time":20.09468841,"data":"=== 112519767.json ===\n"}
+,{"stream_name":"stdout","time":20.094726751,"data":"Winner: player 1, money: 107837\n"}
+,{"stream_name":"stdout","time":20.094732427,"data":"Loser:  player 0, money: 94965\n"}
+,{"stream_name":"stdout","time":20.094736726,"data":"\n"}
+,{"stream_name":"stdout","time":20.094740537,"data":"Money by day (winner vs loser):\n"}
+,{"stream_name":"stdout","time":20.094744934,"data":"player        0         1\n"}
+,{"stream_name":"stdout","time":20.094749436,"data":"day                      \n"}
+,{"stream_name":"stdout","time":20.094754976,"data":"0        3000.0    3000.0\n"}
+,{"stream_name":"stdout","time":20.09475957,"data":"1           1.0      22.0\n"}
+,{"stream_name":"stdout","time":20.094763804,"data":"2           0.0     403.0\n"}
+,{"stream_name":"stdout","time":20.094768656,"data":"3           4.0       8.0\n"}
+,{"stream_name":"stdout","time":20.094773116,"data":"4           5.0      16.0\n"}
+,{"stream_name":"stdout","time":20.094777669,"data":"5         375.0       7.0\n"}
+,{"stream_name":"stdout","time":20.094782229,"data":"6         801.0      10.0\n"}
+,{"stream_name":"stdout","time":20.094786719,"data":"7           8.0      19.0\n"}
+,{"stream_name":"stdout","time":20.094790999,"data":"8          25.0      31.0\n"}
+,{"stream_name":"stdout","time":20.094795433,"data":"9        2310.0      17.0\n"}
+,{"stream_name":"stdout","time":20.094799874,"data":"10         38.0       4.0\n"}
+,{"stream_name":"stdout","time":20.094804229,"data":"11       6266.0    9020.0\n"}
+,{"stream_name":"stdout","time":20.094816177,"data":"12      10190.0   12703.0\n"}
+,{"stream_name":"stdout","time":20.094859814,"data":"13      12328.0   18342.0\n"}
+,{"stream_name":"stdout","time":20.094882337,"data":"14      15515.0   26770.0\n"}
+,{"stream_name":"stdout","time":20.094887126,"data":"15      23835.0   32332.0\n"}
+,{"stream_name":"stdout","time":20.094891289,"data":"16      31555.0   36133.0\n"}
+,{"stream_name":"stdout","time":20.094895346,"data":"17      41980.0   47143.0\n"}
+,{"stream_name":"stdout","time":20.094899736,"data":"18      49121.0   58188.0\n"}
+,{"stream_name":"stdout","time":20.094903786,"data":"19      57941.0   68941.0\n"}
+,{"stream_name":"stdout","time":20.094908077,"data":"20      63594.0   75040.0\n"}
+,{"stream_name":"stdout","time":20.09491211,"data":"21      69721.0   80622.0\n"}
+,{"stream_name":"stdout","time":20.094916277,"data":"22      72123.0   82811.0\n"}
+,{"stream_name":"stdout","time":20.094920402,"data":"23      74438.0   85052.0\n"}
+,{"stream_name":"stdout","time":20.094925308,"data":"24      76605.0   87393.0\n"}
+,{"stream_name":"stdout","time":20.094930218,"data":"25      78476.0   90282.0\n"}
+,{"stream_name":"stdout","time":20.094934744,"data":"26      80837.0   92991.0\n"}
+,{"stream_name":"stdout","time":20.094939433,"data":"27      83597.0   95825.0\n"}
+,{"stream_name":"stdout","time":20.094943666,"data":"28      87200.0   99841.0\n"}
+,{"stream_name":"stdout","time":20.094948196,"data":"29      91063.0  101910.0\n"}
+,{"stream_name":"stdout","time":20.094953048,"data":"\n"}
+,{"stream_name":"stdout","time":20.094957338,"data":"Winner PLANT actions:\n"}
+,{"stream_name":"stdout","time":20.094962162,"data":"farmer_full\n"}
+,{"stream_name":"stdout","time":20.094967006,"data":"['PLANT', 'WHEAT']         27\n"}
+,{"stream_name":"stdout","time":20.094971957,"data":"['PLANT', 'CARROT']         9\n"}
+,{"stream_name":"stdout","time":20.094976439,"data":"['PLANT', 'MELON']          5\n"}
+,{"stream_name":"stdout","time":20.094981282,"data":"['PLANT', 'STRAWBERRY']     1\n"}
+,{"stream_name":"stdout","time":20.0949861,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":20.094991024,"data":"\n"}
+,{"stream_name":"stdout","time":20.094995657,"data":"Winner market ops (top):\n"}
+,{"stream_name":"stdout","time":20.095000598,"data":"market_ops\n"}
+,{"stream_name":"stdout","time":20.095005956,"data":"[['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1]]                                                                                                                                                                                               10\n"}
+,{"stream_name":"stdout","time":20.095012486,"data":"[['SELL', 'FERTILIZER', 3]]                                                                                                                                                                                                                        6\n"}
+,{"stream_name":"stdout","time":20.095018423,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]        3\n"}
+,{"stream_name":"stdout","time":20.095029528,"data":"[['SELL', 'FERTILIZER', 1], ['BUY_SEED', 'MELON', 1]]                                                                                                                                                                                              3\n"}
+,{"stream_name":"stdout","time":20.095035667,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 2]]                                                                                                                                             3\n"}
+,{"stream_name":"stdout","time":20.095046067,"data":"[['SELL', 'FERTILIZER', 1]]                                                                                                                                                                                                                        3\n"}
+,{"stream_name":"stdout","time":20.09505198,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 5]]                                                                                                                                             3\n"}
+,{"stream_name":"stdout","time":20.095057824,"data":"[['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5]]                                                                                                                                                                                                3\n"}
+,{"stream_name":"stdout","time":20.095063876,"data":"[['SELL', 'FERTILIZER', 2], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 5]]                                  3\n"}
+,{"stream_name":"stdout","time":20.095080786,"data":"[['SELL', 'FERTILIZER', 1], ['BUY_PRODUCT', 'WHEAT', 3], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                                     3\n"}
+,{"stream_name":"stdout","time":20.09508683,"data":"[['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                                                                                                                                                2\n"}
+,{"stream_name":"stdout","time":20.095094191,"data":"[['SELL', 'FERTILIZER', 2], ['SELL', 'WHEAT', 3], ['SELL', 'WHEAT', 1], ['BUY_SEED', 'STRAWBERRY', 2]]                                                                                                                                             2\n"}
+,{"stream_name":"stdout","time":20.095100352,"data":"[['SELL', 'FERTILIZER', 8], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                              2\n"}
+,{"stream_name":"stdout","time":20.095106429,"data":"[['SELL', 'FERTILIZER', 3], ['BUY_ANIMAL', 'COW', 1]]                                                                                                                                                                                              2\n"}
+,{"stream_name":"stdout","time":20.095111928,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 2], ['SELL', 'EGG', 2]]                                                                                                                                                                         2\n"}
+,{"stream_name":"stdout","time":20.095117834,"data":"[['SELL', 'FERTILIZER', 2], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 1]]     2\n"}
+,{"stream_name":"stdout","time":20.095124086,"data":"[['SELL', 'CARROT', 24], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                                 2\n"}
+,{"stream_name":"stdout","time":20.095130138,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 2], ['SELL', 'EGG', 4]]                                                                                                                                                                         2\n"}
+,{"stream_name":"stdout","time":20.095139692,"data":"[['SELL', 'WHEAT', 2]]                                                                                                                                                                                                                             2\n"}
+,{"stream_name":"stdout","time":20.095145406,"data":"[['SELL', 'FERTILIZER', 10], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                             2\n"}
+,{"stream_name":"stdout","time":20.095150934,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":20.712536667,"data":"\n"}
+,{"stream_name":"stdout","time":20.712592418,"data":"=== 112531901.json ===\n"}
+,{"stream_name":"stdout","time":20.712599736,"data":"Winner: player 0, money: 101957\n"}
+,{"stream_name":"stdout","time":20.712605159,"data":"Loser:  player 1, money: 96458\n"}
+,{"stream_name":"stdout","time":20.712609589,"data":"\n"}
+,{"stream_name":"stdout","time":20.712613814,"data":"Money by day (winner vs loser):\n"}
+,{"stream_name":"stdout","time":20.712618348,"data":"player        0        1\n"}
+,{"stream_name":"stdout","time":20.712622428,"data":"day                     \n"}
+,{"stream_name":"stdout","time":20.712626461,"data":"0        3000.0   3000.0\n"}
+,{"stream_name":"stdout","time":20.712630782,"data":"1          18.0      5.0\n"}
+,{"stream_name":"stdout","time":20.712635066,"data":"2         398.0      0.0\n"}
+,{"stream_name":"stdout","time":20.712639255,"data":"3           3.0      4.0\n"}
+,{"stream_name":"stdout","time":20.712643628,"data":"4           2.0     88.0\n"}
+,{"stream_name":"stdout","time":20.712647817,"data":"5          23.0    357.0\n"}
+,{"stream_name":"stdout","time":20.712652271,"data":"6          28.0    684.0\n"}
+,{"stream_name":"stdout","time":20.712657023,"data":"7           1.0     32.0\n"}
+,{"stream_name":"stdout","time":20.712661223,"data":"8         378.0     22.0\n"}
+,{"stream_name":"stdout","time":20.712665333,"data":"9           3.0   2361.0\n"}
+,{"stream_name":"stdout","time":20.71266977,"data":"10          2.0    550.0\n"}
+,{"stream_name":"stdout","time":20.7126742,"data":"11      12176.0   3255.0\n"}
+,{"stream_name":"stdout","time":20.71267853,"data":"12      17709.0   8083.0\n"}
+,{"stream_name":"stdout","time":20.712682855,"data":"13      21357.0  10480.0\n"}
+,{"stream_name":"stdout","time":20.712687499,"data":"14      28538.0  13996.0\n"}
+,{"stream_name":"stdout","time":20.712692114,"data":"15      36380.0  24376.0\n"}
+,{"stream_name":"stdout","time":20.712696584,"data":"16      39470.0  27377.0\n"}
+,{"stream_name":"stdout","time":20.712700841,"data":"17      46992.0  34675.0\n"}
+,{"stream_name":"stdout","time":20.712705373,"data":"18      50438.0  40520.0\n"}
+,{"stream_name":"stdout","time":20.71270974,"data":"19      57295.0  45219.0\n"}
+,{"stream_name":"stdout","time":20.712714303,"data":"20      60891.0  48840.0\n"}
+,{"stream_name":"stdout","time":20.7127189,"data":"21      65105.0  52472.0\n"}
+,{"stream_name":"stdout","time":20.71272362,"data":"22      66867.0  55459.0\n"}
+,{"stream_name":"stdout","time":20.712727996,"data":"23      70144.0  59594.0\n"}
+,{"stream_name":"stdout","time":20.712732184,"data":"24      72981.0  64396.0\n"}
+,{"stream_name":"stdout","time":20.712736385,"data":"25      76907.0  68680.0\n"}
+,{"stream_name":"stdout","time":20.712740603,"data":"26      81783.0  73545.0\n"}
+,{"stream_name":"stdout","time":20.712745173,"data":"27      86123.0  78232.0\n"}
+,{"stream_name":"stdout","time":20.712767366,"data":"28      90146.0  83913.0\n"}
+,{"stream_name":"stdout","time":20.712772303,"data":"29      95847.0  89177.0\n"}
+,{"stream_name":"stdout","time":20.712776839,"data":"\n"}
+,{"stream_name":"stdout","time":20.712780648,"data":"Winner PLANT actions:\n"}
+,{"stream_name":"stdout","time":20.712784856,"data":"farmer_full\n"}
+,{"stream_name":"stdout","time":20.712789083,"data":"['PLANT', 'WHEAT']         25\n"}
+,{"stream_name":"stdout","time":20.712793237,"data":"['PLANT', 'CARROT']         8\n"}
+,{"stream_name":"stdout","time":20.712797334,"data":"['PLANT', 'MELON']          5\n"}
+,{"stream_name":"stdout","time":20.712801661,"data":"['PLANT', 'STRAWBERRY']     2\n"}
+,{"stream_name":"stdout","time":20.712805988,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":20.712810183,"data":"\n"}
+,{"stream_name":"stdout","time":20.712814443,"data":"Winner market ops (top):\n"}
+,{"stream_name":"stdout","time":20.712841704,"data":"market_ops\n"}
+,{"stream_name":"stdout","time":20.712846946,"data":"[['SELL', 'FERTILIZER', 1]]                                                                                                                                                                                                              9\n"}
+,{"stream_name":"stdout","time":20.712854915,"data":"[['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 1]]                                                                                                                                                                                      7\n"}
+,{"stream_name":"stdout","time":20.712859955,"data":"[['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5]]                                                                                                                                                                                      5\n"}
+,{"stream_name":"stdout","time":20.712867924,"data":"[['SELL', 'FERTILIZER', 4]]                                                                                                                                                                                                              4\n"}
+,{"stream_name":"stdout","time":20.712872884,"data":"[['SELL', 'FERTILIZER', 2]]                                                                                                                                                                                                              4\n"}
+,{"stream_name":"stdout","time":20.712877865,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 3], ['SELL', 'EGG', 4]]                                                                                                                                                               4\n"}
+,{"stream_name":"stdout","time":20.712882917,"data":"[['SELL', 'FERTILIZER', 1], ['BUY_SEED', 'MELON', 1]]                                                                                                                                                                                    4\n"}
+,{"stream_name":"stdout","time":20.712888636,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 1], ['BUY_PRODUCT', 'WHEAT', 2]]                                                                                                                                   3\n"}
+,{"stream_name":"stdout","time":20.712894439,"data":"[['SELL', 'CARROT', 20], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                       3\n"}
+,{"stream_name":"stdout","time":20.712899911,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 2], ['BUY_PRODUCT', 'WHEAT', 3]]                             3\n"}
+,{"stream_name":"stdout","time":20.712911154,"data":"[['SELL', 'WHEAT', 1]]                                                                                                                                                                                                                   3\n"}
+,{"stream_name":"stdout","time":20.712916443,"data":"[['SELL', 'WHEAT', 6], ['BUY_PRODUCT', 'WHEAT', 5], ['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 5]]                                                                                                                                   2\n"}
+,{"stream_name":"stdout","time":20.712922871,"data":"[['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 4], ['SELL', 'FERTILIZER', 3], ['SELL', 'EGG', 4], ['SELL', 'EGG', 5], ['SELL', 'EGG', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]    2\n"}
+,{"stream_name":"stdout","time":20.712927867,"data":"[['SELL', 'FERTILIZER', 6]]                                                                                                                                                                                                              2\n"}
+,{"stream_name":"stdout","time":20.712932427,"data":"[['SELL', 'WHEAT', 4], ['BUY_PRODUCT', 'WHEAT', 4]]                                                                                                                                                                                      2\n"}
+,{"stream_name":"stdout","time":20.712938261,"data":"[['SELL', 'MILK', 3], ['SELL', 'FERTILIZER', 4], ['SELL', 'EGG', 2], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]           2\n"}
+,{"stream_name":"stdout","time":20.712944283,"data":"[['SELL', 'FERTILIZER', 6], ['SELL', 'FERTILIZER', 1]]                                                                                                                                                                                   2\n"}
+,{"stream_name":"stdout","time":20.712950184,"data":"[['SELL', 'FERTILIZER', 5], ['SELL', 'FERTILIZER', 4], ['SELL', 'EGG', 5], ['SELL', 'EGG', 2], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5], ['SELL', 'WHEAT', 5]]       2\n"}
+,{"stream_name":"stdout","time":20.71295611,"data":"[['SELL', 'FERTILIZER', 11], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE']]                                                                                                                   2\n"}
+,{"stream_name":"stdout","time":20.71296594,"data":"[['SELL', 'WHEAT', 6], ['SELL', 'FERTILIZER', 1], ['BUY_SEED', 'STRAWBERRY', 2]]                                                                                                                                                         2\n"}
+,{"stream_name":"stdout","time":20.712970937,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stdout","time":21.001712538,"data":"Writing /kaggle/working/main.py\n"}
+,{"stream_name":"stdout","time":21.082935252,"data":"Создан: /kaggle/working/submission.tar.gz\n"}
+,{"stream_name":"stdout","time":21.082989934,"data":"Размер: 148973 байт\n"}
+,{"stream_name":"stderr","time":24.828885851,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":24.82893209,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":25.055147448,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":25.055204941,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":26.002731423,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":26.463282613,"data":"[NbConvertApp] Writing 399554 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":29.923543568,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":31.729329614,"data":"[NbConvertApp] Writing 1415161 bytes to __results__.html\n"}
+]

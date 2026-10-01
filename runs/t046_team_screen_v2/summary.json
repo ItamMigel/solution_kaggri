@@ -1,0 +1,117 @@
+{
+  "seeds": [
+    92946001,
+    92946002,
+    92946003,
+    92946004
+  ],
+  "games": 32,
+  "errors": 0,
+  "excluded_outside_complete_plan": 0,
+  "note": "4-world development screen; interrupted for CPU resource contention, before inspecting scores; not a gate",
+  "variants": {
+    "baseline": {
+      "games": 16,
+      "wins": 7,
+      "draws": 0,
+      "losses": 9,
+      "score": 0.4375,
+      "margin": 2674.9375,
+      "max_call": 0.6942896510008723,
+      "median_game_p50": 0.19343429553555325,
+      "seconds_mean": 189.3560704841002,
+      "total_overage": 0,
+      "by_opp": {
+        "tetsu": {
+          "games": 8,
+          "wins": 3,
+          "draws": 0,
+          "losses": 5,
+          "score": 0.375,
+          "margin": -229.75,
+          "max_call": 0.39622353797312826,
+          "median_game_p50": 0.19343429553555325,
+          "seconds_mean": 203.4800792914757,
+          "total_overage": 0
+        },
+        "yaxon5": {
+          "games": 8,
+          "wins": 4,
+          "draws": 0,
+          "losses": 4,
+          "score": 0.5,
+          "margin": 5579.625,
+          "max_call": 0.6942896510008723,
+          "median_game_p50": 0.18901083548553288,
+          "seconds_mean": 175.2320616767247,
+          "total_overage": 0
+        }
+      }
+    },
+    "mg75_mg2": {
+      "games": 16,
+      "wins": 16,
+      "draws": 0,
+      "losses": 0,
+      "score": 1.0,
+      "margin": 7658.125,
+      "max_call": 0.8927736839978024,
+      "median_game_p50": 0.28942993143573403,
+      "seconds_mean": 261.3106555736158,
+      "total_overage": 0,
+      "by_opp": {
+        "tetsu": {
+          "games": 8,
+          "wins": 8,
+          "draws": 0,
+          "losses": 0,
+          "score": 1.0,
+          "margin": 8756.25,
+          "max_call": 0.8927736839978024,
+          "median_game_p50": 0.2845333495060913,
+          "seconds_mean": 273.8432798257272,
+          "total_overage": 0
+        },
+        "yaxon5": {
+          "games": 8,
+          "wins": 8,
+          "draws": 0,
+          "losses": 0,
+          "score": 1.0,
+          "margin": 6560.0,
+          "max_call": 0.8879823380848393,
+          "median_game_p50": 0.28942993143573403,
+          "seconds_mean": 248.7780313215044,
+          "total_overage": 0
+        }
+      },
+      "op_disagreement": 0.03689336691855583,
+      "target_disagreement": 0.03160369437447523,
+      "market_disagreement": 0.06135169414749049,
+      "paired": {
+        "score": 0.5625,
+        "margin": 4983.1875,
+        "world_score": [
+          1.0,
+          0.75,
+          0.5,
+          0.0
+        ],
+        "world_margin": [
+          11054.0,
+          7931.0,
+          -3959.25,
+          4907.0
+        ],
+        "score_ci95": [
+          0.1875,
+          0.875
+        ],
+        "margin_ci95": [
+          -986.6875,
+          9517.25
+        ]
+      }
+    }
+  }
+}

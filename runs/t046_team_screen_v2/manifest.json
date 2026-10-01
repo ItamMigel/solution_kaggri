@@ -1,0 +1,29 @@
+{
+  "seeds": [
+    92946001,
+    92946002,
+    92946003,
+    92946004,
+    92946005,
+    92946006,
+    92946007,
+    92946008
+  ],
+  "variants": [
+    "baseline",
+    "mg75_mg2"
+  ],
+  "opponents": {
+    "tetsu": "/workspace/shared/pavel_lab/lab/pavel/candidates/tetsu1009_public/main.py",
+    "yaxon5": "/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py"
+  },
+  "workers": 12,
+  "base": "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_m15ens_d13/main.py",
+  "sha256": {
+    "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_m15ens_d13/main.py": "1b1261f65cc365fbff76578965de712e7398b7819d80fe6ef3113c272ea0bfe6",
+    "/workspace/shared/pavel_lab/lab/pavel/candidates/tetsu1009_public/main.py": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+    "/workspace/shared/opponents/pool/yaxon_reactive_v5/main.py": "ea4c28e64d77ddcdd5f08cb150b408de3c10f4bc9a18c6e681758b7da2e8f022",
+    "/workspace/shared/opponents/pool/parthenos_robust/main.py": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+  },
+  "rule": "Development only: paired whole-world score CI, no promotion from this screen; no retuning weights."
+}

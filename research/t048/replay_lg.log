@@ -1,0 +1,29 @@
+80 episodes x 3 candidates = 240 games, workers=5 -> /workspace/shared/research/t048/replay_lg.jsonl
+[12/240] ep 115337308 base: 133345 vs 130320 (rec 90946 vs 94111) 23s elapsed 48s
+[24/240] ep 115400969 expert: 113165 vs 113662 (rec 113165 vs 113662) 6s elapsed 92s
+[36/240] ep 115441463 expert: 115676 vs 122287 (rec 115676 vs 122287) 6s elapsed 137s
+[48/240] ep 115552078 expert: 112500 vs 113167 (rec 112500 vs 113167) 6s elapsed 182s
+[60/240] ep 115659115 expert: 122487 vs 71525 (rec 122487 vs 71525) 6s elapsed 230s
+[72/240] ep 115665183 expert: 118992 vs 99997 (rec 118992 vs 99997) 6s elapsed 270s
+[84/240] ep 115669775 expert: 102685 vs 88726 (rec 102685 vs 88726) 6s elapsed 315s
+[96/240] ep 115675829 expert: 91703 vs 81542 (rec 91703 vs 81542) 6s elapsed 363s
+[108/240] ep 115678882 base: 104735 vs 96258 (rec 104348 vs 96258) 24s elapsed 406s
+[120/240] ep 115683524 base: 104920 vs 91412 (rec 104841 vs 91412) 25s elapsed 452s
+[132/240] ep 115689822 expert: 108222 vs 110818 (rec 108222 vs 110818) 6s elapsed 495s
+[144/240] ep 115695982 expert: 85500 vs 68241 (rec 85500 vs 68241) 6s elapsed 540s
+[156/240] ep 115700592 expert: 103659 vs 83194 (rec 103659 vs 83194) 8s elapsed 586s
+[168/240] ep 115703663 base: 118769 vs 115805 (rec 118769 vs 115805) 25s elapsed 632s
+[180/240] ep 115709772 expert: 94600 vs 92448 (rec 94600 vs 92448) 6s elapsed 678s
+[192/240] ep 115712848 base: 95390 vs 95926 (rec 94845 vs 95950) 25s elapsed 727s
+[204/240] ep 115719800 expert: 81682 vs 64851 (rec 81682 vs 64851) 7s elapsed 770s
+[216/240] ep 115723745 expert: 112780 vs 115937 (rec 112780 vs 115937) 7s elapsed 815s
+[228/240] ep 115728368 expert: 112076 vs 121328 (rec 112076 vs 121328) 7s elapsed 864s
+[240/240] ep 115730346 lg26: 99920 vs 105120 (rec 102088 vs 106168) 25s elapsed 914s
+
+candidate           n  err fail   win%      cand$       opp$     margin      ±se   cand-rec invalid   exc  none exact    sec
+----------------------------------------------------------------------------------------------------------------------------
+(recorded)         80             53.8     107507     101692       5815     1453
+expert             80    0    0   53.8     107507     101692       5815     1453          0       0     0     0    80      6
+base               80    0    0   82.5     112526      97013      15513     1884       5019       0     0     0     4     25
+lg26               80    0    0   82.5     111976      96723      15253     1878       4469       0     0     0     0     25
+columns: fail = games with any ERROR/INVALID/TIMEOUT step (scored as loss); invalid = such steps; exc = agent exceptions; none = None/non-dict returns; exact = games with sim == recorded for both seats; cand-rec = sim candidate money - recorded expert money; sec = mean wall seconds per game

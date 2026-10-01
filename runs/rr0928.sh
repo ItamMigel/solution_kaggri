@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /workspace/wt/claude; N=/workspace/shared/opponents/new0928; C=/workspace/shared/candidates
+A="--agent pub_tetsu=$N/demand-preserving-turn-sale-timing/pkg --agent pub_evg31=$N/kaggriculture-version-31-26-09-bronze-going-up/pkg --agent pub_guru53=$N/kaggriculture-master-engine-v53e01d74d8f/pkg --agent pub_shep=$N/the-shepherds-ledger-herd-safe-sovereign/pkg --agent pub_mshock=$N/a-song-of-ice-and-fire-fixed-flexible/pkg --agent pub_multi=$N/kaggriculture-multi-route-farming-agent/pkg"
+for k in es1_g1 es7_wm es6_c4g15 es3_g5 es5_c3g15; do A="$A --agent $k=$C/$k/pkg"; done
+O="--opponent o_tetsu=$N/demand-preserving-turn-sale-timing/pkg --opponent o_evg31=$N/kaggriculture-version-31-26-09-bronze-going-up/pkg --opponent o_guru53=$N/kaggriculture-master-engine-v53e01d74d8f/pkg --opponent o_shep=$N/the-shepherds-ledger-herd-safe-sovereign/pkg --opponent o_mshock=$N/a-song-of-ice-and-fire-fixed-flexible/pkg --opponent o_es1_g1=$C/es1_g1/pkg --opponent o_es7_wm=$C/es7_wm/pkg"
+exec /workspace/solution_kaggri/.venv/bin/python compare.py $A $O --baselines --seeds 11 22 33 44 55 66 --workers 44 --out /workspace/shared/runs/rr0928 --decision-note "RR 09-28 ours vs new publics; no submission"

@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-09-28T21:52:04.285661+00:00",
+  "candidates": {
+    "tetsu": "/workspace/wt/claude/lab/t044/tetsu_base/main.py"
+  },
+  "opponents": {
+    "mirror": "/workspace/wt/claude/lab/t044/tetsu_base/main.py"
+  },
+  "seeds": [
+    184421,
+    184422,
+    184423,
+    184424
+  ],
+  "expected_games": 8,
+  "input_sha256": {
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/lab/t044/tetsu_base/main.py": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 700.0,
+  "workers": 8,
+  "decision_note": "T044 fresh four-world both-seat tetsu mirror attribution; local only; never submit",
+  "extra_assets": [],
+  "all_self_matchups": [
+    [
+      "tetsu",
+      "mirror"
+    ]
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "seeds": [
+    929453001,
+    929453002,
+    929453003,
+    929453004,
+    929453005,
+    929453006,
+    929453007,
+    929453008,
+    929453009,
+    929453010,
+    929453011,
+    929453012,
+    929453013,
+    929453014,
+    929453015,
+    929453016,
+    929453017,
+    929453018,
+    929453019,
+    929453020,
+    929453021,
+    929453022,
+    929453023,
+    929453024,
+    929453025,
+    929453026,
+    929453027,
+    929453028,
+    929453029,
+    929453030,
+    929453031,
+    929453032
+  ],
+  "variants": [
+    "off",
+    "a1",
+    "a2"
+  ],
+  "workers": 20,
+  "both_seats": true,
+  "opponents": {
+    "tetsu": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/tetsu.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8"
+    },
+    "qA": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/qA.py",
+      "sha256": "2db173ab732c35a56cd43a4ac70b476742d8aedc025cdd5117100f13de26bd8c"
+    },
+    "ozer44": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/ozer44.py",
+      "sha256": "797d9bca309d481e18cdbb675ce6d6de9967d266cbafb4c2352c68fb10264e2f"
+    },
+    "yaxon5": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/yaxon5.py",
+      "sha256": "ea4c28e64d77ddcdd5f08cb150b408de3c10f4bc9a18c6e681758b7da2e8f022"
+    },
+    "jaxa2802": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/jaxa2802.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56"
+    },
+    "parthenos": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/parthenos.py",
+      "sha256": "5b6297c51c96f2bd92fe5b8558335f585363f9d96aecb9cb9d4e759d170f13f3"
+    },
+    "bc_m15ens": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/bc_m15ens.py",
+      "sha256": "1b1261f65cc365fbff76578965de712e7398b7819d80fe6ef3113c272ea0bfe6"
+    },
+    "bc_mix4": {
+      "path": "/workspace/wt/codex/lab/t045/execution/frozen/bc_mix4.py",
+      "sha256": "3c5d687dc9cf0abf594513a69d646ab255b0ede864bb21e53ca0e78dda433881"
+    }
+  },
+  "exports": {
+    "engine_sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+    "sources": {
+      "m15ens": {
+        "path": "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_m15ens_d13/main.py",
+        "sha256": "1b1261f65cc365fbff76578965de712e7398b7819d80fe6ef3113c272ea0bfe6"
+      },
+      "mix4": {
+        "path": "/workspace/shared/pavel_lab/lab/pavel/candidates/bc_hg_mix4_d13/main.py",
+        "sha256": "3c5d687dc9cf0abf594513a69d646ab255b0ede864bb21e53ca0e78dda433881"
+      }
+    },
+    "exports": {
+      "m15ens_off": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_off.py",
+        "sha256": "a11075b435d5364ca03784032614454f6718fd85f3d8e200be3fb54b11ec2100"
+      },
+      "m15ens_terminal": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_terminal.py",
+        "sha256": "176fe28f648d71ee7e1d48bb4a2b65185110a8fc8b12e8a2a04bc1d325b5a810"
+      },
+      "m15ens_a1": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_a1.py",
+        "sha256": "53b0155622b763263cbf1bf72e08a809993a88c98b430abe4beaf610f44db3d1"
+      },
+      "m15ens_a2": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/m15ens_a2.py",
+        "sha256": "e3919863ee8123e77e513f0819ff46dc5f2b5fcaf64383f65d722bd23d792ee3"
+      },
+      "mix4_off": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_off.py",
+        "sha256": "9782ca826de0f4c2c6ae5e41535e4a554f4828ca6c05715486ed546053055a00"
+      },
+      "mix4_terminal": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_terminal.py",
+        "sha256": "90c31d829355906b4a7e1b36112726d190d085291651abc0fa01c08675ceb445"
+      },
+      "mix4_a1": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_a1.py",
+        "sha256": "c1bdc0e9b86fd9bd9e4eab3eab5e64d996402d14cb570a8dc009582bd09d758e"
+      },
+      "mix4_a2": {
+        "path": "/workspace/wt/codex/lab/t045/execution/exports/mix4_a2.py",
+        "sha256": "3567b507f6e269a5f09209522cd7b39b740234b414a66a721cfe5a43cac0c631"
+      }
+    }
+  },
+  "identity": false
+}

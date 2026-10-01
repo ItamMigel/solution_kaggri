@@ -1,0 +1,39 @@
+{
+  "created_utc": "2026-09-28T21:59:52.705526+00:00",
+  "candidates": {
+    "tetsu": "/workspace/wt/claude/lab/t044/tetsu_base/main.py"
+  },
+  "opponents": {
+    "wm": "/workspace/wt/claude/lab/t044/tetsu_wm/main.py"
+  },
+  "seeds": [
+    184451,
+    184452,
+    184453,
+    184454,
+    184455,
+    184456,
+    184457,
+    184458,
+    184459,
+    184460,
+    184461,
+    184462
+  ],
+  "expected_games": 24,
+  "input_sha256": {
+    "/workspace/wt/claude/compare.py": "414a2edecf542fb80a19f8fdae35279dd1e69092d2e631e208b1d23141f9ecab",
+    "/workspace/wt/claude/game_worker.py": "68d5af587abbf506bc15c8a3ba7a7ab985f77dfd2608cd3b19b80c21d7f9794b",
+    "/workspace/wt/claude/lab/t044/tetsu_base/main.py": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+    "/workspace/wt/claude/lab/t044/tetsu_wm/main.py": "851090ec09e8f8323e5f1253a5f7876e8a53ae042b65a542b94ccf05aba53908",
+    "/workspace/wt/claude/stability_report.py": "58ce8da3e4553da593b38cc9adf2608c6b735fadb85e84b42da90621546cc6a9"
+  },
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "kaggle_environments": "1.32.7",
+  "runner": "Official make(...).run([...]), new subprocess per game",
+  "game_timeout": 700.0,
+  "workers": 4,
+  "decision_note": "T044 fresh twelve-world both-seat tetsu vs wm attribution; BLAS pinned one thread; local only; never submit",
+  "extra_assets": [],
+  "all_self_matchups": []
+}
